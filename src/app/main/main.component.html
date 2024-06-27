@@ -1,3 +1,3 @@
-<app-header></app-header>
+<app-desktop-header *ngIf="isDesktop"></app-desktop-header>
+<app-mobile-header *ngIf="!isDesktop"></app-mobile-header>
 <app-channel-list></app-channel-list>
-<h1>Test</h1>
