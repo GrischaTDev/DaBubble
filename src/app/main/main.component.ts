@@ -24,7 +24,7 @@ import { MobileChannelsComponent } from "./channels/mobile-channels/mobile-chann
         DesktopThreadComponent,
         MobileThreadComponent,
         DesktopChannelsComponent,
-        MobileChannelsComponent
+        MobileChannelsComponent,
     ]
 })
 export class MainComponent implements OnInit {
