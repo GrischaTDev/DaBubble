@@ -1,0 +1,20 @@
+@import './../../styles.scss';
+
+.login-container {
+    padding-top: 75px;
+    padding-left: 75px;
+    padding-right: 75px;
+    background-color: $background-lightblue;
+}
+
+.login-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .register-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}
