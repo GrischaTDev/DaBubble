@@ -1,6 +1,13 @@
+@import './../../../styles.scss';
+
 .login-container {
     display: flex;
     flex-direction: column;
+    gap: 30px;
+
+    img {
+        width: 200px;
+    }
     
 }
 
@@ -8,4 +15,28 @@
     padding: 32px;
     border-radius: 30px;
     background-color: #fff;
+    width: 400px;
+    text-align: center;
+
+    h1 {
+        color: #4952F2;
+        font-size: 32px;
+    }
+
+    p {
+        font-size: 17px;
+    }
+
+    .input-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        input {
+            border-radius: 100px;
+            padding: 13px 32px;
+            border: unset;
+            background-color: $background-lightblue;
+        }
+    }
 }
