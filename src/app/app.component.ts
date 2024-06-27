@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./login/login.component";
+import { MobileLoginComponent } from "./login/mobile-login/mobile-login.component";
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, LoginComponent]
+    imports: [RouterOutlet, MobileLoginComponent]
 })
 export class AppComponent {
   title = 'da-bubble';
