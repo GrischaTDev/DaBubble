@@ -17,7 +17,8 @@
 
 // @include mat.all-component-themes($da-bubble-theme);
 
-@import url(./fonts.scss);
+// @import url(./fonts.scss);
+@import "./../src/fonts.scss";
 
 
 $background-white: #fff;
@@ -37,5 +38,3 @@ body {
 h1 {
     font-size: 46px;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

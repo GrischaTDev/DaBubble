@@ -1,0 +1,12 @@
+@import "./../../../../styles.scss";
+
+header {
+    background-color: $background-lightblue;
+    height: 80px;
+    >.logo {
+        height: 45px;
+    }
+    >.user {
+        height: 50px;
+    }
+}
