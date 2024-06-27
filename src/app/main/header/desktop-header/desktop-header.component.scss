@@ -1,0 +1,35 @@
+@import "./../../../../styles.scss";
+
+header {
+    background-color: $background-lightblue;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 16px 15px 16px;
+
+    >.input-container {
+        >input {
+            height: 80px;
+        }
+    }
+
+    >.user-container {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        >span {
+            font-weight: 700;
+            font-size: 32px;
+        }
+    }
+
+    >.logo {
+        height: 70px;
+    }
+
+    >.user {
+        height: 50px;
+    }
+}

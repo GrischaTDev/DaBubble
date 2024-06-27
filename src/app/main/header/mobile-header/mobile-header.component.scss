@@ -3,9 +3,16 @@
 header {
     background-color: $background-lightblue;
     height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 16px 15px 16px;
+
+
     >.logo {
         height: 45px;
     }
+
     >.user {
         height: 50px;
     }
