@@ -16,8 +16,8 @@
 // ));
 
 // @include mat.all-component-themes($da-bubble-theme);
-
 // @import url(./fonts.scss);
+
 @import "./../src/fonts.scss";
 
 
@@ -78,4 +78,8 @@ button {
         background-color: $background-blue;
         color: #fff;
     }
+}
+
+.mat-icon {
+    overflow: unset;
 }

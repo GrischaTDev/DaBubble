@@ -1,1 +1,59 @@
-<p>mobile-channels works!</p>
+<section>
+    <div class="input-container">
+        <input type="search" placeholder="Gehe zu...">
+        <mat-icon>search</mat-icon>
+    </div>
+
+    <div class="channels-container">
+        <div>
+            <div class="channels">
+                <mat-icon (click)="openChannels()">{{ arrowIconChannels }}</mat-icon>
+                <div (click)="openChannels()" class="icon-and-name">
+                    <div>
+                        <mat-icon>workspaces_outline</mat-icon>
+                        <span>Channels</span>
+                    </div>
+                </div>
+                <mat-icon class="add-icon">add</mat-icon>
+            </div>
+            <div class="channels" *ngIf="channelListOpen">
+                <mat-icon></mat-icon>
+                <div class="icon-and-name">
+                    <div class="sub-channel">
+                        <mat-icon>tag</mat-icon>
+                        <span>Entwicklerteam</span>
+                    </div>
+                </div>
+            </div>
+            <div class="channels" *ngIf="channelListOpen">
+                <mat-icon></mat-icon>
+                <div class="icon-and-name">
+                    <div class="add-channel">
+                        <mat-icon>add_circle_outline</mat-icon>
+                        <span>Channel hinzufügen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="channels">
+                <mat-icon (click)="openUserList()">{{ arrowIconUser }}</mat-icon>
+                <div (click)="openUserList()" class="icon-and-name">
+                    <div>
+                        <mat-icon>account_circle_outline</mat-icon>
+                        <span>Direktnachrichten</span>
+                    </div>
+                </div>
+            </div>
+            <div class="channels" *ngIf="userListOpen">
+                <mat-icon></mat-icon>
+                <div class="icon-and-name">
+                    <div class="sub-channel">
+                        <mat-icon>tag</mat-icon>
+                        <span>Entwicklerteam</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
