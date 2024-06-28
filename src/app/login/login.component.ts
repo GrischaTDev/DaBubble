@@ -11,7 +11,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MobileLoginComponent,
     DesktopLoginComponent,
-    FormsModule
+    FormsModule,
+    LoginComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
