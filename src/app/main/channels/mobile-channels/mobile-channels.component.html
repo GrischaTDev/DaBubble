@@ -35,25 +35,33 @@
                 </div>
             </div>
         </div>
-        <div>
-            <div class="channels">
-                <mat-icon (click)="openUserList()">{{ arrowIconUser }}</mat-icon>
-                <div (click)="openUserList()" class="icon-and-name">
-                    <div>
-                        <mat-icon>account_circle_outline</mat-icon>
-                        <span>Direktnachrichten</span>
-                    </div>
-                </div>
-            </div>
-            <div class="channels" *ngIf="userListOpen">
-                <mat-icon></mat-icon>
-                <div class="icon-and-name">
-                    <div class="sub-channel">
-                        <mat-icon>tag</mat-icon>
-                        <span>Entwicklerteam</span>
-                    </div>
-                </div>
+    </div>
+
+    <div class="user-container">
+        <div class="titel">
+            <mat-icon (click)="openUserList()">{{ arrowIconUser }}</mat-icon>
+            <div (click)="openUserList()" class="icon-and-name">
+                <mat-icon>account_circle_outline</mat-icon>
+                <span>Direktnachrichten</span>
             </div>
         </div>
+
+        <div class="user-list" *ngIf="userListOpen">
+            <div class="user">
+                <img src="./assets/img/user/user1.svg" alt="">
+                <span>Frederik Beck</span>
+            </div>
+            <div class="user">
+                <img src="./assets/img/user/user2.svg" alt="">
+                <span>Frederik Beck</span>
+            </div>
+            <div class="user">
+                <img src="./assets/img/user/user4.svg" alt="">
+                <span>Frederik Beck</span>
+            </div>
+        </div>
+    </div>
+    <div class="new-msg-icon">
+        <mat-icon>edit_square</mat-icon>
     </div>
 </section>
