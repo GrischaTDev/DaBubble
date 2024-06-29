@@ -18,7 +18,7 @@
         (input)="adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
         [placeholder]="'Antworten...'"
-      ></textarea>
+      >{{ dialogEmoji }}</textarea>
 
       <div class="mobile-chat-input-field-icon-container">
         <div class="mobile-chat-input-icon-container">
@@ -28,7 +28,9 @@
             </div>
           </div>
           <div class="mobile-chat-input-icon">
-            <mat-icon>sentiment_satisfied</mat-icon>
+            <mat-icon (click)="openDialog()">sentiment_satisfied</mat-icon>
+
+            
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon>alternate_email</mat-icon>

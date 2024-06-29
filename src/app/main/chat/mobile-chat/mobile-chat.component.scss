@@ -1,4 +1,11 @@
 @import "./../../../../styles.scss";
+@import "@ctrl/ngx-emoji-mart/picker";
+
+@font-face {
+  font-family: "TwemojiMozilla";
+  src: local("TwemojiMozilla"),
+    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+}
 
 .mobile-chat-container {
   height: calc(100vh - 80px);
@@ -88,6 +95,7 @@
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
+    font-family: Arial, "TwemojiMozilla";
   }
 }
 
