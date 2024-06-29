@@ -9,6 +9,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: $background-white;
 }
 
 .mobile-chat-header-container {
@@ -16,7 +17,6 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: $background-white;
   div {
     display: flex;
     align-items: center;
@@ -45,8 +45,8 @@
   width: 40px;
   border-radius: 100%;
   margin-right: 16px;
-  cursor: pointer;
   background-color: $background-lightblue;
+  cursor: pointer;
   mat-icon {
     &:hover {
       color: $background-purple;
@@ -61,6 +61,85 @@
 }
 
 .mobile-chat-input-container {
-  height: 145px;
+  min-height: 145px;
   width: calc(100vw - 32px);
+  margin-bottom: 16px;
+}
+
+.mobile-chat-input-field-container {
+  width: 100%;
+  min-height: 145px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid $border-gray;
+  textarea {
+    all: unset;
+    min-width: 90%;
+    max-width: 90%;
+    min-height: 80px;
+    font-size: 18px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    resize: none;
+    background-position: right 24px top 16px;
+    word-wrap: break-word;
+  }
+}
+
+.mobile-chat-input-field-icon-container {
+  height: 65px;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+}
+
+.mobile-chat-input-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.mobile-chat-input-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  &:hover {
+    background-color: $background-lightblue;
+  }
+  mat-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    color: $icon-gray;
+    border-radius: 100%;
+    &:hover {
+      color: $icon-purple-hover;
+    }
+  }
+}
+
+.mobile-chat-border-right {
+  height: 40px;
+  width: 45px;
+  border-right: 1px solid $border-gray;
+}
+
+.mobile-chat-send-icon {
+  color: $icon-blue;
+  cursor: pointer;
+  &:hover {
+    color: $background-purple;
+  }
 }

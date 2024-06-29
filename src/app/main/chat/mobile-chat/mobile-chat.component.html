@@ -10,5 +10,38 @@
     </div>
   </div>
   <div class="mobile-chat-content"></div>
-  <div class="mobile-chat-input-container"></div>
+
+  <div class="mobile-chat-input-container" id="meinTextarea">
+    <form class="mobile-chat-input-field-container br-20">
+      <textarea
+        [(ngModel)]="text"
+        (input)="adjustHeight($event.target)"
+        style="min-height: 50px; width: 100%"
+        [placeholder]="'Antworten...'"
+      ></textarea>
+
+      <div class="mobile-chat-input-field-icon-container">
+        <div class="mobile-chat-input-icon-container">
+          <div class="mobile-chat-border-right">
+            <div class="mobile-chat-input-icon">
+              <mat-icon>add</mat-icon>
+            </div>
+          </div>
+          <div class="mobile-chat-input-icon">
+            <mat-icon>sentiment_satisfied</mat-icon>
+          </div>
+          <div class="mobile-chat-input-icon">
+            <mat-icon>alternate_email</mat-icon>
+          </div>
+        </div>
+        <div>
+          <div>
+            <mat-icon class="mobile-chat-send-icon">send</mat-icon>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div></div>
+  </div>
 </div>
