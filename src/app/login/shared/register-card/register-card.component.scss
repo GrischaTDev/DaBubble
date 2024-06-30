@@ -1,19 +1,2 @@
 @import './../../shared/card-styles.scss';
 @import './../../../../styles.scss';
-
-.arrow-back-container {
-    position: absolute;
-    top: 8px;
-    left: 0;
-
-    .arrow-back-icon {
-        cursor: pointer;
-        border-radius: 999px;
-        padding: 4px;
-
-        &:hover {
-            background-color: $background-lightblue;
-            color: $background-blue;
-        }
-    }
-}
