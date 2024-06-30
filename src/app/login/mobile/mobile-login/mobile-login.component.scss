@@ -1,46 +1,8 @@
 @import './../../../../styles.scss';
-@import './../../login/login.component.scss';
+@import './../../shared/container-styles.scss';
 @import './../../shared/login-card/login-card.component.scss';
 
 .login-card-component {
     display: flex;
     justify-content: center;
-}
-
-@media(min-width: 300px) {
-    .login-card {
-        width: 90%;
-        padding: 20px 10px; 
-
-        .google-btn {
-            padding: 8px 16px; /* Beispielwerte für Google-Btn bei 300px */
-        }
-    }
-
-    button {
-        padding: 8px 16px; /* Beispielwerte für Input bei 300px */
-    }
-
-    input {
-        padding: 8px 16px !important; /* Beispielwerte für Btn bei 300px */
-    }
-}
-
-@media(min-width: 450px) {
-    .login-card {
-        width: 400px;
-        padding: 35px 20px;
-
-        .google-btn {
-            padding: 6px 32px;
-        }
-    }
-
-    button {
-        padding: 12px 25px;
-    }
-
-    input {
-        padding: 13px 32px;
-    }
 }
