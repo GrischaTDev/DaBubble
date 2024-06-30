@@ -5,11 +5,12 @@ import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.com
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
 import { ChatService } from '../chat.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 
 @Component({
   selector: 'app-mobile-chat',
   standalone: true,
-  imports: [MatIconModule, FormsModule],
+  imports: [MatIconModule, FormsModule, MobileHeaderComponent],
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
 })

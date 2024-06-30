@@ -1,14 +1,18 @@
 .dialog-mention-users-container {
     overflow: scroll !important;
-    padding: 16px;
-    max-height: 230px;
+    padding-left: 16px;
+    max-height: calc(100vh - 250px);
+    h2 {
+        font-size: 24px;
+        font-size: 700;
+    }
 }
 
 .dialog-mention-users-content {
     display:flex;
     justify-content: flex-start;
     align-items: center;
-    padding-left: 32px;
+    padding-left: 16px;
     padding-bottom: 16px;
     gap: 8px;
 }
