@@ -1,6 +1,6 @@
-@import './../login.component.scss';
-@import './../../../styles.scss';
-@import './../shared/login-card/login-card.component.scss';
+@import './../../../login/login/login.component.scss';
+@import './../../../../styles.scss';
+@import './../../shared/login-card/login-card.component.scss';
 
 .desktop-login-container {
     display: flex;
@@ -19,10 +19,10 @@
 .desktop-login-card-container {
     display: flex;
     justify-content: center;
+}
 
-    .login-card {
-        padding: 50px 60px;
-    }
+.login-card {
+    padding: 50px 60px;
 }
 
 .impress-policy {

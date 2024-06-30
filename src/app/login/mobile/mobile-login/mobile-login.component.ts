@@ -4,7 +4,7 @@ import {MatIconModule} from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from 'express';
-import { LoginCardComponent } from '../shared/login-card/login-card.component';
+import { LoginCardComponent } from './../../shared/login-card/login-card.component';
 
 @Component({
   selector: 'app-mobile-login',

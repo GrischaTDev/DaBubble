@@ -1,8 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MobileLoginComponent } from './mobile-login/mobile-login.component'
-import { DesktopLoginComponent } from './desktop-login/desktop-login.component';
+import { MobileLoginComponent } from '../mobile/mobile-login/mobile-login.component'
+import { DesktopLoginComponent } from '../desktop/desktop-login/desktop-login.component';
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
