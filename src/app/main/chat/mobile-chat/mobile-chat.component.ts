@@ -29,6 +29,8 @@ export class MobileChatComponent {
     );
   }
 
+  
+
     /**
    * A lifecycle hook that is called when the component is destroyed.
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.

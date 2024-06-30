@@ -15,17 +15,21 @@ import { Channel } from '../../assets/models/channel.class';
 })
 export class MainServiceService {
   unsubUserList;
+  unsubChannelsList;
   changeContent(inputContent: string) {
     throw new Error('Method not implemented.');
   }
   constructor() {
     this.unsubUserList = this.subUserList();
+    this.unsubChannelsList = this.subChannelsList()
+
   }
   private contentSource = new BehaviorSubject<string>('');
   currentContentEmoji = this.contentSource.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
+  channels: Channel[] = [];
 
   changeContentEmoji(content: string) {
     this.contentSource.next(content);
@@ -70,11 +74,32 @@ export class MainServiceService {
     });
   }
 
+    /**
+   * Initializes component by setting up a snapshot listener on the 'users' collection from Firestore.
+   * Updates `allUsers` array with `User` instances representing each document in the collection.
+   * Each `User` instance is created from the document's data, including a unique ID.
+   */
+    subChannelsList() {
+      return onSnapshot(collection(this.firestore, 'channels'), (list) => {
+        this.channels = [];
+        list.forEach((element) => {
+          console.log(element.data());
+          let userData = {
+            ...element.data(),
+            idChannel: element.id,
+          };
+          this.channels.push(new Channel(userData));
+          console.log(this.channels);
+        });
+      });
+    }
+
   /**
    * Unsubscribes from user list to prevent memory leaks.
    * This method is called automatically by Angular just before the component is destroyed.
    */
   ngOnDestroy() {
     this.unsubUserList();
+    this.unsubChannelsList();
   }
 }

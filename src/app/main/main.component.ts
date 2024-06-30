@@ -9,6 +9,7 @@ import { DesktopThreadComponent } from "./thread/desktop-thread/desktop-thread.c
 import { MobileThreadComponent } from "./thread/mobile-thread/mobile-thread.component";
 import { DesktopChannelsComponent } from "./channels/desktop-channels/desktop-channels.component";
 import { MobileChannelsComponent } from "./channels/mobile-channels/mobile-channels.component";
+import { MainServiceService } from '../service/main-service.service';
 
 @Component({
     selector: 'app-main',
@@ -30,9 +31,11 @@ import { MobileChannelsComponent } from "./channels/mobile-channels/mobile-chann
 export class MainComponent implements OnInit {
   isDesktop: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver, mainService: MainServiceService) {
+  
+  }
 
-  ngOnInit() {
+ ngOnInit() {
     this.breakpointObserver.observe([
       Breakpoints.Handset,
       Breakpoints.Tablet
