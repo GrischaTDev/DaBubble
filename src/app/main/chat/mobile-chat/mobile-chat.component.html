@@ -1,4 +1,4 @@
-<div class="mobile-chat-container">
+<div class="mobile-chat-container" (click)="closeDialog()">
   <div class="mobile-chat-header-container">
     <div class="mobile-chat-header-headline">
       <p>#</p>
@@ -15,10 +15,11 @@
     <form class="mobile-chat-input-field-container br-20">
       <textarea
         [(ngModel)]="text"
+        name="textarea"
         (input)="adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
         [placeholder]="'Antworten...'"
-      >{{ dialogEmoji }}</textarea>
+      ></textarea>
 
       <div class="mobile-chat-input-field-icon-container">
         <div class="mobile-chat-input-icon-container">
@@ -28,9 +29,9 @@
             </div>
           </div>
           <div class="mobile-chat-input-icon">
-            <mat-icon (click)="openDialog()">sentiment_satisfied</mat-icon>
-
-            
+            <mat-icon (click)="onEmojiButtonClick($event); openDialog()"
+              >sentiment_satisfied</mat-icon
+            >
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon>alternate_email</mat-icon>

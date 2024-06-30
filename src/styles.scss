@@ -86,3 +86,21 @@ button {
 .br-20 {
   border-radius: 20px;
 }
+
+.cdk-overlay-pane.mat-mdc-dialog-panel {
+  max-width: 360px !important;
+  min-width: 360px !important;
+}
+
+.cdk-overlay-container {
+  position: absolute;
+  right: 18px;
+  bottom: 164px;
+}
+
+@media (max-width: 400px) {
+  .cdk-overlay-pane.mat-mdc-dialog-panel {
+    max-width: 338px !important;
+    min-width: 338px !important;
+  }
+}
