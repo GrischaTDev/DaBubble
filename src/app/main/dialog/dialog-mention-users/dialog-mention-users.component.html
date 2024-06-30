@@ -1,1 +1,11 @@
-<p>dialog-mention-users works!</p>
+<div class="dialog-mention-users-container">
+  <h1>Mitglieder</h1>
+  <div
+    class="dialog-mention-users-content"
+    *ngFor="let user of users; let i = index"
+  >
+    <img [src]="user.photoPath" />
+    <p>{{ user.firstName }}</p>
+    <p>{{ user.lastName }}</p>
+  </div>
+</div>

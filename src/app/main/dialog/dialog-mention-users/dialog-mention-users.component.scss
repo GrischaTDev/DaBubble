@@ -1,0 +1,14 @@
+.dialog-mention-users-container {
+    overflow: scroll !important;
+    padding: 16px;
+    max-height: 230px;
+}
+
+.dialog-mention-users-content {
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 32px;
+    padding-bottom: 16px;
+    gap: 8px;
+}
