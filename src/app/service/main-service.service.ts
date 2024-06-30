@@ -7,6 +7,8 @@ import {
 } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../../assets/models/user.class';
+import { Channel } from '../../assets/models/channel.class';
+
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,7 @@ export class MainServiceService {
   }
   private contentSource = new BehaviorSubject<string>('');
   currentContentEmoji = this.contentSource.asObservable();
-  user: User = new User();
+  channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
 
@@ -38,9 +40,9 @@ export class MainServiceService {
    * @function addNewUserOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewUserOnFirebase() {
+  async addNewChannelOnFirebase() {
     try {
-      await addDoc(collection(this.firestore, 'users'), this.user.toJSON());
+      await addDoc(collection(this.firestore, 'channels'), this.channel.toJSON());
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
