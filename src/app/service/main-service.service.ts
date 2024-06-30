@@ -10,7 +10,6 @@ export class MainServiceService {
   }
   constructor() {}
   private contentSource = new BehaviorSubject<string>('');
-
   currentContentEmoji = this.contentSource.asObservable();
 
   changeContentEmoji(content: string) {

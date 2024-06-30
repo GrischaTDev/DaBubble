@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { MainServiceService } from '../../service/main-service.service';
+import { MainServiceService } from '../../../service/main-service.service';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -8,7 +8,6 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-
 
 @Component({
   selector: 'app-dialog-emoji',
@@ -33,11 +32,15 @@ export class DialogEmojiComponent {
    * @param {any} event - The event object containing the emoji data.
    */
   addEmoji(event: any) {
-    this.inputContent = event.emoji.native;
+    this.inputContent = ' ' + event.emoji.native;
     this.mainService.changeContentEmoji(this.inputContent);
     this.dialogRef.close();
   }
 
+  /**
+   * Closes the currently open dialog.
+   * @method closeDialog
+   */
   closeDialog() {
     this.dialogRef.close();
   }

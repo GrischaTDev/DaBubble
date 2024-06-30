@@ -1,4 +1,4 @@
-<div class="mobile-chat-container" (click)="closeDialog()">
+<div class="mobile-chat-container" (click)="chatService.closeDialog()">
   <div class="mobile-chat-header-container">
     <div class="mobile-chat-header-headline">
       <p>#</p>
@@ -10,13 +10,12 @@
     </div>
   </div>
   <div class="mobile-chat-content"></div>
-
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
       <textarea
         [(ngModel)]="text"
         name="textarea"
-        (input)="adjustHeight($event.target)"
+        (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
         [placeholder]="'Antworten...'"
       ></textarea>
@@ -29,12 +28,12 @@
             </div>
           </div>
           <div class="mobile-chat-input-icon">
-            <mat-icon (click)="onEmojiButtonClick($event); openDialog()"
+            <mat-icon (click)="chatService.onButtonClick($event); chatService.openDialogEmoji()"
               >sentiment_satisfied</mat-icon
             >
           </div>
           <div class="mobile-chat-input-icon">
-            <mat-icon>alternate_email</mat-icon>
+            <mat-icon (click)="chatService.onButtonClick($event); chatService.openDialogMentionUser()">alternate_email</mat-icon>
           </div>
         </div>
         <div>
