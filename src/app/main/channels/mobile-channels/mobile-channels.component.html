@@ -14,14 +14,18 @@
                         <span>Channels</span>
                     </div>
                 </div>
-                <mat-icon class="add-icon">add</mat-icon>
+                <div (click)="openDialog()">
+                    <mat-icon class="add-icon">add</mat-icon>
+                </div>
             </div>
-            <div class="channels" *ngIf="channelListOpen">
-                <mat-icon></mat-icon>
-                <div class="icon-and-name">
-                    <div class="sub-channel">
-                        <mat-icon>tag</mat-icon>
-                        <a href="chat">Entwicklerteam</a>
+            <div  *ngIf="channelListOpen"> 
+                <div class="channels" *ngFor="let channel of mainService.channels; let i = index">
+                    <mat-icon></mat-icon>
+                    <div class="icon-and-name">
+                        <div class="sub-channel">
+                            <mat-icon>tag</mat-icon>
+                            <a href="chat">{{ channel.name }}</a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,8 @@ import { MobileThreadComponent } from "./thread/mobile-thread/mobile-thread.comp
 import { DesktopChannelsComponent } from "./channels/desktop-channels/desktop-channels.component";
 import { MobileChannelsComponent } from "./channels/mobile-channels/mobile-channels.component";
 import { MainServiceService } from '../service/main-service.service';
+import { AddChannelComponent } from './channels/add-channel/add-channel.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-main',
@@ -26,6 +28,8 @@ import { MainServiceService } from '../service/main-service.service';
         MobileThreadComponent,
         DesktopChannelsComponent,
         MobileChannelsComponent,
+        AddChannelComponent,
+        MatDialogModule
     ]
 })
 export class MainComponent implements OnInit {
