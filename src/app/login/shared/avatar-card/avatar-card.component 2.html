@@ -1,0 +1,30 @@
+<div class="card">
+    <form class="form-container">
+        <div class="arrow-back-container">
+            <mat-icon routerLink='/register' class="arrow-back-icon" aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_back"></mat-icon>
+            <h1>Wähle deinen Avatar</h1>
+        </div>
+        <div class="profile-container">
+            <img class="profile-img" src="./../../../../assets/img/user/profile.png" alt="">
+            <h2>Vor- und Nachname </h2>
+        </div>
+
+        <div class="change-avatar-container">
+            <p>Aus der Liste wählen...</p>
+            <div class="avatar-list">
+                <img *ngFor="let user of [1,2,3,4,5,6]" src="./../../../../assets/img/user/user{{user}}.svg" alt="">
+            </div>
+            <div class="upload-img">
+                <p>oder eigenes Bild</p>
+                <button class="secondary-btn">Hochladen</button>
+            </div>
+        </div>
+        
+
+        <div class="flexend-btn-container">
+            <button class="primary-btn">Weiter</button>
+        </div>
+
+    </form>
+</div>
+
