@@ -2,14 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../dialog/dialog-mention-users/dialog-mention-users.component';
-
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   contentEmojie = '';
   public dialog = inject(MatDialog);
-  dialogInstance: MatDialogRef<DialogMentionUsersComponent, any> | undefined;
+  dialogInstance: MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
 
