@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-avatar-card',
@@ -15,5 +15,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './avatar-card.component.scss'
 })
 export class AvatarCardComponent {
+
+  constructor( private router: Router ) { }
+
+  saveAndBackToLogin() {
+    this.router.navigate(['/login']);
+  }
   
 }

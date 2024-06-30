@@ -2,7 +2,8 @@
 @import './../../../styles.scss';
 
 .card {
-    width: 570px;
+    width: 90%;
+    max-width: 570px;
     padding: 45px 32px;
     border-radius: 30px;
     background-color: #fff;
@@ -80,6 +81,33 @@
     }
 }
 
+.arrow-back-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .arrow-back-icon {
+        cursor: pointer;
+        border-radius: 999px;
+        padding: 4px;
+        position: absolute;
+        left: 0;
+
+        &:hover {
+            background-color: $background-lightblue;
+            color: $background-blue;
+        }
+    }
+
+    h1 {
+        flex: 1;
+        text-align: center;
+        max-width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
 .parting-line {
     display: flex;
     align-items: center;
@@ -94,7 +122,6 @@
 
 @media(min-width: 300px) {
     .card {
-        width: 90%;
         padding: 20px 10px; 
 
         .google-btn {
