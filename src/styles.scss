@@ -88,8 +88,8 @@ button {
 }
 
 .cdk-overlay-pane.mat-mdc-dialog-panel {
-  max-width: 360px !important;
-  min-width: 360px !important;
+  max-width: 355px !important;
+  min-width: 355px !important;
 }
 
 .cdk-overlay-container {
@@ -98,9 +98,15 @@ button {
   bottom: 164px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 600px) {
   .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: 338px !important;
     min-width: 338px !important;
+  }
+
+  .cdk-overlay-container {
+    position: absolute;
+    right: calc((100vw - 338px) / 2);
+    bottom: 164px;
   }
 }
