@@ -25,7 +25,7 @@ import {
 export class DialogEmojiComponent {
   public dialogRef = inject(MatDialogRef<DialogEmojiComponent>);
   constructor(public mainService: MainServiceService) {}
-  inputContent = '';
+  inputContent: any;
 
   /**
    * Adds an emoji to the input content and updates the main service with the new content.
@@ -33,7 +33,7 @@ export class DialogEmojiComponent {
    */
   addEmoji(event: any) {
     this.inputContent = ' ' + event.emoji.native;
-    this.mainService.changeContentEmoji(this.inputContent);
+    this.mainService.changeInputContent(this.inputContent);
     this.dialogRef.close();
   }
 

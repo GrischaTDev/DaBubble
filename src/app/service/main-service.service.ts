@@ -16,24 +16,26 @@ import { Channel } from '../../assets/models/channel.class';
 export class MainServiceService {
   unsubUserList;
   unsubChannelsList;
-  changeContent(inputContent: string) {
+  changeContent(inputContent: any) {
     throw new Error('Method not implemented.');
   }
   constructor() {
     this.unsubUserList = this.subUserList();
     this.unsubChannelsList = this.subChannelsList()
-
   }
-  private contentSource = new BehaviorSubject<string>('');
+  private contentSource = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
+  mentionUser = this.contentSource.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
   channels: Channel[] = [];
 
-  changeContentEmoji(content: string) {
+  changeInputContent(content: any) {
     this.contentSource.next(content);
   }
+  
+
 
   /**
    * Adds the current user to Firebase Firestore.

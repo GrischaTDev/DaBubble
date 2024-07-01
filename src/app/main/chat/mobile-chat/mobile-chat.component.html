@@ -29,12 +29,21 @@
             </div>
           </div>
           <div class="mobile-chat-input-icon">
-            <mat-icon (click)="chatService.onButtonClick($event); chatService.openDialogEmoji()"
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event); chatService.openDialogEmoji()
+              "
               >sentiment_satisfied</mat-icon
             >
           </div>
           <div class="mobile-chat-input-icon">
-            <mat-icon (click)="chatService.onButtonClick($event); chatService.openDialogMentionUser()">alternate_email</mat-icon>
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event);
+                chatService.openDialogMentionUser()
+              "
+              >alternate_email</mat-icon
+            >
           </div>
         </div>
         <div>

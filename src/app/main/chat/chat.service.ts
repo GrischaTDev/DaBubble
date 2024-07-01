@@ -2,15 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../dialog/dialog-mention-users/dialog-mention-users.component';
+import { User } from '../../../assets/models/user.class';
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  contentEmojie = '';
+  contentEmojie: any;
   public dialog = inject(MatDialog);
   dialogInstance: MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
+  mentionUser: User[] = [];
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
@@ -36,7 +38,7 @@ export class ChatService {
   openDialogEmoji() {
     if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
       this.closeDialog();
-      this.dialogInstance = this.dialog.open(DialogEmojiComponent, {});
+      this.dialogInstance = this.dialog.open(DialogEmojiComponent);
       this.dialogEmojiOpen = true;
     } else {
       this.closeDialog();
@@ -53,7 +55,7 @@ export class ChatService {
   openDialogMentionUser() {
     if (!this.dialogMentionUserOpen || this.dialogEmojiOpen) {
       this.closeDialog();
-      this.dialogInstance = this.dialog.open(DialogMentionUsersComponent, {});
+      this.dialogInstance = this.dialog.open(DialogMentionUsersComponent);
       this.dialogMentionUserOpen = true;
     } else {
       this.closeDialog();

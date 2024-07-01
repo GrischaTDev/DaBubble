@@ -15,26 +15,47 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 16px;
-  padding-bottom: 16px;   
+  padding-bottom: 16px;
   gap: 8px;
   height: 58px;
   div {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding-top: 4px;
     padding-bottom: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
     gap: 8px;
-    min-width: 140px;
+    min-width: 240px;
+    p {
+      font-size: 18px;
+      font-weight: 400;
+    }
     cursor: pointer;
     img {
       height: 50px;
       width: 50px;
     }
     &:hover {
-      background-color: $background-purple;
+      background-color: $background-lightblue;
     }
+  }
+}
+
+.dialog-mention-add-users {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 16px;
+  padding-bottom: 4px;
+  p {
+    font-size: 18px;
+    font-weight: 400;
   }
 }
 
