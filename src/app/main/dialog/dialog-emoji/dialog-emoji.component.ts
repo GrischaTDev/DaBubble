@@ -24,7 +24,7 @@ import {
 })
 export class DialogEmojiComponent {
   public dialogRef = inject(MatDialogRef<DialogEmojiComponent>);
-  constructor(private mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService) {}
   inputContent = '';
 
   /**

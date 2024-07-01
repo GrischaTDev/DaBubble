@@ -3,14 +3,15 @@ import {
   MatDialogActions,
   MatDialogClose,
   MatDialogContent,
-  MatDialogTitle,
-} from '@angular/material/dialog';
+  MatDialogTitle} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-mention-users',
   standalone: true,
-  imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, CommonModule],
+  imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, CommonModule, MatIconModule ],
   templateUrl: './dialog-mention-users.component.html',
   styleUrl: './dialog-mention-users.component.scss',
 })

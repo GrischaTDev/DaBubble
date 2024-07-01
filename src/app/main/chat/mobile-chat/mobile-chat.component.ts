@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -28,8 +28,6 @@ export class MobileChatComponent {
       }
     );
   }
-
-  
 
     /**
    * A lifecycle hook that is called when the component is destroyed.

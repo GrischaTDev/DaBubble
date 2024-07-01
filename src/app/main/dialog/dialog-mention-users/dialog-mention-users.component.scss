@@ -1,7 +1,10 @@
+@import "./../../../../styles.scss";
+
 .dialog-mention-users-container {
-    overflow: scroll !important;
+    overflow-y: scroll !important;
     padding-left: 16px;
     max-height: calc(100vh - 250px);
+    border-top-left-radius: ;
     h2 {
         font-size: 24px;
         font-size: 700;
@@ -16,3 +19,21 @@
     padding-bottom: 16px;
     gap: 8px;
 }
+
+.dialog-mention-icon-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    margin-right: 16px;
+    background-color: $background-lightblue;
+    margin-left: 8px;
+    cursor: pointer;
+    mat-icon {
+      &:hover {
+        color: $background-purple;
+      }
+    }
+  }
