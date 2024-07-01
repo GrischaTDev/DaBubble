@@ -14,7 +14,7 @@
                         <span>Channels</span>
                     </div>
                 </div>
-                <div (click)="openDialog()">
+                <div (click)="openDialogAddChannel()">
                     <mat-icon class="add-icon">add</mat-icon>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="channels" *ngIf="channelListOpen">
                 <mat-icon></mat-icon>
                 <div class="icon-and-name">
-                    <div class="add-channel">
+                    <div class="add-channel" (click)="openDialogAddChannel()">
                         <mat-icon>add_circle_outline</mat-icon>
                         <span>Channel hinzufügen</span>
                     </div>
