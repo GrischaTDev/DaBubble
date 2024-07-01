@@ -23,7 +23,7 @@ export class MobileChannelsComponent {
   arrowIconUser: string = 'arrow_drop_down';
   isDialogOpen: boolean = false;
 
-  openDialog() {
+  openDialogAddChannel() {
     // Überprüfen, ob bereits ein Dialog geöffnet ist
 
     if (!this.isDialogOpen) {

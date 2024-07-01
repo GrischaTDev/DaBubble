@@ -1,0 +1,48 @@
+@import "./../../../../styles.scss";
+
+.add-channel-dialog {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: white;
+    margin: 0;
+    padding: 40px 20px;
+
+    >.headline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    >.create-btn {
+        text-align: right;
+        width: 100%;
+        margin-top: 40px;
+
+        >button {
+            color: white;
+            padding: 12px 25px;
+            gap: 10px;
+            border-radius: 25px;
+            border: unset;
+            background-color: $background-blue;
+        }
+    }
+}
+
+.input-container {
+    >h3 span {
+        color: $background-gray;
+        font-weight: 400;
+    }
+}
+
+input {
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 40px;
+    border: 1px solid $border-ligth-purple;
+    box-sizing: border-box;
+}
