@@ -1,21 +1,48 @@
 <div class="add-channel-dialog">
     <div class="headline">
         <h2>Channel erstellen</h2>
-        <mat-icon>close</mat-icon>
+        <div (click)="closeDialog()">
+            <mat-icon>close</mat-icon>
+        </div>
     </div>
-
     <span>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themnenbezogen sein #marketing zum Beispiel.</span>
-
     <div class="input-container">
         <h3>Channel-Name</h3>
-        <input type="text" placeholder="#  z.B. Kooperationsprojekte">
+        <input class="inputfield" type="text" placeholder="#  z.B. Kooperationsprojekte">
     </div>
-
     <div class="input-container">
         <h3>Beschreibung <span>(optional)</span></h3>
-        <input type="text" placeholder="Dein Text hier">
+        <textarea name="" id="" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
     </div>
     <div class="create-btn">
-        <button>Erstellen</button>
+        <button (click)="openAddUserMenu()">Erstellen</button>
+    </div>
+</div>
+
+<div *ngIf="addUserMenu" class="add-user">
+    <div class="menu-container">
+        <div class="border-container">
+            <div class="border"></div>
+        </div>
+        <div class="headline">
+            <h2>Leute hinzufügen</h2>
+            <div (click)="closeDialog()">
+                <mat-icon>close</mat-icon>
+            </div>
+        </div>
+        <div>
+            <div class="radio-options">
+                <input type="radio" name="" id="">
+                <span>Alle Mitglieder von OfficeTeam hinzufügen</span>
+            </div>
+            <div class="radio-options">
+                <input type="radio" name="" id="">
+                <span>Bestimmte Leute hinzufügen</span>
+            </div>
+            <input class="inputfield" type="text" placeholder="Name eingeben">
+            <div class="create-btn">
+                <button class="primary-btn" (click)="openAddUserMenu()">Erstellen</button>
+            </div>
+        </div>
     </div>
 </div>

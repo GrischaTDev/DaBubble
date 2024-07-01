@@ -59,6 +59,34 @@ button {
   cursor: pointer;
 }
 
+input {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 40px;
+  border: 1px solid $border-ligth-purple;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none !important;
+  border-color: $background-blue;
+}
+
+textarea {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 40px;
+  border: 1px solid $border-ligth-purple;
+  box-sizing: border-box;
+  font-family: "Nunito";
+  font-size: 17px;
+}
+
+textarea:focus {
+  outline: none !important;
+  border-color: $background-blue;
+}
+
 .primary-btn {
   background-color: $background-blue;
   color: #fff;

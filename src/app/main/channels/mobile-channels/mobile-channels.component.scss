@@ -45,10 +45,6 @@ section {
     box-sizing: border-box;
     cursor: pointer;
 
-    &:hover {
-        color: $background-blue;
-    }
-
     >.icon-and-name {
         width: 100%;
         padding-left: 24px;
@@ -57,6 +53,9 @@ section {
         align-items: center;
         font-size: 20px;
         font-weight: 700;
+        &:hover {
+            color: $background-blue;
+        }
 
         >div {
             display: flex;
@@ -66,9 +65,10 @@ section {
     }
 
     >.add-icon {
+        display: flex;
         text-align: center;
-        color: $background-blue;
         padding: 4px;
+        color: $background-blue;
         &:hover {
             background-color: $background-lightblue;
             border-radius: 50px;
@@ -77,8 +77,9 @@ section {
 }
 
 .sub-channel {
-    >span {
-        font-weight: 400;
+    >a {
+        color: unset;
+        font-weight: bold;
         font-size: 17px;
     }
 }

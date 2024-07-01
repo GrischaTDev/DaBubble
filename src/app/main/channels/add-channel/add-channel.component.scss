@@ -8,7 +8,7 @@
     bottom: 0;
     background-color: white;
     margin: 0;
-    padding: 40px 20px;
+    padding: 20px;
 
     >.headline {
         display: flex;
@@ -30,19 +30,78 @@
             background-color: $background-blue;
         }
     }
-}
 
-.input-container {
-    >h3 span {
-        color: $background-gray;
-        font-weight: 400;
+    .input-container {
+        >h3 span {
+            color: $background-gray;
+            font-weight: 400;
+        }
     }
 }
 
-input {
-    width: 100%;
-    padding: 18px 20px;
-    border-radius: 40px;
-    border: 1px solid $border-ligth-purple;
-    box-sizing: border-box;
+
+
+
+
+.add-user{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 100vh;
+    background: #00000040;
+    z-index: 10;
+
+    >.menu-container {
+        background-color: white;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 30px 26px;
+        border-radius: 30px 30px 0px 0px;
+        box-shadow: 0px -3px 10px 0px #00000033;
+
+        >.border-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 0 0 30px 0;
+            >.border {
+                height: 6px;
+                width: 62px;
+                background-color: $background-lightgray;
+                border-radius: 23px;
+            }
+        }
+
+        >.headline {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            >div {
+                display: flex;
+            }
+        }
+
+        >div {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+}
+
+
+.radio-options {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    >input {
+        height: 20px !important;
+        width: 20px !important;
+        cursor: pointer;
+    }
 }
