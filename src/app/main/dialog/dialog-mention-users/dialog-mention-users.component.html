@@ -4,14 +4,14 @@
     class="dialog-mention-users-content"
     *ngFor="let user of users; let i = index"
   >
-    <img [src]="user.photoPath" />
-    <p>{{ user.firstName }}</p>
-    <p>{{ user.lastName }}</p>
+    <div>
+      <img [src]="user.photoPath" />
+      <p>{{ user.firstName }}</p>
+      <p>{{ user.lastName }}</p>
+    </div>
   </div>
-  <div
-    class="dialog-mention-users-content"
-  >
-  <div class="dialog-mention-icon-add "><mat-icon>person_add</mat-icon></div>
-  <p>Mitglieder hinzufüngen</p>
+  <div class="dialog-mention-add-users">
+    <div class="dialog-mention-icon-add"><mat-icon>person_add</mat-icon></div>
+    <p>Mitglieder hinzufüngen</p>
   </div>
 </div>

@@ -97,6 +97,11 @@ button {
   bottom: 164px;
 }
 
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-top-left-radius: 20px !important;
+  border-bottom-left-radius: 20px !important;
+}
+
 @media (max-width: 600px) {
   .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: 338px !important;
