@@ -93,7 +93,9 @@ export class MainServiceService {
       });
     }
 
-
+    addCollection() {
+      
+    }
 
   /**
    * Unsubscribes from user list to prevent memory leaks.

@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div  *ngIf="channelListOpen"> 
-                <div class="channels" *ngFor="let channel of mainService.channels; let i = index">
+                <div class="channels" *ngFor="let channel of mainService.allChannels; let i = index">
                     <mat-icon></mat-icon>
                     <div class="icon-and-name">
                         <div class="sub-channel">
