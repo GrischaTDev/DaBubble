@@ -37,7 +37,6 @@ export class RegisterCardComponent implements OnInit {
 
 
   async saveRegister(): Promise<void> {
-    // this.router.navigate(['/create-avatar']);
 
     const auth = getAuth();
 
@@ -53,7 +52,9 @@ export class RegisterCardComponent implements OnInit {
         avatar: ''
       });
 
-      await addDoc(collection(this.firestore, 'users'), newUser.toJSON());
+      const userRef = doc(this.firestore, 'users', user.uid);
+      await setDoc(userRef, newUser.toJSON());
+      this.router.navigate(['/create-avatar']);
 
     } catch (error: any) {
 

@@ -5,15 +5,15 @@
             <h1>Wähle deinen Avatar</h1>
         </div>
         <div class="profile-container">
-            <img class="profile-img" src="./../../../../assets/img/user/user{{selectedAvatarImage}}.svg" alt="">
+            <img class="profile-img" src="./../../../../assets/img/user/{{ selectedAvatarImage }}" alt="">
             <h2>Vor- und Nachname </h2>
         </div>
 
         <div class="change-avatar-container">
             <p>Aus der Liste wählen...</p>
             <div class="avatar-list">
-                <div *ngFor="let user of [1,2,3,4,5,6]; let i = index">
-                    <img (click)="chooseAvatar(i)" src="./../../../../assets/img/user/user{{user}}.svg" alt="">
+                <div *ngFor="let user of avatarImg; let i = index">
+                    <img (click)="chooseAvatar(i)" src="./../../../../assets/img/user/{{ user }}" alt="">
                 </div>
             </div>
                 <p>oder eigenes Bild</p>

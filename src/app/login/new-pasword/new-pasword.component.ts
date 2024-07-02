@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MobileNewPasswordComponent } from "../mobile/mobile-new-password/mobile-new-password.component";
-import { DesktopNewPasswordComponent } from "../desktop/desktop-new-password/desktop-new-password.component";
+import { MobileNewPasswordComponent } from "./../mobile/mobile-new-password/mobile-new-password.component";
+import { DesktopNewPasswordComponent } from "./../desktop/desktop-new-password/desktop-new-password.component";
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 
