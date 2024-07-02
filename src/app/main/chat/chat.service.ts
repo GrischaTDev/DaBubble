@@ -6,6 +6,8 @@ import { User } from '../../../assets/models/user.class';
 import { Channel } from '../../../assets/models/channel.class';
 import { Message } from '../../../assets/models/message.class';
 import { MainServiceService } from '../../service/main-service.service';
+import { ActivatedRoute } from '@angular/router';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -19,9 +21,9 @@ export class ChatService {
   dataChannel: Channel= new Channel();
   messageChannel: Message= new Message();
 
-  constructor(public mainService: MainServiceService) {}
+  constructor( public mainService: MainServiceService) {}
 
-  /**
+   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
    * This function sets the textarea's overflow to hidden and height to the scrollHeight of the textarea,
    * ensuring that the textarea fully displays all its content without needing an internal scrollbar.

@@ -123,7 +123,17 @@ export class MainServiceService {
    */
   async goToCollectionPath(data: Channel | User, path: string) {
     this.router.navigateByUrl(path + data.id);
-  }                           
+  }
+
+  /**
+   * Retrieves a reference to a specific document within the 'games' collection in Firestore.
+   * This reference can be used for further operations like reading or updating the document.
+   * @param {string} id - The unique identifier of the document within the 'games' collection.
+   * @returns {DocumentReference} A reference to the specified Firestore document.
+   */
+  getDataRef(id: string, docName: string) {
+    return doc(collection(this.firestore, docName), id);
+  }
 
   /**
    * Unsubscribes from user list to prevent memory leaks.

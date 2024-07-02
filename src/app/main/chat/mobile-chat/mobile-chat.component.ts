@@ -7,8 +7,8 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { ChatService } from '../chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
-
-
+import { ActivatedRoute } from '@angular/router';
+import { docData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -18,17 +18,27 @@ import { CommonModule } from '@angular/common';
   styleUrl: './mobile-chat.component.scss',
 })
 export class MobileChatComponent {
+  items$;
+  items;
+  parmsId: string = '';
   text: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
   dialogOpen = false;
-  
 
   constructor(
+    private route: ActivatedRoute,
     public chatService: ChatService,
     mainService: MainServiceService
   ) {
+    this.route.params.subscribe((params: any) => {
+      this.parmsId = params.id;
+    });
+    this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
+    this.items = this.items$.subscribe((channel: any) => {
+      this.chatService.dataChannel = channel;
+    });
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
