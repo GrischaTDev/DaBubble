@@ -26,7 +26,7 @@ export class AddChannelComponent {
   }
 
   addChannel() {
-    console.log('Wert 1:', this.newChannelName);
+    
   }
 
 }
