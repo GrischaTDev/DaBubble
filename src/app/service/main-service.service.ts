@@ -49,7 +49,7 @@ export class MainServiceService {
    */
   async addNewDocOnFirebase(docName: string, data: Channel | User ) {
     try {
-      await addDoc(collection(this.firestore, docName), this.channel.toJSON());
+      await addDoc(collection(this.firestore, docName), data.toJSON());
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
