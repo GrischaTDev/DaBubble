@@ -1,5 +1,4 @@
 
-
 // Mobile-Container Styles
 .login-container {
     display: flex;
@@ -13,12 +12,11 @@
     img {
         width: 200px;
     }
-    
+
 }
 
 // Desktop-Container Styles 
 .desktop-login-container {
-    display: flex;
     flex-direction: column;
     height: calc(100vh - 75px);
 }

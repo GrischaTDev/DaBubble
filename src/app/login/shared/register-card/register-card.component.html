@@ -6,9 +6,9 @@
         </div>
         <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
         <div class="input-fields">
-            <input type="text" placeholder="Name und Nachname">
-            <input class="email-input" type="email" placeholder="beispielname@email.com">
-            <input type="password" placeholder="Passwort">
+            <input [(ngModel)]="name" type="text" placeholder="Name und Nachname" [ngModelOptions]="{standalone: true}">
+            <input [(ngModel)]="email" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}">
+            <input [(ngModel)]="password" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}">
 
         </div>
 

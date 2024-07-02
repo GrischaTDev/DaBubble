@@ -1,20 +1,23 @@
 import { Component } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password-card',
   standalone: true,
   imports: [
     MatIcon,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './reset-password-card.component.html',
   styleUrl: './reset-password-card.component.scss'
 })
 export class ResetPasswordCardComponent {
+
+constructor(private router: Router) {}
+
 resetPassword() {
-throw new Error('Method not implemented.');
+  this.router.navigate(['/new-password']);
 }
 
 }

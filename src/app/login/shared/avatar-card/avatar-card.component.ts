@@ -15,6 +15,15 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './avatar-card.component.scss'
 })
 export class AvatarCardComponent {
+onFileSelected($event: Event) {
+throw new Error('Method not implemented.');
+}
+
+  selectedAvatarImage: number = 1;
+
+  chooseAvatar(index: number) {
+    this.selectedAvatarImage = (index + 1);
+  }
 
   constructor( private router: Router ) { }
 

@@ -23,9 +23,14 @@
 
 .avatar-list {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 8px;
+
+    img {
+        cursor: pointer;
+    }
 }
 
 .profile-img {
@@ -53,6 +58,10 @@
         align-items: center;
         gap: 16px;
     }
+}
+
+.upload-btn {
+    border: unset;
 }
 
 @media(max-width: 756px) {
