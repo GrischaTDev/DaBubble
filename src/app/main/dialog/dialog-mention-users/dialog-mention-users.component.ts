@@ -22,7 +22,7 @@ import { MainServiceService } from '../../../service/main-service.service';
     MatDialogTitle,
     CommonModule,
     MatIconModule,
-    FormsModule,
+    FormsModule
   ],
   templateUrl: './dialog-mention-users.component.html',
   styleUrl: './dialog-mention-users.component.scss',
@@ -41,9 +41,7 @@ export class DialogMentionUsersComponent {
 
   addMentionUser(user: User) {
     this.chatService.mentionUser.push(new User(user));
-    this.inputContent = `@<span>
-    class="mention-user-text-background"
- ${user.name}</span>`;
+    this.inputContent = ' ' + '@' + user.name;
     this.mainService.changeInputContent(this.inputContent);
   }
 }
