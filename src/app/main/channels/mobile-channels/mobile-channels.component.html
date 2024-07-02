@@ -51,17 +51,9 @@
         </div>
 
         <div class="user-list" *ngIf="userListOpen">
-            <div class="user">
-                <img src="./assets/img/user/user1.svg" alt="">
-                <span>Frederik Beck</span>
-            </div>
-            <div class="user">
-                <img src="./assets/img/user/user2.svg" alt="">
-                <span>Frederik Beck</span>
-            </div>
-            <div class="user">
-                <img src="./assets/img/user/user4.svg" alt="">
-                <span>Frederik Beck</span>
+            <div *ngFor="let user of mainService.allUsers; let i = index" class="user">
+                <img src="{{ user.avatar }}" alt="">
+                <span>{{ user.name }}</span>
             </div>
         </div>
     </div>
