@@ -1,17 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, NgModule } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogRef } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-add-channel',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, FormsModule],
   templateUrl: './add-channel.component.html',
   styleUrl: './add-channel.component.scss'
 })
 export class AddChannelComponent {
   addUserMenu: boolean = false;
+  newChannelName: string = '';
 
   constructor(public dialogRef: MatDialogRef<AddChannelComponent>) {}
 
@@ -19,21 +21,12 @@ export class AddChannelComponent {
     this.dialogRef.close();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // clickout(event: Event) {
-  //   const target = event.target as HTMLElement;
-  //   const triggerElement = document.querySelector('.add-user'); // Element, das openUserMenu() auslöst
-  
-  //   if (this.addUserMenu && target !== triggerElement) { // Nur schließen, wenn nicht auf triggerElement geklickt wurde
-  //     const clickedInsideMenu = target.closest('.menu-container');
-  //     if (!clickedInsideMenu) {
-  //       this.addUserMenu = false;
-  //     }
-  //   }
-  // }
-
   openAddUserMenu() {
     this.addUserMenu = !this.addUserMenu;
+  }
+
+  addChannel() {
+    console.log('Wert 1:', this.newChannelName);
   }
 
 }
