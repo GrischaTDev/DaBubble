@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 export class AddChannelComponent {
   addUserMenu: boolean = false;
   newChannelName: string = '';
+  newChannelDescription: string = '';
 
   constructor(public dialogRef: MatDialogRef<AddChannelComponent>) {}
 
@@ -26,7 +27,7 @@ export class AddChannelComponent {
   }
 
   addChannel() {
-    
+    console.log(this.newChannelDescription);
   }
 
 }

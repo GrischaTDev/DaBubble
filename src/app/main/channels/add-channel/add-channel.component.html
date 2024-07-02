@@ -12,7 +12,7 @@
     </div>
     <div class="input-container">
         <h3>Beschreibung <span>(optional)</span></h3>
-        <textarea name="" id="" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
+        <textarea [(ngModel)]="newChannelDescription" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
     </div>
     <div class="create-btn">
         <button (click)="openAddUserMenu()">Erstellen</button>
