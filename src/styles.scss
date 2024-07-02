@@ -38,9 +38,17 @@ body {
   background-color: $background-lightblue;
 }
 
+.text-color-blue {
+  color: $background-blue;
+}
+
 input {
   font-family: "Nunito";
   font-size: 18px;
+}
+
+label {
+  cursor: pointer;
 }
 
 a {

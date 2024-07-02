@@ -8,7 +8,7 @@
     <span>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themnenbezogen sein #marketing zum Beispiel.</span>
     <div class="input-container">
         <h3>Channel-Name</h3>
-        <input class="inputfield" type="text" placeholder="#  z.B. Kooperationsprojekte">
+        <input [(ngModel)]="newChannelName" class="inputfield" type="text" placeholder="#  z.B. Kooperationsprojekte">
     </div>
     <div class="input-container">
         <h3>Beschreibung <span>(optional)</span></h3>
@@ -32,17 +32,17 @@
         </div>
         <div>
             <div class="radio-options">
-                <input type="radio" name="" id="">
-                <span>Alle Mitglieder von OfficeTeam hinzufügen</span>
+                <input type="radio" name="memberSelection" id="all-members">
+                <label for="all-members">Alle Mitglieder zu <span class="text-color-blue">{{ newChannelName }}</span> hinzufügen</label> 
             </div>
             <div class="radio-options">
-                <input type="radio" name="" id="">
-                <span>Bestimmte Leute hinzufügen</span>
+                <input type="radio" name="memberSelection" id="specific-members">
+                <label for="specific-members">Bestimmte Leute hinzufügen</label> 
             </div>
             <input class="inputfield" type="text" placeholder="Name eingeben">
             <div class="create-btn">
-                <button class="primary-btn" (click)="openAddUserMenu()">Erstellen</button>
+                <button class="primary-btn" (click)="addChannel()">Erstellen</button>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
