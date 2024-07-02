@@ -33,6 +33,8 @@ export class Channel {
         nameUser: user.nameUser,
         date: user.date,
         message: user.message,
+        answerMessage: user.answerMessage,
+        mentionUser: user.mentionUser
       })),
       avatar: this.avatar,
     };

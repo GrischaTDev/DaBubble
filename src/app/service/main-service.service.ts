@@ -30,7 +30,7 @@ export class MainServiceService {
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
-  channels: Channel[] = [];
+  allChannels: Channel[] = [];
 
   changeInputContent(content: any) {
     this.contentSource.next(content);
@@ -66,13 +66,11 @@ export class MainServiceService {
     return onSnapshot(collection(this.firestore, 'users'), (list) => {
       this.allUsers = [];
       list.forEach((element) => {
-        console.log(element.data());
         let userData = {
           ...element.data(),
           idUser: element.id,
         };
         this.allUsers.push(new User(userData));
-        console.log(this.allUsers);
       });
     });
   }
@@ -84,18 +82,18 @@ export class MainServiceService {
    */
     subChannelsList() {
       return onSnapshot(collection(this.firestore, 'channels'), (list) => {
-        this.channels = [];
+        this.allChannels = [];
         list.forEach((element) => {
-          console.log(element.data());
           let userData = {
             ...element.data(),
             idChannel: element.id,
           };
-          this.channels.push(new Channel(userData));
-          console.log(this.channels);
+          this.allChannels.push(new Channel(userData));
         });
       });
     }
+
+
 
   /**
    * Unsubscribes from user list to prevent memory leaks.
