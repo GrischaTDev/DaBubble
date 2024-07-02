@@ -4,6 +4,7 @@ import { User } from "./user.class";
 export class Channel {
   idChannel: string;
   name: string;
+  description: string;
   channelUsers: User[]; 
   channelMessage: Message[]; 
   avatar: string;
@@ -11,6 +12,7 @@ export class Channel {
   constructor(obj?: any) {
     this.idChannel = obj?.idChannel || '';
     this.name = obj?.name || '';
+    this.description = obj?.description || '';
     this.channelUsers = obj?.channelUsers || []; 
     this.channelMessage = obj?.channelMessage || [];
     this.avatar = obj?.avatar || '';
@@ -20,6 +22,7 @@ export class Channel {
     return {
       idChannel: this.idChannel,
       name: this.name,
+      description: this.description,
       channelUsers: this.channelUsers.map(user => ({
         idUser: user.idUser,
         name: user.name,
