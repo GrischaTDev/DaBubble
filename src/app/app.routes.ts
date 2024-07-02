@@ -16,5 +16,5 @@ export const routes: Routes = [
     { path: 'new-password', component: NewPaswordComponent },
     { path: 'create-avatar', component: AvatarComponent },
     { path: 'main', component: MainComponent },
-    { path: 'chat', component: MobileChatComponent },
+    { path: 'chat/:id', component: MobileChatComponent },
 ];

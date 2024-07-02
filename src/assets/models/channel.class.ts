@@ -2,7 +2,7 @@ import { Message } from "./message.class";
 import { User } from "./user.class";
 
 export class Channel {
-  idChannel: string;
+  id: string;
   name: string;
   description: string;
   channelUsers: User[]; 
@@ -10,7 +10,7 @@ export class Channel {
   avatar: string;
   
   constructor(obj?: any) {
-    this.idChannel = obj?.idChannel || '';
+    this.id = obj?.id || '';
     this.name = obj?.name || '';
     this.description = obj?.description || '';
     this.channelUsers = obj?.channelUsers || []; 
@@ -20,11 +20,11 @@ export class Channel {
 
   public toJSON() {
     return {
-      idChannel: this.idChannel,
+      id: this.id,
       name: this.name,
       description: this.description,
       channelUsers: this.channelUsers.map(user => ({
-        idUser: user.idUser,
+        id: user.id,
         name: user.name,
         email: user.email,
         avatar: user.avatar

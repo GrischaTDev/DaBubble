@@ -3,6 +3,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../dialog/dialog-mention-users/dialog-mention-users.component';
 import { User } from '../../../assets/models/user.class';
+import { Channel } from '../../../assets/models/channel.class';
+import { Message } from '../../../assets/models/message.class';
+import { MainServiceService } from '../../service/main-service.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,6 +16,10 @@ export class ChatService {
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   mentionUser: User[] = [];
+  dataChannel: Channel= new Channel();
+  messageChannel: Message= new Message();
+
+  constructor(public mainService: MainServiceService) {}
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
@@ -84,4 +91,14 @@ export class ChatService {
       this.dialogMentionUserOpen = false;
     }
   }
+
+/*   sendMessageToChannel() {
+    this.mainService.addCollection(
+      'channels',
+      channelId,
+      new Channel(this.dataChannel)
+    )
+  } */
+
+  
 }

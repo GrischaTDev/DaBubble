@@ -24,7 +24,7 @@
                     <div class="icon-and-name">
                         <div class="sub-channel">
                             <mat-icon>tag</mat-icon>
-                            <a href="chat">{{ channel.name }}</a>
+                            <a (click)="mainService.goToCollectionPath(channel, '/chat/')">{{ channel.name }} </a>
                         </div>
                     </div>
                 </div>

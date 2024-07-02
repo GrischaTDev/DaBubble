@@ -3,13 +3,14 @@ import {
   Firestore,
   addDoc,
   collection,
+  doc,
   onSnapshot,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
-import { Message } from '../../assets/models/message.class';
-
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,9 @@ export class MainServiceService {
   changeContent(inputContent: any) {
     throw new Error('Method not implemented.');
   }
-  constructor() {
+  constructor(private router: Router) {
     this.unsubUserList = this.subUserList();
-    this.unsubChannelsList = this.subChannelsList()
+    this.unsubChannelsList = this.subChannelsList();
   }
   private contentSource = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
@@ -35,8 +36,6 @@ export class MainServiceService {
   changeInputContent(content: any) {
     this.contentSource.next(content);
   }
-  
-
 
   /**
    * Adds the current user to Firebase Firestore.
@@ -47,7 +46,7 @@ export class MainServiceService {
    * @function addNewDocOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewDocOnFirebase(docName: string, data: Channel | User ) {
+  async addNewDocOnFirebase(docName: string, data: Channel | User) {
     try {
       await addDoc(collection(this.firestore, docName), data.toJSON());
     } catch (error) {
@@ -68,34 +67,63 @@ export class MainServiceService {
       list.forEach((element) => {
         let userData = {
           ...element.data(),
-          idUser: element.id,
+          id: element.id,
         };
         this.allUsers.push(new User(userData));
       });
     });
   }
 
-    /**
+  /**
    * Initializes component by setting up a snapshot listener on the 'users' collection from Firestore.
    * Updates `allUsers` array with `User` instances representing each document in the collection.
    * Each `User` instance is created from the document's data, including a unique ID.
    */
-    subChannelsList() {
-      return onSnapshot(collection(this.firestore, 'channels'), (list) => {
-        this.allChannels = [];
-        list.forEach((element) => {
-          let userData = {
-            ...element.data(),
-            idChannel: element.id,
-          };
-          this.allChannels.push(new Channel(userData));
-        });
+  subChannelsList() {
+    return onSnapshot(collection(this.firestore, 'channels'), (list) => {
+      this.allChannels = [];
+      list.forEach((element) => {
+        let userData = {
+          ...element.data(),
+          id: element.id,
+        };
+        this.allChannels.push(new Channel(userData));
       });
-    }
+    });
+  }
 
-    addCollection() {
-      
-    }
+  /**
+   * Asynchronously adds or updates a document within a collection in Firestore.
+   * @param {string} docName - The name of the document to be added or updated.
+   * @param {string} collectionId - The ID of the collection where the document will be stored.
+   * @param {Channel|User} data - The data to be stored, which should be an instance of Channel or User.
+   * @returns {Promise<void>} A promise that resolves when the update is complete and logs any errors encountered.
+   */
+  async addCollection(
+    docName: string,
+    collectionId: string,
+    data: Channel | User
+  ) {
+    await updateDoc(
+      doc(collection(this.firestore, docName), collectionId),
+      data.toJSON()
+    )
+      .catch((err) => {
+        console.log(err);
+      })
+      .then(() => {
+        /* this.dialogRef.close(); */
+      });
+  }
+
+  /**
+   * Navigates to the specific collection path based on the provided data's ID.
+   * This function is typically used to route to a specific chat based on the channel or user's ID.
+   * @param {Channel|User} data - The data object containing the ID to navigate to, which can be a Channel or User instance.
+   */
+  async goToCollectionPath(data: Channel | User, path: string) {
+    this.router.navigateByUrl(path + data.id);
+  }                           
 
   /**
    * Unsubscribes from user list to prevent memory leaks.

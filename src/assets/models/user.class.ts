@@ -1,13 +1,13 @@
 import { Message } from './message.class';
 export class User {
-  idUser: string;
+  id: string;
   name: string;
   email: string;
   avatar: string;
   message: Message[];
 
   constructor(obj?: any) {
-    this.idUser = obj ? obj.idUser : '';
+    this.id = obj ? obj.id : '';
     this.name = obj ? obj.name : '';
     this.email = obj ? obj.email : '';
     this.avatar = obj ? obj.avatar : '';
@@ -16,7 +16,7 @@ export class User {
 
   public toJSON() {
     return {
-      idUser: this.idUser,
+      idUser: this.id,
       name: this.name,
       email: this.email,
       avatar: this.avatar,
