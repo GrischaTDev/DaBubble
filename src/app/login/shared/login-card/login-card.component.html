@@ -3,8 +3,8 @@
             <h1>Anmelden</h1>
             <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
             <div class="input-fields">
-                <input class="email-input" type="email" placeholder="beispielname@email.com">
-                <input type="password" placeholder="Passwort">
+                <input [(ngModel)]="email" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}">
+                <input [(ngModel)]="password" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}">
             </div>
     
             <a routerLink="/reset-password" href="#">Passwort vergessen?</a>
@@ -15,13 +15,13 @@
                 <div class="line"></div>
             </div>
     
-            <button class="google-btn"> 
+            <button (click)="loginWithGoogle()" class="google-btn"> 
                 <img src="./../../../assets/icons/google-logo.png" alt=""> 
                 Anmelden mit Google
             </button>
     
             <div class="btn-container">
-                <button class="primary-btn">Anmelden</button>
+                <button (click)="login()" class="primary-btn">Anmelden</button>
                 <button class="secondary-btn">Gäste-Login</button>
             </div>
     
