@@ -8,6 +8,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
+import { Message } from '../../assets/models/message.class';
 
 
 @Injectable({
@@ -43,12 +44,12 @@ export class MainServiceService {
    * Resets the loading state and updates the UI.
    *
    * @async
-   * @function addNewUserOnFirebase
+   * @function addNewDocOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewChannelOnFirebase() {
+  async addNewDocOnFirebase(docName: string, data: Channel | User ) {
     try {
-      await addDoc(collection(this.firestore, 'channels'), this.channel.toJSON());
+      await addDoc(collection(this.firestore, docName), this.channel.toJSON());
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
