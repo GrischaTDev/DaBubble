@@ -8,12 +8,12 @@
 }
 
 .mobile-chat-container {
-  height: calc(100vh - 80px);
-  width: 100vw;
-  position: absolute;
-  bottom: 0;
+  max-height: 100vh;
+  width: 70vw;
+  padding: 25px;
+  border-radius: 30px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: $background-white;
@@ -24,6 +24,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+
   div {
     display: flex;
     align-items: center;
@@ -38,6 +39,7 @@
   gap: 8px;
   margin-left: 16px;
   cursor: pointer;
+
   p {
     font-size: 20px;
     font-weight: 700;
@@ -54,6 +56,7 @@
   margin-right: 16px;
   background-color: $background-lightblue;
   cursor: pointer;
+
   mat-icon {
     &:hover {
       color: $background-purple;
@@ -62,14 +65,14 @@
 }
 
 .mobile-chat-content {
-  width: calc(100vw - 32px);
+  width: 100%;
   max-height: calc(100vh - 285px);
   height: 100%;
 }
 
 .mobile-chat-input-container {
   min-height: 145px;
-  width: calc(100vw - 32px);
+  width: 100%;
   margin-bottom: 16px;
 }
 
@@ -83,6 +86,7 @@
   align-items: center;
   flex-direction: column;
   border: 1px solid $border-gray;
+
   textarea {
     all: unset;
     min-width: 90%;
@@ -120,9 +124,11 @@
   height: 40px;
   width: 40px;
   border-radius: 100%;
+
   &:hover {
     background-color: $background-lightblue;
   }
+
   mat-icon {
     display: flex;
     justify-content: center;
@@ -132,6 +138,7 @@
     cursor: pointer;
     color: $icon-gray;
     border-radius: 100%;
+
     &:hover {
       color: $icon-purple-hover;
     }
@@ -147,8 +154,8 @@
 .mobile-chat-send-icon {
   color: $icon-blue;
   cursor: pointer;
+
   &:hover {
     color: $background-purple;
   }
 }
-
