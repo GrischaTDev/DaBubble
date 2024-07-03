@@ -46,10 +46,11 @@ export class RegisterCardComponent implements OnInit {
       console.log(user);
 
       const newUser = new User({
-        idUser: user.uid,
+        id: user.uid,
         name: this.name,
         email: this.email,
-        avatar: ''
+        avatar: '',
+        message: ''
       });
 
       const userRef = doc(this.firestore, 'users', user.uid);

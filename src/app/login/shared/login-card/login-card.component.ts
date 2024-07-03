@@ -19,21 +19,21 @@ import { User } from '../../../../assets/models/user.class';
 })
 export class LoginCardComponent {
 
-  constructor( private firestore: Firestore, private router: Router ) {}
+  constructor(private firestore: Firestore, private router: Router) { }
   email: string = '';
   password: string = '';
 
   async login() {
     const auth = getAuth();
     await signInWithEmailAndPassword(auth, this.email, this.password)
-     .then(() => {
-       console.log('Dieser Login war erfolgreich');
-       this.router.navigate(['main']);
-       
-     })
-     .catch(() => {
+      .then(() => {
+        console.log('Dieser Login war erfolgreich');
+        this.router.navigate(['main']);
+
+      })
+      .catch(() => {
         console.log('Dieser Login ist fehlgeschlagen');
-     })
+      })
 
   }
 
@@ -42,28 +42,36 @@ export class LoginCardComponent {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider) 
-     .then(async (result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if(credential) {
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        if (credential) {
 
-        const user = result.user;
-        if(user) {
-          const newUser = new User({
-            idUser: user.uid,
-            name: user.displayName,
-            email: user.email,
-            avatar: user.photoURL
-          });
-  
-          const userRef = doc(this.firestore, 'users', user.uid);
-          await setDoc(userRef, newUser.toJSON());
-  
+          const token = credential.accessToken;
+          console.log(token);
+
+          const user = result.user;
+          console.log(user);
+          if(user) {
+            const newUser = new User({
+              id: user.uid,
+              name: user.displayName,
+              email: user.email,
+              avatar: user.photoURL,
+              message: ''
+            });
+
+            const userRef = doc(this.firestore, 'users', user.uid);
+            await setDoc(userRef, newUser.toJSON());
+            
+          }
+
+    
+
           this.router.navigate(['main']);
-        }
 
-      }
-     })
+        }
+      })
   }
 
 }

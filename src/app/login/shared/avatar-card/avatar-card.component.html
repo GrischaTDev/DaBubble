@@ -9,24 +9,6 @@
             <h2>Vor- und Nachname </h2>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="change-avatar-container">
             <p>Aus der Liste wählen...</p>
             <div class="avatar-list">
@@ -35,8 +17,11 @@
                 </div>
             </div>
                 <p>oder eigenes Bild</p>
-                <div class="upload-btn">
-                    <input class="upload-btn" type="file">
+                <div class="upload-btn-wrapper">
+                    <label for="file-upload" class="secondary-btn">
+                        Datei hochladen
+                    </label>
+                    <input id="file-upload" type="file" (change)="onFileSelected($event)">
                 </div>
         </div>
         

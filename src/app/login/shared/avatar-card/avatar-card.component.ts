@@ -28,11 +28,25 @@ export class AvatarCardComponent {
     './assets/img/user/user6.svg',
   ];
 
-  selectedAvatarImage: string | null = './assets/img/user/user1.svg';
+  selectedAvatarImage: string | ArrayBuffer | null = './assets/img/user/user1.svg';
 
   chooseAvatar(index: number) {
     this.selectedAvatarImage = this.avatarImg[index];
     console.log(this.selectedAvatarImage)
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if(e.target) {
+          this.selectedAvatarImage = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   constructor(private router: Router, private firestore: Firestore) { }
