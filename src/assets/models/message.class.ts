@@ -1,14 +1,14 @@
 import { User } from "./user.class";
 export class Message {
-    nameUser: string;
+    user: string;
     date: number;
     message: string;
     answerMessage: Message[];
     mentionUser: User [];
 
     constructor(obj?: any) {
-      this.nameUser = obj ? obj.nameUser : '';
-      this.date = obj ? obj.name: '';
+      this.user = obj ? obj.user : '';
+      this.date = obj ? obj.data: '';
       this.message = obj ? obj.email : '';
       this.answerMessage = obj ? obj.answerMessage : [];
       this.mentionUser = obj?.mentionUser || []; 
@@ -16,7 +16,7 @@ export class Message {
   
     public toJSON() {
       return {
-        nameUser: this.nameUser,
+        nameUser: this.user,
         date: this.date,
         message: this.message,
         answerMessage: this.answerMessage,

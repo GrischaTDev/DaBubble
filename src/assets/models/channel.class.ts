@@ -5,8 +5,8 @@ export class Channel {
   id: string;
   name: string;
   description: string;
-  channelUsers: User[]; 
-  channelMessage: Message[]; 
+  channelUsers: User[] = []; 
+  channelMessage: Message[] = []; 
   avatar: string;
   
   constructor(obj?: any) {
@@ -30,7 +30,7 @@ export class Channel {
         avatar: user.avatar
       })),
       messageChannel: this.channelMessage.map(user => ({
-        nameUser: user.nameUser,
+        user: user.user,
         date: user.date,
         message: user.message,
         answerMessage: user.answerMessage,

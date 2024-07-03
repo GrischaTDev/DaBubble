@@ -5,7 +5,7 @@ export class User {
   name: string;
   email: string;
   avatar: string;
-  message: Message[];
+  message: Message[] = [];
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : '';

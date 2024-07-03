@@ -32,6 +32,7 @@ export class MainServiceService {
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
   allChannels: Channel[] = [];
+  loggedInUser: User[] = [];
 
   changeInputContent(content: any) {
     this.contentSource.next(content);

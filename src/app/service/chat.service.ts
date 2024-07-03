@@ -1,12 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DialogEmojiComponent } from '../dialog/dialog-emoji/dialog-emoji.component';
-import { DialogMentionUsersComponent } from '../dialog/dialog-mention-users/dialog-mention-users.component';
-import { User } from '../../../assets/models/user.class';
-import { Channel } from '../../../assets/models/channel.class';
-import { Message } from '../../../assets/models/message.class';
-import { MainServiceService } from '../../service/main-service.service';
-import { ActivatedRoute } from '@angular/router';
+import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
+import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
+import { User } from '../../assets/models/user.class';
+import { Channel } from '../../assets/models/channel.class';
+import { Message } from '../../assets/models/message.class';
+import { MainServiceService } from './main-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +13,19 @@ import { ActivatedRoute } from '@angular/router';
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  dialogInstance: MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | undefined;
+  dialogInstance:
+    | MatDialogRef<DialogEmojiComponent, any>
+    | MatDialogRef<DialogMentionUsersComponent, any>
+    | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   mentionUser: User[] = [];
-  dataChannel: Channel= new Channel();
-  messageChannel: Message= new Message();
+  dataChannel: Channel = new Channel();
+  messageChannel: Message = new Message();
 
-  constructor( public mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService) {}
 
-   /**
+  /**
    * Adjusts the height of a textarea to fit its content without scrolling.
    * This function sets the textarea's overflow to hidden and height to the scrollHeight of the textarea,
    * ensuring that the textarea fully displays all its content without needing an internal scrollbar.
@@ -94,13 +96,23 @@ export class ChatService {
     }
   }
 
-/*   sendMessageToChannel() {
+  sendMessageFromChannel(channelId: string, textContent: string) {
+    this.messageChannel.message = textContent;
+    this.messageChannel.date = Date.now();
+    this.messageChannel.mentionUser = this.mentionUser;
+
+    console.log("Message", this.messageChannel)
+
+    this.dataChannel.channelMessage.push(new Message(this.messageChannel));
+    
+    /* this.sendMessage('channel', channelId); */
+  }
+
+  sendMessage(docName: string, channelId: string) {
     this.mainService.addCollection(
-      'channels',
+      docName,
       channelId,
       new Channel(this.dataChannel)
-    )
-  } */
-
-  
+    );
+  }
 }

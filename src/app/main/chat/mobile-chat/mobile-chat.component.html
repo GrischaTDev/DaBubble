@@ -12,7 +12,7 @@
   </div>
   <div class="mobile-chat-content"></div>
   <div class="mobile-chat-input-container" id="meinTextarea">
-    <form class="mobile-chat-input-field-container br-20">
+    <form  class="mobile-chat-input-field-container br-20">
       <textarea
         [(ngModel)]="text"
         name="textarea"
@@ -48,7 +48,7 @@
         </div>
         <div>
           <div>
-            <mat-icon class="mobile-chat-send-icon">send</mat-icon>
+            <mat-icon (click)="chatService.sendMessageFromChannel(this.parmsId, this.text)" class="mobile-chat-send-icon">send</mat-icon>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
-import { ChatService } from '../chat.service';
+import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';

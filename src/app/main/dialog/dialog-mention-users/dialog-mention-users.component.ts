@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { ChatService } from '../../chat/chat.service';
+import { ChatService } from '../../../service/chat.service';
 import { User } from '../../../../assets/models/user.class';
 import { MainServiceService } from '../../../service/main-service.service';
 

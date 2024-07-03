@@ -36,7 +36,7 @@ export class MainComponent implements OnInit {
   isDesktop: boolean = false;
 
   constructor(private breakpointObserver: BreakpointObserver, mainService: MainServiceService) {
-  
+      
   }
 
  ngOnInit() {
