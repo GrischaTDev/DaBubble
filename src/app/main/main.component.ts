@@ -34,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 })
 export class MainComponent implements OnInit {
   isDesktop: boolean = false;
+  isThreadOpen: boolean = false;
 
   constructor(private breakpointObserver: BreakpointObserver, mainService: MainServiceService) {
   
