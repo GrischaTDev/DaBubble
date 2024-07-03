@@ -1,5 +1,9 @@
 @import "./../../../../styles.scss";
 
+.close {
+    cursor: pointer;
+}
+
 .add-channel-dialog {
     position: fixed;
     right: 0;
@@ -88,6 +92,22 @@
             flex-direction: column;
             gap: 15px;
         }
+    }
+}
+
+
+.create-btn {
+    text-align: right;
+    width: 100%;
+    margin-top: 10px;
+
+    >button {
+        color: white;
+        padding: 12px 25px;
+        gap: 10px;
+        border-radius: 25px;
+        border: unset;
+        background-color: $background-blue;
     }
 }
 

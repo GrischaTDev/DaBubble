@@ -1,7 +1,7 @@
 <div class="add-channel-dialog">
     <div class="headline">
         <h2>Channel erstellen</h2>
-        <div (click)="closeDialog()">
+        <div class="close" (click)="closeDialog()">
             <mat-icon>close</mat-icon>
         </div>
     </div>
@@ -15,7 +15,7 @@
         <textarea [(ngModel)]="newChannelDescription" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
     </div>
     <div class="create-btn">
-        <button (click)="openAddUserMenu()">Erstellen</button>
+        <button class="primary-btn" (click)="openAddUserMenu()">Erstellen</button>
     </div>
 </div>
 
@@ -32,14 +32,14 @@
         </div>
         <div>
             <div class="radio-options">
-                <input type="radio" name="memberSelection" id="all-members">
+                <input (click)="addUserInputfieldOff()" type="radio" name="memberSelection" id="all-members" checked>
                 <label for="all-members">Alle Mitglieder zu <span class="text-color-blue">{{ newChannelName }}</span> hinzufügen</label> 
             </div>
             <div class="radio-options">
-                <input type="radio" name="memberSelection" id="specific-members">
+                <input (click)="addUserInputfield()" type="radio" name="memberSelection" id="specific-members">
                 <label for="specific-members">Bestimmte Leute hinzufügen</label> 
             </div>
-            <input class="inputfield" type="text" placeholder="Name eingeben">
+            <input *ngIf="addUserInput" class="inputfield" type="text" placeholder="Name eingeben">
             <div class="create-btn">
                 <button class="primary-btn" (click)="addChannel()">Erstellen</button>
             </div>
