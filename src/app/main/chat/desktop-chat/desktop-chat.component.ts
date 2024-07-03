@@ -8,7 +8,7 @@ import { ChatService } from '../chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { docData } from '@angular/fire/firestore';
+import { Firestore, docData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -26,6 +26,7 @@ export class DesktopChatComponent {
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
   dialogOpen = false;
+  firestore: Firestore = inject(Firestore);
 
   constructor(
     private route: ActivatedRoute,
@@ -35,10 +36,12 @@ export class DesktopChatComponent {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
     });
-    this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-    this.items = this.items$.subscribe((channel: any) => {
-      this.chatService.dataChannel = channel;
-    });
+    if (this.parmsId) {
+      this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
+      this.items = this.items$.subscribe((channel: any) => {
+        this.chatService.dataChannel = channel;
+      });
+    }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
