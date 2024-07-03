@@ -20,22 +20,22 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 export class AvatarCardComponent {
 
   avatarImg = [
-    'user1.svg',
-    'user2.svg',
-    'user3.svg',
-    'user4.svg',
-    'user5.svg',
-    'user6.svg',
+    './assets/img/user/user1.svg',
+    './assets/img/user/user2.svg',
+    './assets/img/user/user3.svg',
+    './assets/img/user/user4.svg',
+    './assets/img/user/user5.svg',
+    './assets/img/user/user6.svg',
   ];
 
-  selectedAvatarImage: string | null = 'user1.svg';
+  selectedAvatarImage: string | null = './assets/img/user/user1.svg';
 
   chooseAvatar(index: number) {
     this.selectedAvatarImage = this.avatarImg[index];
     console.log(this.selectedAvatarImage)
   }
 
-  constructor(private router: Router, private firestore: Firestore, private ngZone: NgZone) { }
+  constructor(private router: Router, private firestore: Firestore) { }
 
   async saveAndBackToLogin() {
 

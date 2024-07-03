@@ -46,22 +46,21 @@ export class LoginCardComponent {
      .then(async (result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       if(credential) {
-        const token = credential.accessToken;
-        console.log(token);
 
         const user = result.user;
-        console.log(user);
-
-        const newUser = new User({
-          idUser: user.uid,
-          name: user.displayName,
-          email: user.email,
-          avatar: user.photoURL
-        });
-
-        const userRef = doc(this.firestore, 'users', user.uid);
-        await setDoc(userRef, newUser.toJSON());
-        this.router.navigate(['main']);
+        if(user) {
+          const newUser = new User({
+            idUser: user.uid,
+            name: user.displayName,
+            email: user.email,
+            avatar: user.photoURL
+          });
+  
+          const userRef = doc(this.firestore, 'users', user.uid);
+          await setDoc(userRef, newUser.toJSON());
+  
+          this.router.navigate(['main']);
+        }
 
       }
      })
