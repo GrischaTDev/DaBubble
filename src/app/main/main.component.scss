@@ -7,14 +7,14 @@
     box-sizing: border-box;
   }
   
-//   app-desktop-channels { /* Der Container mit fester Breite */
-//     width: 300px;
-//   }
+  app-desktop-channels { /* Der Container mit fester Breite */
+    width: 366px;
+  }
   
-//   app-desktop-chat { /* Der Container, der den restlichen Platz einnimmt */
-//     flex-grow: 1; /* Nimmt den gesamten verfügbaren Platz ein */
-//     margin: 0 25px;
-//   }
+  app-desktop-chat { /* Der Container, der den restlichen Platz einnimmt */
+    flex-grow: 1; /* Nimmt den gesamten verfügbaren Platz ein */
+    margin-left: 25px;
+  }
   
 //   /* Wenn app-desktop-thread angezeigt wird, sollte er wahrscheinlich unter app-desktop-chat platziert werden */
 //   app-desktop-thread {
