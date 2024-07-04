@@ -6,6 +6,7 @@ import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
+import { log } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -99,13 +100,12 @@ export class ChatService {
   sendMessageFromChannel(channelId: string, textContent: string) {
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
-    this.messageChannel.mentionUser = this.mentionUser;
-
-    console.log("Message", this.messageChannel)
-
-    this.dataChannel.channelMessage.push(new Message(this.messageChannel));
-    
-    /* this.sendMessage('channel', channelId); */
+    this.messageChannel.userId = this.mainService.loggedInUser.id;
+    this.messageChannel.userName = this.mainService.loggedInUser.name;
+    this.messageChannel.userEmail = this.mainService.loggedInUser.email;
+    this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+    this.dataChannel.messageChannel.push(this.messageChannel);
+    this.sendMessage('channels', channelId);
   }
 
   sendMessage(docName: string, channelId: string) {

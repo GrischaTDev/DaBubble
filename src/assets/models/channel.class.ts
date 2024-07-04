@@ -1,21 +1,29 @@
-import { Message } from "./message.class";
-import { User } from "./user.class";
+import { Message } from './message.class';
+import { User } from './user.class';
 
 export class Channel {
   id: string;
   name: string;
   description: string;
-  channelUsers: User[] = []; 
-  channelMessage: Message[] = []; 
-  avatar: string;
-  
+  channelUsers: User[] = [];
+  messageChannel: Message[] = [];
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userAvatar: string;
+  avatarChannel: string;
+
   constructor(obj?: any) {
     this.id = obj?.id || '';
     this.name = obj?.name || '';
     this.description = obj?.description || '';
-    this.channelUsers = obj?.channelUsers || []; 
-    this.channelMessage = obj?.channelMessage || [];
-    this.avatar = obj?.avatar || '';
+    this.channelUsers = obj?.channelUsers || [];
+    this.messageChannel = obj?.messageChannel || [];
+    this.userId = obj?.userId || '';
+    this.userName = obj?.userName || '';
+    this.userEmail = obj?.userEmail || '';
+    this.userAvatar = obj?.userAvatar || '';
+    this.avatarChannel = obj?.avatar || '';
   }
 
   public toJSON() {
@@ -23,22 +31,21 @@ export class Channel {
       id: this.id,
       name: this.name,
       description: this.description,
-      channelUsers: this.channelUsers.map(user => ({
+      channelUsers: this.channelUsers.map((user) => ({
         id: user.id,
         name: user.name,
         email: user.email,
-        avatar: user.avatar
+        avatar: user.avatar,
       })),
-      messageChannel: this.channelMessage.map(user => ({
-        user: user.user,
+      messageChannel: this.messageChannel.map((user) => ({
+        userId: user.userId,
+        userName: user.userName,
+        userEmail: user.userEmail,
+        userAvatar: user.userAvatar,
         date: user.date,
         message: user.message,
-        answerMessage: user.answerMessage,
-        mentionUser: user.mentionUser
       })),
-      avatar: this.avatar,
+      avatarChannel: this.avatarChannel,
     };
   }
 }
-
-  

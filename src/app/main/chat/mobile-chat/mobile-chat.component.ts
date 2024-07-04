@@ -9,6 +9,8 @@ import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Firestore, docData } from '@angular/fire/firestore';
+import { Message } from '../../../../assets/models/message.class';
+import { User } from '../../../../assets/models/user.class';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -27,12 +29,19 @@ export class MobileChatComponent {
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
+  messageToChannel: Message = new Message();
+  testUser: User = new User();
 
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     mainService: MainServiceService
   ) {
+    this.testUser.id = 'hioho33333333';
+    this.testUser.email = 'tester.tester@test.com';
+    this.testUser.name = 'Max Tester';
+    this.testUser.avatar = "src/assets/img/user/user1.svg"
+    mainService.loggedInUser = this.testUser;
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
     });
@@ -46,6 +55,8 @@ export class MobileChatComponent {
       this.text += content;
     });
   }
+
+  
 
   /**
    * A lifecycle hook that is called when the component is destroyed.

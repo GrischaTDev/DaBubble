@@ -1,6 +1,5 @@
 import { Message } from './message.class';
 export class User {
-  [x: string]: any;
   id: string;
   name: string;
   email: string;
