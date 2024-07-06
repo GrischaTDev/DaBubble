@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
+import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +33,7 @@ export class MainServiceService {
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
   allChannels: Channel[] = [];
-  loggedInUser: User = new User();
+  loggedInUser: any = [];
 
   changeInputContent(content: any) {
     this.contentSource.next(content);
@@ -55,6 +56,22 @@ export class MainServiceService {
     } finally {
       /* this.dialogRef.close(); */
     }
+  }
+
+  currentLoggedUser() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      const userId = user?.uid;
+
+      if (user) {
+        onSnapshot(doc(this.firestore, 'users', userId ?? 'default'), (item) => {
+          if (item.exists()) {
+            this.loggedInUser = item.data();
+            console.log(this.loggedInUser);
+          }
+        });
+      };
+    });
   }
 
   /**

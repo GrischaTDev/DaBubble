@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { User } from '../../../../assets/models/user.class';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login-card',
@@ -13,6 +14,7 @@ import { User } from '../../../../assets/models/user.class';
   imports: [
     RouterModule,
     FormsModule,
+    CommonModule
   ],
   templateUrl: './login-card.component.html',
   styleUrl: './login-card.component.scss'
@@ -22,17 +24,22 @@ export class LoginCardComponent {
   constructor(private firestore: Firestore, private router: Router) { }
   email: string = '';
   password: string = '';
+  wrongPassword: string | undefined;
+  wrongEmail: string | undefined;
 
   async login() {
     const auth = getAuth();
     await signInWithEmailAndPassword(auth, this.email, this.password)
       .then(() => {
-        console.log('Dieser Login war erfolgreich');
         this.router.navigate(['main']);
 
       })
-      .catch(() => {
-        console.log('Dieser Login ist fehlgeschlagen');
+      .catch((error: any) => {
+        console.log('Fehler beim login', error);
+        if(error.code === 'auth/invalid-credential') {
+          this.wrongEmail = 'Diese E-Mail-Adresse ist leider ungültig';
+          this.wrongPassword = 'Falsches Passwort. Bitte noch einmal prüfen';
+        }
       })
 
   }

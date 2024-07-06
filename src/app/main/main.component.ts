@@ -36,7 +36,7 @@ export class MainComponent implements OnInit {
   isDesktop: boolean = false;
   isThreadOpen: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, mainService: MainServiceService) {
+  constructor(private breakpointObserver: BreakpointObserver, private mainService: MainServiceService) {
       
   }
 
@@ -47,5 +47,7 @@ export class MainComponent implements OnInit {
     ]).subscribe(result => {
       this.isDesktop = !result.matches; // Wenn es KEIN Handset oder Tablet ist, ist es Desktop
     });
+
+    this.mainService.currentLoggedUser();
   }
 }

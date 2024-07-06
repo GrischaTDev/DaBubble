@@ -4,7 +4,9 @@
             <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
             <div class="input-fields">
                 <input [(ngModel)]="email" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}">
+                <p *ngIf="wrongEmail" > {{ wrongEmail }} </p>
                 <input [(ngModel)]="password" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}">
+                <p *ngIf="wrongPassword" > {{ wrongPassword }} </p>
             </div>
     
             <a routerLink="/reset-password" href="#">Passwort vergessen?</a>

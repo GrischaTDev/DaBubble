@@ -16,13 +16,15 @@
                     <img (click)="chooseAvatar(i)" src="{{ user }}" alt="">
                 </div>
             </div>
+            <div class="upload-img-container">
                 <p>oder eigenes Bild</p>
                 <div class="upload-btn-wrapper">
-                    <label for="file-upload" class="secondary-btn">
-                        Datei hochladen
-                    </label>
+                    <button class="secondary-btn">
+                        Hochladen
+                    </button>
                     <input id="file-upload" type="file" (change)="onFileSelected($event)">
                 </div>
+            </div>
         </div>
         
 
