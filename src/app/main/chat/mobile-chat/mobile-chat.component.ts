@@ -30,18 +30,18 @@ export class MobileChatComponent {
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   messageToChannel: Message = new Message();
-  testUser: User = new User();
+  
 
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     mainService: MainServiceService
   ) {
-    this.testUser.id = 'hioho33333333';
-    this.testUser.email = 'tester.tester@test.com';
-    this.testUser.name = 'Max Tester';
-    this.testUser.avatar = "src/assets/img/user/user1.svg"
-    mainService.loggedInUser = this.testUser;
+    mainService.testUser.id = 'hioho33333333';
+    mainService.testUser.email = 'tester.tester@test.com';
+    mainService.testUser.name = 'Max Tester';
+    mainService.testUser.avatar = "/assets/img/user/user3.svg"
+    mainService.loggedInUser = mainService.testUser;
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
     });

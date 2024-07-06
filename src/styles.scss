@@ -30,12 +30,13 @@ $border-gray: #adb0d9;
 $icon-gray: #686868;
 $icon-blue: #444df2;
 $icon-purple-hover: #535af1;
-$border-ligth-purple: #ADB0D9;
+$border-ligth-purple: #adb0d9;
+$color-black: #000000;
 
 body {
   margin: 0;
   font-family: "Nunito";
-  background-color: $background-lightblue;
+  background-color: $background-white;
 }
 
 .text-color-blue {
@@ -152,7 +153,6 @@ textarea:focus {
     bottom: 164px;
   }
 }
-
 
 /* width */
 ::-webkit-scrollbar {

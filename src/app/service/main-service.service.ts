@@ -34,6 +34,7 @@ export class MainServiceService {
   allUsers: User[] = [];
   allChannels: Channel[] = [];
   loggedInUser: any = [];
+  testUser: User = new User();
 
   changeInputContent(content: any) {
     this.contentSource.next(content);

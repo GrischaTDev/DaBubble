@@ -115,4 +115,37 @@ export class ChatService {
       new Channel(this.dataChannel)
     );
   }
+
+  setDate(timeFromServer: number): string {
+    const date = new Date(timeFromServer);
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long', // Wochentag in langform
+      day: '2-digit',
+      month: 'long', // Monat in langform
+      year: 'numeric'
+    };
+    const localeDate = date.toLocaleDateString('de-DE', options);
+    const today = new Date();
+    const todayLocaleDate = today.toLocaleDateString('de-DE', options);
+    if (localeDate === todayLocaleDate) {
+      return "Heute";
+    } else {
+      return localeDate;
+    }
+  }
+
+  setTime(timeFromServer: number): string {
+    const date = new Date(timeFromServer);
+    const formattedTime = date.toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  
+    return formattedTime;
+  }
+
+  ifMessageFromMe(userIdFromMessage: string): boolean {
+    return userIdFromMessage === this.mainService.testUser.id;
+  }
 }

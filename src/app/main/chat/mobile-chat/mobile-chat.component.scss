@@ -17,6 +17,7 @@
   align-items: center;
   flex-direction: column;
   background-color: $background-white;
+  overflow-x: hidden;
 }
 
 .mobile-chat-header-container {
@@ -24,6 +25,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.08);
   div {
     display: flex;
     align-items: center;
@@ -62,9 +64,119 @@
 }
 
 .mobile-chat-content {
-  width: calc(100vw - 32px);
-  max-height: calc(100vh - 285px);
+  width: 100vw;
+  max-height: calc(100vh - 280px);
   height: 100%;
+  overflow: scroll;
+}
+
+.mobile-chat-message-date-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.mobile-chat-message-date {
+  font-size: 18px;
+  font-weight: 400;
+  white-space: nowrap;
+  color: $color-black;
+  border: 1px solid $border-ligth-purple;
+  border-radius: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.mobile-chat-message-line {
+  height: 1px;
+  width: 100%;
+  background-color: $border-ligth-purple;
+}
+
+.mobile-chat-message-container-from-others {
+  padding-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.mobile-chat-message-container-from-me {
+  padding-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.mobile-chat-message-avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  > img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.mobile-chat-message-content {
+  margin-left: 18px;
+  margin-right: 18px;
+}
+
+.mobile-chat-message-name-date-container-from-others {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.mobile-chat-message-name-date-container-me {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-direction: row-reverse;
+}
+
+.mobile-chat-message-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: $color-black;
+}
+
+.mobile-chat-message-time {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.mobile-chat-message-text-container {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.mobile-chat-message-from-others {
+  background-color: $background-lightblue;
+  max-width: 300px;
+  padding: 16px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.mobile-chat-message-from-me {
+  background-color: $background-purple;
+  color: $background-white;
+  max-width: 300px;
+  padding: 16px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 .mobile-chat-input-container {
@@ -151,4 +263,3 @@
     color: $background-purple;
   }
 }
-
