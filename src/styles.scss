@@ -103,6 +103,11 @@ textarea:focus {
   &:hover {
     opacity: 0.8;
   }
+
+  &:disabled {
+    background-color: #686868;
+    cursor: default;
+  }
 }
 
 .secondary-btn {

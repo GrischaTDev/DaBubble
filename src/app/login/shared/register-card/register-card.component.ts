@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, getAuth } from '@angular/fire/auth';
 import { addDoc, collection, doc, Firestore, getFirestore, setDoc } from '@angular/fire/firestore';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
@@ -38,15 +38,22 @@ export class RegisterCardComponent implements OnInit {
     
   }
 
+  submitRegister(registerForm: NgForm) {
+    if(registerForm.valid) {
+      this.saveRegister();
+    } else {
+      console.log('Bitte fülle alle restlichen Felder aus');
+    }
+  }
 
-  async saveRegister(): Promise<void> {
+
+  async saveRegister() {
 
     const auth = getAuth();
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password);
       const user = userCredential.user;
-      console.log(user);
 
       const newUser = new User({
         id: user.uid,
@@ -67,11 +74,13 @@ export class RegisterCardComponent implements OnInit {
       } else if (error.code === 'auth/invalid-email') {
         this.isEmailAvaiable = 'Diese E-Mail-Adresse ist nicht gültig.';
       } else if (error.code === 'auth/missing-email') {
-        this.isEmailAvaiable = 'Bitte gib eine E-Mail-Adresse ein.'
+        this.isEmailAvaiable = 'Bitte gebe eine E-Mail-Adresse ein.'
       } else if (error.code === 'auth/operation-not-allowed') {
         this.isUserRegister = 'Operation not allowed. Please enable Email/Password authentication.';
       } else if (error.code === 'auth/weak-password') {
         this.isPasswordAvaiable = 'Dieses Passwort ist zu schwach.';
+      } else if (error.code === 'auth/missing-password') {
+        this.isPasswordAvaiable = 'Bitte gebe ein Passwort ein.'; 
       } else {
         this.isUserRegister = 'User is not register';
       }

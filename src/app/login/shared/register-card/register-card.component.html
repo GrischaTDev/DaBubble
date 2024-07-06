@@ -1,21 +1,27 @@
 <div class="card">
-    <form class="form-container" #registerForm="ngForm" (ngSubmit)="saveRegister()">
+    <form class="form-container" #registerForm="ngForm" (ngSubmit)="submitRegister(registerForm)">
         <div class="arrow-back-container">
             <mat-icon routerLink='/login' class="arrow-back-icon" aria-hidden="false" aria-label="Example home icon" fontIcon="arrow_back"></mat-icon>
             <h1>Konto erstellen</h1>
         </div>
         <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
         <div class="input-fields">
-            <input [(ngModel)]="name" type="text" placeholder="Name und Nachname" [ngModelOptions]="{standalone: true}" name="name" required>
-            <p ></p>
-            <input [(ngModel)]="email" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}" name="email" required>
-            <p *ngIf="isEmailAvaiable"> {{ isEmailAvaiable }} </p>
-            <input [(ngModel)]="password" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}" name="password" required>
-            <p *ngIf="isPasswordAvaiable"> {{ isPasswordAvaiable }} </p>
+            <div>
+                <input [ngModel]="isNameValid" [(ngModel)]="name" #isNameValid="ngModel" type="text" placeholder="Name und Nachname" [ngModelOptions]="{standalone: true}" name="name" required>
+                <p *ngIf="!isNameValid.valid && registerForm.submitted"> Bitte gebe ein Namen ein. </p>
+            </div>
+            <div>
+                <input [(ngModel)]="isMailValid" [(ngModel)]="email" #isMailValid="ngModel" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}" name="email" required>
+                <p *ngIf="isEmailAvaiable"> {{ isEmailAvaiable }} </p>
+            </div>
+            <div>
+                <input [(ngModel)]="isPasswordValid" [(ngModel)]="password" #isPasswordValid="ngModel" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}" name="password" required>
+                <p *ngIf="isPasswordAvaiable"> {{ isPasswordAvaiable }} </p>
+            </div>
         </div>
 
         <div class="flexend-btn-container">
-            <button type="submit" class="primary-btn">Weiter</button>
+            <button [disabled]="!isMailValid.valid || !isNameValid.valid || !isPasswordValid.valid" type="submit" class="primary-btn">Weiter</button>
         </div>
 
     </form>

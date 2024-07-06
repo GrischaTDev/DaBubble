@@ -39,6 +39,10 @@ export class LoginCardComponent {
         if(error.code === 'auth/invalid-credential') {
           this.wrongEmail = 'Diese E-Mail-Adresse ist leider ungültig';
           this.wrongPassword = 'Falsches Passwort. Bitte noch einmal prüfen';
+        } else if (error.code === 'auth/missing-password') {
+          this.wrongPassword = 'Bitte gib ein Passwort ein.';
+        } else if (error.code === 'auth/invalid-email') {
+          this.wrongEmail = 'Bitte gib eine gültige E-Mail-Adresse an';
         }
       })
 
