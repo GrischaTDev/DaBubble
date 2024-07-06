@@ -38,6 +38,13 @@
         flex-direction: column;
         gap: 30px;
 
+        p {
+            display: flex;
+            justify-content: flex-start;
+            color: #ED1E79;
+            font-size: 13px;
+        }
+
         input {
             border-radius: 100px;
             padding: 13px 32px;
