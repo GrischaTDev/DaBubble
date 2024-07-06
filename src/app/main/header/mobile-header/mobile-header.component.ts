@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-mobile-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, UserProfileComponent],
   templateUrl: './mobile-header.component.html',
   styleUrls: ['./mobile-header.component.scss'] 
 })
 export class MobileHeaderComponent {
+  private dialog = inject(MatDialog);
   userMenu: boolean = false;
+
 
   @HostListener('document:click', ['$event'])
   clickout(event: Event) {
@@ -24,9 +28,18 @@ export class MobileHeaderComponent {
       }
     }
   }
-  
+
 
   openUserMenu() {
     this.userMenu = !this.userMenu;
+  }
+
+
+  openUserProfile() {
+    this.dialog.open(UserProfileComponent);
+  }
+
+  logout() {
+
   }
 }

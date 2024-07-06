@@ -1,0 +1,21 @@
+@import "./../../../styles.scss";
+
+.user-pofile-dialog {
+    position: fixed;
+    top: 20%;
+    right: 20px;
+    left: 20px;
+    bottom: 20%;
+    z-index: 999;
+    background-color: white;
+    margin: 0;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0px 6px 10px 0px #00000033;
+
+    >.headline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
