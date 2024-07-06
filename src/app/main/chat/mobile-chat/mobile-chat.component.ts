@@ -35,7 +35,7 @@ export class MobileChatComponent {
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
-    mainService: MainServiceService
+    public mainService: MainServiceService
   ) {
     mainService.testUser.id = 'hioho33333333';
     mainService.testUser.email = 'tester.tester@test.com';
@@ -44,6 +44,7 @@ export class MobileChatComponent {
     mainService.loggedInUser = mainService.testUser;
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
+      chatService.idOfChannel = params.id;
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));

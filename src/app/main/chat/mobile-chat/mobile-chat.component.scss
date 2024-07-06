@@ -67,7 +67,7 @@
   width: 100vw;
   max-height: calc(100vh - 280px);
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .mobile-chat-message-date-container {
@@ -104,7 +104,6 @@
   display: flex;
   justify-content: flex-start;
   margin-left: 16px;
-  margin-right: 16px;
 }
 
 .mobile-chat-message-container-from-me {
@@ -156,8 +155,9 @@
 }
 
 .mobile-chat-message-text-container {
+  margin-top: 8px;
   padding-top: 24px;
-  padding-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .mobile-chat-message-from-others {
@@ -167,6 +167,7 @@
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
+  margin-right: 90px;
 }
 
 .mobile-chat-message-from-me {
@@ -177,6 +178,7 @@
   border-top-left-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
+  margin-left: 90px;
 }
 
 .mobile-chat-input-container {

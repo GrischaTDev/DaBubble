@@ -6,7 +6,7 @@ import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { log } from 'console';
+import { updateDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +23,7 @@ export class ChatService {
   mentionUser: User[] = [];
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
+  idOfChannel: string = '';
 
   constructor(public mainService: MainServiceService) {}
 
@@ -48,6 +49,7 @@ export class ChatService {
    * it simply closes it.
    */
   openDialogEmoji() {
+    this.mainService.emojiReactionMessage = false;
     if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
       this.closeDialog();
       this.dialogInstance = this.dialog.open(DialogEmojiComponent);
@@ -141,11 +143,36 @@ export class ChatService {
       minute: '2-digit',
       hour12: false
     });
-  
     return formattedTime;
   }
 
   ifMessageFromMe(userIdFromMessage: string): boolean {
     return userIdFromMessage === this.mainService.testUser.id;
+  }
+
+    /**
+   * Manages the state of the emoji dialog. If the emoji dialog is not open or if the chat dialog is open,
+   * it attempts to close any currently open dialogs and opens the emoji dialog. If the emoji dialog is already open,
+   * it simply closes it.
+   */
+    openDialogEmojiReactionMessage() {
+      this.mainService.emojiReactionMessage = true;
+      if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
+        this.closeDialog();
+        this.dialogInstance = this.dialog.open(DialogEmojiComponent);
+        this.dialogEmojiOpen = true;
+      } else {
+        this.closeDialog();
+      }
+    }
+
+  async addReactionToMessage(emoji: string) {
+    this.messageChannel.emojis.push(emoji);
+      let docRef = this.mainService.getDataRef(this.idOfChannel, 'channels');
+      await updateDoc(docRef, this.messageChannel.toJSON()).catch(
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 }

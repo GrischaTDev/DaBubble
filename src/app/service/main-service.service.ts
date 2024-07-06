@@ -35,6 +35,7 @@ export class MainServiceService {
   allChannels: Channel[] = [];
   loggedInUser: any = [];
   testUser: User = new User();
+  emojiReactionMessage = false;
 
   changeInputContent(content: any) {
     this.contentSource.next(content);

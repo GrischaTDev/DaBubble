@@ -54,19 +54,28 @@
               </span>
             </div>
           </div>
-          <div class="mobile-chat-message-text-container">
-            <p
-              [ngClass]="{
-                'mobile-chat-message-from-me': chatService.ifMessageFromMe(
-                  singleMessage.userId
-                ),
-                'mobile-chat-message-from-others': !chatService.ifMessageFromMe(
-                  singleMessage.userId
-                )
-              }"
+          <div
+            class="mobile-chat-message-text-container"
+            [ngClass]="{
+              'mobile-chat-message-from-me': chatService.ifMessageFromMe(
+                singleMessage.userId
+              ),
+              'mobile-chat-message-from-others': !chatService.ifMessageFromMe(
+                singleMessage.userId
+              )
+            }"
+          >
+            <span>
+              {{ singleMessage.message }}
+            </span>
+          </div>
+          <div>
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event); chatService.openDialogEmojiReactionMessage()
+              "
+              >add_reaction</mat-icon
             >
-                {{ singleMessage.message }}
-            </p>
           </div>
         </div>
       </div>

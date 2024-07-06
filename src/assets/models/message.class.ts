@@ -1,4 +1,3 @@
-import { User } from './user.class';
 export class Message {
   userId: string;
   userName: string;
@@ -6,7 +5,8 @@ export class Message {
   userAvatar: string;
   date: number;
   message: string;
-
+  emojis: string[] = [];
+ 
   constructor(obj?: any) {
     this.userId = obj?.userId || '';
     this.userName = obj?.userName || '';
@@ -14,6 +14,7 @@ export class Message {
     this.userAvatar = obj?.userAvatar || '';
     this.date = obj ? obj.data : '';
     this.message = obj ? obj.email : '';
+    this.emojis = obj?.emojis || [];
   }
 
   public toJSON() {
@@ -25,6 +26,7 @@ export class Message {
       nameUser: this.userName,
       date: this.date,
       message: this.message,
+      emojis: this.emojis,
     };
   }
 }
