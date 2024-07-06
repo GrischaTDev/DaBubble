@@ -1,6 +1,10 @@
 @import "./../../../../styles.scss";
 
 header {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
     background-color: $background-lightblue;
     height: 80px;
     display: flex;

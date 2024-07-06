@@ -12,6 +12,7 @@ import { MobileChannelsComponent } from "./channels/mobile-channels/mobile-chann
 import { MainServiceService } from '../service/main-service.service';
 import { AddChannelComponent } from './channels/add-channel/add-channel.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @Component({
     selector: 'app-main',
@@ -29,7 +30,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         DesktopChannelsComponent,
         MobileChannelsComponent,
         AddChannelComponent,
-        MatDialogModule
+        MatDialogModule,
+        UserProfileComponent
     ]
 })
 export class MainComponent implements OnInit {
