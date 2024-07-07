@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseApp } from '@angular/fire/app';
-import { getAuth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { getAuth, signInAnonymously, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterModule } from '@angular/router';
@@ -46,6 +46,21 @@ export class LoginCardComponent {
         }
       })
 
+  }
+
+  async loginAnonymus() {
+    const auth = getAuth();
+    await signInAnonymously(auth)
+      .then(() => {
+        this.router.navigate(['main']);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      console.log(errorCode);
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      // ...
+    });   
   }
 
   async loginWithGoogle() {

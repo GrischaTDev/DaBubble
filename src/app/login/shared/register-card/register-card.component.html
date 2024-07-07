@@ -7,15 +7,37 @@
         <p>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto.</p>
         <div class="input-fields">
             <div>
-                <input [ngModel]="isNameValid" [(ngModel)]="name" #isNameValid="ngModel" type="text" placeholder="Name und Nachname" [ngModelOptions]="{standalone: true}" name="name" required>
-                <p *ngIf="!isNameValid.valid && registerForm.submitted"> Bitte gebe ein Namen ein. </p>
+                <input [ngModel]="isNameValid" 
+                    [(ngModel)]="name" 
+                    #isNameValid="ngModel" 
+                    type="text" 
+                    placeholder="Name und Nachname" 
+                    [ngModelOptions]="{standalone: true}" 
+                    name="name" required>
+                <p *ngIf="!isNameValid.valid && registerForm.submitted"> Bitte gib deinen Namen ein. </p>
             </div>
             <div>
-                <input [(ngModel)]="isMailValid" [(ngModel)]="email" #isMailValid="ngModel" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}" name="email" required>
+                <input [(ngModel)]="isMailValid" 
+                    [(ngModel)]="email" 
+                    #isMailValid="ngModel" 
+                    class="email-input" 
+                    type="email" 
+                    placeholder="beispielname@email.com" 
+                    [ngModelOptions]="{standalone: true}" 
+                    name="email" required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                >
+                <p *ngIf="!isMailValid.valid && registerForm.submitted"> Bitte gib deine E-Mail-Adresse ein. </p>
                 <p *ngIf="isEmailAvaiable"> {{ isEmailAvaiable }} </p>
             </div>
             <div>
-                <input [(ngModel)]="isPasswordValid" [(ngModel)]="password" #isPasswordValid="ngModel" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}" name="password" required>
+                <input [(ngModel)]="isPasswordValid" 
+                    [(ngModel)]="password" 
+                    #isPasswordValid="ngModel" 
+                    type="password" 
+                    placeholder="Passwort" 
+                    [ngModelOptions]="{standalone: true}" 
+                    name="password" required>
                 <p *ngIf="isPasswordAvaiable"> {{ isPasswordAvaiable }} </p>
             </div>
         </div>
