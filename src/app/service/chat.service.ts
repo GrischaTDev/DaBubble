@@ -6,7 +6,9 @@ import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { updateDoc } from '@angular/fire/firestore';
+import { docData, Firestore } from '@angular/fire/firestore';
+import { Emoji } from '../../assets/models/emoji.class';
+import { user } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,7 @@ import { updateDoc } from '@angular/fire/firestore';
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
+  firestore: Firestore = inject(Firestore);
   dialogInstance:
     | MatDialogRef<DialogEmojiComponent, any>
     | MatDialogRef<DialogMentionUsersComponent, any>
@@ -24,6 +27,9 @@ export class ChatService {
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
   idOfChannel: string = '';
+  indexOfChannelMessage: number = 0;
+  newEmoji: Emoji = new Emoji();
+  savedEmojis: string[] = [];
 
   constructor(public mainService: MainServiceService) {}
 
@@ -124,13 +130,13 @@ export class ChatService {
       weekday: 'long', // Wochentag in langform
       day: '2-digit',
       month: 'long', // Monat in langform
-      year: 'numeric'
+      year: 'numeric',
     };
     const localeDate = date.toLocaleDateString('de-DE', options);
     const today = new Date();
     const todayLocaleDate = today.toLocaleDateString('de-DE', options);
     if (localeDate === todayLocaleDate) {
-      return "Heute";
+      return 'Heute';
     } else {
       return localeDate;
     }
@@ -141,7 +147,7 @@ export class ChatService {
     const formattedTime = date.toLocaleTimeString('de-DE', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
     });
     return formattedTime;
   }
@@ -150,29 +156,56 @@ export class ChatService {
     return userIdFromMessage === this.mainService.testUser.id;
   }
 
-    /**
+  /**
    * Manages the state of the emoji dialog. If the emoji dialog is not open or if the chat dialog is open,
    * it attempts to close any currently open dialogs and opens the emoji dialog. If the emoji dialog is already open,
    * it simply closes it.
    */
-    openDialogEmojiReactionMessage() {
-      this.mainService.emojiReactionMessage = true;
-      if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
-        this.closeDialog();
-        this.dialogInstance = this.dialog.open(DialogEmojiComponent);
-        this.dialogEmojiOpen = true;
-      } else {
-        this.closeDialog();
-      }
+  openDialogEmojiReactionMessage(index: number) {
+    this.mainService.emojiReactionMessage = true;
+    this.indexOfChannelMessage = index;
+    if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
+      this.closeDialog();
+      this.dialogInstance = this.dialog.open(DialogEmojiComponent);
+      this.dialogEmojiOpen = true;
+    } else {
+      this.closeDialog();
     }
+  }
 
   async addReactionToMessage(emoji: string) {
-    this.messageChannel.emojis.push(emoji);
-      let docRef = this.mainService.getDataRef(this.idOfChannel, 'channels');
-      await updateDoc(docRef, this.messageChannel.toJSON()).catch(
-        (err) => {
-          console.log(err);
-        }
-      );
+    this.savedEmojis = [];
+    this.newEmoji.emoji = emoji;
+    this.newEmoji.users.push(this.mainService.testUser);
+    let refEmojieOfMessage =
+      this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis;
+    if (refEmojieOfMessage.length === 0) {
+      await this.mainService.addNewDocOnFirebase('emoji', this.newEmoji);
+    } else {
+      for (let index = 0; index < refEmojieOfMessage.length; index++) {
+        let items$ = docData(
+          this.mainService.getDataRef(refEmojieOfMessage[index], 'emoji')
+        );
+        items$.subscribe((emojiObj: any) => {
+          this.savedEmojis.push(emojiObj.emoji);
+          for (let index = 0; index < this.savedEmojis.length; index++) {
+            const savedEmoji = this.savedEmojis[index];
+            if (savedEmoji === emoji) {
+              this.mainService.messageEmoji[index].users.push(
+                this.mainService.testUser
+              );
+            } else {
+              this.mainService.messageEmoji.push(this.newEmoji);
+            }
+          }
+        });
+        this.mainService.addCollection(
+          'emoji',
+          this.mainService.messageEmoji[index].id,
+          new Emoji(this.mainService.messageEmoji)
+        );
+      }
+    }
   }
+
 }

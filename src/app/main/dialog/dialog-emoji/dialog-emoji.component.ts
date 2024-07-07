@@ -43,7 +43,7 @@ export class DialogEmojiComponent {
       this.chatService.addReactionToMessage(event.emoji.native);
       this.mainService.emojiReactionMessage = false;
     }
-    this.dialogRef.close();
+    this.chatService.closeDialog();
   }
 
   /**

@@ -12,6 +12,7 @@ import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { Emoji } from '../../assets/models/emoji.class';
 
 @Injectable({
   providedIn: 'root',
@@ -19,12 +20,14 @@ import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 export class MainServiceService {
   unsubUserList;
   unsubChannelsList;
+  unsubEmojiList;
   changeContent(inputContent: any) {
     throw new Error('Method not implemented.');
   }
   constructor(private router: Router) {
     this.unsubUserList = this.subUserList();
     this.unsubChannelsList = this.subChannelsList();
+    this.unsubEmojiList = this.subEmojiList();
   }
   private contentSource = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
@@ -33,9 +36,11 @@ export class MainServiceService {
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
   allChannels: Channel[] = [];
+  messageEmoji: Emoji[] = [];
   loggedInUser: any = [];
   testUser: User = new User();
   emojiReactionMessage = false;
+  docId: string = '';
 
   changeInputContent(content: any) {
     this.contentSource.next(content);
@@ -50,13 +55,14 @@ export class MainServiceService {
    * @function addNewDocOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewDocOnFirebase(docName: string, data: Channel | User) {
+  async addNewDocOnFirebase(docName: string, data: Channel | User | Emoji) {
     try {
-      await addDoc(collection(this.firestore, docName), data.toJSON());
+      const docRef = await addDoc(collection(this.firestore, docName), data.toJSON());
+      this.docId = docRef.id;
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
-      /* this.dialogRef.close(); */
+     
     }
   }
 
@@ -64,7 +70,6 @@ export class MainServiceService {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       const userId = user?.uid;
-
       if (user) {
         onSnapshot(doc(this.firestore, 'users', userId ?? 'default'), (item) => {
           if (item.exists()) {
@@ -103,14 +108,32 @@ export class MainServiceService {
     return onSnapshot(collection(this.firestore, 'channels'), (list) => {
       this.allChannels = [];
       list.forEach((element) => {
-        let userData = {
+        let channelData = {
           ...element.data(),
           id: element.id,
         };
-        this.allChannels.push(new Channel(userData));
+        this.allChannels.push(new Channel(channelData));
       });
     });
   }
+
+    /**
+   * Initializes component by setting up a snapshot listener on the 'users' collection from Firestore.
+   * Updates `allUsers` array with `User` instances representing each document in the collection.
+   * Each `User` instance is created from the document's data, including a unique ID.
+   */
+    subEmojiList() {
+      return onSnapshot(collection(this.firestore, 'emoji'), (list) => {
+        this.messageEmoji = [];
+        list.forEach((element) => {
+          let messageEmojiData = {
+            ...element.data(),
+            id: element.id,
+          };
+          this.messageEmoji.push(new Emoji(messageEmojiData));
+        });
+      });
+    } 
 
   /**
    * Asynchronously adds or updates a document within a collection in Firestore.
@@ -122,7 +145,7 @@ export class MainServiceService {
   async addCollection(
     docName: string,
     collectionId: string,
-    data: Channel | User
+    data: Channel | User | Emoji
   ) {
     await updateDoc(
       doc(collection(this.firestore, docName), collectionId),
@@ -162,5 +185,6 @@ export class MainServiceService {
   ngOnDestroy() {
     this.unsubUserList();
     this.unsubChannelsList();
+    this.unsubEmojiList();
   }
 }

@@ -12,6 +12,7 @@ export class Channel {
   userEmail: string;
   userAvatar: string;
   avatarChannel: string;
+  mentionUser: string;
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
@@ -24,6 +25,7 @@ export class Channel {
     this.userEmail = obj?.userEmail || '';
     this.userAvatar = obj?.userAvatar || '';
     this.avatarChannel = obj?.avatar || '';
+    this.mentionUser= obj?.mentionUser || [];
   }
 
   public toJSON() {
@@ -44,6 +46,8 @@ export class Channel {
         userAvatar: user.userAvatar,
         date: user.date,
         message: user.message,
+        emojis: user.emojis,
+        mentionUser: user.mentionUser,
       })),
       avatarChannel: this.avatarChannel,
     };
