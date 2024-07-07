@@ -74,13 +74,13 @@ export class RegisterCardComponent implements OnInit {
       } else if (error.code === 'auth/invalid-email') {
         this.isEmailAvaiable = 'Diese E-Mail-Adresse ist nicht gültig.';
       } else if (error.code === 'auth/missing-email') {
-        this.isEmailAvaiable = 'Bitte gebe eine E-Mail-Adresse ein.'
+        this.isEmailAvaiable = 'Bitte gib eine E-Mail-Adresse ein.'
       } else if (error.code === 'auth/operation-not-allowed') {
         this.isUserRegister = 'Operation not allowed. Please enable Email/Password authentication.';
       } else if (error.code === 'auth/weak-password') {
         this.isPasswordAvaiable = 'Dieses Passwort ist zu schwach.';
       } else if (error.code === 'auth/missing-password') {
-        this.isPasswordAvaiable = 'Bitte gebe ein Passwort ein.'; 
+        this.isPasswordAvaiable = 'Bitte gib ein Passwort ein'; 
       } else {
         this.isUserRegister = 'User is not register';
       }
