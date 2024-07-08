@@ -126,7 +126,7 @@
 }
 
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 840px) {
     .add-channel-container {
         display: flex;
         align-items: center;
@@ -134,6 +134,8 @@
     }
     .add-channel-dialog {
         width: 700px;
-        height: 300px;
+        height: 500px;
+        box-shadow: 0px 6px 10px 0px #00000033;
+        border-radius: 30px;
     }
 }

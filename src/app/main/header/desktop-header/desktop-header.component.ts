@@ -4,6 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
+import { User } from '../../../../assets/models/user.class';
+
 
 @Component({
   selector: 'app-desktop-header',
@@ -13,13 +15,19 @@ import { MainServiceService } from '../../../service/main-service.service';
   styleUrl: './desktop-header.component.scss'
 })
 export class DesktopHeaderComponent implements OnInit {
-  constructor(public mainService: MainServiceService) {}
+  userTest: User = new User();
+
+  constructor(public mainService: MainServiceService) {
+    this.userTest = mainService.loggedInUser;
+  }
   currentUser = this.mainService.loggedInUser;
+
+  
 
   ngOnInit() {
     this.mainService.currentLoggedUser();
-    console.log('Logged in user', this.currentUser);
-    console.log('User avatar', this.currentUser.avatar);
+    console.log('Logged in user', this.userTest);
+    console.log('User avatar', this.userTest.avatar);
   }
 
   
