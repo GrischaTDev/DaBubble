@@ -32,11 +32,73 @@ export class AvatarCardComponent {
 
   selectedAvatarImage: string | ArrayBuffer | null = './assets/img/user/user1.svg';
 
+  constructor(private router: Router, private firestore: Firestore, private loginService: LoginService) { }
+
+  /**
+   * 
+   * The selected avatar image is uploaded to Firebase and the user is redirected to the login page.
+   * @param event - Click event
+   */
+  async saveAndBackToLogin(event: Event) {
+    this.eventPreventDefault(event);  
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user !== null) {
+      this.loginService.setUserRegistered(true);
+      this.setAvatarImageToFirebase(user);
+      this.redirectedToLogin();
+    }
+  }
+
+  /**
+   * 
+   * The selected avatar image is uploaded to Firebase.
+   * @param user - Current user data
+   */
+  async setAvatarImageToFirebase(user: any) {
+    await setDoc(doc(this.firestore, 'users', user.uid), {
+      avatar: this.selectedAvatarImage
+    }, { merge: true });
+  }
+
+  /**
+   * 
+   * Resets the default behavior of the button.
+   * @param event - Click event
+   */
+  eventPreventDefault(event: Event) {
+    if (event) {
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * 
+   * Redirected to the login page with a 2-second delay.
+   */
+  redirectedToLogin() {
+    setTimeout(() => {
+      this.router.navigate(['login']).then(() => {
+        this.loginService.setUserRegistered(false);
+      });
+    }, 2000);
+  }
+
+  /**
+   * 
+   * The selected avatar images from the list are saved.
+   * @param index - Current index from array
+   */
   chooseAvatar(index: number) {
     this.selectedAvatarImage = this.avatarImg[index];
     console.log(this.selectedAvatarImage)
   }
 
+  /**
+   * 
+   * Saves the selected image and stores it in a variable.
+   * @param event - Event for input type file
+   */
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -49,45 +111,6 @@ export class AvatarCardComponent {
       };
       reader.readAsDataURL(file);
     }
-  }
-
-  constructor(private router: Router, private firestore: Firestore, private loginService: LoginService, private ngZone: NgZone) { }
-
-  async saveAndBackToLogin(event: Event) {
-
-    if (event) {
-      event.preventDefault();
-    }
-
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user !== null) {
-
-      this.loginService.setUserRegistered(true);
-
-      try {
-        await setDoc(doc(this.firestore, 'users', user.uid), {
-          avatar: this.selectedAvatarImage
-        }, { merge: true });
-
-        console.log('Daten erfolgreich gespeichert.');
-
-        // 2 Sekunden warten
-        setTimeout(() => {
-          this.router.navigate(['login']).then(() => {
-            this.loginService.setUserRegistered(false);
-          }).catch((navigationError) => {
-            console.error("Error during navigation: ", navigationError);
-          });
-        }, 2000);
-      } catch (error) {
-        console.error("Error saving document: ", error);
-      }
-
-
-
-    }
-
   }
 
 }
