@@ -110,12 +110,13 @@ export class ChatService {
    sendMessageFromChannel(channelId: string, textContent: string) {
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
-    this.messageChannel.userId = this.mainService.loggedInUser.id;
+    console.log('ddddddddd',this.mainService.loggedInUser)
+/*     this.messageChannel.userId = this.mainService.loggedInUser.id;
     this.messageChannel.userName = this.mainService.loggedInUser.name;
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
-    this.setSubcontentCollection('channels', channelId);
+    this.setSubcontentCollection('channels', channelId); */
   }
 
   async setSubcontentCollection(docName: string, channelId: string) {
@@ -152,9 +153,9 @@ export class ChatService {
   setDate(timeFromServer: number): string {
     const date = new Date(timeFromServer);
     const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long', // Wochentag in langform
+      weekday: 'long', 
       day: '2-digit',
-      month: 'long', // Monat in langform
+      month: 'long',
       year: 'numeric',
     };
     const localeDate = date.toLocaleDateString('de-DE', options);
