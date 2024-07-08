@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
-import { User } from '../../assets/models/user.class';
+
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
 import { docData, Firestore } from '@angular/fire/firestore';
 import { Emoji } from '../../assets/models/emoji.class';
-import { user } from '@angular/fire/auth';
+import { MentionUser } from '../../assets/models/mention-user.class';
+
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +24,15 @@ export class ChatService {
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
-  mentionUser: User[] = [];
+  mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
+  messageThread: Message = new Message();
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   newEmoji: Emoji = new Emoji();
   savedEmojis: string[] = [];
+  emojiForHTML: Emoji[] = [];
 
   constructor(public mainService: MainServiceService) {}
 
@@ -99,13 +102,12 @@ export class ChatService {
   closeDialog(): void {
     if (this.dialogInstance) {
       this.dialogInstance.close();
-      console.log('Dialog geschlossen');
       this.dialogEmojiOpen = false;
       this.dialogMentionUserOpen = false;
     }
   }
 
-  sendMessageFromChannel(channelId: string, textContent: string) {
+   sendMessageFromChannel(channelId: string, textContent: string) {
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
     this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -113,7 +115,30 @@ export class ChatService {
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
-    this.sendMessage('channels', channelId);
+    this.setSubcontentCollection('channels', channelId);
+  }
+
+  async setSubcontentCollection(docName: string, channelId: string) {
+    await this.mainService.addNewDocOnFirebase('emoji', this.newEmoji);
+    this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis.push(
+      this.mainService.docId
+    );
+
+
+
+    await this.mainService.addNewDocOnFirebase('mentionUser', this.mentionUser);
+    this.dataChannel.messageChannel[
+      this.indexOfChannelMessage
+    ].mentionUser.push(this.mainService.docId);
+
+
+
+
+    await this.mainService.addNewDocOnFirebase('thread', this.messageThread);
+    this.dataChannel.messageChannel[
+      this.indexOfChannelMessage
+    ].thread = this.mainService.docId;
+    this.sendMessage(docName, channelId);
   }
 
   sendMessage(docName: string, channelId: string) {
@@ -181,6 +206,7 @@ export class ChatService {
       this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis;
     if (refEmojieOfMessage.length === 0) {
       await this.mainService.addNewDocOnFirebase('emoji', this.newEmoji);
+      refEmojieOfMessage.push(this.mainService.docId);
     } else {
       for (let index = 0; index < refEmojieOfMessage.length; index++) {
         let items$ = docData(
@@ -199,13 +225,25 @@ export class ChatService {
             }
           }
         });
-        this.mainService.addCollection(
-          'emoji',
-          this.mainService.messageEmoji[index].id,
-          new Emoji(this.mainService.messageEmoji)
-        );
       }
     }
+    this.mainService.addCollection(
+      'channel',
+      this.idOfChannel,
+      new Channel(this.dataChannel)
+    );
   }
 
+  loadEmojiFromMessage(singleMessage: Message) {
+    this.emojiForHTML = [];
+    let emojiArray = singleMessage.emojis;
+    for (let index = 0; index < emojiArray.length; index++) {
+      const refDoc = emojiArray[index];
+      let items$ = docData(this.mainService.getDataRef(refDoc, 'emoji'));
+      items$.subscribe((emojiObj: any) => {
+        this.emojiForHTML.push(emojiObj);
+      });
+    }
+    return this.emojiForHTML;
+  }
 }

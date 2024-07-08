@@ -13,6 +13,7 @@ export class Channel {
   userAvatar: string;
   avatarChannel: string;
   mentionUser: string;
+  thread: string;
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
@@ -26,6 +27,7 @@ export class Channel {
     this.userAvatar = obj?.userAvatar || '';
     this.avatarChannel = obj?.avatar || '';
     this.mentionUser= obj?.mentionUser || [];
+    this.thread= obj?.thread || '';
   }
 
   public toJSON() {
@@ -48,6 +50,7 @@ export class Channel {
         message: user.message,
         emojis: user.emojis,
         mentionUser: user.mentionUser,
+        thread: user.thread
       })),
       avatarChannel: this.avatarChannel,
     };

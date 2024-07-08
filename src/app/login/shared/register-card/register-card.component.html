@@ -40,10 +40,17 @@
                     name="password" required>
                 <p *ngIf="isPasswordAvaiable"> {{ isPasswordAvaiable }} </p>
             </div>
+            <div class="agree-policy">
+                <input [(ngModel)]="isCheckedPolicy" 
+                    type="checkbox" 
+                    [ngModelOptions]="{standalone: true}"> 
+                <span class="custom-checkbox"></span>
+                Ich simme der&nbsp;<a href="#">Datenschutzerklärung</a>&nbsp;zu.
+            </div>
         </div>
 
         <div class="flexend-btn-container">
-            <button [disabled]="!isMailValid.valid || !isNameValid.valid || !isPasswordValid.valid" type="submit" class="primary-btn">Weiter</button>
+            <button [disabled]="!isMailValid.valid || !isNameValid.valid || !isPasswordValid.valid || !isCheckedPolicy" type="submit" class="primary-btn">Weiter</button>
         </div>
 
     </form>
