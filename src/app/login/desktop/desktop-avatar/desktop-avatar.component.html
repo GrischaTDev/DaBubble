@@ -10,6 +10,10 @@
     </div>
 </div>
 
+<div  *ngIf="overlayRegistered$ | async" class="overlay">
+    Regestrierung erfolgreich!
+</div>
+
 <div class="impress-policy">
     <a href="#">Datenschutz</a>
     <a href="#">Impressum</a>

@@ -1,3 +1,6 @@
+import { Emoji } from "./emoji.class";
+import { User } from "./user.class";
+
 export class Message {
   userId: string;
   userName: string;
