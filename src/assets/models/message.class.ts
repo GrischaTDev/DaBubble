@@ -1,6 +1,3 @@
-import { User } from "../../../dist/da-bubble/browser/assets/models/user.class";
-import { Emoji } from "./emoji.class";
-
 export class Message {
   userId: string;
   userName: string;
@@ -8,7 +5,7 @@ export class Message {
   userAvatar: string;
   date: number;
   message: string;
-  mentionUser: User[] = [];
+  mentionUser: string[] = [];
   emojis:string[] = [];
  
   constructor(obj?: any) {
@@ -18,7 +15,6 @@ export class Message {
     this.userAvatar = obj?.userAvatar || '';
     this.date = obj ? obj.data : '';
     this.message = obj ? obj.email : '';
-    this.mentionUser = obj?.mentionUser || [];
   }
 
   public toJSON() {
@@ -31,12 +27,7 @@ export class Message {
       date: this.date,
       message: this.message,
       emojis:  this.emojis,
-      mentionUser: this.mentionUser.map((user) => ({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar,
-      })),
+      mentionUser: this.mentionUser,
     };
   }
 }

@@ -13,6 +13,7 @@ import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { Emoji } from '../../assets/models/emoji.class';
+import { MentionUser } from '../../assets/models/mention-user.class';
 
 @Injectable({
   providedIn: 'root',
@@ -55,7 +56,7 @@ export class MainServiceService {
    * @function addNewDocOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewDocOnFirebase(docName: string, data: Channel | User | Emoji) {
+  async addNewDocOnFirebase(docName: string, data: Channel | User | Emoji | MentionUser) {
     try {
       const docRef = await addDoc(collection(this.firestore, docName), data.toJSON());
       this.docId = docRef.id;
@@ -131,6 +132,7 @@ export class MainServiceService {
             id: element.id,
           };
           this.messageEmoji.push(new Emoji(messageEmojiData));
+          console.log(this.messageEmoji       )
         });
       });
     } 

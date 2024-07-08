@@ -72,12 +72,21 @@
           <div>
             <mat-icon
               (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmojiReactionMessage(i)
+                chatService.onButtonClick($event);
+                chatService.openDialogEmojiReactionMessage(i)
               "
               >add_reaction</mat-icon
             >
-            <div >
-             
+            <div>
+              <div 
+                *ngFor="
+                  let emojiContent of chatService.loadEmojiFromMessage(singleMessage);
+                  let i = index
+                "
+              >
+                <span>{{ emojiContent.emoji }}</span>
+               
+              </div>
             </div>
           </div>
         </div>

@@ -8,7 +8,7 @@ import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
 import { docData, Firestore } from '@angular/fire/firestore';
 import { Emoji } from '../../assets/models/emoji.class';
-import { user } from '@angular/fire/auth';
+import { MentionUser } from '../../assets/models/mention-user.class';
 
 @Injectable({
   providedIn: 'root',
@@ -23,13 +23,14 @@ export class ChatService {
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
-  mentionUser: User[] = [];
+  mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   newEmoji: Emoji = new Emoji();
   savedEmojis: string[] = [];
+  emojiForHTML: Emoji[] = [];
 
   constructor(public mainService: MainServiceService) {}
 
@@ -105,7 +106,7 @@ export class ChatService {
     }
   }
 
-  sendMessageFromChannel(channelId: string, textContent: string) {
+   sendMessageFromChannel(channelId: string, textContent: string) {
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
     this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -116,7 +117,15 @@ export class ChatService {
     this.sendMessage('channels', channelId);
   }
 
-  sendMessage(docName: string, channelId: string) {
+  async sendMessage(docName: string, channelId: string) {
+    await this.mainService.addNewDocOnFirebase('emoji', this.newEmoji);
+    this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis.push(
+      this.mainService.docId
+    );
+    await this.mainService.addNewDocOnFirebase('mentionUser', this.mentionUser);
+    this.dataChannel.messageChannel[
+      this.indexOfChannelMessage
+    ].mentionUser.push(this.mainService.docId);
     this.mainService.addCollection(
       docName,
       channelId,
@@ -181,6 +190,7 @@ export class ChatService {
       this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis;
     if (refEmojieOfMessage.length === 0) {
       await this.mainService.addNewDocOnFirebase('emoji', this.newEmoji);
+      refEmojieOfMessage.push(this.mainService.docId);
     } else {
       for (let index = 0; index < refEmojieOfMessage.length; index++) {
         let items$ = docData(
@@ -206,6 +216,23 @@ export class ChatService {
         );
       }
     }
+    this.mainService.addCollection(
+      'channel',
+      this.idOfChannel,
+      new Channel(this.dataChannel)
+    );
   }
 
+  loadEmojiFromMessage(singleMessage: Message) {
+    this.emojiForHTML = [];
+    let emojiArray = singleMessage.emojis;
+    for (let index = 0; index < emojiArray.length; index++) {
+      const refDoc = emojiArray[index];
+      let items$ = docData(this.mainService.getDataRef(refDoc, 'emoji'));
+      items$.subscribe((emojiObj: any) => {
+        this.emojiForHTML.push(emojiObj);
+      });
+    }
+    return this.emojiForHTML;
+  }
 }
