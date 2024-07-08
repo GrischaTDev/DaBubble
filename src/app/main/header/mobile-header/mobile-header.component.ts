@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MainServiceService } from '../../../service/main-service.service';
 
 @Component({
   selector: 'app-mobile-header',
@@ -11,7 +12,19 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './mobile-header.component.html',
   styleUrls: ['./mobile-header.component.scss'] 
 })
-export class MobileHeaderComponent {
+export class MobileHeaderComponent implements OnInit { 
+  
+
+  constructor(public mainService: MainServiceService) {}
+  currentUser = this.mainService.loggedInUser;
+
+  ngOnInit() {
+    this.mainService.currentLoggedUser();
+    console.log('Logged in user', this.currentUser);
+    console.log('User avatar', this.currentUser.avatar);
+  }
+
+  
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
 
