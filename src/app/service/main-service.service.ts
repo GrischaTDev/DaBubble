@@ -57,14 +57,19 @@ export class MainServiceService {
    * @function addNewDocOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewDocOnFirebase(docName: string, data: Channel | User | Emoji | MentionUser | Message) {
+  async addNewDocOnFirebase(
+    docName: string,
+    data: Channel | User | Emoji | MentionUser | Message
+  ) {
     try {
-      const docRef = await addDoc(collection(this.firestore, docName), data.toJSON());
+      const docRef = await addDoc(
+        collection(this.firestore, docName),
+        data.toJSON()
+      );
       this.docId = docRef.id;
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
-     
     }
   }
 
@@ -73,12 +78,19 @@ export class MainServiceService {
     onAuthStateChanged(auth, (user) => {
       const userId = user?.uid;
       if (user) {
-        onSnapshot(doc(this.firestore, 'users', userId ?? 'default'), (item) => {
-          if (item.exists()) {
-            this.loggedInUser = new User(item.data());
+        onSnapshot(
+          doc(this.firestore, 'users', userId ?? 'default'),
+          (item) => {
+            if (item.exists()) {
+              let userData = {
+                ...item.data(),
+                id: item.id,
+              };
+              this.loggedInUser = new User(userData);
+            }
           }
-        });
-      };
+        );
+      }
     });
   }
 
@@ -118,23 +130,23 @@ export class MainServiceService {
     });
   }
 
-    /**
+  /**
    * Initializes component by setting up a snapshot listener on the 'users' collection from Firestore.
    * Updates `allUsers` array with `User` instances representing each document in the collection.
    * Each `User` instance is created from the document's data, including a unique ID.
    */
-    subEmojiList() {
-      return onSnapshot(collection(this.firestore, 'emoji'), (list) => {
-        this.messageEmoji = [];
-        list.forEach((element) => {
-          let messageEmojiData = {
-            ...element.data(),
-            id: element.id,
-          };
-          this.messageEmoji.push(new Emoji(messageEmojiData));
-        });
+  subEmojiList() {
+    return onSnapshot(collection(this.firestore, 'emoji'), (list) => {
+      this.messageEmoji = [];
+      list.forEach((element) => {
+        let messageEmojiData = {
+          ...element.data(),
+          id: element.id,
+        };
+        this.messageEmoji.push(new Emoji(messageEmojiData));
       });
-    } 
+    });
+  }
 
   /**
    * Asynchronously adds or updates a document within a collection in Firestore.
