@@ -4,6 +4,8 @@ import { getAuth } from '@angular/fire/auth';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink, RouterModule } from '@angular/router';
+import { LoginService } from '../../../service/login.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-avatar-card',
@@ -41,7 +43,7 @@ export class AvatarCardComponent {
       const file = input.files[0];
       const reader = new FileReader();
       reader.onload = (e) => {
-        if(e.target) {
+        if (e.target) {
           this.selectedAvatarImage = e.target.result;
         }
       };
@@ -49,18 +51,43 @@ export class AvatarCardComponent {
     }
   }
 
-  constructor(private router: Router, private firestore: Firestore) { }
+  constructor(private router: Router, private firestore: Firestore, private loginService: LoginService, private ngZone: NgZone) { }
 
-  async saveAndBackToLogin() {
+  async saveAndBackToLogin(event: Event) {
 
-    const auth = getAuth();  
+    if (event) {
+      event.preventDefault();
+    }
+
+    const auth = getAuth();
     const user = auth.currentUser;
-      if (user !== null) {
-        setDoc(doc(this.firestore, 'users', user.uid), {
+    if (user !== null) {
+
+      this.loginService.setUserRegistered(true);
+
+      try {
+        await setDoc(doc(this.firestore, 'users', user.uid), {
           avatar: this.selectedAvatarImage
         }, { merge: true });
+
+        console.log('Daten erfolgreich gespeichert.');
+
+        // 2 Sekunden warten
+        setTimeout(() => {
+          this.router.navigate(['login']).then(() => {
+            this.loginService.setUserRegistered(false);
+          }).catch((navigationError) => {
+            console.error("Error during navigation: ", navigationError);
+          });
+        }, 2000);
+      } catch (error) {
+        console.error("Error saving document: ", error);
       }
-      
-      this.router.navigate(['login']);
-    } 
+
+
+
+    }
+
+  }
+
 }

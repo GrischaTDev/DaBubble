@@ -1,5 +1,5 @@
-import { User } from "../../../dist/da-bubble/browser/assets/models/user.class";
 import { Emoji } from "./emoji.class";
+import { User } from "./user.class";
 
 export class Message {
   userId: string;
