@@ -1,48 +1,50 @@
-<div class="add-channel-dialog">
-    <div class="headline">
-        <h2>Channel erstellen</h2>
-        <div class="close" (click)="closeDialog()">
-            <mat-icon>close</mat-icon>
-        </div>
-    </div>
-    <span>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themnenbezogen sein #marketing zum Beispiel.</span>
-    <div class="input-container">
-        <h3>Channel-Name</h3>
-        <input [(ngModel)]="newChannelName" class="inputfield" type="text" placeholder="#  z.B. Kooperationsprojekte">
-    </div>
-    <div class="input-container">
-        <h3>Beschreibung <span>(optional)</span></h3>
-        <textarea [(ngModel)]="newChannelDescription" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
-    </div>
-    <div class="create-btn">
-        <button class="primary-btn" (click)="openAddUserMenu()">Erstellen</button>
-    </div>
-</div>
-
-<div *ngIf="addUserMenu" class="add-user">
-    <div class="menu-container">
-        <div class="border-container">
-            <div class="border"></div>
-        </div>
+<div class="add-channel-container">
+    <div class="add-channel-dialog">
         <div class="headline">
-            <h2>Leute hinzufügen</h2>
+            <h2>Channel erstellen</h2>
             <div class="close" (click)="closeDialog()">
                 <mat-icon>close</mat-icon>
             </div>
         </div>
-        <div>
-            <div class="radio-options">
-                <input (click)="addUserInputfieldOff()" type="radio" name="memberSelection" id="all-members" checked>
-                <label for="all-members">Alle Mitglieder zu <span class="text-color-blue">{{ newChannelName }}</span> hinzufügen</label> 
-            </div>
-            <div class="radio-options">
-                <input (click)="addUserInputfield()" type="radio" name="memberSelection" id="specific-members">
-                <label for="specific-members">Bestimmte Leute hinzufügen</label> 
-            </div>
-            <input *ngIf="addUserInput" class="inputfield" type="text" placeholder="Name eingeben">
-            <div class="create-btn">
-                <button class="primary-btn" (click)="addChannel()">Erstellen</button>
-            </div>
+        <span>Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themnenbezogen sein #marketing zum Beispiel.</span>
+        <div class="input-container">
+            <h3>Channel-Name</h3>
+            <input [(ngModel)]="newChannelName" class="inputfield" type="text" placeholder="#  z.B. Kooperationsprojekte">
         </div>
-    </div>  
+        <div class="input-container">
+            <h3>Beschreibung <span>(optional)</span></h3>
+            <textarea [(ngModel)]="newChannelDescription" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
+        </div>
+        <div class="create-btn">
+            <button class="primary-btn" (click)="openAddUserMenu()">Erstellen</button>
+        </div>
+    </div>
+    
+    <div *ngIf="addUserMenu" class="add-user">
+        <div class="menu-container">
+            <div class="border-container">
+                <div class="border"></div>
+            </div>
+            <div class="headline">
+                <h2>Leute hinzufügen</h2>
+                <div class="close" (click)="closeDialog()">
+                    <mat-icon>close</mat-icon>
+                </div>
+            </div>
+            <div>
+                <div class="radio-options">
+                    <input (click)="addUserInputfieldOff()" type="radio" name="memberSelection" id="all-members" checked>
+                    <label for="all-members">Alle Mitglieder zu <span class="text-color-blue">{{ newChannelName }}</span> hinzufügen</label> 
+                </div>
+                <div class="radio-options">
+                    <input (click)="addUserInputfield()" type="radio" name="memberSelection" id="specific-members">
+                    <label for="specific-members">Bestimmte Leute hinzufügen</label> 
+                </div>
+                <input *ngIf="addUserInput" class="inputfield" type="text" placeholder="Name eingeben">
+                <div class="create-btn">
+                    <button class="primary-btn" (click)="addChannel()">Erstellen</button>
+                </div>
+            </div>
+        </div>  
+    </div>
 </div>
