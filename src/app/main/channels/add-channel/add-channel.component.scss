@@ -128,14 +128,41 @@
 
 @media only screen and (min-width: 840px) {
     .add-channel-container {
+        position: fixed;
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 100vh;
+        background-color: #796e6e52;
+        width: 100%;
+        top: 0;
     }
     .add-channel-dialog {
+        position: unset;
         width: 700px;
         height: 500px;
         box-shadow: 0px 6px 10px 0px #00000033;
         border-radius: 30px;
+    }
+    
+    .add-user {
+        position: fixed;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.2509803922);
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        >.menu-container {
+            width: 650px;
+            position: unset;
+            border-radius: 30px;
+
+            >.border-container {
+                display: none;
+            }
+        }
     }
 }
