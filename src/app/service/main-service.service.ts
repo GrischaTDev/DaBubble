@@ -13,8 +13,8 @@ import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
 import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { Emoji } from '../../assets/models/emoji.class';
-import { MentionUser } from '../../assets/models/mention-user.class';
 import { Message } from '../../assets/models/message.class';
+import { MentionUser } from '../../assets/models/mention-user.class';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +39,7 @@ export class MainServiceService {
   allUsers: User[] = [];
   allChannels: Channel[] = [];
   messageEmoji: Emoji[] = [];
-  loggedInUser: any = [];
+  loggedInUser: User = new User();
   testUser: User = new User();
   emojiReactionMessage = false;
   docId: string = '';
@@ -75,8 +75,7 @@ export class MainServiceService {
       if (user) {
         onSnapshot(doc(this.firestore, 'users', userId ?? 'default'), (item) => {
           if (item.exists()) {
-            this.loggedInUser = item.data();
-            console.log(this.loggedInUser);
+            this.loggedInUser = new User(item.data());
           }
         });
       };
@@ -133,7 +132,6 @@ export class MainServiceService {
             id: element.id,
           };
           this.messageEmoji.push(new Emoji(messageEmojiData));
-          console.log(this.messageEmoji       )
         });
       });
     } 
@@ -155,7 +153,7 @@ export class MainServiceService {
       data.toJSON()
     )
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       })
       .then(() => {
         /* this.dialogRef.close(); */

@@ -37,11 +37,11 @@ export class MobileChatComponent {
     public chatService: ChatService,
     public mainService: MainServiceService
   ) {
-    mainService.testUser.id = 'hioho33333333';
+/*     mainService.testUser.id = 'hioho33333333';
     mainService.testUser.email = 'tester.tester@test.com';
     mainService.testUser.name = 'Max Tester';
     mainService.testUser.avatar = "/assets/img/user/user3.svg"
-    mainService.loggedInUser = mainService.testUser;
+    mainService.loggedInUser = mainService.testUser; */
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;

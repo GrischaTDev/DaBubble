@@ -10,6 +10,7 @@ import { docData, Firestore } from '@angular/fire/firestore';
 import { Emoji } from '../../assets/models/emoji.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -101,7 +102,6 @@ export class ChatService {
   closeDialog(): void {
     if (this.dialogInstance) {
       this.dialogInstance.close();
-      console.log('Dialog geschlossen');
       this.dialogEmojiOpen = false;
       this.dialogMentionUserOpen = false;
     }
@@ -123,10 +123,17 @@ export class ChatService {
     this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis.push(
       this.mainService.docId
     );
+
+
+
     await this.mainService.addNewDocOnFirebase('mentionUser', this.mentionUser);
     this.dataChannel.messageChannel[
       this.indexOfChannelMessage
     ].mentionUser.push(this.mainService.docId);
+
+
+
+
     await this.mainService.addNewDocOnFirebase('thread', this.messageThread);
     this.dataChannel.messageChannel[
       this.indexOfChannelMessage
