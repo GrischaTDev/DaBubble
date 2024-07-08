@@ -30,18 +30,13 @@ export class MobileChatComponent {
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   messageToChannel: Message = new Message();
+  loggedInUser: User = new User();
   
-
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     public mainService: MainServiceService
   ) {
-/*     mainService.testUser.id = 'hioho33333333';
-    mainService.testUser.email = 'tester.tester@test.com';
-    mainService.testUser.name = 'Max Tester';
-    mainService.testUser.avatar = "/assets/img/user/user3.svg"
-    mainService.loggedInUser = mainService.testUser; */
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
@@ -55,6 +50,7 @@ export class MobileChatComponent {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
+    this.loggedInUser = mainService.loggedInUser
   }
 
   /**

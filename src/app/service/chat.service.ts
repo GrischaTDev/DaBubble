@@ -115,6 +115,7 @@ export class ChatService {
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
+    console.log('2222222',this.mainService.loggedInUser)
     this.setSubcontentCollection('channels', channelId);
   }
 
