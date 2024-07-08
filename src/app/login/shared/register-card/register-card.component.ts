@@ -28,6 +28,7 @@ export class RegisterCardComponent implements OnInit {
   isEmailAvaiable: string | undefined;
   isUserRegister: string | undefined;
   isPasswordAvaiable: string | undefined;
+  isCheckedPolicy: boolean | undefined;
 
 
   constructor(private router: Router, private firestore: Firestore) { 
