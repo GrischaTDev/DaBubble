@@ -1,5 +1,4 @@
 import { User } from './user.class';
-
 export class MentionUser {
   mentionUser: User[] = [];
 

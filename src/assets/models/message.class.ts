@@ -1,6 +1,3 @@
-import { Emoji } from "./emoji.class";
-import { User } from "./user.class";
-
 export class Message {
   userId: string;
   userName: string;
@@ -10,6 +7,7 @@ export class Message {
   message: string;
   mentionUser: string[] = [];
   emojis:string[] = [];
+  thread:string = '';
  
   constructor(obj?: any) {
     this.userId = obj?.userId || '';
@@ -31,6 +29,7 @@ export class Message {
       message: this.message,
       emojis:  this.emojis,
       mentionUser: this.mentionUser,
+      thread: this.thread,
     };
   }
 }

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
-import { User } from '../../assets/models/user.class';
+
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
@@ -26,6 +26,7 @@ export class ChatService {
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
+  messageThread: Message = new Message();
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   newEmoji: Emoji = new Emoji();
@@ -114,10 +115,10 @@ export class ChatService {
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
-    this.sendMessage('channels', channelId);
+    this.setSubcontentCollection('channels', channelId);
   }
 
-  async sendMessage(docName: string, channelId: string) {
+  async setSubcontentCollection(docName: string, channelId: string) {
     await this.mainService.addNewDocOnFirebase('emoji', this.newEmoji);
     this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis.push(
       this.mainService.docId
@@ -126,6 +127,14 @@ export class ChatService {
     this.dataChannel.messageChannel[
       this.indexOfChannelMessage
     ].mentionUser.push(this.mainService.docId);
+    await this.mainService.addNewDocOnFirebase('thread', this.messageThread);
+    this.dataChannel.messageChannel[
+      this.indexOfChannelMessage
+    ].thread = this.mainService.docId;
+    this.sendMessage(docName, channelId);
+  }
+
+  sendMessage(docName: string, channelId: string) {
     this.mainService.addCollection(
       docName,
       channelId,
@@ -209,11 +218,6 @@ export class ChatService {
             }
           }
         });
-        this.mainService.addCollection(
-          'emoji',
-          this.mainService.messageEmoji[index].id,
-          new Emoji(this.mainService.messageEmoji)
-        );
       }
     }
     this.mainService.addCollection(
