@@ -25,6 +25,7 @@ constructor(private firestore: Firestore) {}
 
 resetPassword() {
   const auth = getAuth();
+  console.log(this.email);
   sendPasswordResetEmail(auth, this.email)
   .then(() => {
     console.log('Password reset email sent');
