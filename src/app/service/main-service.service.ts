@@ -15,6 +15,7 @@ import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
 import { Emoji } from '../../assets/models/emoji.class';
 import { Message } from '../../assets/models/message.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
+import { EmojiCollection } from '../../assets/models/emojiCollection.class';
 
 @Injectable({
   providedIn: 'root',
@@ -59,7 +60,7 @@ export class MainServiceService {
    */
   async addNewDocOnFirebase(
     docName: string,
-    data: Channel | User | Emoji | MentionUser | Message
+    data: Channel | User | EmojiCollection | MentionUser | Message
   ) {
     try {
       const docRef = await addDoc(
@@ -179,6 +180,15 @@ export class MainServiceService {
    */
   async goToCollectionPath(data: Channel | User, path: string) {
     this.router.navigateByUrl(path + data.id);
+  }
+
+ async updateDoc(collectionName: string, docId: string, dataObj: User | Message | Channel | Emoji | EmojiCollection |MentionUser) {
+    await updateDoc(
+      doc(collection(this.firestore, collectionName), docId),
+      dataObj.toJSON()
+    ).catch((err) => {
+      console.log(err);
+    });
   }
 
   /**
