@@ -50,27 +50,29 @@ export class LoginCardComponent {
 
   async loginAnonymus() {
     const auth = getAuth();
-    const user = auth.currentUser
 
-    await signInAnonymously(auth)
-      .then(() => {
-        console.log(auth.currentUser);
-        this.router.navigate(['main']);
-    });
+    const userCredential = await signInAnonymously(auth);
+    const user = userCredential.user;
 
-    if(user !== null) {
-      const idName = user.uid.substring(0, 5);
-
-      const newUser = new User({
-        id: user.uid,
-        name: 'Gast_' + idName,
-        email: '',
-        avatar: './assets/img/user/profile.png',
-        message: ''
-      });
-
-      const userRef = doc(this.firestore, 'users', user.uid);
-      await setDoc(userRef, newUser.toJSON());
+    try {
+      if(user) {
+        const idName = user.uid.substring(0, 5);
+  
+        const newUser = new User({
+          id: user.uid,
+          name: 'Gast_' + idName,
+          email: '',
+          avatar: './assets/img/user/profile.png',
+          message: ''
+        });
+  
+        const userRef = doc(this.firestore, 'users', user.uid);
+        await setDoc(userRef, newUser.toJSON());
+      }
+      
+      this.router.navigate(['main']);
+    } catch(error) {
+      console.log(error);
     }
   }
 
@@ -102,8 +104,6 @@ export class LoginCardComponent {
             await setDoc(userRef, newUser.toJSON());
             
           }
-
-    
 
           this.router.navigate(['main']);
 
