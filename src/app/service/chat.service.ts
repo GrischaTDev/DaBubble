@@ -179,7 +179,7 @@ export class ChatService {
   }
 
   ifMessageFromMe(userIdFromMessage: string): boolean {
-    return userIdFromMessage === this.mainService.testUser.id;
+    return userIdFromMessage === this.mainService.loggedInUser.id;
   }
 
   /**

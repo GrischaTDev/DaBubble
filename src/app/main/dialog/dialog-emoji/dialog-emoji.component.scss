@@ -1,30 +1,21 @@
-/* .cdk-overlay-pane.mat-mdc-dialog-panel {
-  max-width: 344px !important;
-  min-width: 344px !important;
+.emoji-container {
+  position: fixed; 
+  right: 50px; 
+  bottom: 210px; 
+  display: inline-block; 
+  background: rgba(241, 241, 241, 0.5);
 }
 
-.cdk-overlay-container {
-  position: absolute;
-  right: 18px;
-  bottom: 164px;
+@media (max-width: 1279px) {
+  .emoji-container {
+    right: 18px; 
+    bottom: 164px; 
+  }
 }
 
-.mat-mdc-dialog-container .mdc-dialog__surface {
-  border-top-left-radius: 20px !important;
-  border-bottom-left-radius: 20px !important;
-} */
-
-/* @media (max-width: 600px) {
-  .cdk-overlay-container {
-    position: absolute;
-    right: calc((100vw - 338px) / 2);
-    bottom: 164px;
+@media (max-width: 400px) {
+  .emoji-container {
+    right: calc((100vw - 343px) / 2); 
+    bottom: 164px; 
   }
-
-  .mat-mdc-dialog-container .mdc-dialog__surface {
-    border-top-left-radius: 20px !important;
-    border-top-right-radius: 20px !important;
-    border-bottom-left-radius: 20px !important;
-    border-bottom-right-radius: 20px !important;
-  }
-} */
+}
