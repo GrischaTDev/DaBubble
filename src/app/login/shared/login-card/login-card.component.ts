@@ -50,17 +50,28 @@ export class LoginCardComponent {
 
   async loginAnonymus() {
     const auth = getAuth();
+    const user = auth.currentUser
+
     await signInAnonymously(auth)
       .then(() => {
+        console.log(auth.currentUser);
         this.router.navigate(['main']);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      console.log(errorCode);
-      const errorMessage = error.message;
-      console.log(errorMessage);
-      // ...
-    });   
+    });
+
+    if(user !== null) {
+      const idName = user.uid.substring(0, 5);
+
+      const newUser = new User({
+        id: user.uid,
+        name: 'Gast_' + idName,
+        email: '',
+        avatar: './assets/img/user/profile.png',
+        message: ''
+      });
+
+      const userRef = doc(this.firestore, 'users', user.uid);
+      await setDoc(userRef, newUser.toJSON());
+    }
   }
 
   async loginWithGoogle() {
