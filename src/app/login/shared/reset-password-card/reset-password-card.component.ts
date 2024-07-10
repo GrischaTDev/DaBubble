@@ -20,22 +20,35 @@ import { LoginService } from '../../../service/login.service';
   styleUrl: './reset-password-card.component.scss'
 })
 export class ResetPasswordCardComponent {
-email: string = '';
+  email: string = '';
 
-constructor(private firestore: Firestore, private loginService: LoginService) {}
+  constructor(private firestore: Firestore, private loginService: LoginService) { }
 
-resetPassword() {
-  const auth = getAuth();
-  console.log(this.email);
-  sendPasswordResetEmail(auth, this.email)
-  .then(() => {
-    this.loginService.setResetPasswordOverlay(true);
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
-}
+  resetPassword(event: Event) {
+
+    this.eventPreventDefault(event);
+
+    const auth = getAuth();
+    console.log(this.email);
+    sendPasswordResetEmail(auth, this.email)
+      .then(() => {
+        this.loginService.setResetPasswordOverlay(true);
+        setTimeout(() => {
+          this.loginService.setResetPasswordOverlay(false);
+        }, 2000);
+        
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  }
+
+  eventPreventDefault(event: Event) {
+    if (event) {
+      event.preventDefault();
+    }
+  }
 
 }

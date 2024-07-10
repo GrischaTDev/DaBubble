@@ -12,6 +12,9 @@ export class LoginService {
   private sendResetPasswordMailSubject = new BehaviorSubject<boolean>(false);
   sendResetPasswordMail$ = this.sendResetPasswordMailSubject.asObservable();
 
+  private newPasswordSubject = new BehaviorSubject<boolean>(false);
+  isNewPassword$ = this.newPasswordSubject.asObservable();
+
   constructor() { }
 
   setUserRegistered(isRegistered: boolean) {
@@ -20,5 +23,9 @@ export class LoginService {
 
   setResetPasswordOverlay(isSendMail: boolean) {
     this.sendResetPasswordMailSubject.next(isSendMail);
+  }
+
+  setNewPasswordOverlay(isLogin: boolean) {
+    this.newPasswordSubject.next(isLogin);
   }
 }

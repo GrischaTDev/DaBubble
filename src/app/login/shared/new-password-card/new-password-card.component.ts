@@ -5,6 +5,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-new-password-card',
@@ -20,21 +21,27 @@ export class NewPasswordCardComponent {
   verifyPassword: string = '';
   errorMessage: string | undefined;
 
-  constructor(private firetore: Firestore, private router: Router, private route: ActivatedRoute) {
+  constructor(private firetore: Firestore, private router: Router, private route: ActivatedRoute, private loginServie: LoginService) {
     this.route.queryParams.subscribe(params => {
       this.oobCode = params['oobCode'];
     });
   }
 
-  changePassword() {
+  changePassword(event: Event) {
+
+    this.eventPreventDefault(event);
 
     const auth = getAuth();
 
     if (this.oobCode && this.password) {
       confirmPasswordReset(auth, this.oobCode, this.password)
         .then(() => {
-          console.log('Passwort wurde erfolgreich geändert.')
-          this.router.navigate(['login']);
+          this.loginServie.setNewPasswordOverlay(true);
+
+          setTimeout(() => {
+            this.loginServie.setNewPasswordOverlay(false);
+            this.router.navigate(['login']);
+          }, 2000);
         })
         .catch((error) => {
           if(error.code === 'auth/expired-action-code') {
@@ -45,6 +52,12 @@ export class NewPasswordCardComponent {
         })
     };
 
+  }
+
+  eventPreventDefault(event: Event) {
+    if (event) {
+      event.preventDefault();
+    }
   }
 
 }

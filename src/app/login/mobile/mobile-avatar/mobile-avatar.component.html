@@ -4,4 +4,8 @@
         
         <app-avatar-card class="avatar-card-component"></app-avatar-card>
 
+        <div  *ngIf="overlayRegistered$ | async" class="overlay">
+                Regestrierung erfolgreich!
+            </div>
+
 </div>
