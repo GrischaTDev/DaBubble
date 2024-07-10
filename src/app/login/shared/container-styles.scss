@@ -5,12 +5,24 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     gap: 30px;
     font-size: 17px;
+    min-height: 100vh;
+    height: 100vh;
+    background-color: #eceefe;
+    padding-top: 16px;
+    padding-bottom: 16px;
 
     img {
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
         width: 200px;
+    }
+
+    .mobile-register-container {
+        display: flex;
+        align-items: center;
     }
 
 }
