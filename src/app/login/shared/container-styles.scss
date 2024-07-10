@@ -60,11 +60,16 @@
     right: 10px;
     display: inline-block;
     margin: 10px;
-    padding: 50px;
+    padding: 30px;
     background-color: $background-blue;
     border-radius: 30px;
     border-bottom-right-radius: 0 !important;
     color: #fff;
     font-weight: 700;
     font-size: 20px;
+
+    .overlay-content {
+        display: flex;
+        gap: 8px;
+    }
 }
