@@ -15,6 +15,7 @@ import { Channel } from '../../../../assets/models/channel.class';
 })
 export class AddChannelComponent {
   addUserMenu: boolean = false;
+  isAddUserMenuOpen: boolean = false;
   addUserInput: boolean = false;
   newChannelName: string = '';
   newChannelDescription: string = '';
@@ -27,10 +28,14 @@ export class AddChannelComponent {
 
   closeDialog() {
     this.dialogRef.close();
+    setTimeout(() => {
+      this.isAddUserMenuOpen = false;
+    }, 2000);
   }
 
   openAddUserMenu() {
     this.addUserMenu = !this.addUserMenu;
+    this.isAddUserMenuOpen = true;
   }
 
   addUserInputfield() {

@@ -1,5 +1,5 @@
 <div class="add-channel-container">
-    <div class="add-channel-dialog">
+    <div class="add-channel-dialog" [ngClass]="{'d-none': isAddUserMenuOpen}">
         <div class="headline">
             <h2>Channel erstellen</h2>
             <div class="close" (click)="closeDialog()">
