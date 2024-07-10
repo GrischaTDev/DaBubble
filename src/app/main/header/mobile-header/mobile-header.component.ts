@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,19 +29,9 @@ export class MobileHeaderComponent implements OnInit {
   userMenu: boolean = false;
 
 
-  @HostListener('document:click', ['$event'])
-  clickout(event: Event) {
-    const target = event.target as HTMLElement;
-    const triggerElement = document.querySelector('.user'); // Element, das openUserMenu() auslöst
-  
-    if (this.userMenu && target !== triggerElement) { // Nur schließen, wenn nicht auf triggerElement geklickt wurde
-      const clickedInsideMenu = target.closest('.menu-container');
-      if (!clickedInsideMenu) {
-        this.userMenu = false;
-      }
-    }
+  doNotClose(event: Event) {
+    event.stopPropagation();
   }
-
 
   openUserMenu() {
     this.userMenu = !this.userMenu;

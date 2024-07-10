@@ -1,8 +1,56 @@
-<div class="user-pofile-dialog">
-    <div class="headline">
-        <h2>Profil</h2>
-        <div class="close" (click)="closeDialog()">
-            <mat-icon>close</mat-icon>
+<div class="profile-container" (click)="closeDialog()">
+    <div class="user-pofile-dialog" (click)="doNotClose($event)">
+        <div class="headline">
+            <h2>Profil</h2>
+            <div class="close" (click)="closeDialog()">
+                <mat-icon>close</mat-icon>
+            </div>
+        </div>
+        <div class="avatar">
+            <img src="{{ this.currentUser.avatar }}" alt="">
+        </div>
+        <div class="name">
+            <span>{{ this.currentUser.name }}</span>
+            <mat-icon (click)="editUserProfile()" class="edit">edit</mat-icon>
+        </div>
+        <div class="status">
+            <span>Aktive</span>
+        </div>
+        <div class="email">
+            <mat-icon>mail</mat-icon>
+            <div class="email-adresse">
+                <span class="titel">E-Mail-Adresse</span>
+                <span class="adresse">{{ this.currentUser.email }}</span>
+            </div>
         </div>
     </div>
 </div>
+
+<div *ngIf="editProfileOpen" class="profile-container" (click)="closeDialog()">
+    <div class="user-pofile-dialog" (click)="doNotClose($event)">
+        <div class="headline">
+            <h2>Dein Profil bearbeiten</h2>
+            <div class="close" (click)="closeDialog()">
+                <mat-icon>close</mat-icon>
+            </div>
+        </div>
+        <div class="avatar">
+            <img src="{{ this.currentUser.avatar }}" alt="">
+        </div>
+        <div class="name">
+            <div>
+                <mat-icon class="edit">edit</mat-icon>
+                <span>Vollständiger Name</span>
+            </div>
+            <input type="text" placeholder="{{ this.currentUser.name }}">
+        </div>
+        <div class="email">
+            <mat-icon>mail</mat-icon>
+            <div class="email-adresse">
+                <span class="titel">E-Mail-Adresse</span>
+                <span class="adresse">{{ this.currentUser.email }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
