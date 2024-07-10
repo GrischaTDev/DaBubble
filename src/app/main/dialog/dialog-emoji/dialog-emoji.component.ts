@@ -19,6 +19,7 @@ import { ChatService } from '../../../service/chat.service';
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
+
   ],
   templateUrl: './dialog-emoji.component.html',
   styleUrl: './dialog-emoji.component.scss',

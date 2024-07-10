@@ -11,11 +11,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Firestore, docData } from '@angular/fire/firestore';
 import { Message } from '../../../../assets/models/message.class';
 import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @Component({
   selector: 'app-mobile-chat',
   standalone: true,
-  imports: [MatIconModule, FormsModule, MobileHeaderComponent, CommonModule],
+  imports: [MatIconModule, FormsModule, MobileHeaderComponent, CommonModule, PickerComponent],
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
 })

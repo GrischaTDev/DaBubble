@@ -6,7 +6,14 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { docData, Firestore } from '@angular/fire/firestore';
+import {
+  doc,
+  docData,
+  Firestore,
+  getDoc,
+  getDocFromCache,
+  onSnapshot,
+} from '@angular/fire/firestore';
 import { Emoji } from '../../assets/models/emoji.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
@@ -33,8 +40,8 @@ export class ChatService {
   newEmoji: Emoji = new Emoji();
   newEmojiArray: EmojiCollection = new EmojiCollection();
   savedEmojis: string[] = [];
-  emojiForHTML: Emoji[] = [];
-
+  newEmojiData: EmojiCollection = new EmojiCollection();
+  searchEmojis: string[] = [];
   constructor(public mainService: MainServiceService) {}
 
   /**
@@ -192,49 +199,51 @@ export class ChatService {
   }
 
   async addReactionToMessage(emoji: string) {
-    let docData = {
-      emoji: emoji,
-      id: this.mainService.loggedInUser.id
-    }
-    this.newEmoji.emoji = emoji;
-    this.newEmoji.id.push(this.mainService.loggedInUser.id)
-    this.newEmojiArray.emojis.push(this.newEmoji) 
     let refEmojieOfMessage =
-      this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis[0];
-   
-      
-      this.mainService.updateDoc('emoji', refEmojieOfMessage,  this.newEmojiArray);
-
-    /*  for (let index = 0; index < refEmojieOfMessage.length; index++) {
-        let items$ = docData(
-          this.mainService.getDataRef(refEmojieOfMessage[index], 'emoji')
-        );
-        items$.subscribe((emojiObj: any) => {
-          this.savedEmojis.push(emojiObj.emoji);
-          for (let index = 0; index < this.savedEmojis.length; index++) {
-            const savedEmoji = this.savedEmojis[index];
-            if (savedEmoji === emoji) {
-              this.mainService.messageEmoji[index].users.push(
-                this.mainService.testUser
-              );
-            } else {
-              this.mainService.messageEmoji.push(this.newEmoji);
-            }
-          }
-        });
-      } */
+      this.dataChannel.messageChannel[0].emojis[this.indexOfChannelMessage];
+    await this.loadEmojiDocData(refEmojieOfMessage);
+    this.newEmojiArray.emojis.forEach((emoji) => {
+      this.searchEmojis.push(emoji.emoji);
+    });
+    let index = this.searchEmojis.indexOf(emoji);
+    if (index === -1) {
+      this.pushEmojiToArray(emoji, refEmojieOfMessage);
+    } else {
+      this.pushUserToEmoji(refEmojieOfMessage, index);
+    }
   }
 
-  loadEmojiFromMessage(singleMessage: Message) {
-    this.emojiForHTML = [];
-    let emojiArray = singleMessage.emojis;
-    for (let index = 0; index < emojiArray.length; index++) {
-      const refDoc = emojiArray[index];
-      let items$ = docData(this.mainService.getDataRef(refDoc, 'emoji'));
-      items$.subscribe((emojiObj: any) => {
-        this.emojiForHTML.push(emojiObj);
-      });
+  async loadEmojiDocData(refEmojieOfMessage: string) {
+    const docRef = doc(this.firestore, 'emoji', refEmojieOfMessage);
+    const docSnap = await getDoc(docRef);
+    this.newEmojiArray = new EmojiCollection(docSnap.data());
+  }
+
+  pushEmojiToArray(emoji: string, refEmojieOfMessage: string) {
+    this.newEmoji.id = [];
+    this.newEmoji.emoji = emoji;
+    this.newEmoji.id.push(this.mainService.loggedInUser.id);
+    this.newEmojiArray.emojis.push(this.newEmoji);
+    this.pushEmojiToFirebase(refEmojieOfMessage);
+  }
+
+  pushUserToEmoji(refEmojieOfMessage: string, indexEmoji: number) {
+    let indexUser = this.newEmojiArray.emojis[indexEmoji].id.indexOf(
+      this.mainService.loggedInUser.id
+    );
+    if (indexUser === -1) {
+      this.newEmojiArray.emojis[indexEmoji].id.push(
+        this.mainService.loggedInUser.id 
+      );
     }
-    return this.emojiForHTML;
+    this.pushEmojiToFirebase(refEmojieOfMessage);
+  }
+
+  pushEmojiToFirebase(refEmojieOfMessage: string) {
+    this.mainService.addCollection(
+      'emoji',
+      refEmojieOfMessage,
+      new EmojiCollection(this.newEmojiArray)
+    );
   }
 }

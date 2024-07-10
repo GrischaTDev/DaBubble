@@ -159,7 +159,7 @@ export class MainServiceService {
   async addCollection(
     docName: string,
     collectionId: string,
-    data: Channel | User | Emoji
+    data: Channel | User | Emoji | EmojiCollection
   ) {
     await updateDoc(
       doc(collection(this.firestore, docName), collectionId),
@@ -182,7 +182,11 @@ export class MainServiceService {
     this.router.navigateByUrl(path + data.id);
   }
 
- async updateDoc(collectionName: string, docId: string, dataObj: User | Message | Channel | Emoji | EmojiCollection |MentionUser) {
+  async updateDoc(
+    collectionName: string,
+    docId: string,
+    dataObj: User | Message | Channel | Emoji | EmojiCollection | MentionUser
+  ) {
     await updateDoc(
       doc(collection(this.firestore, collectionName), docId),
       dataObj.toJSON()
