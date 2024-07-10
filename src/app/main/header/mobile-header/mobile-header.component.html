@@ -3,8 +3,8 @@
     <img (click)="openUserMenu()" class="user" src="{{ currentUser.avatar }}" alt="User avatar">
 </header>
 
-<div *ngIf="userMenu" class="user-menu">
-    <div class="menu-container">
+<div *ngIf="userMenu" class="user-menu" (click)="openUserMenu()">
+    <div class="menu-container" (click)="doNotClose($event)">
         <div class="border-container">
             <div class="border"></div>
         </div>

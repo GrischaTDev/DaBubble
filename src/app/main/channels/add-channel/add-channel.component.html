@@ -1,5 +1,5 @@
-<div class="add-channel-container">
-    <div class="add-channel-dialog">
+<div class="add-channel-container" (click)="closeDialog()">
+    <div class="add-channel-dialog" [ngClass]="{'d-none': isAddUserMenuOpen}" (click)="doNotClose($event)">
         <div class="headline">
             <h2>Channel erstellen</h2>
             <div class="close" (click)="closeDialog()">
@@ -16,7 +16,7 @@
             <textarea [(ngModel)]="newChannelDescription" cols="1" rows="1" placeholder="Dein Text hier"></textarea>
         </div>
         <div class="create-btn">
-            <button class="primary-btn" (click)="openAddUserMenu()">Erstellen</button>
+            <button class="primary-btn" (click)="openAddUserMenu($event)">Erstellen</button>
         </div>
     </div>
     
