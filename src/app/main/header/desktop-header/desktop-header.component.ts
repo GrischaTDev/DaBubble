@@ -5,6 +5,10 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { MatDialog } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
 import { User } from '../../../../assets/models/user.class';
+import { LoginService } from '../../../service/login.service';
+import { Firestore } from '@angular/fire/firestore';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,12 +21,12 @@ import { User } from '../../../../assets/models/user.class';
 export class DesktopHeaderComponent implements OnInit {
   userTest: User = new User();
 
-  constructor(public mainService: MainServiceService) {
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore) {
     this.userTest = mainService.loggedInUser;
   }
   currentUser = this.mainService.loggedInUser;
 
-  
+
 
   ngOnInit() {
     this.mainService.currentLoggedUser();
@@ -30,7 +34,7 @@ export class DesktopHeaderComponent implements OnInit {
     console.log('User avatar', this.userTest.avatar);
   }
 
-  
+
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
 
@@ -39,7 +43,7 @@ export class DesktopHeaderComponent implements OnInit {
   clickout(event: Event) {
     const target = event.target as HTMLElement;
     const triggerElement = document.querySelector('.user'); // Element, das openUserMenu() auslöst
-  
+
     if (this.userMenu && target !== triggerElement) { // Nur schließen, wenn nicht auf triggerElement geklickt wurde
       const clickedInsideMenu = target.closest('.menu-container');
       if (!clickedInsideMenu) {
@@ -59,6 +63,11 @@ export class DesktopHeaderComponent implements OnInit {
   }
 
   logout() {
+    const auth = getAuth();
+    this.loginService.logoutUser(auth);
 
+    signOut(auth).then(() => {
+      this.router.navigate(['login']);
+    })
   }
 }

@@ -31,8 +31,16 @@ export class LoginCardComponent {
     const auth = getAuth();
     await signInWithEmailAndPassword(auth, this.email, this.password)
       .then(() => {
-        this.router.navigate(['main']);
 
+        const user = auth.currentUser;
+
+        if(user) {
+          setDoc(doc(this.firestore, 'users', user.uid), {
+            online: true
+          }, { merge: true });
+
+          this.router.navigate(['main']);
+        }
       })
       .catch((error: any) => {
         console.log('Fehler beim login', error);
@@ -63,7 +71,8 @@ export class LoginCardComponent {
           name: 'Gast_' + idName,
           email: '',
           avatar: './assets/img/user/profile.png',
-          message: ''
+          message: '',
+          online: true
         });
   
         const userRef = doc(this.firestore, 'users', user.uid);
@@ -97,7 +106,8 @@ export class LoginCardComponent {
               name: user.displayName,
               email: user.email,
               avatar: user.photoURL,
-              message: ''
+              message: '',
+              online: true
             });
 
             const userRef = doc(this.firestore, 'users', user.uid);

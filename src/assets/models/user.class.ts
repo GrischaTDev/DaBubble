@@ -5,6 +5,7 @@ export class User {
   email: string;
   avatar: string;
   message: Message[] = [];
+  online: boolean;
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : '';
@@ -12,6 +13,7 @@ export class User {
     this.email = obj ? obj.email : '';
     this.avatar = obj ? obj.avatar : '';
     this.message = obj?.message || [];
+    this.online = obj?.online;
   }
 
   public toJSON() {
@@ -21,6 +23,7 @@ export class User {
       email: this.email,
       avatar: this.avatar,
       message: this.message,
+      online: this.online
     };
   }
 }

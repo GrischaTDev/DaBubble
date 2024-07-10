@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+
 
   private userRegisteredSubject = new BehaviorSubject<boolean>(false);
   isUserRegistered$ = this.userRegisteredSubject.asObservable();
@@ -15,7 +17,7 @@ export class LoginService {
   private newPasswordSubject = new BehaviorSubject<boolean>(false);
   isNewPassword$ = this.newPasswordSubject.asObservable();
 
-  constructor() { }
+  constructor(private firestore: Firestore) { }
 
   setUserRegistered(isRegistered: boolean) {
     this.userRegisteredSubject.next(isRegistered);
@@ -27,5 +29,19 @@ export class LoginService {
 
   setNewPasswordOverlay(isLogin: boolean) {
     this.newPasswordSubject.next(isLogin);
+  }
+
+
+  // Loggout 
+
+  logoutUser(auth: any) {
+    const user = auth.currentUser;
+
+    if (user) {
+      console.log(user.uid);
+      setDoc(doc(this.firestore, 'users', user.uid), {
+        online: false
+      }, { merge: true });
+    }
   }
 }

@@ -4,6 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
+import { LoginService } from '../../../service/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mobile-header',
@@ -15,7 +19,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 export class MobileHeaderComponent implements OnInit { 
   
 
-  constructor(public mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router) {}
   currentUser = this.mainService.loggedInUser;
 
   ngOnInit() {
@@ -43,6 +47,11 @@ export class MobileHeaderComponent implements OnInit {
   }
 
   logout() {
+    const auth = getAuth();
+    this.loginService.logoutUser(auth);
 
+    signOut(auth).then(() => {
+      this.router.navigate(['login']);
+    })
   }
 }

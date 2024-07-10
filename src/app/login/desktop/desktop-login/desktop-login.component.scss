@@ -1,3 +1,13 @@
 @import './../../shared/container-styles.scss';
 @import './../../../../styles.scss';
 @import './../../shared/login-card/login-card.component.scss';
+
+.animation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $background-blue;
+    width: 100vw;
+    height: 100vh;
+    opacity: 1;
+}
