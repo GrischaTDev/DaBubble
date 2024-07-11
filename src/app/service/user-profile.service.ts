@@ -1,6 +1,6 @@
 import { Injectable, inject, OnInit } from '@angular/core'; // OnInit importieren
 import { MainServiceService } from '../service/main-service.service';
-import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { getAuth, onAuthStateChanged, updateEmail } from '@angular/fire/auth';
 import {
   Firestore,
   addDoc,
@@ -15,11 +15,9 @@ import {
   providedIn: 'root'
 })
 export class UserProfileService { // OnInit implementieren
-  firestore: Firestore = inject(Firestore);
   currentUser = this.mainService.loggedInUser;
-  // const auth = getAuth();
 
-  constructor(public mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService, private firestore: Firestore) {}
 
 
   async updateUserProfile(name: string, email: string) {
@@ -30,13 +28,22 @@ export class UserProfileService { // OnInit implementieren
       name: name,
       email: email
     }, { merge: true });
+
+    this.updateEmailToAuth(email);
+
   }
 
-  // updateEmail(auth.currentUser, "user@example.com").then(() => {
-  //   // Email updated!
-  //   // ...
-  // }).catch ((error) => {
-  //   // An error occurred
-  //   // ...
-  // });
+  updateEmailToAuth(newEmail: string) {
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if(user) {
+      updateEmail(user, newEmail).then(() => {
+        console.log('Email wurde erfolgreich geändert!')
+       }).catch((error: any) => {
+        console.log(error);
+       })
+    }
+  }
 }

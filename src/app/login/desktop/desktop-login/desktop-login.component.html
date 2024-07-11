@@ -1,4 +1,4 @@
-<div [@desktopStartAnimation]="isVisible" class="animation-container">
+<div [@desktopStartAnimation]="isVisible" (@desktopStartAnimation.done)="toggleToHidden($event)" class="animation-container">
     <div class="logo-container">
         <img src="./../../../../assets/img/logo.svg" alt="">
     </div>

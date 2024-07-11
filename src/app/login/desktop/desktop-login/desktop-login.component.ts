@@ -22,12 +22,8 @@ import { animate, query, sequence, style, transition, trigger } from '@angular/a
         ])
       ]),
       transition('visible => hidden', [
-        sequence([
-          query('animation-container', [
-            style({ display: 'flex', opacity: 1}),
-            animate('1.5s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ display: 'none', opacity: 0}))
-          ], { optional: true })
-        ])
+        style({ opacity: 1, display: 'flex' }),
+        animate('1.5s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ opacity: 0 }))
       ])
     ])
   ],
@@ -42,6 +38,12 @@ export class DesktopLoginComponent implements OnInit {
     setTimeout(() => {
       this.isVisible = 'visible';
     }, 0);
+  }
+
+  toggleToHidden(event: any): void {
+    if(this.isVisible === 'visible') {
+      this.isVisible = 'hidden';
+    }
   }
 
 }
