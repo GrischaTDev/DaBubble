@@ -16,7 +16,13 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 @Component({
   selector: 'app-mobile-chat',
   standalone: true,
-  imports: [MatIconModule, FormsModule, MobileHeaderComponent, CommonModule, PickerComponent],
+  imports: [
+    MatIconModule,
+    FormsModule,
+    MobileHeaderComponent,
+    CommonModule,
+    PickerComponent,
+  ],
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
 })
@@ -32,7 +38,7 @@ export class MobileChatComponent {
   firestore: Firestore = inject(Firestore);
   messageToChannel: Message = new Message();
   loggedInUser: User = new User();
-  
+
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
@@ -51,7 +57,16 @@ export class MobileChatComponent {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
-    this.loggedInUser = mainService.loggedInUser
+    this.subscription = mainService.messageEmojiReaction.subscribe(
+      (content) => {
+        this.chatService.loadEmojiForMassage();
+      }
+    );
+    this.loggedInUser = mainService.loggedInUser;
+  }
+
+  ngOnInit() {
+    this.chatService.loadEmojiForMassage();
   }
 
   /**

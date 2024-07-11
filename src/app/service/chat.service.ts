@@ -6,14 +6,7 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import {
-  doc,
-  docData,
-  Firestore,
-  getDoc,
-  getDocFromCache,
-  onSnapshot,
-} from '@angular/fire/firestore';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { Emoji } from '../../assets/models/emoji.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
@@ -39,6 +32,7 @@ export class ChatService {
   indexOfChannelMessage: number = 0;
   newEmoji: Emoji = new Emoji();
   newEmojiArray: EmojiCollection = new EmojiCollection();
+  newEmojiArrayHTML: EmojiCollection = new EmojiCollection();
   savedEmojis: string[] = [];
   newEmojiData: EmojiCollection = new EmojiCollection();
   searchEmojis: string[] = [];
@@ -142,7 +136,7 @@ export class ChatService {
   }
 
   sendMessage(docName: string, channelId: string) {
-    this.mainService.addCollection(
+    this.mainService.addDoc(
       docName,
       channelId,
       new Channel(this.dataChannel)
@@ -233,17 +227,43 @@ export class ChatService {
     );
     if (indexUser === -1) {
       this.newEmojiArray.emojis[indexEmoji].id.push(
-        this.mainService.loggedInUser.id 
+        this.mainService.loggedInUser.id
       );
     }
     this.pushEmojiToFirebase(refEmojieOfMessage);
   }
 
   pushEmojiToFirebase(refEmojieOfMessage: string) {
-    this.mainService.addCollection(
+    this.mainService.addDoc(
       'emoji',
       refEmojieOfMessage,
       new EmojiCollection(this.newEmojiArray)
     );
+  }
+
+  loadEmojiForMassage() {
+    this.newEmojiArrayHTML.emojis = []
+    for (
+      let index = 0;
+      index < this.dataChannel.messageChannel.length;
+      index++
+    ) {
+      let idEmmijiFrommSingleMessage =
+        this.dataChannel.messageChannel[index].emojis;
+      for (
+        let index = 0;
+        index < this.mainService.messageEmoji.length;
+        index++
+      ) {
+        let idOfEmoji = this.mainService.messageEmoji[index].id;
+        console.log('înfo', this.dataChannel.messageChannel, idOfEmoji)
+        if (idEmmijiFrommSingleMessage === idOfEmoji) {
+          this.newEmojiArrayHTML.emojis.push(
+            this.mainService.messageEmoji[index]
+          );
+          console.log('new',this.newEmojiArrayHTML)
+        }
+      }
+    }
   }
 }
