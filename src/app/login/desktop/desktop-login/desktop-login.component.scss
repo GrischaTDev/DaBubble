@@ -6,8 +6,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: $background-blue;
+    background: linear-gradient(to bottom, #7378F3, #343DE7);
+    overflow: hidden;
     width: 100vw;
     height: 100vh;
+    gap: 30px;
     opacity: 1;
+
+    .logo-container{
+        flex: 0 0 auto;
+    }
+
+    .text-container {
+        overflow: hidden; 
+    }
+
+    h1 {
+        color: #fff;
+        font-size: 64px;
+    }
+}
+
+section {
+    display: none;
 }
