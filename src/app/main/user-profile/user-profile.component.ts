@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MainServiceService } from '../../service/main-service.service';
+import { UserProfileService } from '../../service/user-profile.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,7 +18,8 @@ export class UserProfileComponent {
 
   constructor(
     public dialogRef: MatDialogRef<UserProfileComponent>,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public userProfile: UserProfileService 
   ) {}
 
 
@@ -39,5 +41,9 @@ export class UserProfileComponent {
 
   editUserProfile() {
     this.editProfileOpen = !this.editProfileOpen;
+  }
+
+  async updateUser() {
+
   }
 }

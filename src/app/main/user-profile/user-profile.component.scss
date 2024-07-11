@@ -6,6 +6,8 @@
     right: 0;
     left: 0;
     bottom: 0;
+    display: flex;
+    align-items: center;
     z-index: 999;
     
     >.user-pofile-dialog {
@@ -79,5 +81,89 @@
                 }
             }
         }
+    }
+}
+
+
+.edit-user-pofile-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: fixed;
+    right: 20px;
+    left: 20px;
+    background-color: white;
+    margin: 0;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0px 6px 10px 0px #00000033;
+
+    >.headline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    >.avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        >img {
+            height: 200px;
+        }
+    }
+
+    >.edit-btn {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+        padding-top: 20px;
+
+        >div {
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 30px;
+            padding: 12px 25px;
+            cursor: pointer;
+        }
+    }
+}
+
+.edit-name div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+
+    >.edit {
+        font-size: 30px;
+        height: 30px;
+        width: 30px;
+    }
+
+    >span {
+        font-size: 20px;
+        font-weight: 700;
+    }
+}
+
+.edit-email div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 10px;
+
+    >.edit {
+        font-size: 30px;
+        height: 30px;
+        width: 30px;
+    }
+
+    >span {
+        font-size: 20px;
+        font-weight: 700;
     }
 }

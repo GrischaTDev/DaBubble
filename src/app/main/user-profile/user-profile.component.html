@@ -27,7 +27,7 @@
 </div>
 
 <div *ngIf="editProfileOpen" class="profile-container" (click)="closeDialog()">
-    <div class="user-pofile-dialog" (click)="doNotClose($event)">
+    <div class="edit-user-pofile-dialog" (click)="doNotClose($event)">
         <div class="headline">
             <h2>Dein Profil bearbeiten</h2>
             <div class="close" (click)="closeDialog()">
@@ -37,19 +37,23 @@
         <div class="avatar">
             <img src="{{ this.currentUser.avatar }}" alt="">
         </div>
-        <div class="name">
+        <div class="edit-name">
             <div>
-                <mat-icon class="edit">edit</mat-icon>
+                <mat-icon class="edit">account_circle</mat-icon>
                 <span>Vollständiger Name</span>
             </div>
             <input type="text" placeholder="{{ this.currentUser.name }}">
         </div>
-        <div class="email">
-            <mat-icon>mail</mat-icon>
-            <div class="email-adresse">
+        <div class="edit-email">
+            <div>
+                <mat-icon class="edit">mail</mat-icon>
                 <span class="titel">E-Mail-Adresse</span>
-                <span class="adresse">{{ this.currentUser.email }}</span>
             </div>
+            <input type="text" placeholder="{{ this.currentUser.email }}">
+        </div>
+        <div class="edit-btn">
+            <div class="secondary-btn">Abbrechen</div>
+            <div class="primary-btn">Speichern</div>
         </div>
     </div>
 </div>
