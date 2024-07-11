@@ -42,18 +42,18 @@
                 <mat-icon class="edit">account_circle</mat-icon>
                 <span>Vollständiger Name</span>
             </div>
-            <input type="text" placeholder="{{ this.currentUser.name }}">
+            <input [(ngModel)]="updateUserName" type="text" placeholder="{{ this.currentUser.name }}">
         </div>
         <div class="edit-email">
             <div>
                 <mat-icon class="edit">mail</mat-icon>
                 <span class="titel">E-Mail-Adresse</span>
             </div>
-            <input type="text" placeholder="{{ this.currentUser.email }}">
+            <input [(ngModel)]="updateUserEmail" type="text" placeholder="{{ this.currentUser.email }}">
         </div>
         <div class="edit-btn">
             <div class="secondary-btn">Abbrechen</div>
-            <div class="primary-btn">Speichern</div>
+            <div class="primary-btn" (click)="updateCurrentUser()">Speichern</div>
         </div>
     </div>
 </div>
