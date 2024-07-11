@@ -14,7 +14,7 @@
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
-        let i = index
+        let singleMessageIndex = index
       "
     >
       <div class="mobile-chat-message-date-container">
@@ -73,16 +73,22 @@
             <mat-icon
               (click)="
                 chatService.onButtonClick($event);
-                chatService.openDialogEmojiReactionMessage(i)
+                chatService.openDialogEmojiReactionMessage(singleMessageIndex)
               "
               >add_reaction</mat-icon
             >
-            <div>
-              <div 
+            <div
               
+            >
+              <div
+           
               >
+             <!--  {{emojie}} -->
+            </div>
+            </div>
+            <div>
+              <div>
                 <span></span>
-               
               </div>
             </div>
           </div>

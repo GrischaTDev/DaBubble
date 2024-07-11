@@ -35,6 +35,7 @@ export class MainServiceService {
   private contentSource = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
   mentionUser = this.contentSource.asObservable();
+  messageEmojiReaction = this.contentSource.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -156,13 +157,13 @@ export class MainServiceService {
    * @param {Channel|User} data - The data to be stored, which should be an instance of Channel or User.
    * @returns {Promise<void>} A promise that resolves when the update is complete and logs any errors encountered.
    */
-  async addCollection(
-    docName: string,
-    collectionId: string,
+  async addDoc(
+    collectionName: string,
+    docId: string,
     data: Channel | User | Emoji | EmojiCollection
   ) {
     await updateDoc(
-      doc(collection(this.firestore, docName), collectionId),
+      doc(collection(this.firestore, collectionName), docId), 
       data.toJSON()
     )
       .catch((err) => {
