@@ -1,6 +1,6 @@
 import { Injectable, inject, OnInit } from '@angular/core'; // OnInit importieren
 import { MainServiceService } from '../service/main-service.service';
-import { getAuth, onAuthStateChanged, updateEmail } from '@angular/fire/auth';
+import { EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, updateEmail, verifyBeforeUpdateEmail } from '@angular/fire/auth';
 import {
   Firestore,
   addDoc,
@@ -29,21 +29,26 @@ export class UserProfileService { // OnInit implementieren
       email: email
     }, { merge: true });
 
-    this.updateEmailToAuth(email);
+    if(email) {
+      this.updateEmailToAuth(email);
+    }
 
   }
 
-  updateEmailToAuth(newEmail: string) {
+  async updateEmailToAuth(newEmail: string) {
 
     const auth = getAuth();
     const user = auth.currentUser;
 
     if(user) {
-      updateEmail(user, newEmail).then(() => {
-        console.log('Email wurde erfolgreich geändert!')
-       }).catch((error: any) => {
-        console.log(error);
-       })
+
+      await verifyBeforeUpdateEmail(user, newEmail).then(() => {
+        console.log("Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine neue E-Mail-Adresse und bestätige sie.");
+      }).catch((error) => {
+        console.error("Fehler beim Senden der Verifizierungs-E-Mail:", error);
+      });
+
     }
   }
+
 }
