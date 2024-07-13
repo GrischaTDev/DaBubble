@@ -6,7 +6,7 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { Emoji } from '../../assets/models/emoji.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
@@ -36,6 +36,8 @@ export class ChatService {
   savedEmojis: string[] = [];
   newEmojiData: EmojiCollection = new EmojiCollection();
   searchEmojis: string[] = [];
+  emojiIsAvailable = false;
+  
   constructor(public mainService: MainServiceService) {}
 
   /**
@@ -109,7 +111,7 @@ export class ChatService {
     }
   }
 
-  sendMessageFromChannel(channelId: string, textContent: string) {
+ async sendMessageFromChannel(channelId: string, textContent: string) {
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
     this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -117,22 +119,7 @@ export class ChatService {
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
-    this.setSubcontentCollection('channels', channelId);
-  }
-
-  async setSubcontentCollection(docName: string, channelId: string) {
-    await this.mainService.addNewDocOnFirebase('emoji', this.newEmojiArray);
-    this.dataChannel.messageChannel[this.indexOfChannelMessage].emojis.push(
-      this.mainService.docId
-    );
-    await this.mainService.addNewDocOnFirebase('mentionUser', this.mentionUser);
-    this.dataChannel.messageChannel[
-      this.indexOfChannelMessage
-    ].mentionUser.push(this.mainService.docId);
-    await this.mainService.addNewDocOnFirebase('thread', this.messageThread);
-    this.dataChannel.messageChannel[this.indexOfChannelMessage].thread =
-      this.mainService.docId;
-    this.sendMessage(docName, channelId);
+    this.sendMessage('channels', channelId);
   }
 
   sendMessage(docName: string, channelId: string) {
@@ -192,41 +179,32 @@ export class ChatService {
     }
   }
 
-  async addReactionToMessage(emoji: string) {
-    let refEmojieOfMessage =
-      this.dataChannel.messageChannel[0].emojis[this.indexOfChannelMessage];
-    await this.loadEmojiDocData(refEmojieOfMessage);
-    this.newEmojiArray.emojis.forEach((emoji) => {
-      this.searchEmojis.push(emoji.emoji);
-    });
-    let index = this.searchEmojis.indexOf(emoji);
-    if (index === -1) {
-      this.pushEmojiToArray(emoji, refEmojieOfMessage);
-    } else {
-      this.pushUserToEmoji(refEmojieOfMessage, index);
+  addReactionToMessage(emoji: string) {
+    for (let index = 0; index < this.dataChannel.messageChannel[this.indexOfChannelMessage].emojiReaction.length; index++) {
+      const emojiOnForebase = this.dataChannel.messageChannel[this.indexOfChannelMessage].emojiReaction[index].emoji;
+      if (emoji === emojiOnForebase) {
+        this.emojiIsAvailable = true;
+      }
+      }
+    if (!this.emojiIsAvailable) {
+      this.pushEmojiToArray(emoji)
     }
   }
 
-  async loadEmojiDocData(refEmojieOfMessage: string) {
-    const docRef = doc(this.firestore, 'emoji', refEmojieOfMessage);
-    const docSnap = await getDoc(docRef);
-    this.newEmojiArray = new EmojiCollection(docSnap.data());
-  }
-
-  pushEmojiToArray(emoji: string, refEmojieOfMessage: string) {
-    this.newEmoji.id = [];
-    this.newEmoji.emoji = emoji;
-    this.newEmoji.id.push(this.mainService.loggedInUser.id);
-    this.newEmojiArray.emojis.push(this.newEmoji);
-    this.pushEmojiToFirebase(refEmojieOfMessage);
+ async pushEmojiToArray(emoji: string) {
+  this.newEmoji.emoji = emoji;
+  this.newEmoji.user = [];
+  this.newEmoji.user.push(this.mainService.loggedInUser.id)
+  this.dataChannel.messageChannel[this.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
+  await setDoc(doc(this.firestore, "channels", this.idOfChannel), this.dataChannel);
   }
 
   pushUserToEmoji(refEmojieOfMessage: string, indexEmoji: number) {
-    let indexUser = this.newEmojiArray.emojis[indexEmoji].id.indexOf(
+    let indexUser = this.newEmojiArray.emojis[indexEmoji].user.indexOf(
       this.mainService.loggedInUser.id
     );
     if (indexUser === -1) {
-      this.newEmojiArray.emojis[indexEmoji].id.push(
+      this.newEmojiArray.emojis[indexEmoji].user.push(
         this.mainService.loggedInUser.id
       );
     }
@@ -239,31 +217,5 @@ export class ChatService {
       refEmojieOfMessage,
       new EmojiCollection(this.newEmojiArray)
     );
-  }
-
-  loadEmojiForMassage() {
-    this.newEmojiArrayHTML.emojis = []
-    for (
-      let index = 0;
-      index < this.dataChannel.messageChannel.length;
-      index++
-    ) {
-      let idEmmijiFrommSingleMessage =
-        this.dataChannel.messageChannel[index].emojis;
-      for (
-        let index = 0;
-        index < this.mainService.messageEmoji.length;
-        index++
-      ) {
-        let idOfEmoji = this.mainService.messageEmoji[index].id;
-        console.log('înfo', this.dataChannel.messageChannel, idOfEmoji)
-        if (idEmmijiFrommSingleMessage === idOfEmoji) {
-          this.newEmojiArrayHTML.emojis.push(
-            this.mainService.messageEmoji[index]
-          );
-          console.log('new',this.newEmojiArrayHTML)
-        }
-      }
-    }
   }
 }

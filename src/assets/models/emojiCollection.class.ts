@@ -11,7 +11,7 @@ export class EmojiCollection {
     return {
       emojis: this.emojis.map((emoji) => ({
         emoji: emoji.emoji,
-        id: emoji.id,
+        user: emoji.user,
       })),
     };
   }

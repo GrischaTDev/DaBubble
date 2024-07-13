@@ -81,9 +81,13 @@
               
             >
               <div
-           
+                *ngFor="
+                  let emojie of chatService.dataChannel.messageChannel[singleMessageIndex].emojiReaction;
+                  let i = index
+                "
               >
-             <!--  {{emojie}} -->
+              {{emojie.emoji}}
+              {{emojie.user.length}}
             </div>
             </div>
             <div>

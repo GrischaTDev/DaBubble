@@ -59,14 +59,15 @@ export class MobileChatComponent {
     });
     this.subscription = mainService.messageEmojiReaction.subscribe(
       (content) => {
-        this.chatService.loadEmojiForMassage();
+  /*       this.chatService.loadEmojiForMassage(); */
       }
     );
     this.loggedInUser = mainService.loggedInUser;
   }
 
   ngOnInit() {
-    this.chatService.loadEmojiForMassage();
+/*     this.chatService.loadEmojiForMassage(); */
+    this.mainService.subEmojiList();
   }
 
   /**

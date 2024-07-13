@@ -33,9 +33,10 @@ export class MainServiceService {
     this.unsubEmojiList = this.subEmojiList();
   }
   private contentSource = new BehaviorSubject<any>([]);
+  private contentSourceEmoji = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
   mentionUser = this.contentSource.asObservable();
-  messageEmojiReaction = this.contentSource.asObservable();
+  messageEmojiReaction = this.contentSourceEmoji.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -49,6 +50,11 @@ export class MainServiceService {
   changeInputContent(content: any) {
     this.contentSource.next(content);
   }
+
+  changeReactionContent(content: any) {
+    this.contentSourceEmoji.next(content);
+  }
+
 
   /**
    * Adds the current user to Firebase Firestore.
@@ -183,18 +189,6 @@ export class MainServiceService {
     this.router.navigateByUrl(path + data.id);
   }
 
-  async updateDoc(
-    collectionName: string,
-    docId: string,
-    dataObj: User | Message | Channel | Emoji | EmojiCollection | MentionUser
-  ) {
-    await updateDoc(
-      doc(collection(this.firestore, collectionName), docId),
-      dataObj.toJSON()
-    ).catch((err) => {
-      console.log(err);
-    });
-  }
 
   /**
    * Retrieves a reference to a specific document within the 'games' collection in Firestore.
