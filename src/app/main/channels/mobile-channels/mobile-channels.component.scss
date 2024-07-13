@@ -5,6 +5,7 @@ section {
     padding: 16px;
     box-sizing: border-box;
     background-color: $background-white;
+    overflow: unset !important;
 }
 
 .input-container {
@@ -154,9 +155,20 @@ section {
             gap: 10px;
             font-size: 17px;
 
-            >img {
-                height: 50px;
-                border-radius: 50px;
+            >.user-img {
+                display: flex;
+                position: relative;
+
+                >.user-avatar {
+                    height: 50px;
+                    border-radius: 50px;
+                }
+    
+                >.user-status {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MainServiceService } from '../../../service/main-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,11 +17,17 @@ import { AddChannelComponent } from '../add-channel/add-channel.component';
 export class MobileChannelsComponent {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService, private router: Router) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
+
+
+  navigateToChat(userId: string) {
+    this.router.navigate(['/direct-chat', userId]); 
+  }
+
 
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);

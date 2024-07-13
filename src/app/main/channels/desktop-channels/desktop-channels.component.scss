@@ -140,7 +140,7 @@ section {
         display: flex;
         align-items: center;
         width: 100%;
-        padding: 18px;
+        padding: 10px;
         box-sizing: border-box;
         cursor: pointer;
 
@@ -162,19 +162,35 @@ section {
     >.user-list {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 10px;
         padding: 18px;
-
         >.user {
             display: flex;
             align-items: center;
-            padding-left: 48px;
-            gap: 10px;
+            padding: 8px 48px;
+            gap: 18px;
             font-size: 17px;
+            cursor: pointer;
 
-            >img {
-                height: 50px;
-                border-radius: 50px;
+            &:hover {
+                background-color: $background-lightblue;
+                border-radius: 30px;
+            }
+
+            >.user-img {
+                display: flex;
+                position: relative;
+
+                >.user-avatar {
+                    height: 50px;
+                    border-radius: 50px;
+                }
+    
+                >.user-status {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                }
             }
         }
     }

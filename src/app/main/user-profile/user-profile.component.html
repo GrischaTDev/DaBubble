@@ -14,7 +14,7 @@
             <mat-icon (click)="editUserProfile()" class="edit">edit</mat-icon>
         </div>
         <div class="status">
-            <span>Aktive</span>
+            <img src="{{ userStatus }}">
         </div>
         <div class="email">
             <mat-icon>mail</mat-icon>
@@ -52,7 +52,7 @@
             <input [(ngModel)]="updateUserEmail" type="text" placeholder="{{ this.currentUser.email }}">
         </div>
         <div class="edit-btn">
-            <div class="secondary-btn">Abbrechen</div>
+            <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>
             <div class="primary-btn" (click)="updateCurrentUser()">Speichern</div>
         </div>
     </div>

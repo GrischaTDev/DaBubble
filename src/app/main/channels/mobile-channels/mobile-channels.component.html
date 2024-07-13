@@ -52,8 +52,11 @@
         </div>
 
         <div class="user-list" *ngIf="userListOpen">
-            <div *ngFor="let user of mainService.allUsers; let i = index" class="user">
-                <img src="{{ user.avatar }}" alt="">
+            <div *ngFor="let user of mainService.allUsers; let i = index" class="user" (click)="navigateToChat(user.id)">
+                <div class="user-img">
+                    <img class="user-avatar" src="{{ user.avatar }}">
+                    <img class="user-status" [src]="user.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
+                </div>
                 <span>{{ user.name }}</span>
             </div>
         </div>

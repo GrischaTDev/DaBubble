@@ -18,6 +18,7 @@ export class UserProfileComponent {
   editProfileOpen: boolean = false;
   updateUserName: string = '';
   updateUserEmail: string = '';
+  userStatus: string = './assets/img/offline.svg';
 
   constructor(
     public dialogRef: MatDialogRef<UserProfileComponent>,
@@ -28,7 +29,16 @@ export class UserProfileComponent {
 
   ngOnInit() {
     this.mainService.currentLoggedUser();
-    console.log('User Profile', this.currentUser);
+    this.checkUserStatus();
+  }
+
+
+  checkUserStatus() {
+    if(this.currentUser.online) {
+      this.userStatus = './assets/img/aktive.svg';
+    } else {
+      this.userStatus = './assets/img/offline.svg';
+    }
   }
 
 
