@@ -1,16 +1,17 @@
 export class Emoji {
   emoji: string;
-  id: string[] = [];
+  user: string[] = [];
+
 
   constructor(obj?: any) {
     this.emoji = obj ? obj.emoji : '';
-    this.id = obj ? obj.id : [];
+    this.user = obj ? obj.user : [];
   }
 
   public toJSON() {
     return {
       emoji: this.emoji,
-      id: this.id,
+      user: this.user,
     };
   }
 }

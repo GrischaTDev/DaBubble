@@ -41,16 +41,16 @@ export class Channel {
         email: user.email,
         avatar: user.avatar,
       })),
-      messageChannel: this.messageChannel.map((user) => ({
-        userId: user.userId,
-        userName: user.userName,
-        userEmail: user.userEmail,
-        userAvatar: user.userAvatar,
-        date: user.date,
-        message: user.message,
-        emojis: user.emojis,
-        mentionUser: user.mentionUser,
-        thread: user.thread
+      messageChannel: this.messageChannel.map((message) => ({
+        userId: message.userId,
+        userName: message.userName,
+        userEmail: message.userEmail,
+        userAvatar: message.userAvatar,
+        date: message.date,
+        message: message.message,
+        emojiReaction: message.emojiReaction,
+        mentionUser: message.mentionUser,
+        thread: message.thread
       })),
       avatarChannel: this.avatarChannel,
     };
