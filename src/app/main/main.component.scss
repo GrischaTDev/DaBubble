@@ -4,6 +4,7 @@ body {
   background-color: $background-lightblue !important;
 }
 
+
 .main-desktop {
   display: flex;
   height: 100vh;
@@ -13,14 +14,12 @@ body {
   background-color: $background-lightblue !important;
 }
 
-// .mobile-main {
-//   overflow: hidden;
-// }
 
 app-desktop-channels {
   /* Der Container mit fester Breite */
   width: 366px;
 }
+
 
 app-desktop-chat {
   /* Der Container, der den restlichen Platz einnimmt */
@@ -28,6 +27,7 @@ app-desktop-chat {
   /* Nimmt den gesamten verfügbaren Platz ein */
   margin-left: 25px;
 }
+
 
 //   /* Wenn app-desktop-thread angezeigt wird, sollte er wahrscheinlich unter app-desktop-chat platziert werden */
 //   app-desktop-thread {

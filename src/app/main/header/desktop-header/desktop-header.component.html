@@ -6,7 +6,10 @@
     </div>
     <div class="user-container">
         <span>{{ currentUser.name }}</span>
-        <img class="user" src="{{ currentUser.avatar }}" alt="User avatar">
+        <div class="user-img">
+            <img class="user-avatar" src="{{ currentUser.avatar }}">
+            <img class="user-status" src="./assets/img/online-icon-desktop.svg" >
+        </div>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
 </header>
