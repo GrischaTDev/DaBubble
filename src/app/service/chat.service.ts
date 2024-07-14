@@ -7,6 +7,7 @@ import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
 import { Firestore } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
+import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,6 +18,7 @@ export class ChatService {
   dialogInstance:
     | MatDialogRef<DialogEmojiComponent, any>
     | MatDialogRef<DialogMentionUsersComponent, any>
+    | MatDialogRef<DialogUserChatComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
@@ -98,6 +100,15 @@ export class ChatService {
       this.dialogEmojiOpen = false;
       this.dialogMentionUserOpen = false;
     }
+  }
+
+  /**
+   * Prevents an event from bubbling up the event chain.
+   * Typically used to stop a parent handler from being notified of an event.
+   * @param {Event} event - The event to stop propagation for.
+   */
+  doNotClose(event: Event) {
+    event.stopPropagation();
   }
 
   /**
@@ -188,5 +199,9 @@ export class ChatService {
     } else {
       this.closeDialog();
     }
+  }
+
+  openProfil() {
+    this.dialogInstance = this.dialog.open(DialogUserChatComponent);
   }
 }

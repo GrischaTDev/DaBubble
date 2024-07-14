@@ -7,6 +7,8 @@ import { AvatarComponent } from './login/avatar/avatar.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { NewPaswordComponent } from './login/new-pasword/new-pasword.component';
 import { DirectChatComponent } from './main/chat/direct-chat/direct-chat.component';
+import { VerifyEmailComponent } from './login/verify-email/verify-email.component';
+import { UserProfileComponent } from './main/user-profile/user-profile.component';
 
 
 export const routes: Routes = [
@@ -15,8 +17,10 @@ export const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
     { path: 'new-password', component: NewPaswordComponent },
+    { path: 'verify-email', component: VerifyEmailComponent },
     { path: 'create-avatar', component: AvatarComponent },
     { path: 'main', component: MainComponent },
+    { path: 'user-profile', component: UserProfileComponent },
     { path: 'chat/:id', component: MobileChatComponent },
     { path: 'direct-chat/:userId', component: DirectChatComponent },
 ];
