@@ -1,4 +1,4 @@
-<app-mobile-header></app-mobile-header>
+<app-mobile-chat-header></app-mobile-chat-header>
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
     <div class="user-container">
         <div class="user-img">
@@ -8,15 +8,22 @@
         <span class="user-name">{{ directChatUser.name }}</span>
     </div>
     <div class="mobile-chat-content">
-        <div *ngFor="
-        let singleMessage of chatService.dataChannel.messageChannel;
-        let singleMessageIndex = index
-      ">
+        <div class="direct-chat-info">
+            <div class="user-img">
+                <img class="user-avatar" src="{{ directChatUser.avatar }}">
+                <span class="user-name">{{ directChatUser.name }}</span>
+            </div>
+            <span class="description">
+                Diese Unterhaltung findet nur zwischen <br>
+                <span class="user-name-description">&#64; {{ directChatUser.name }}</span>
+                und dir statt.
+            </span>
+        </div>
+
+        <div *ngFor=" let singleMessage of chatService.dataChannel.messageChannel; let singleMessageIndex = index">
             <div class="mobile-chat-message-date-container">
                 <div class="mobile-chat-message-line"></div>
-                <span class="mobile-chat-message-date">{{
-                    chatService.setDate(singleMessage.date)
-                    }}</span>
+                <span class="mobile-chat-message-date">{{ chatService.setDate(singleMessage.date) }}</span>
                 <div class="mobile-chat-message-line"></div>
             </div>
             <div [ngClass]="{
@@ -24,8 +31,7 @@
             singleMessage.userId
           ),
           'mobile-chat-message-container-from-others':
-            !chatService.ifMessageFromMe(singleMessage.userId)
-        }">
+            !chatService.ifMessageFromMe(singleMessage.userId)}">
                 <div class="mobile-chat-message-avatar-container">
                     <img src="{{ singleMessage.userAvatar }}" alt="" />
                 </div>
@@ -34,8 +40,7 @@
               'mobile-chat-message-name-date-container-me':
                 chatService.ifMessageFromMe(singleMessage.userId),
               'mobile-chat-message-name-date-container-from-others':
-                !chatService.ifMessageFromMe(singleMessage.userId)
-            }">
+                !chatService.ifMessageFromMe(singleMessage.userId)}">
                         <span class="mobile-chat-message-name">
                             {{ singleMessage.userName }}
                         </span>
@@ -46,13 +51,10 @@
                         </div>
                     </div>
                     <div class="mobile-chat-message-text-container" [ngClass]="{
-              'mobile-chat-message-from-me': chatService.ifMessageFromMe(
-                singleMessage.userId
-              ),
-              'mobile-chat-message-from-others': !chatService.ifMessageFromMe(
-                singleMessage.userId
-              )
-            }">
+                        'mobile-chat-message-from-me': chatService.ifMessageFromMe(
+                        singleMessage.userId),
+                        'mobile-chat-message-from-others': !chatService.ifMessageFromMe(
+                        singleMessage.userId)}">
                         <span>
                             {{ singleMessage.message }}
                         </span>
@@ -62,8 +64,7 @@
               'mobile-chat-message-reaction-right-container':
                 chatService.ifMessageFromMe(singleMessage.userId),
               'mobile-chat-message-reaction-left-container':
-                !chatService.ifMessageFromMe(singleMessage.userId)
-            }">
+                !chatService.ifMessageFromMe(singleMessage.userId)}">
                         <div class="mobile-chat-message-reaction-content" *ngFor="
                 let emojie of chatService.dataChannel.messageChannel[
                   singleMessageIndex
@@ -92,7 +93,7 @@
     <div class="mobile-chat-input-container" id="meinTextarea">
         <form class="mobile-chat-input-field-container br-20">
             <textarea [(ngModel)]="text" name="textarea" (input)="chatService.adjustHeight($event.target)"
-                style="min-height: 50px; width: 100%" [placeholder]="'Antworten...'"></textarea>
+                style="min-height: 50px; width: 100%" placeholder="Nachricht an {{ directChatUser.name }}"></textarea>
 
             <div class="mobile-chat-input-field-icon-container">
                 <div class="mobile-chat-input-icon-container">
@@ -102,22 +103,15 @@
                         </div>
                     </div>
                     <div class="mobile-chat-input-icon">
-                        <mat-icon (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmoji()
-              ">sentiment_satisfied</mat-icon>
+                        <mat-icon (click)=" chatService.onButtonClick($event); chatService.openDialogEmoji()">sentiment_satisfied</mat-icon>
                     </div>
                     <div class="mobile-chat-input-icon">
-                        <mat-icon (click)="
-                chatService.onButtonClick($event);
-                chatService.openDialogMentionUser()
-              ">alternate_email</mat-icon>
+                        <mat-icon (click)="chatService.onButtonClick($event); chatService.openDialogMentionUser()">alternate_email</mat-icon>
                     </div>
                 </div>
                 <div>
                     <div>
-                        <mat-icon (click)="
-                chatService.sendMessageFromChannel(this.parmsId, this.text)
-              " class="mobile-chat-send-icon">send</mat-icon>
+                        <mat-icon (click)="chatService.sendMessageFromChannel(this.parmsId, this.text)"class="mobile-chat-send-icon">send</mat-icon>
                     </div>
                 </div>
             </div>

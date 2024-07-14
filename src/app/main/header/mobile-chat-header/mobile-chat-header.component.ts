@@ -10,24 +10,22 @@ import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-mobile-header',
+  selector: 'app-mobile-chat-header',
   standalone: true,
   imports: [CommonModule, MatIconModule, UserProfileComponent],
-  templateUrl: './mobile-header.component.html',
-  styleUrls: ['./mobile-header.component.scss'] 
+  templateUrl: './mobile-chat-header.component.html',
+  styleUrl: './mobile-chat-header.component.scss'
 })
-export class MobileHeaderComponent implements OnInit { 
-  
-
+export class MobileChatHeaderComponent implements OnInit {
   constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router) {}
   currentUser = this.mainService.loggedInUser;
 
   ngOnInit() {
-    setTimeout(() => {
-      this.currentUser = this.mainService.loggedInUser;
-      console.log('Eingeloggter Benutzer', this.currentUser);
-    }, 1000);
+    this.mainService.currentLoggedUser();
+    console.log('Logged in user', this.currentUser);
+    console.log('User avatar', this.currentUser.avatar);
   }
+
   
   private dialog = inject(MatDialog);
   userMenu: boolean = false;

@@ -12,6 +12,7 @@ import { Firestore, docData } from '@angular/fire/firestore';
 import { Message } from '../../../../assets/models/message.class';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 
 @Component({
   selector: 'app-direct-chat',
@@ -22,6 +23,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
     MobileHeaderComponent,
     CommonModule,
     PickerComponent,
+    MobileChatHeaderComponent
   ],
   templateUrl: './direct-chat.component.html',
   styleUrl: './direct-chat.component.scss'
