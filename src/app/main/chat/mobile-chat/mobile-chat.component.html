@@ -69,31 +69,40 @@
               {{ singleMessage.message }}
             </span>
           </div>
-          <div>
-            <mat-icon
-              (click)="
-                chatService.onButtonClick($event);
-                chatService.openDialogEmojiReactionMessage(singleMessageIndex)
-              "
-              >add_reaction</mat-icon
-            >
+
+          <div
+            [ngClass]="{
+              'mobile-chat-message-reaction-right-container':
+                chatService.ifMessageFromMe(singleMessage.userId),
+              'mobile-chat-message-reaction-left-container':
+                !chatService.ifMessageFromMe(singleMessage.userId)
+            }"
+          >
             <div
-              
+              class="mobile-chat-message-reaction-content"
+              *ngFor="
+                let emojie of chatService.dataChannel.messageChannel[
+                  singleMessageIndex
+                ].emojiReaction;
+                let i = index
+              "
             >
-              <div
-                *ngFor="
-                  let emojie of chatService.dataChannel.messageChannel[singleMessageIndex].emojiReaction;
-                  let i = index
+              {{ emojie.emoji }}
+              {{ emojie.user.length }}
+            </div>
+            <div class="mobile-chat-message-reaction-icon">
+              <mat-icon
+                (click)="
+                  chatService.onButtonClick($event);
+                  chatService.openDialogEmojiReactionMessage(singleMessageIndex)
                 "
+                >add_reaction</mat-icon
               >
-              {{emojie.emoji}}
-              {{emojie.user.length}}
             </div>
-            </div>
+          </div>
+          <div>
             <div>
-              <div>
-                <span></span>
-              </div>
+              <span></span>
             </div>
           </div>
         </div>

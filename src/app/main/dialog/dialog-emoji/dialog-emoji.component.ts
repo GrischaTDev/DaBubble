@@ -9,6 +9,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { ChatService } from '../../../service/chat.service';
+import { EmojiService } from '../../../service/emoji.service';
 
 @Component({
   selector: 'app-dialog-emoji',
@@ -28,7 +29,8 @@ export class DialogEmojiComponent {
   public dialogRef = inject(MatDialogRef<DialogEmojiComponent>);
   constructor(
     public mainService: MainServiceService,
-    public chatService: ChatService
+    public chatService: ChatService,
+    public emojiService: EmojiService
   ) {}
   inputContent: any;
 
@@ -41,7 +43,7 @@ export class DialogEmojiComponent {
       this.inputContent = ' ' + event.emoji.native;
       this.mainService.changeInputContent(this.inputContent);
     } else {
-      this.chatService.addReactionToMessage(event.emoji.native);
+      this.emojiService.addReactionToMessage(event.emoji.native);
       this.mainService.changeReactionContent(event.emoji.native);
       this.mainService.emojiReactionMessage = false;
     }
