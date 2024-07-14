@@ -1,1 +1,2 @@
-<p>verify-email works!</p>
+<app-desktop-verify-email *ngIf="isDesktop" ></app-desktop-verify-email>
+<app-mobile-verify-email *ngIf="!isDesktop" ></app-mobile-verify-email>

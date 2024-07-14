@@ -17,6 +17,9 @@ export class LoginService {
   private newPasswordSubject = new BehaviorSubject<boolean>(false);
   isNewPassword$ = this.newPasswordSubject.asObservable();
 
+  private newMailSubject = new BehaviorSubject<boolean>(false);
+  isNewMail$ = this.newMailSubject.asObservable();
+
   constructor(private firestore: Firestore) { }
 
   setUserRegistered(isRegistered: boolean) {
@@ -29,6 +32,10 @@ export class LoginService {
 
   setNewPasswordOverlay(isLogin: boolean) {
     this.newPasswordSubject.next(isLogin);
+  }
+
+  setNewEmailOverlay(isVerifyMail: boolean) {
+    this.newMailSubject.next(isVerifyMail);
   }
 
 
