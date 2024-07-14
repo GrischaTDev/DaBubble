@@ -24,7 +24,7 @@
         }}</span>
         <div class="mobile-chat-message-line"></div>
       </div>
-      <div 
+      <div
         [ngClass]="{
           'mobile-chat-message-container-from-me': chatService.ifMessageFromMe(
             singleMessage.userId
@@ -33,7 +33,12 @@
             !chatService.ifMessageFromMe(singleMessage.userId)
         }"
       >
-        <div (click)="this.chatService.doNotClose($event); chatService.openProfil()" class="mobile-chat-message-avatar-container">
+        <div
+          (click)="
+            this.chatService.doNotClose($event); chatService.openProfil()
+          "
+          class="mobile-chat-message-avatar-container"
+        >
           <img src="{{ singleMessage.userAvatar }}" alt="" />
         </div>
         <div class="mobile-chat-message-content">
@@ -45,7 +50,10 @@
                 !chatService.ifMessageFromMe(singleMessage.userId)
             }"
           >
-            <span (click)="chatService.openProfil()" class="mobile-chat-message-name">
+            <span
+              (click)="chatService.openProfil()"
+              class="mobile-chat-message-name"
+            >
               {{ singleMessage.userName }}
             </span>
             <div>
@@ -84,7 +92,17 @@
                 let emojie of chatService.dataChannel.messageChannel[
                   singleMessageIndex
                 ].emojiReaction;
-                let i = index
+                let emojiIndex = index
+              "
+              [ngClass]="{
+                'd-none': emojie.user.length === 0
+              }"
+              (click)="
+                this.emojiService.addAdditionalReactionToMessage(
+                  emojie.emoji,
+                  singleMessageIndex,
+                  emojiIndex
+                )
               "
             >
               {{ emojie.emoji }}
