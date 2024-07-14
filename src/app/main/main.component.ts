@@ -14,6 +14,7 @@ import { AddChannelComponent } from './channels/add-channel/add-channel.componen
 import { MatDialogModule } from '@angular/material/dialog';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
+import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-chat-header.component';
 
 @Component({
     selector: 'app-main',
@@ -33,7 +34,8 @@ import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
         AddChannelComponent,
         MatDialogModule,
         UserProfileComponent,
-        DirectChatComponent
+        DirectChatComponent,
+        MobileChatHeaderComponent
     ]
 })
 export class MainComponent implements OnInit {

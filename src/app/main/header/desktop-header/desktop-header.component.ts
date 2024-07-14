@@ -31,7 +31,6 @@ export class DesktopHeaderComponent implements OnInit {
   ngOnInit() {
     this.mainService.currentLoggedUser();
     console.log('Logged in user', this.userTest);
-    console.log('User avatar', this.userTest.avatar);
   }
 
 
