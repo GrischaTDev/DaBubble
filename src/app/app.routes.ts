@@ -6,11 +6,9 @@ import { MobileChatComponent } from './main/chat/mobile-chat/mobile-chat.compone
 import { AvatarComponent } from './login/avatar/avatar.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { NewPaswordComponent } from './login/new-pasword/new-pasword.component';
-<<<<<<< Updated upstream
 import { DirectChatComponent } from './main/chat/direct-chat/direct-chat.component';
 import { VerifyEmailComponent } from './login/verify-email/verify-email.component';
 import { UserProfileComponent } from './main/user-profile/user-profile.component';
->>>>>>> Stashed changes
 
 
 export const routes: Routes = [
