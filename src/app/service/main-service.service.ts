@@ -5,6 +5,7 @@ import {
   collection,
   doc,
   onSnapshot,
+  setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs';
@@ -47,14 +48,21 @@ export class MainServiceService {
   emojiReactionMessage = false;
   docId: string = '';
 
+  /**
+   * Updates the content source with the new content.
+   * @param {any} content - The new content to set.
+   */
   changeInputContent(content: any) {
     this.contentSource.next(content);
   }
 
+  /**
+   * Updates the emoji content source with the new content.
+   * @param {any} content - The new emoji content to set.
+   */
   changeReactionContent(content: any) {
     this.contentSourceEmoji.next(content);
   }
-
 
   /**
    * Adds the current user to Firebase Firestore.
@@ -81,6 +89,10 @@ export class MainServiceService {
     }
   }
 
+  /**
+   * Monitors authentication state changes and retrieves the logged-in user's data from Firestore.
+   * Updates the loggedInUser property with the user's data if available.
+   */
   currentLoggedUser() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -169,7 +181,7 @@ export class MainServiceService {
     data: Channel | User | Emoji | EmojiCollection
   ) {
     await updateDoc(
-      doc(collection(this.firestore, collectionName), docId), 
+      doc(collection(this.firestore, collectionName), docId),
       data.toJSON()
     )
       .catch((err) => {
@@ -181,6 +193,20 @@ export class MainServiceService {
   }
 
   /**
+   * Asynchronously sets the document data in the specified Firestore collection.
+   * @param {string} collectionName - The name of the Firestore collection.
+   * @param {string} docId - The ID of the document to update.
+   * @param {Channel | User | Emoji | EmojiCollection} data - The data to set in the document.
+   */
+  async setDocData(
+    collectionName: string,
+    docId: string,
+    data: Channel | User | Emoji | EmojiCollection
+  ) {
+    await setDoc(doc(this.firestore, collectionName, docId), data);
+  }
+
+  /**
    * Navigates to the specific collection path based on the provided data's ID.
    * This function is typically used to route to a specific chat based on the channel or user's ID.
    * @param {Channel|User} data - The data object containing the ID to navigate to, which can be a Channel or User instance.
@@ -188,7 +214,6 @@ export class MainServiceService {
   async goToCollectionPath(data: Channel | User, path: string) {
     this.router.navigateByUrl(path + data.id);
   }
-
 
   /**
    * Retrieves a reference to a specific document within the 'games' collection in Firestore.

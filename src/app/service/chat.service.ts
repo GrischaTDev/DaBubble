@@ -2,15 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
-
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
-import { Emoji } from '../../assets/models/emoji.class';
+import { Firestore } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
-import { EmojiCollection } from '../../assets/models/emojiCollection.class';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -30,14 +26,7 @@ export class ChatService {
   messageThread: Message = new Message();
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
-  newEmoji: Emoji = new Emoji();
-  newEmojiArray: EmojiCollection = new EmojiCollection();
-  newEmojiArrayHTML: EmojiCollection = new EmojiCollection();
-  savedEmojis: string[] = [];
-  newEmojiData: EmojiCollection = new EmojiCollection();
-  searchEmojis: string[] = [];
-  emojiIsAvailable = false;
-  
+
   constructor(public mainService: MainServiceService) {}
 
   /**
@@ -111,7 +100,13 @@ export class ChatService {
     }
   }
 
- async sendMessageFromChannel(channelId: string, textContent: string) {
+  /**
+   * Asynchronously sends a message from a specific channel, updating the channel data and triggering
+   * a sendMessage process.
+   * @param {string} channelId - The ID of the channel from which to send the message.
+   * @param {string} textContent - The text content of the message.
+   */
+  async sendMessageFromChannel(channelId: string, textContent: string) {
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
     this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -122,14 +117,20 @@ export class ChatService {
     this.sendMessage('channels', channelId);
   }
 
+  /**
+   * Initiates the process to add a new document for a message within a specified channel.
+   * @param {string} docName - The name of the document to be added.
+   * @param {string} channelId - The ID of the channel where the document should be added.
+   */
   sendMessage(docName: string, channelId: string) {
-    this.mainService.addDoc(
-      docName,
-      channelId,
-      new Channel(this.dataChannel)
-    );
+    this.mainService.addDoc(docName, channelId, new Channel(this.dataChannel));
   }
 
+  /**
+   * Converts a timestamp from the server into a localized date string. If the date is today, it returns "Heute".
+   * @param {number} timeFromServer - The timestamp from the server to be converted.
+   * @returns {string} A formatted date string or "Heute" if the date is today.
+   */
   setDate(timeFromServer: number): string {
     const date = new Date(timeFromServer);
     const options: Intl.DateTimeFormatOptions = {
@@ -148,6 +149,11 @@ export class ChatService {
     }
   }
 
+  /**
+   * Converts a timestamp from the server into a localized time string in 24-hour format.
+   * @param {number} timeFromServer - The timestamp from the server to be converted.
+   * @returns {string} A formatted time string in HH:mm format.
+   */
   setTime(timeFromServer: number): string {
     const date = new Date(timeFromServer);
     const formattedTime = date.toLocaleTimeString('de-DE', {
@@ -158,6 +164,11 @@ export class ChatService {
     return formattedTime;
   }
 
+  /**
+   * Checks if the message is sent by the logged-in user.
+   * @param {string} userIdFromMessage - The user ID from the message to compare.
+   * @returns {boolean} True if the message is from the logged-in user, false otherwise.
+   */
   ifMessageFromMe(userIdFromMessage: string): boolean {
     return userIdFromMessage === this.mainService.loggedInUser.id;
   }
@@ -177,45 +188,5 @@ export class ChatService {
     } else {
       this.closeDialog();
     }
-  }
-
-  addReactionToMessage(emoji: string) {
-    for (let index = 0; index < this.dataChannel.messageChannel[this.indexOfChannelMessage].emojiReaction.length; index++) {
-      const emojiOnForebase = this.dataChannel.messageChannel[this.indexOfChannelMessage].emojiReaction[index].emoji;
-      if (emoji === emojiOnForebase) {
-        this.emojiIsAvailable = true;
-      }
-      }
-    if (!this.emojiIsAvailable) {
-      this.pushEmojiToArray(emoji)
-    }
-  }
-
- async pushEmojiToArray(emoji: string) {
-  this.newEmoji.emoji = emoji;
-  this.newEmoji.user = [];
-  this.newEmoji.user.push(this.mainService.loggedInUser.id)
-  this.dataChannel.messageChannel[this.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
-  await setDoc(doc(this.firestore, "channels", this.idOfChannel), this.dataChannel);
-  }
-
-  pushUserToEmoji(refEmojieOfMessage: string, indexEmoji: number) {
-    let indexUser = this.newEmojiArray.emojis[indexEmoji].user.indexOf(
-      this.mainService.loggedInUser.id
-    );
-    if (indexUser === -1) {
-      this.newEmojiArray.emojis[indexEmoji].user.push(
-        this.mainService.loggedInUser.id
-      );
-    }
-    this.pushEmojiToFirebase(refEmojieOfMessage);
-  }
-
-  pushEmojiToFirebase(refEmojieOfMessage: string) {
-    this.mainService.addDoc(
-      'emoji',
-      refEmojieOfMessage,
-      new EmojiCollection(this.newEmojiArray)
-    );
   }
 }
