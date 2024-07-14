@@ -24,20 +24,17 @@ import { EmojiCollection } from '../../assets/models/emojiCollection.class';
 export class MainServiceService {
   unsubUserList;
   unsubChannelsList;
-  unsubEmojiList;
   changeContent(inputContent: any) {
     throw new Error('Method not implemented.');
   }
   constructor(private router: Router) {
     this.unsubUserList = this.subUserList();
     this.unsubChannelsList = this.subChannelsList();
-    this.unsubEmojiList = this.subEmojiList();
   }
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceEmoji = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
   mentionUser = this.contentSource.asObservable();
-  messageEmojiReaction = this.contentSourceEmoji.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -47,6 +44,7 @@ export class MainServiceService {
   testUser: User = new User();
   emojiReactionMessage = false;
   docId: string = '';
+  dialogClose = false;
 
   /**
    * Updates the content source with the new content.
@@ -151,24 +149,6 @@ export class MainServiceService {
   }
 
   /**
-   * Initializes component by setting up a snapshot listener on the 'users' collection from Firestore.
-   * Updates `allUsers` array with `User` instances representing each document in the collection.
-   * Each `User` instance is created from the document's data, including a unique ID.
-   */
-  subEmojiList() {
-    return onSnapshot(collection(this.firestore, 'emoji'), (list) => {
-      this.messageEmoji = [];
-      list.forEach((element) => {
-        let messageEmojiData = {
-          ...element.data(),
-          id: element.id,
-        };
-        this.messageEmoji.push(new Emoji(messageEmojiData));
-      });
-    });
-  }
-
-  /**
    * Asynchronously adds or updates a document within a collection in Firestore.
    * @param {string} docName - The name of the document to be added or updated.
    * @param {string} collectionId - The ID of the collection where the document will be stored.
@@ -232,6 +212,5 @@ export class MainServiceService {
   ngOnDestroy() {
     this.unsubUserList();
     this.unsubChannelsList();
-    this.unsubEmojiList();
   }
 }

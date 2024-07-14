@@ -13,6 +13,7 @@ export class EmojiService {
   ) {}
   emojiIsAvailable = false;
   emojiAndUserIsAvailable = false;
+  userIsAvailable = false;
   newEmoji: Emoji = new Emoji();
 
   /**
@@ -47,6 +48,11 @@ export class EmojiService {
         this.emojiAndUserIsAvailable;
       } else if (emoji === emojiFb) {
         this.emojiIsAvailable = true;
+      } else if (
+        emoji !== emojiFb &&
+        user === this.mainService.loggedInUser.id
+      ) {
+        this.userIsAvailable = true;
       }
     }
   }
@@ -79,7 +85,16 @@ export class EmojiService {
       this.chatService.idOfChannel,
       this.chatService.dataChannel
     );
+    this.resetReactionVariables();
+  }
+
+  /**
+   * Resets the reaction-related variables to false. This is typically called to clear the state before
+   * processing a new reaction or at the end of an operation involving reactions.
+   */
+  resetReactionVariables() {
     this.emojiIsAvailable = false;
     this.emojiAndUserIsAvailable = false;
+    this.userIsAvailable = false;
   }
 }

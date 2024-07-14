@@ -57,22 +57,10 @@ export class DirectChatComponent {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
-    this.subscription = mainService.messageEmojiReaction.subscribe(
-      (content) => {
-  /*       this.chatService.loadEmojiForMassage(); */
-      }
-    );
     this.loggedInUser = mainService.loggedInUser;
   }
 
   directChatUser = this.mainService.loggedInUser;
-
-  ngOnInit() {
-/*     this.chatService.loadEmojiForMassage(); */
-    this.mainService.subEmojiList();
-    console.log(this.directChatUser.name);
-    
-  }
 
   /**
    * A lifecycle hook that is called when the component is destroyed.
