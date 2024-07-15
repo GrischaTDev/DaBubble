@@ -7,20 +7,24 @@
             </div>
         </div>
         <div class="avatar">
-            <img src="{{ this.currentUser.avatar }}" alt="">
+            <img *ngIf="!directUserProfile?.avatar" src="{{ loggedInUser.avatar }}" alt="">
+            <img *ngIf="directUserProfile?.avatar" src="{{ directUserProfile.avatar }}" alt="">
         </div>
         <div class="name">
-            <span>{{ this.currentUser.name }}</span>
+            <span *ngIf="!directUserProfile?.name">{{ loggedInUser.name }}</span>
+            <span *ngIf="directUserProfile?.name">{{ directUserProfile.name }}</span>
             <mat-icon (click)="editUserProfile()" class="edit">edit</mat-icon>
         </div>
         <div class="status">
-            <img src="{{ userStatus }}">
+            <img *ngIf="!directUserProfile?.name" src="{{ loggedInUserStatus }}">
+            <img *ngIf="directUserProfile?.name" src="{{ directUserProfileStatus }}">
         </div>
         <div class="email">
             <mat-icon>mail</mat-icon>
             <div class="email-adresse">
                 <span class="titel">E-Mail-Adresse</span>
-                <span class="adresse">{{ this.currentUser.email }}</span>
+                <span class="adresse" *ngIf="!directUserProfile?.email">{{ loggedInUser.email }}</span>
+                <span class="adresse" *ngIf="directUserProfile?.email">{{ directUserProfile.email }}</span>
             </div>
         </div>
     </div>
@@ -35,21 +39,21 @@
             </div>
         </div>
         <div class="avatar">
-            <img src="{{ this.currentUser.avatar }}" alt="">
+            <img src="{{ this.loggedInUser.avatar }}" alt="">
         </div>
         <div class="edit-name">
             <div>
                 <mat-icon class="edit">account_circle</mat-icon>
                 <span>Vollständiger Name</span>
             </div>
-            <input [(ngModel)]="updateUserName" type="text" placeholder="{{ this.currentUser.name }}">
+            <input [(ngModel)]="updateUserName" type="text" placeholder="{{ this.loggedInUser.name }}">
         </div>
         <div class="edit-email">
             <div>
                 <mat-icon class="edit">mail</mat-icon>
                 <span class="titel">E-Mail-Adresse</span>
             </div>
-            <input [(ngModel)]="updateUserEmail" type="text" placeholder="{{ this.currentUser.email }}">
+            <input [(ngModel)]="updateUserEmail" type="text" placeholder="{{ this.loggedInUser.email }}">
         </div>
         <div class="edit-btn">
             <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>
