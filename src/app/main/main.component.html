@@ -1,12 +1,13 @@
-<app-desktop-header *ngIf="isDesktop"></app-desktop-header>
-<app-mobile-header *ngIf="!isDesktop"></app-mobile-header>
+<div *ngIf="isDesktop">
+    <app-desktop-header></app-desktop-header>
+    <div class="main-desktop">
+        <app-desktop-channels></app-desktop-channels>
+        <app-desktop-chat></app-desktop-chat>
+        <app-desktop-thread *ngIf="isThreadOpen"></app-desktop-thread>
+    </div>
+</div>
 
-<app-desktop-channels *ngIf="isDesktop"></app-desktop-channels>
-<app-mobile-channels *ngIf="!isDesktop"></app-mobile-channels>
-
-<app-desktop-chat *ngIf="isDesktop"></app-desktop-chat>
-<!-- <app-mobile-chat *ngIf="!isDesktop"></app-mobile-chat> -->
-
-<!-- <app-desktop-thread *ngIf="isDesktop"></app-desktop-thread>
-<app-mobile-thread *ngIf="!isDesktop"></app-mobile-thread> -->
-
+<div *ngIf="!isDesktop" class="mobile-main">
+    <app-mobile-header></app-mobile-header>
+    <app-mobile-channels></app-mobile-channels>
+</div>

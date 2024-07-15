@@ -7,28 +7,33 @@
     <div class="channels-container">
         <div>
             <div class="channels">
-                <mat-icon (click)="openChannels()">{{ arrowIconChannels }}</mat-icon>
-                <div (click)="openChannels()" class="icon-and-name">
-                    <div>
+                <div class="titel">
+                    <mat-icon (click)="openChannels()">{{ arrowIconChannels }}</mat-icon>
+                    <div (click)="openChannels()" class="icon-and-name">
                         <mat-icon>workspaces_outline</mat-icon>
                         <span>Channels</span>
                     </div>
                 </div>
-                <mat-icon class="add-icon">add</mat-icon>
+                <div class="add-icon" (click)="openDialogAddChannel()">
+                    <mat-icon>add</mat-icon>
+                </div>
             </div>
-            <div class="channels" *ngIf="channelListOpen">
-                <mat-icon></mat-icon>
-                <div class="icon-and-name">
-                    <div class="sub-channel">
-                        <mat-icon>tag</mat-icon>
-                        <span>Entwicklerteam</span>
+
+            <div  *ngIf="channelListOpen"> 
+                <div class="channels" *ngFor="let channel of mainService.allChannels; let i = index">
+                    <mat-icon></mat-icon>
+                    <div class="icon-and-name">
+                        <div class="sub-channel">
+                            <mat-icon>tag</mat-icon>
+                            <a (click)="mainService.goToCollectionPath(channel, '/chat/')">{{ channel.name }} </a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="channels" *ngIf="channelListOpen">
                 <mat-icon></mat-icon>
                 <div class="icon-and-name">
-                    <div class="add-channel">
+                    <div class="add-channel" (click)="openDialogAddChannel()">
                         <mat-icon>add_circle_outline</mat-icon>
                         <span>Channel hinzufügen</span>
                     </div>
@@ -47,17 +52,12 @@
         </div>
 
         <div class="user-list" *ngIf="userListOpen">
-            <div class="user">
-                <img src="./assets/img/user/user1.svg" alt="">
-                <span>Frederik Beck</span>
-            </div>
-            <div class="user">
-                <img src="./assets/img/user/user2.svg" alt="">
-                <span>Frederik Beck</span>
-            </div>
-            <div class="user">
-                <img src="./assets/img/user/user4.svg" alt="">
-                <span>Frederik Beck</span>
+            <div *ngFor="let user of mainService.allUsers; let i = index" class="user" (click)="navigateToChat(user.id)">
+                <div class="user-img">
+                    <img class="user-avatar" src="{{ user.avatar }}">
+                    <img class="user-status" [src]="user.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
+                </div>
+                <span>{{ user.name }}</span>
             </div>
         </div>
     </div>

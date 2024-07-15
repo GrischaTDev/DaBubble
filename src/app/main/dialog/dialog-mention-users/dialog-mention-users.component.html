@@ -1,0 +1,16 @@
+<div class="dialog-mention-users-container">
+  <h2>Mitglieder</h2>
+  <div 
+    class="dialog-mention-users-content"
+    *ngFor="let user of mainService.allUsers; let i = index"
+  >
+    <div (click)="addMentionUser(user)">
+      <img [src]="user.avatar" />
+      <p>{{ user.name }}</p>
+    </div>
+  </div>
+  <div class="dialog-mention-add-users">
+    <div class="dialog-mention-icon-add"><mat-icon>person_add</mat-icon></div>
+    <p>Mitglieder hinzufüngen</p>
+  </div>
+</div>

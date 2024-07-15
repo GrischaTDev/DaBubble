@@ -5,6 +5,7 @@ section {
     padding: 16px;
     box-sizing: border-box;
     background-color: $background-white;
+    overflow: unset !important;
 }
 
 .input-container {
@@ -13,6 +14,7 @@ section {
     justify-content: flex-end;
     align-items: center;
     padding: 20px 0;
+    margin-top: 80px;
 
     >input {
         font-size: 17px;
@@ -39,14 +41,34 @@ section {
 
 .channels {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 18px;
     box-sizing: border-box;
     cursor: pointer;
 
-    &:hover {
-        color: $background-blue;
+
+    >.titel {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+    
+        &:hover {
+            color: $background-blue;
+        }
+
+        >.icon-and-name {
+            width: 100%;
+            padding-left: 24px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
     }
 
     >.icon-and-name {
@@ -57,6 +79,9 @@ section {
         align-items: center;
         font-size: 20px;
         font-weight: 700;
+        &:hover {
+            color: $background-blue;
+        }
 
         >div {
             display: flex;
@@ -66,9 +91,10 @@ section {
     }
 
     >.add-icon {
+        display: flex;
         text-align: center;
-        color: $background-blue;
         padding: 4px;
+        color: $background-blue;
         &:hover {
             background-color: $background-lightblue;
             border-radius: 50px;
@@ -77,8 +103,9 @@ section {
 }
 
 .sub-channel {
-    >span {
-        font-weight: 400;
+    >a {
+        color: unset;
+        font-weight: bold;
         font-size: 17px;
     }
 }
@@ -129,15 +156,27 @@ section {
             gap: 10px;
             font-size: 17px;
 
-            >img {
-                height: 50px;
+            >.user-img {
+                display: flex;
+                position: relative;
+
+                >.user-avatar {
+                    height: 50px;
+                    border-radius: 50px;
+                }
+    
+                >.user-status {
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                }
             }
         }
     }
 }
 
 .new-msg-icon {
-    position: absolute;
+    position: fixed;
     right: 16px;
     height: 60px;
     width: 60px;

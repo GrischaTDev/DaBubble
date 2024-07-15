@@ -1,19 +1,37 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MainServiceService } from '../../../service/main-service.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddChannelComponent } from '../add-channel/add-channel.component';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-mobile-channels',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, AddChannelComponent],
   templateUrl: './mobile-channels.component.html',
   styleUrl: './mobile-channels.component.scss'
 })
 export class MobileChannelsComponent {
+  private dialog = inject(MatDialog);
+
+  constructor(public mainService: MainServiceService, private router: Router) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
+
+
+  navigateToChat(userId: string) {
+    this.router.navigate(['/direct-chat', userId]); 
+  }
+
+
+  openDialogAddChannel() {
+    this.dialog.open(AddChannelComponent);
+  }
 
   openChannels() {
     this.channelListOpen = !this.channelListOpen;

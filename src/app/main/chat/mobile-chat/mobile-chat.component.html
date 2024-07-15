@@ -1,14 +1,181 @@
-<div class="mobile-chat-container">
+<app-mobile-header></app-mobile-header>
+<div class="mobile-chat-container" (click)="chatService.closeDialog()">
   <div class="mobile-chat-header-container">
     <div class="mobile-chat-header-headline">
       <p>#</p>
-      <p>Entwicklerteam</p>
+      <p>{{ chatService.dataChannel.name }}</p>
       <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
     <div>
       <div class="mobile-chat-header-icon"><mat-icon>person_add</mat-icon></div>
     </div>
   </div>
-  <div class="mobile-chat-content"></div>
-  <div class="mobile-chat-input-container"></div>
+  <div #scrollContainer class="mobile-chat-content">
+    <div
+      *ngFor="
+        let singleMessage of chatService.dataChannel.messageChannel;
+        let singleMessageIndex = index
+      "
+    >
+      <div class="mobile-chat-message-date-container">
+        <div class="mobile-chat-message-line"></div>
+        <span class="mobile-chat-message-date">{{
+          chatService.setDate(singleMessage.date)
+        }}</span>
+        <div class="mobile-chat-message-line"></div>
+      </div>
+      <div
+        [ngClass]="{
+          'mobile-chat-message-container-from-me': chatService.ifMessageFromMe(
+            singleMessage.userId
+          ),
+          'mobile-chat-message-container-from-others':
+            !chatService.ifMessageFromMe(singleMessage.userId)
+        }"
+      >
+        <div
+          (click)="
+            this.chatService.doNotClose($event); chatService.openProfil()
+          "
+          class="mobile-chat-message-avatar-container"
+        >
+          <img src="{{ singleMessage.userAvatar }}" alt="" />
+        </div>
+        <div class="mobile-chat-message-content">
+          <div
+            [ngClass]="{
+              'mobile-chat-message-name-date-container-me':
+                chatService.ifMessageFromMe(singleMessage.userId),
+              'mobile-chat-message-name-date-container-from-others':
+                !chatService.ifMessageFromMe(singleMessage.userId)
+            }"
+          >
+            <span
+              (click)="chatService.openProfil()"
+              class="mobile-chat-message-name"
+            >
+              {{ singleMessage.userName }}
+            </span>
+            <div>
+              <span class="mobile-chat-message-time">
+                {{ chatService.setTime(singleMessage.date) }} Uhr
+              </span>
+            </div>
+          </div>
+          <div
+            class="mobile-chat-message-text-container"
+            [ngClass]="{
+              'mobile-chat-message-from-me': chatService.ifMessageFromMe(
+                singleMessage.userId
+              ),
+              'mobile-chat-message-from-others': !chatService.ifMessageFromMe(
+                singleMessage.userId
+              )
+            }"
+          >
+            <span>
+              {{ singleMessage.message }}
+            </span>
+          </div>
+
+          <div
+            [ngClass]="{
+              'mobile-chat-message-reaction-right-container':
+                chatService.ifMessageFromMe(singleMessage.userId),
+              'mobile-chat-message-reaction-left-container':
+                !chatService.ifMessageFromMe(singleMessage.userId)
+            }"
+          >
+            <div
+              class="mobile-chat-message-reaction-content"
+              *ngFor="
+                let emojie of chatService.dataChannel.messageChannel[
+                  singleMessageIndex
+                ].emojiReaction;
+                let emojiIndex = index
+              "
+              [ngClass]="{
+                'd-none': emojie.user.length === 0
+              }"
+              (click)="
+                this.emojiService.addAdditionalReactionToMessage(
+                  emojie.emoji,
+                  singleMessageIndex,
+                  emojiIndex
+                )
+              "
+            >
+              {{ emojie.emoji }}
+              {{ emojie.user.length }}
+            </div>
+            <div class="mobile-chat-message-reaction-icon">
+              <mat-icon
+                (click)="
+                  chatService.onButtonClick($event);
+                  chatService.openDialogEmojiReactionMessage(singleMessageIndex)
+                "
+                >add_reaction</mat-icon
+              >
+            </div>
+          </div>
+          <div>
+            <div>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-chat-input-container" id="meinTextarea">
+    <form class="mobile-chat-input-field-container br-20">
+      <textarea
+        [(ngModel)]="text"
+        name="textarea"
+        (input)="chatService.adjustHeight($event.target)"
+        style="min-height: 50px; width: 100%"
+        [placeholder]="'Antworten...'"
+      ></textarea>
+
+      <div class="mobile-chat-input-field-icon-container">
+        <div class="mobile-chat-input-icon-container">
+          <div class="mobile-chat-border-right">
+            <div class="mobile-chat-input-icon">
+              <mat-icon>add</mat-icon>
+            </div>
+          </div>
+          <div class="mobile-chat-input-icon">
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event); chatService.openDialogEmoji()
+              "
+              >sentiment_satisfied</mat-icon
+            >
+          </div>
+          <div class="mobile-chat-input-icon">
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event);
+                chatService.openDialogMentionUser()
+              "
+              >alternate_email</mat-icon
+            >
+          </div>
+        </div>
+        <div>
+          <div>
+            <mat-icon
+              (click)="
+                chatService.sendMessageFromChannel(this.parmsId, this.text)
+              "
+              class="mobile-chat-send-icon"
+              >send</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div></div>
+  </div>
 </div>

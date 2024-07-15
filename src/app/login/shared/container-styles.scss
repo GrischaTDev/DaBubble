@@ -1,0 +1,87 @@
+@import './../../../styles.scss';
+
+// Mobile-Container Styles
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    font-size: 17px;
+    min-height: 100vh;
+    height: 100vh;
+    background-color: #eceefe;
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    img {
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+        width: 200px;
+    }
+
+    .mobile-register-container {
+        display: flex;
+        align-items: center;
+    }
+
+}
+
+// Desktop-Container Styles 
+.desktop-login-container {
+    flex-direction: column;
+    height: calc(100vh - 75px);
+}
+
+.desktop-login-header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 75px;
+    padding-left: 75px;
+    padding-right: 75px;
+}
+
+.desktop-login-card-container {
+    display: flex;
+    justify-content: center;
+}
+
+.impress-policy {
+   display: flex;
+   justify-content: center;
+   align-items: flex-end;
+   gap: 30px;
+   margin-top: 30px;
+}
+
+// General Container Styles
+
+.register-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    button {
+        padding: 7px 18px !important;
+    }
+}
+
+.overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: inline-block;
+    margin: 10px;
+    padding: 30px;
+    background-color: $background-blue;
+    border-radius: 30px;
+    border-bottom-right-radius: 0 !important;
+    color: #fff;
+    font-weight: 700;
+    font-size: 20px;
+
+    .overlay-content {
+        display: flex;
+        gap: 8px;
+    }
+}

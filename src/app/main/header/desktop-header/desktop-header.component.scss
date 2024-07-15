@@ -1,13 +1,17 @@
 @import "./../../../../styles.scss";
 
 header {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
     background-color: $background-lightblue;
     height: 80px;
     display: flex;
     justify-content: space-between;
     gap: 50px;
     align-items: center;
-    padding: 15px 16px 15px 16px;
+    padding: 15px 60px;
 
     >.logo {
         height: 70px;
@@ -49,15 +53,27 @@ header {
             font-size: 32px;
         }
 
+        >.user-img {
+            display: flex;
+            position: relative;
+
+            >.user-avatar {
+                height: 70px;
+                border-radius: 50px;
+            }
+
+            >.user-status {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
+        }
+
         >.mat-icon {
             cursor: pointer;
             width: 30px;
             height: 30px;
             font-size: 30px;
         }
-    }
-
-    >.user {
-        height: 50px;
     }
 }

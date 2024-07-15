@@ -1,0 +1,23 @@
+@import '@ctrl/ngx-emoji-mart/picker';
+
+.emoji-container {
+  position: fixed; 
+  right: 50px; 
+  bottom: 210px; 
+  display: inline-block; 
+  background: rgba(241, 241, 241, 0.5);
+}
+
+@media (max-width: 1279px) {
+  .emoji-container {
+    right: 18px; 
+    bottom: 164px; 
+  }
+}
+
+@media (max-width: 400px) {
+  .emoji-container {
+    right: calc((100vw - 343px) / 2); 
+    bottom: 164px; 
+  }
+}

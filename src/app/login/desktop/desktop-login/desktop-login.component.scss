@@ -1,0 +1,50 @@
+@import './../../shared/container-styles.scss';
+@import './../../../../styles.scss';
+@import './../../shared/login-card/login-card.component.scss';
+
+.animation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #7378F3, #343DE7);
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    gap: 30px;
+    opacity: 1;
+
+    .logo-container {
+        flex: 0 0 auto;
+    }
+
+    .text-container {
+        overflow: hidden;
+    }
+
+    h1 {
+        color: #fff;
+        font-size: 64px;
+    }
+}
+
+.desktop-animation-login-header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 75px;
+    padding-left: 75px;
+    padding-right: 75px;
+
+    img {
+        position: absolute; 
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+    }
+
+    .register-container {
+        position: relative; 
+        flex: 1;
+        text-align: right; 
+      }
+}

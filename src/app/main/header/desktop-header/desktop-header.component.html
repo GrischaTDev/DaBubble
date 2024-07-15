@@ -5,8 +5,11 @@
         <mat-icon>search</mat-icon>
     </div>
     <div class="user-container">
-        <span>Frederik Beck</span>
-        <img class="user" src="./assets/img/user/user3.svg" alt="User avatar">
+        <span>{{ currentUser.name }}</span>
+        <div class="user-img">
+            <img class="user-avatar" src="{{ currentUser.avatar }}">
+            <img class="user-status" src="./assets/img/online-icon-desktop.svg" >
+        </div>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
 </header>
