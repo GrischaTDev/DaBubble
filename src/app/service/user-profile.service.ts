@@ -32,7 +32,6 @@ export class UserProfileService { // OnInit implementieren
     if(email) {
       this.updateEmailToAuth(email);
     }
-
   }
 
   async updateEmailToAuth(newEmail: string) {
