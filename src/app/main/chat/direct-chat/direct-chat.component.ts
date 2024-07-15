@@ -2,12 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogConfig  } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
 import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import {
   Firestore,
   addDoc,
@@ -51,6 +52,7 @@ export class DirectChatComponent implements OnInit {
   messageToChannel: Message = new Message();
   loggedInUser: User = new User();
   directUser: User = new User();
+  directUserStatus: string = './assets/img/offline-icon.svg'; 
   directUserId: string = '';
 
   constructor(
@@ -85,7 +87,9 @@ export class DirectChatComponent implements OnInit {
         this.loadDirectChatUser(directUserId); 
       }
     });
+    this.checkUserStatus();
   }
+
 
   /**
    * Load direct chat user data!
@@ -109,11 +113,28 @@ export class DirectChatComponent implements OnInit {
   }
 
 
+  checkUserStatus() {
+    if(this.directUser.online) {
+      this.directUserStatus = './assets/img/online-icon.svg';
+    } else {
+      this.directUserStatus = './assets/img/offline-icon.svg';
+    }
+  }
+
+
   /**
    * A lifecycle hook that is called when the component is destroyed.
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+
+  openUserProfile(directUser: User) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = directUser;
+  
+    this.dialog.open(UserProfileComponent, dialogConfig);
   }
 }

@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MainServiceService } from '../../service/main-service.service';
 import { UserProfileService } from '../../service/user-profile.service';
 import { FormsModule } from '@angular/forms';
+import { User } from '../../../assets/models/user.class';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -14,16 +16,18 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './user-profile.component.scss'
 })
 export class UserProfileComponent {
-  currentUser = this.mainService.loggedInUser;
+  loggedInUser = this.mainService.loggedInUser;
   editProfileOpen: boolean = false;
   updateUserName: string = '';
   updateUserEmail: string = '';
-  userStatus: string = './assets/img/offline.svg';
+  loggedInUserStatus: string = './assets/img/offline.svg';
+  directUserProfileStatus: string = './assets/img/offline.svg';
 
   constructor(
     public dialogRef: MatDialogRef<UserProfileComponent>,
     public mainService: MainServiceService,
-    public userProfileService: UserProfileService 
+    public userProfileService: UserProfileService,
+    @Inject(MAT_DIALOG_DATA) public directUserProfile: User 
   ) {}
 
 
@@ -34,10 +38,15 @@ export class UserProfileComponent {
 
 
   checkUserStatus() {
-    if(this.currentUser.online) {
-      this.userStatus = './assets/img/aktive.svg';
+    if(this.loggedInUser.online) {
+      this.loggedInUserStatus = './assets/img/aktive.svg';
     } else {
-      this.userStatus = './assets/img/offline.svg';
+      this.loggedInUserStatus = './assets/img/offline.svg';
+    }
+    if(this.directUserProfile?.online) {
+      this.directUserProfileStatus = './assets/img/aktive.svg';
+    } else {
+      this.directUserProfileStatus = './assets/img/offline.svg';
     }
   }
 
@@ -60,7 +69,7 @@ export class UserProfileComponent {
     let name =  this.updateUserName;
     let email =  this.updateUserEmail;
     await this.userProfileService.updateUserProfile(name, email);
-    this.currentUser = this.mainService.loggedInUser;
+    this.loggedInUser = this.mainService.loggedInUser;
     this.editProfileOpen = false;
   }
 }
