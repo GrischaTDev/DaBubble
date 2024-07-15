@@ -12,6 +12,7 @@ import { Firestore, docData } from '@angular/fire/firestore';
 import { Message } from '../../../../assets/models/message.class';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiService } from '../../../service/emoji.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -42,6 +43,7 @@ export class MobileChatComponent {
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
+    public emojiService: EmojiService,
     public mainService: MainServiceService
   ) {
     this.route.params.subscribe((params: any) => {

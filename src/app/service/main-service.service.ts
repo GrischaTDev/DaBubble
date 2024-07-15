@@ -44,7 +44,6 @@ export class MainServiceService {
   testUser: User = new User();
   emojiReactionMessage = false;
   docId: string = '';
-  dialogClose = false;
 
   /**
    * Updates the content source with the new content.
