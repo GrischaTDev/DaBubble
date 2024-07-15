@@ -13,12 +13,12 @@
     gap: 30px;
     opacity: 1;
 
-    .logo-container{
+    .logo-container {
         flex: 0 0 auto;
     }
 
     .text-container {
-        overflow: hidden; 
+        overflow: hidden;
     }
 
     h1 {
@@ -27,6 +27,24 @@
     }
 }
 
-section {
-    display: none;
+.desktop-animation-login-header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 75px;
+    padding-left: 75px;
+    padding-right: 75px;
+
+    img {
+        position: absolute; 
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+    }
+
+    .register-container {
+        position: relative; 
+        flex: 1;
+        text-align: right; 
+      }
 }
