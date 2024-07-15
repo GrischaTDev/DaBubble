@@ -22,9 +22,18 @@ export class EmojiService {
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
    * @param {string} emoji - The emoji character to add as a reaction.
    */
-  async addReactionToMessage(emoji: string) {
-    await this.preparedSearchUserAndEmoji(emoji);
-    this.selectionTheAddedEmoji(emoji);
+  addReactionToMessage(emoji: string) {
+    let data =
+      this.chatService.dataChannel.messageChannel[
+        this.chatService.indexOfChannelMessage
+      ].emojiReaction;
+    if (data.length !== 0) {
+      this.preparedSearchUserAndEmoji(emoji, data);
+      this.selectionTheAddedEmoji(emoji);
+    } else {
+      this.pushEmojiToArray(emoji);
+      this.resetReactionVariables();
+    }
   }
 
   /**
@@ -32,11 +41,10 @@ export class EmojiService {
    * Calls a function to handle each individual search iteration.
    * @param {string} emoji - The emoji to search for within the reactions.
    */
-  preparedSearchUserAndEmoji(emoji: string) {
-    let data =
-      this.chatService.dataChannel.messageChannel[
-        this.chatService.indexOfChannelMessage
-      ].emojiReaction;
+  preparedSearchUserAndEmoji(
+    emoji: string,
+    data: { emoji: string; user: string[] }[]
+  ) {
     for (let index = 0; index < data.length; index++) {
       const emojiFb = data[index].emoji;
       const userFb = data[index].user;
@@ -82,7 +90,7 @@ export class EmojiService {
         user === this.mainService.loggedInUser.id
       ) {
         this.userIsAvailable = true;
-      }
+      } 
     }
   }
 
@@ -103,6 +111,8 @@ export class EmojiService {
       if (!this.mainService.emojiReactionMessage) {
         this.removeUserFromEmoji(usersFromEmoji);
       }
+    } else {
+      this.pushEmojiToArray(emoji);
     }
     this.resetReactionVariables();
   }
@@ -120,11 +130,6 @@ export class EmojiService {
     this.chatService.dataChannel.messageChannel[
       this.chatService.indexOfChannelMessage
     ].emojiReaction.push(this.newEmoji.toJSON());
-    this.mainService.setDocData(
-      'channels',
-      this.chatService.idOfChannel,
-      this.chatService.dataChannel
-    );
   }
 
   /**
@@ -134,11 +139,6 @@ export class EmojiService {
    */
   pushUserToArray(usersFromEmoji: string[]) {
     usersFromEmoji.push(this.mainService.loggedInUser.id);
-    this.mainService.setDocData(
-      'channels',
-      this.chatService.idOfChannel,
-      this.chatService.dataChannel
-    );
   }
 
   removeUserFromEmoji(usersFromEmoji: string[]) {

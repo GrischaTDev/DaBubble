@@ -35,7 +35,7 @@
       >
         <div
           (click)="
-            this.chatService.doNotClose($event); chatService.openProfil()
+            this.chatService.doNotClose($event); chatService.openProfil(singleMessage.userId)
           "
           class="mobile-chat-message-avatar-container"
         >
@@ -51,7 +51,7 @@
             }"
           >
             <span
-              (click)="chatService.openProfil()"
+              (click)="chatService.openProfil(singleMessage.userId)"
               class="mobile-chat-message-name"
             >
               {{ singleMessage.userName }}

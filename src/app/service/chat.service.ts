@@ -5,9 +5,10 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { Firestore } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
+import { User } from '../../assets/models/user.class';
 @Injectable({
   providedIn: 'root',
 })
@@ -28,6 +29,7 @@ export class ChatService {
   messageThread: Message = new Message();
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
+  clickedUser: User = new User();
 
   constructor(public mainService: MainServiceService) {}
 
@@ -201,7 +203,21 @@ export class ChatService {
     }
   }
 
-  openProfil() {
+  async  openProfil(userId:string) {  
+    await this.loadDirectChatUser(userId); 
+    this.clickedUser.id = userId;
     this.dialogInstance = this.dialog.open(DialogUserChatComponent);
+  }
+
+  async loadDirectChatUser(userId: string) {
+    try {
+      const userDocRef = doc(this.firestore, 'users', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        this.clickedUser = new User(userDocSnap.data());
+      } 
+    } catch (error) {
+      console.error("Fehler beim Laden der Benutzerdaten:", error);
+    }
   }
 }
