@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { DesktopVerifyEmailComponent } from "../desktop/desktop-verify-email/desktop-verify-email.component";
 import { MobileVerifyEmailComponent } from "../mobile/mobile-verify-email/mobile-verify-email.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../../service/login.service';
 import { applyActionCode, checkActionCode, getAuth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
+import { DesktopVerifyEmailComponent } from '../desktop/desktop-verify-email/desktop-verify-email.component';
 
 @Component({
   selector: 'app-verify-email',

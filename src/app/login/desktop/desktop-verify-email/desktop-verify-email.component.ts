@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { VerifyEmailCardComponent } from "../../shared/verify-email-card/verify-email-card.component";
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../../service/login.service';
 import { Observable } from 'rxjs';
+import { VerifyEmailCardComponent } from '../../shared/verify-email-card/verify-email-card.component';
 
 @Component({
   selector: 'app-desktop-verify-email',
