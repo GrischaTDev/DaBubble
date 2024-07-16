@@ -53,6 +53,9 @@
         border-radius: 50px;
         padding: 4px;
         cursor: pointer;
+        &:hover {
+          color: $icon-purple-hover;
+        }
       }
     }
 
@@ -87,6 +90,13 @@
 
 .close {
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  &:hover {
+    color: $icon-purple-hover;
+    background-color: $background-lightblue;
+  }
 }
 
 .edit-user-pofile-dialog {
@@ -116,7 +126,7 @@
 
     > img {
       height: 200px;
-      border: 100%;
+      border-radius: 100%;
     }
   }
 

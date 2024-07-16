@@ -70,6 +70,10 @@
   overflow-y: scroll;
 }
 
+.mobile-chat-message-container-clicked {
+  background-color: $background-lightblue;
+}
+
 .mobile-chat-message-date-container {
   display: flex;
   justify-content: center;
@@ -97,6 +101,50 @@
   height: 1px;
   width: 100%;
   background-color: $border-ligth-purple;
+}
+
+.mobile-chat-edit-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  right: 120px;
+  margin-top: -12px;
+  gap: 5px;
+  height: 46px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border: 1px solid $border-gray;
+  background-color: $background-white;
+}
+
+.mobile-chat-edit-message-container-left {
+  left: 120px;
+  width: 200px;
+}
+
+.mobile-chat-edit-message-container-right {
+  right: 120px;
+  width: 255px;
+}
+
+.mobile-chat-edit-icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  &:hover {
+    color: $icon-purple-hover;
+    background-color: $background-lightblue;
+  }
+}
+
+.mobile-chat-edit-icon-left {
+ display: none;
 }
 
 .mobile-chat-message-container-from-others {
@@ -161,6 +209,7 @@
   margin-top: 8px;
   padding-top: 24px;
   margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .mobile-chat-message-from-others {
@@ -182,6 +231,11 @@
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
   margin-left: 90px;
+}
+
+.mobile-chat-message-clicked {
+  background-color: $background-white;
+  color: $color-black;
 }
 
 .mobile-chat-input-container {
