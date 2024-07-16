@@ -43,6 +43,7 @@ export class MobileChatComponent {
   messageToChannel: Message = new Message();
   loggedInUser: User = new User();
   activeMessageIndex: number | null = null;
+  hoveredMessageIndex: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -96,6 +97,14 @@ export class MobileChatComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(): void {
     this.activeMessageIndex = null;
+  }
+
+  onMouseEnter(index: number): void {
+    this.hoveredMessageIndex = index;
+  }
+
+  onMouseLeave(): void {
+    this.hoveredMessageIndex = null;
   }
 
   /**

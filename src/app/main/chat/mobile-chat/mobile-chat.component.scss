@@ -1,5 +1,5 @@
 @import "./../../../../styles.scss";
-@import '@ctrl/ngx-emoji-mart/picker';
+@import "@ctrl/ngx-emoji-mart/picker";
 
 @font-face {
   font-family: "TwemojiMozilla";
@@ -129,6 +129,44 @@
   width: 255px;
 }
 
+.mobile-chat-edit-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  right: 60px;
+  margin-top: 120px;
+  gap: 5px;
+  height: 46px;
+  width: 269px;
+  height: 67px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border: 1px solid $border-gray;
+  background-color: $background-white;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.08);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.mobile-chat-edit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 229px;
+  height: 47px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  cursor: pointer;
+  &:hover {
+    background-color: $background-lightblue;
+    color: $icon-purple-hover;
+  }
+}
+
 .mobile-chat-edit-icon-container {
   display: flex;
   justify-content: center;
@@ -144,7 +182,7 @@
 }
 
 .mobile-chat-edit-icon-left {
- display: none;
+  display: none;
 }
 
 .mobile-chat-message-container-from-others {
@@ -161,7 +199,7 @@
   flex-direction: row-reverse;
   margin-left: 16px;
   margin-right: 16px;
- }
+}
 
 .mobile-chat-message-avatar-container {
   display: flex;
@@ -323,20 +361,24 @@
   }
 }
 
-.mobile-chat-message-reaction-right-container{
+.mobile-chat-message-reaction-right-container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 8px;
-  gap: 10px
+  gap: 10px;
+  width: 200px;
+  flex-wrap: wrap;
 }
 
-.mobile-chat-message-reaction-left-container{
+.mobile-chat-message-reaction-left-container {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 8px;
-  gap: 10px
+  gap: 10px;
+  width: 200px;
+  flex-wrap: wrap;
 }
 
 .mobile-chat-message-reaction-content {
