@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MainServiceService } from '../../../service/main-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
+import { ChatService } from '../../../service/chat.service';
+
 
 
 @Component({
@@ -14,14 +16,23 @@ import { Router } from '@angular/router';
   templateUrl: './mobile-channels.component.html',
   styleUrl: './mobile-channels.component.scss'
 })
-export class MobileChannelsComponent {
+export class MobileChannelsComponent  implements OnInit {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private router: Router, public chatService: ChatService,) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
+  currentUser = this.mainService.loggedInUser;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
+
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.currentUser = this.mainService.loggedInUser;
+      console.log('Eingeloggter Benutzer', this.currentUser);
+    }, 1000);
+  }
 
 
   navigateToChat(userId: string) {

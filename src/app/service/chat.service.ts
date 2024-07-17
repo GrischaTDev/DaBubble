@@ -5,9 +5,11 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { Firestore } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
+import { User } from '../../assets/models/user.class';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
@@ -28,8 +30,11 @@ export class ChatService {
   messageThread: Message = new Message();
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
+  clickedUser: User = new User();
+  directMessageId: string = '';
+  dataDirectMessage: Channel = new Channel();
 
-  constructor(public mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService, private router: Router) {}
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
@@ -201,7 +206,62 @@ export class ChatService {
     }
   }
 
-  openProfil() {
+  async openProfil(userId:string) {  
+    this.clickedUser.id = userId;
+    await this.loadDirectChatUser(userId);   
     this.dialogInstance = this.dialog.open(DialogUserChatComponent);
   }
+
+  async loadDirectChatUser(userId: string) {
+    try {
+      const userDocRef = doc(this.firestore, 'users', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        this.clickedUser = new User(userDocSnap.data());
+      } 
+    } catch (error) {
+      console.error("Fehler beim Laden der Benutzerdaten:", error);
+    }
+  }
+
+async openDirectMessage(userId:string) {
+  this.clickedUser.id = userId;
+  await this.directMessageIsAvailable();
+  await this.pushDirectMessageToFirebase();  
+  this.navigateDirectMessage(this.clickedUser.id)
+}
+
+directMessageIsAvailable() {
+  this.directMessageId = '';
+  this.clickedUser.message.forEach(clickedUserMessage => {
+    this.mainService.loggedInUser.message.forEach(loggedInUserMessage => {
+      if (clickedUserMessage === loggedInUserMessage) {
+        this.directMessageId === loggedInUserMessage;
+      }
+    });
+  });
+}
+
+async pushDirectMessageToFirebase() {
+  if (this.directMessageId === '') {
+    await this.mainService.addNewDocOnFirebase(
+      'direct-message',
+      this.dataDirectMessage
+    ) 
+    this.pushDirectMessageIdToUser();
+  } else {
+    this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataChannel));
+  }
+}
+
+async pushDirectMessageIdToUser() {
+  this.mainService.loggedInUser.message.push(this.mainService.docId);
+  this.clickedUser.message.push(this.mainService.docId);
+  await this.mainService.addDoc('users', this.mainService.loggedInUser.id, new Channel(this.mainService.loggedInUser));
+  await this.mainService.addDoc('users', this.clickedUser.id, new Channel(this.clickedUser));
+}
+
+navigateDirectMessage(userId: string) {
+  this.router.navigate(['/direct-chat', userId]); 
+}
 }

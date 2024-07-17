@@ -11,7 +11,7 @@ header {
     align-items: center;
     padding: 15px 16px;
     box-sizing: border-box;
-    z-index: 999;
+    z-index: 100;
 
 
     >.logo {
@@ -20,6 +20,7 @@ header {
 
     >.user {
         height: 50px;
+        width: 50px;
         border-radius: 50px;
         cursor: pointer;
     }

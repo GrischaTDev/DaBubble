@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -13,6 +13,7 @@ import { Message } from '../../../../assets/models/message.class';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -23,6 +24,8 @@ import { EmojiService } from '../../../service/emoji.service';
     MobileHeaderComponent,
     CommonModule,
     PickerComponent,
+    MobileHeaderComponent,
+    MobileChatHeaderComponent
   ],
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
@@ -39,6 +42,8 @@ export class MobileChatComponent {
   firestore: Firestore = inject(Firestore);
   messageToChannel: Message = new Message();
   loggedInUser: User = new User();
+  activeMessageIndex: number | null = null;
+  hoveredMessageIndex: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -78,6 +83,28 @@ export class MobileChatComponent {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
+  }
+
+  toggleIconContainer(index: number, event: MouseEvent): void {
+    event.stopPropagation(); 
+    if (this.activeMessageIndex === index) {
+      this.activeMessageIndex = null;
+    } else {
+      this.activeMessageIndex = index;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(): void {
+    this.activeMessageIndex = null;
+  }
+
+  onMouseEnter(index: number): void {
+    this.hoveredMessageIndex = index;
+  }
+
+  onMouseLeave(): void {
+    this.hoveredMessageIndex = null;
   }
 
   /**
