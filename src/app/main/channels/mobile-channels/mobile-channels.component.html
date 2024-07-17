@@ -59,13 +59,17 @@
                 </div>
                 <span>{{ currentUser.name }} (Du)</span>
             </div>
-            
-            <div *ngFor="let user of mainService.allUsers; let i = index" class="user" (click)="chatService.navigateDirectMessage(user.id)">
-                <div class="user-img">
-                    <img class="user-avatar" src="{{ user.avatar }}">
-                    <img class="user-status" [src]="user.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
+            <ng-container *ngFor="let user of mainService.allUsers; let i = index">
+                <div *ngIf="user.id !== currentUser.id" class="user" (click)="chatService.navigateDirectMessage(user.id)">
+                    <div class="user-img">
+                        <img class="user-avatar" src="{{ user.avatar }}">
+                        <img class="user-status" [src]="user.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
+                    </div>
+                    <span>{{ user.name }}</span>
                 </div>
-                <span>{{ user.name }}</span>
+            </ng-container>
+            <div>
+
             </div>
         </div>
     </div>
