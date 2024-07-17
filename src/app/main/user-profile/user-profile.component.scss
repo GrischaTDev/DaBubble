@@ -81,6 +81,29 @@
                 }
             }
         }
+
+        >.message-btn {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            >button {
+                color: white;
+                padding: 12px 25px;
+                gap: 10px;
+                border: unset;
+                border-radius: 25px;
+                position: relative;
+                background-color: $background-blue;
+                display: flex;
+                align-items: center;
+            }
+
+            >mat-icon {
+                position: absolute;
+            }
+        }
     }
 }
 

@@ -13,7 +13,7 @@
         <div class="name">
             <span *ngIf="!directUserProfile?.name">{{ loggedInUser.name }}</span>
             <span *ngIf="directUserProfile?.name">{{ directUserProfile.name }}</span>
-            <mat-icon (click)="editUserProfile()" class="edit">edit</mat-icon>
+            <mat-icon *ngIf="!directUserProfile?.name" (click)="editUserProfile()" class="edit">edit</mat-icon>
         </div>
         <div class="status">
             <img *ngIf="!directUserProfile?.name" src="{{ loggedInUserStatus }}">
@@ -26,6 +26,9 @@
                 <span class="adresse" *ngIf="!directUserProfile?.email">{{ loggedInUser.email }}</span>
                 <span class="adresse" *ngIf="directUserProfile?.email">{{ directUserProfile.email }}</span>
             </div>
+        </div>
+        <div class="message-btn">
+            <button><mat-icon>mode_comment</mat-icon> Nachricht</button>
         </div>
     </div>
 </div>
