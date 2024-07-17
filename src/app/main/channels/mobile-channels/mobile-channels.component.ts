@@ -31,12 +31,6 @@ export class MobileChannelsComponent implements OnInit {
     
   }
 
-
-  navigateToChat(userId: string) {
-    this.router.navigate(['/direct-chat', userId]); 
-  }
-
-
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);
   }
