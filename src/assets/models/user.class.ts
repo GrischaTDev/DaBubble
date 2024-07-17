@@ -4,7 +4,7 @@ export class User {
   name: string;
   email: string;
   avatar: string;
-  message: Message[] = [];
+  message: String[] = [];
   online: boolean;
 
   constructor(obj?: any) {

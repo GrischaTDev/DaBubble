@@ -182,3 +182,32 @@
     font-weight: 700;
   }
 }
+
+.send-direct-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.send-direct-message-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 164px;
+  height: 49px;
+  gap: 10px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  background-color: $icon-blue;
+  color: $background-white;
+  cursor: pointer;
+  &:hover {
+    color: $icon-blue;
+    background-color: $background-white;
+    border: 1px solid $icon-blue;
+  }
+}

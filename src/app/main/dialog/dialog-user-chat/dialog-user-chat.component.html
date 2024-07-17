@@ -15,9 +15,9 @@
         (click)="editUserProfile()"
         class="edit"
         [ngClass]="{
-            'd-none':
-              this.chatService.clickedUser.id !== this.mainService.loggedInUser.id
-          }"
+          'd-none':
+            this.chatService.clickedUser.id !== this.mainService.loggedInUser.id
+        }"
         >edit</mat-icon
       >
     </div>
@@ -29,6 +29,18 @@
       <div class="email-adresse">
         <span class="titel">E-Mail-Adresse</span>
         <span class="adresse">{{ this.chatService.clickedUser.email }}</span>
+      </div>
+    </div>
+    <div
+      class="send-direct-message-container"
+      [ngClass]="{
+        'd-none':
+          this.chatService.clickedUser.id === this.mainService.loggedInUser.id
+      }"
+    >
+      <div class="send-direct-message-button">
+        <mat-icon>mode_comment</mat-icon>
+        <span>Nachricht</span>
       </div>
     </div>
   </div>

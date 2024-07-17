@@ -5,6 +5,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
+import { ChatService } from '../../../service/chat.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { Router } from '@angular/router';
 export class MobileChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService, private router: Router) {}
+  constructor(public mainService: MainServiceService, public chatService: ChatService, private router: Router) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   currentUser = this.mainService.loggedInUser;
