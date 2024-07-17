@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { MainServiceService } from '../../../service/main-service.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ChatService } from '../../../service/chat.service';
+
 
 @Component({
   selector: 'app-add-channel',
@@ -28,7 +30,8 @@ export class AddChannelComponent implements OnInit{
   constructor(
     private breakpointObserver: BreakpointObserver,
     public dialogRef: MatDialogRef<AddChannelComponent>,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public ChatService: ChatService
   ) {}
 
 
