@@ -57,6 +57,7 @@
                     <img class="user-avatar" src="{{ currentUser.avatar }}">
                     <img class="user-status" [src]="currentUser.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
                 </div>
+                <span>{{ currentUser.name }} (Du)</span>
             </div>
             
             <div *ngFor="let user of mainService.allUsers; let i = index" class="user" (click)="chatService.navigateDirectMessage(user.id)">

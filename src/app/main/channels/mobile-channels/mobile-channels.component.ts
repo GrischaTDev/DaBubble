@@ -26,9 +26,10 @@ export class MobileChannelsComponent implements OnInit {
   arrowIconUser: string = 'arrow_drop_down';
 
   ngOnInit(): void {
-    this.currentUser = this.mainService.loggedInUser;
-    console.log(this.currentUser);
-    
+    setTimeout(() => {
+      this.currentUser = this.mainService.loggedInUser;
+      console.log('ddddd', this.currentUser);
+    }, 1000);
   }
 
   openDialogAddChannel() {
