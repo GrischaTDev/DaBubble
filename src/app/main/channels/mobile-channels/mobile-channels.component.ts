@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MainServiceService } from '../../../service/main-service.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,14 +14,21 @@ import { Router } from '@angular/router';
   templateUrl: './mobile-channels.component.html',
   styleUrl: './mobile-channels.component.scss'
 })
-export class MobileChannelsComponent {
+export class MobileChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   constructor(public mainService: MainServiceService, private router: Router) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
+  currentUser = this.mainService.loggedInUser;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
+
+  ngOnInit(): void {
+    this.currentUser = this.mainService.loggedInUser;
+    console.log(this.currentUser);
+    
+  }
 
 
   navigateToChat(userId: string) {
