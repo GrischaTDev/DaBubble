@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
 
 
+
 @Component({
   selector: 'app-mobile-channels',
   standalone: true,
@@ -15,22 +16,29 @@ import { ChatService } from '../../../service/chat.service';
   templateUrl: './mobile-channels.component.html',
   styleUrl: './mobile-channels.component.scss'
 })
-export class MobileChannelsComponent implements OnInit {
+export class MobileChannelsComponent  implements OnInit {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService, public chatService: ChatService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private router: Router, public chatService: ChatService,) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   currentUser = this.mainService.loggedInUser;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
 
-  ngOnInit(): void {
+
+  ngOnInit() {
     setTimeout(() => {
       this.currentUser = this.mainService.loggedInUser;
-      console.log('ddddd', this.currentUser);
+      console.log('Eingeloggter Benutzer', this.currentUser);
     }, 1000);
   }
+
+
+  navigateToChat(userId: string) {
+    this.router.navigate(['/direct-chat', userId]); 
+  }
+
 
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);
