@@ -206,9 +206,9 @@ export class ChatService {
     }
   }
 
-  async  openProfil(userId:string) {  
-    await this.loadDirectChatUser(userId); 
+  async openProfil(userId:string) {  
     this.clickedUser.id = userId;
+    await this.loadDirectChatUser(userId);   
     this.dialogInstance = this.dialog.open(DialogUserChatComponent);
   }
 
@@ -224,9 +224,11 @@ export class ChatService {
     }
   }
 
-openDirectMessage() {
-  this.directMessageIsAvailable();
-  this.pushDirectMessageToFirebase();  
+async openDirectMessage(userId:string) {
+  this.clickedUser.id = userId;
+  await this.directMessageIsAvailable();
+  await this.pushDirectMessageToFirebase();  
+  this.navigateDirectMessage(this.clickedUser.id)
 }
 
 directMessageIsAvailable() {
