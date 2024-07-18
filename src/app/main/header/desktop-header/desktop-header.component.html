@@ -4,7 +4,7 @@
         <input type="search" placeholder="Code learning durchsuchen">
         <mat-icon>search</mat-icon>
     </div>
-    <div class="user-container">
+    <div *ngIf="currentUser" class="user-container">
         <span>{{ currentUser.name }}</span>
         <div class="user-img">
             <img class="user-avatar" src="{{ currentUser.avatar }}">
