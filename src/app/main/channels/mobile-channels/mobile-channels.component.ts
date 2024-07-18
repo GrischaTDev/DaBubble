@@ -7,6 +7,7 @@ import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
 import { NewMessageComponent } from '../../new-message/new-message.component';
+import { LoginService } from '../../../service/login.service';
 
 
 
@@ -20,19 +21,20 @@ import { NewMessageComponent } from '../../new-message/new-message.component';
 export class MobileChannelsComponent  implements OnInit {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService, private router: Router, public chatService: ChatService,) {}
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService,) {}
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
-  currentUser = this.mainService.loggedInUser;
+  currentUser: any;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
 
 
   ngOnInit() {
-    setTimeout(() => {
-      this.currentUser = this.mainService.loggedInUser;
-      console.log('Eingeloggter Benutzer', this.currentUser);
-    }, 1000);
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.currentUser = user;
+      console.log('Eingeloggter Benutzer Channels Mobile', this.currentUser);
+    });
   }
 
 

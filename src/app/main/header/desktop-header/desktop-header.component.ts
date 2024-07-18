@@ -28,7 +28,7 @@ export class DesktopHeaderComponent implements OnInit {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
-      console.log('Logged in user', this.currentUser);
+      console.log('Eingeloggter Benutzer Desktop Header', this.currentUser);
     });
   }
 
