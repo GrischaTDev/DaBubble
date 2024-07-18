@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { doc, Firestore, setDoc } from '@angular/fire/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { doc, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../../assets/models/user.class';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,9 @@ export class LoginService {
 
   private newMailSubject = new BehaviorSubject<boolean>(false);
   isNewMail$ = this.newMailSubject.asObservable();
+
+  private loggedInUserSubject = new BehaviorSubject<User | null>(null);
+  loggedInUser$: Observable<User | null> = this.loggedInUserSubject.asObservable();
 
   constructor(private firestore: Firestore) { }
 
@@ -51,4 +56,26 @@ export class LoginService {
       }, { merge: true });
     }
   }
+
+  currentLoggedUser() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      const userId = user?.uid;
+      if (user) {
+        onSnapshot(
+          doc(this.firestore, 'users', userId ?? 'default'),
+          (item) => {
+            if (item.exists()) {
+              let userData = {
+                ...item.data(),
+                id: item.id,
+              };
+              this.loggedInUserSubject.next(new User(userData));
+            }
+          });
+      }
+    });
+  }
+
+
 }

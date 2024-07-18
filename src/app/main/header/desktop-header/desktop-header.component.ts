@@ -19,18 +19,17 @@ import { Router } from '@angular/router';
   styleUrl: './desktop-header.component.scss'
 })
 export class DesktopHeaderComponent implements OnInit {
-  userTest: User = new User();
+  currentUser: any;
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore) {
-    this.userTest = mainService.loggedInUser;
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore ) {
   }
-  currentUser = this.mainService.loggedInUser;
-
-
 
   ngOnInit() {
-    this.mainService.currentLoggedUser();
-    console.log('Logged in user', this.userTest);
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.currentUser = user;
+      console.log('Logged in user', this.currentUser);
+    });
   }
 
 

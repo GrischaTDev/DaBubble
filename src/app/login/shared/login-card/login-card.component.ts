@@ -79,7 +79,7 @@ export class LoginCardComponent {
         await setDoc(userRef, newUser.toJSON());
       }
       
-      this.router.navigate(['main']);
+      this.router.navigate(['thread']);
     } catch(error) {
       console.log(error);
     }
