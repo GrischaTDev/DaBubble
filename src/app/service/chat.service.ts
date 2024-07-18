@@ -33,6 +33,8 @@ export class ChatService {
   clickedUser: User = new User();
   directMessageId: string = '';
   dataDirectMessage: Channel = new Channel();
+  directMessageDocId: string = '';
+  directMessageIdIsAvailable = false;
 
   constructor(public mainService: MainServiceService, private router: Router) {}
 
@@ -206,9 +208,9 @@ export class ChatService {
     }
   }
 
-  async openProfil(userId:string) {  
+  async openProfil(userId: string) {
     this.clickedUser.id = userId;
-    await this.loadDirectChatUser(userId);   
+    await this.loadDirectChatUser(userId);
     this.dialogInstance = this.dialog.open(DialogUserChatComponent);
   }
 
@@ -218,50 +220,79 @@ export class ChatService {
       const userDocSnap = await getDoc(userDocRef);
       if (userDocSnap.exists()) {
         this.clickedUser = new User(userDocSnap.data());
-      } 
+        this.clickedUser.id = userId;
+      }
     } catch (error) {
-      console.error("Fehler beim Laden der Benutzerdaten:", error);
+      console.error('Fehler beim Laden der Benutzerdaten:', error);
     }
   }
 
-async openDirectMessage(userId:string) {
-  this.clickedUser.id = userId;
-  await this.directMessageIsAvailable();
-  await this.pushDirectMessageToFirebase();  
-  this.navigateDirectMessage(this.clickedUser.id)
-}
-
-directMessageIsAvailable() {
-  this.directMessageId = '';
-  this.clickedUser.message.forEach(clickedUserMessage => {
-    this.mainService.loggedInUser.message.forEach(loggedInUserMessage => {
-      if (clickedUserMessage === loggedInUserMessage) {
-        this.directMessageId === loggedInUserMessage;
-      }
-    });
-  });
-}
-
-async pushDirectMessageToFirebase() {
-  if (this.directMessageId === '') {
-    await this.mainService.addNewDocOnFirebase(
-      'direct-message',
-      this.dataDirectMessage
-    ) 
-    this.pushDirectMessageIdToUser();
-  } else {
-    this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataChannel));
+  async openDirectMessage(userId: string) {
+    this.clickedUser.id = userId;
+    await this.loadDirectChatUser(userId);
+    await this.directMessageIsAvailable();
+    await this.pushDirectMessageDocToFirebase();
+    this.directMessageDocId = this.mainService.docId;
+    this.navigateDirectMessage(this.clickedUser.id);
   }
-}
 
-async pushDirectMessageIdToUser() {
-  this.mainService.loggedInUser.message.push(this.mainService.docId);
-  this.clickedUser.message.push(this.mainService.docId);
-  await this.mainService.addDoc('users', this.mainService.loggedInUser.id, new Channel(this.mainService.loggedInUser));
-  await this.mainService.addDoc('users', this.clickedUser.id, new Channel(this.clickedUser));
-}
+  directMessageIsAvailable() {
+    this.directMessageIdIsAvailable = false;
+    this.directMessageId = '';
+    this.clickedUser.message.forEach((clickedUserMessage) => {
+      this.mainService.loggedInUser.message.forEach((loggedInUserMessage) => {
+        if (clickedUserMessage === loggedInUserMessage) {
+          let loggedInUserMessageString: string =
+            loggedInUserMessage.toString();
+          this.directMessageId = loggedInUserMessageString;
+          this.directMessageIdIsAvailable = true;
+        }
+      });
+    });
+  }
 
-navigateDirectMessage(userId: string) {
-  this.router.navigate(['/direct-chat', userId]); 
-}
+  async pushDirectMessageDocToFirebase() {
+    if (!this.directMessageIdIsAvailable) {
+      await this.mainService.addNewDocOnFirebase(
+        'direct-message',
+        this.dataDirectMessage
+      );
+      this.pushDirectMessageIdToUser();
+    }
+  }
+
+  async pushDirectMessageIdToUser() {
+    this.mainService.loggedInUser.message.push(this.mainService.docId);
+    this.clickedUser.message.push(this.mainService.docId);
+    this.directMessageId = this.mainService.docId;
+    await this.mainService.addDoc(
+      'users',
+      this.mainService.loggedInUser.id,
+      new User(this.mainService.loggedInUser)
+    );
+    await this.mainService.addDoc(
+      'users',
+      this.clickedUser.id,
+      new User(this.clickedUser)
+    );
+  }
+
+  navigateDirectMessage(userId: string) {
+    this.router.navigate(['/direct-chat', userId]);
+  }
+
+  async sendMessageFromDirectMessage(channelId: string, textContent: string) {
+    this.messageChannel.message = textContent;
+    this.messageChannel.date = Date.now();
+    this.messageChannel.userId = this.mainService.loggedInUser.id;
+    this.messageChannel.userName = this.mainService.loggedInUser.name;
+    this.messageChannel.userEmail = this.mainService.loggedInUser.email;
+    this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+    this.dataDirectMessage.messageChannel.push(this.messageChannel);
+     await this.mainService.addDoc(
+      'direct-message',
+      this.directMessageId,
+      new Channel(this.dataDirectMessage)
+    );
+  }
 }

@@ -20,6 +20,7 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { EmojiService } from '../../../service/emoji.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 
 @Component({
@@ -59,18 +60,14 @@ export class DirectChatComponent implements OnInit {
     public chatService: ChatService,
     public mainService: MainServiceService,
     public emojiService: EmojiService,
-  ) {
-    this.route.params.subscribe((params: any) => {
-      this.parmsId = params.id;
-      chatService.idOfChannel = params.id;
-    });
-
+  ) {  
     if (this.parmsId) {
-      this.items$ = docData(mainService.getDataRef(this.parmsId, 'direct-message'));
+      this.items$ = docData(mainService.getDataRef(this.chatService.directMessageId, 'direct-message'));
       this.items = this.items$.subscribe((directMessage: any) => {
         this.chatService.dataDirectMessage = directMessage;
       });
     }
+    this.loadDirectChatContent(this.chatService.directMessageId)
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
@@ -78,9 +75,9 @@ export class DirectChatComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.route.paramMap.subscribe(params => {
       const directUserId = params.get('userId');
-
       if (directUserId) {
         this.loadDirectChatUser(directUserId); 
       }
@@ -109,6 +106,19 @@ export class DirectChatComponent implements OnInit {
       console.error("Fehler beim Laden der Benutzerdaten:", error);
     }
   }
+
+  async loadDirectChatContent(userId:string) {
+    try {
+      const userDocRef = doc(this.firestore, 'direct-message', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      if (userDocSnap.exists()) {
+        this.chatService.dataDirectMessage = new Channel(userDocSnap.data());
+        this.chatService.dataDirectMessage.id = userId;
+      }
+    } catch (error) {
+      console.error('Fehler beim Laden der Benutzerdaten:', error);
+    }
+    }
 
 
   checkUserStatus() {
