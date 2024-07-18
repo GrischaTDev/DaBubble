@@ -6,13 +6,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
+import { NewMessageComponent } from '../../new-message/new-message.component';
 
 
 
 @Component({
   selector: 'app-mobile-channels',
   standalone: true,
-  imports: [CommonModule, MatIconModule, AddChannelComponent],
+  imports: [CommonModule, MatIconModule, AddChannelComponent, NewMessageComponent],
   templateUrl: './mobile-channels.component.html',
   styleUrl: './mobile-channels.component.scss'
 })
@@ -42,6 +43,10 @@ export class MobileChannelsComponent  implements OnInit {
 
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);
+  }
+
+  openDialogNewMessage() {
+    this.dialog.open(NewMessageComponent);
   }
 
   openChannels() {
