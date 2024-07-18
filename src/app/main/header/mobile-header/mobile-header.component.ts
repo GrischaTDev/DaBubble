@@ -17,16 +17,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./mobile-header.component.scss'] 
 })
 export class MobileHeaderComponent implements OnInit { 
-  
+  currentUser: any;
 
   constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router) {}
-  currentUser = this.mainService.loggedInUser;
 
   ngOnInit() {
-    setTimeout(() => {
-      this.currentUser = this.mainService.loggedInUser;
-      console.log('Eingeloggter Benutzer', this.currentUser);
-    }, 1000);
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.currentUser = user;
+      console.log('Eingeloggter Benutzer Mobile Header', this.currentUser);
+    });
   }
   
   private dialog = inject(MatDialog);

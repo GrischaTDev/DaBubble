@@ -1,4 +1,4 @@
-<header>
+<header *ngIf="currentUser">
     <img class="logo" src="./assets/img/logo-name.svg" alt="DaBubble logo">
     <img (click)="openUserMenu()" class="user" src="{{ currentUser.avatar }}" alt="User avatar">
 </header>

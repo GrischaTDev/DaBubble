@@ -27,7 +27,7 @@
                 <span class="adresse" *ngIf="directUserProfile?.email">{{ directUserProfile.email }}</span>
             </div>
         </div>
-        <div class="message-btn">
+        <div class="message-btn" *ngIf="directUserProfile?.name">
             <button (click)="closeDialog()"><mat-icon>mode_comment</mat-icon> Nachricht</button>
         </div>
     </div>

@@ -1,15 +1,16 @@
+<app-mobile-chat-header></app-mobile-chat-header>
 <div class="test">
-    <app-mobile-chat-header></app-mobile-chat-header>
+    
 
     <div class="input-container">
-        <input type="search" placeholder="Gehe zu...">
-        <mat-icon>search</mat-icon>
+        <h2>Neue Nachricht</h2>
+        <input type="search" placeholder="An: #channel, oder @jemand">
     </div>
   
     <div class="mobile-chat-input-container" id="meinTextarea">
         <form class="mobile-chat-input-field-container br-20">
             <textarea [(ngModel)]="text" name="textarea" (input)="chatService.adjustHeight($event.target)"
-                style="min-height: 50px; width: 100%" [placeholder]="'Antworten...'"></textarea>
+                style="min-height: 50px; width: 100%" placeholder="Starte eine neue Nachricht"></textarea>
   
             <div class="mobile-chat-input-field-icon-container">
                 <div class="mobile-chat-input-icon-container">

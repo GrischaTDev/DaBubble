@@ -49,7 +49,7 @@ export class MainComponent implements OnInit {
  ngOnInit() {
     this.breakpointObserver.observe([
       Breakpoints.Handset,
-      Breakpoints.Tablet
+      Breakpoints.Small,
     ]).subscribe(result => {
       this.isDesktop = !result.matches; // Wenn es KEIN Handset oder Tablet ist, ist es Desktop
     });
