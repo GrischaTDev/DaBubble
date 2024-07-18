@@ -53,14 +53,14 @@
 
         <div class="user-list" *ngIf="userListOpen">
             <div class="logged-in-user" class="user" (click)="chatService.navigateDirectMessage(currentUser.id)">
-                <div class="user-img">
+                <div *ngIf="currentUser" class="user-img">
                     <img class="user-avatar" src="{{ currentUser.avatar }}">
                     <img class="user-status" [src]="currentUser.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
                 </div>
-                <span>{{ currentUser.name }} (Du)</span>
+                <span *ngIf="currentUser">{{ currentUser.name }} (Du)</span>
             </div>
             <ng-container *ngFor="let user of mainService.allUsers; let i = index">
-                <div *ngIf="user.name !== currentUser.name" class="user" (click)="chatService.navigateDirectMessage(user.id)">
+                <div *ngIf="currentUser && user.name !== currentUser.name" class="user" (click)="chatService.navigateDirectMessage(user.id)">
                     <div class="user-img">
                         <img class="user-avatar" src="{{ user.avatar }}">
                         <img class="user-status" [src]="user.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >

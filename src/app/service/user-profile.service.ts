@@ -26,7 +26,6 @@ export class UserProfileService { // OnInit implementieren
 
     await setDoc(doc(this.firestore, 'users', this.currentUser.id), {
       name: name,
-      email: email
     }, { merge: true });
 
     if(email) {
