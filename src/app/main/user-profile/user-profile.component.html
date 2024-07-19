@@ -14,6 +14,7 @@
             <span *ngIf="!directUserProfile?.name">{{ loggedInUser.name }}</span>
             <span *ngIf="directUserProfile?.name">{{ directUserProfile.name }}</span>
             <mat-icon *ngIf="!directUserProfile?.name" (click)="editUserProfile()" class="edit">edit</mat-icon>
+            <span *ngIf="!directUserProfile?.name" (click)="editUserProfile()" class="edit-desktop">Bearbeiten</span>
         </div>
         <div class="status">
             <img *ngIf="!directUserProfile?.name" src="{{ loggedInUserStatus }}">

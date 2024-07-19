@@ -1,4 +1,4 @@
-<div *ngIf="isDesktop">
+<div class="desktop">
     <app-desktop-header></app-desktop-header>
     <div class="main-desktop">
         <app-desktop-channels></app-desktop-channels>
@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<div *ngIf="!isDesktop" class="mobile-main">
+<div class="mobile">
     <app-mobile-header></app-mobile-header>
     <app-mobile-channels></app-mobile-channels>
 </div>

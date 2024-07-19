@@ -5,7 +5,6 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { MatDialog } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
 import { getAuth, signOut } from '@angular/fire/auth';
-import { Firestore } from '@angular/fire/firestore';
 import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
 
@@ -18,24 +17,25 @@ import { Router } from '@angular/router';
 })
 export class MobileHeaderComponent implements OnInit { 
   currentUser: any;
+  private dialog = inject(MatDialog);
+  userMenu: boolean = false;
 
-  constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router) {}
+
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router) {}
+
 
   ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
-      console.log('Eingeloggter Benutzer Mobile Header', this.currentUser);
     });
   }
-  
-  private dialog = inject(MatDialog);
-  userMenu: boolean = false;
 
 
   doNotClose(event: Event) {
     event.stopPropagation();
   }
+
 
   openUserMenu() {
     this.userMenu = !this.userMenu;
@@ -45,6 +45,7 @@ export class MobileHeaderComponent implements OnInit {
   openUserProfile() {
     this.dialog.open(UserProfileComponent);
   }
+
 
   logout() {
     const auth = getAuth();

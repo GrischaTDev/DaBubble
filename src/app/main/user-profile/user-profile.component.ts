@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MainServiceService } from '../../service/main-service.service';
 import { UserProfileService } from '../../service/user-profile.service';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../../assets/models/user.class';
+import { LoginService } from '../../service/login.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { User } from '../../../assets/models/user.class';
   styleUrl: './user-profile.component.scss'
 })
 export class UserProfileComponent {
-  loggedInUser = this.mainService.loggedInUser;
+  loggedInUser: any;
   editProfileOpen: boolean = false;
   updateUserName: string = '';
   updateUserEmail: string = '';
@@ -27,12 +28,16 @@ export class UserProfileComponent {
     public dialogRef: MatDialogRef<UserProfileComponent>,
     public mainService: MainServiceService,
     public userProfileService: UserProfileService,
+    private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public directUserProfile: User 
   ) {}
 
 
   ngOnInit() {
-    this.mainService.currentLoggedUser();
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.loggedInUser = user;
+    });
     this.checkUserStatus();
   }
 
@@ -64,6 +69,7 @@ export class UserProfileComponent {
   editUserProfile() {
     this.editProfileOpen = !this.editProfileOpen;
   }
+
 
   async updateCurrentUser() {
     let name =  this.updateUserName;
