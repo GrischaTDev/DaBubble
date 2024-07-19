@@ -9,7 +9,7 @@
 
 .mobile-chat-container {
   height: calc(100vh - 80px);
-  width: 100vw;
+  width: 100%;
   position: absolute;
   bottom: 0;
   display: flex;
@@ -101,7 +101,6 @@
 
 .mobile-chat-container {
   height: calc(100vh - 80px);
-  width: 100vw;
   position: absolute;
   bottom: 0;
   display: flex;
@@ -157,6 +156,7 @@
 
 .mobile-chat-content {
   width: 100vw;
+  overflow-x: hidden;
   max-height: calc(100vh - 280px);
   height: 100%;
   overflow-y: scroll;
