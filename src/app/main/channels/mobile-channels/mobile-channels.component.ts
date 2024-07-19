@@ -10,7 +10,6 @@ import { NewMessageComponent } from '../../new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 
 
-
 @Component({
   selector: 'app-mobile-channels',
   standalone: true,
@@ -33,7 +32,6 @@ export class MobileChannelsComponent  implements OnInit {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
-      console.log('Eingeloggter Benutzer Channels Mobile', this.currentUser);
     });
   }
 
@@ -47,9 +45,11 @@ export class MobileChannelsComponent  implements OnInit {
     this.dialog.open(AddChannelComponent);
   }
 
+
   openDialogNewMessage() {
     this.dialog.open(NewMessageComponent);
   }
+
 
   openChannels() {
     this.channelListOpen = !this.channelListOpen;
