@@ -14,6 +14,7 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { DirectMessageService } from '../../../service/direct-message.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -49,7 +50,8 @@ export class MobileChatComponent {
     private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public directMessageService: DirectMessageService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;

@@ -1,36 +1,36 @@
 <app-mobile-chat-header></app-mobile-chat-header>
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
-  <div class="user-container" (click)="openUserProfile(directUser)">
+  <div class="user-container" (click)="openUserProfile(directMessageService.directUser)">
     <div class="user-img">
-      <img class="user-avatar" src="{{ directUser.avatar }}" />
+      <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}" />
       <img
         class="user-status"
         [src]="
-          directUser.online
+        directMessageService.directUser.online
             ? './assets/img/online-icon.svg'
             : './assets/img/offline-icon.svg'
         "
       />
     </div>
-    <span class="user-name">{{ directUser.name }}</span>
+    <span class="user-name">{{ directMessageService.directUser.name }}</span>
   </div>
   <div
     class="mobile-chat-content"
   
   >
     <div class="direct-chat-info"   [ngClass]="{
-      'd-none': chatService.dataDirectMessage.messageChannel.length !== 0
+      'd-none': directMessageService.dataDirectMessage.messageChannel.length !== 0
     }">
-      <div class="user-img" (click)="openUserProfile(directUser)">
-        <img class="user-avatar" src="{{ directUser.avatar }}" />
-        <span class="user-name">{{ directUser.name }}</span>
+      <div class="user-img" (click)="openUserProfile(directMessageService.directUser)">
+        <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}" />
+        <span class="user-name">{{ directMessageService.directUser.name }}</span>
       </div>
       <span class="description">
         Diese Unterhaltung findet nur zwischen <br />
         <span
           class="user-name-description"
-          (click)="openUserProfile(directUser)"
-          >&#64; {{ directUser.name }}</span
+          (click)="openUserProfile(directMessageService.directUser)"
+          >&#64; {{ directMessageService.directUser.name }}</span
         >
         und dir statt.
       </span>
@@ -39,17 +39,17 @@
     <div #scrollContainer class="mobile-chat-content">
       <div
         *ngFor="
-          let singleMessage of chatService.dataDirectMessage.messageChannel;
+          let singleMessage of directMessageService.dataDirectMessage.messageChannel;
           let singleMessageIndex = index
         "
         [ngClass]="{
           'mobile-chat-message-container-clicked':
-          activeMessageIndex === singleMessageIndex,
+          directMessageService.activeMessageIndex === singleMessageIndex,
       }"
       >
         <div
           class="mobile-chat-edit-message-container"
-          *ngIf="activeMessageIndex === singleMessageIndex"
+          *ngIf="directMessageService.activeMessageIndex === singleMessageIndex"
           [ngClass]="{
           'mobile-chat-edit-message-container-right':
             chatService.ifMessageFromMe(singleMessage.userId),
@@ -82,15 +82,15 @@
             <mat-icon>add_reaction</mat-icon>
           </div>
           <div
-            (mouseenter)="onMouseLeave()"
+            (mouseenter)="directMessageService.onMouseLeave()"
             class="mobile-chat-edit-icon-container"
-            (click)="this.chatService.openDirectMessage(singleMessage.userId)"
+            (click)="this.directMessageService.openDirectMessage(singleMessage.userId)"
           >
             <mat-icon>comment</mat-icon>
           </div>
           <div
             class="mobile-chat-edit-icon-container"
-            (mouseenter)="onMouseEnter(singleMessageIndex)"
+            (mouseenter)="directMessageService.onMouseEnter(singleMessageIndex)"
             [ngClass]="{
               'mobile-chat-edit-icon-left': !chatService.ifMessageFromMe(
                 singleMessage.userId
@@ -100,10 +100,10 @@
             <mat-icon>more_vert</mat-icon>
           </div>
           <div
-            (mouseenter)="onMouseEnter(singleMessageIndex)"
-            (mouseleave)="onMouseLeave()"
+            (mouseenter)="directMessageService.onMouseEnter(singleMessageIndex)"
+            (mouseleave)="directMessageService.onMouseLeave()"
             class="mobile-chat-edit-button-container"
-            *ngIf="hoveredMessageIndex === singleMessageIndex"
+            *ngIf="directMessageService.hoveredMessageIndex === singleMessageIndex"
           >
             <span class="mobile-chat-edit-button">Nachricht bearbeiten</span>
           </div>
@@ -120,9 +120,9 @@
           <div
             (click)="
               this.chatService.doNotClose($event);
-              chatService.openProfil(singleMessage.userId)
+              directMessageService.openProfil(singleMessage.userId)
             "
-            (mouseenter)="onMouseLeave()"
+            (mouseenter)="directMessageService.onMouseLeave()"
             class="mobile-chat-message-avatar-container"
           >
             <img src="{{ singleMessage.userAvatar }}" alt="" />
@@ -137,7 +137,7 @@
               }"
             >
               <span
-                (click)="chatService.openProfil(singleMessage.userId)"
+                (click)="directMessageService.openProfil(singleMessage.userId)"
                 class="mobile-chat-message-name"
               >
                 {{ singleMessage.userName }}
@@ -149,7 +149,7 @@
               </div>
             </div>
             <div
-              (click)="toggleIconContainer(singleMessageIndex, $event)"
+              (click)="directMessageService.toggleIconContainer(singleMessageIndex, $event)"
               class="mobile-chat-message-text-container"
               [ngClass]="{
               'mobile-chat-message-from-me': chatService.ifMessageFromMe(
@@ -159,7 +159,7 @@
                 singleMessage.userId
               ),
               'mobile-chat-message-clicked':
-              activeMessageIndex === singleMessageIndex,
+              directMessageService.activeMessageIndex === singleMessageIndex,
             }"
             >
               <span>
@@ -226,7 +226,7 @@
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
-        placeholder="Nachricht an {{ directUser.name }}"
+        placeholder="Nachricht an {{ directMessageService.directUser.name }}"
       ></textarea>
 
       <div class="mobile-chat-input-field-icon-container">
@@ -258,8 +258,8 @@
           <div>
             <mat-icon
               (click)="
-                chatService.sendMessageFromDirectMessage(
-                  this.chatService.directMessageDocId,
+              directMessageService.sendMessageFromDirectMessage(
+                  this.directMessageService.directMessageDocId,
                   this.text
                 )
               "

@@ -65,7 +65,7 @@
         <div
           (mouseenter)="onMouseLeave()"
           class="mobile-chat-edit-icon-container"
-          (click)="this.chatService.openDirectMessage(singleMessage.userId)"
+          (click)="this.directMessageService.openDirectMessage(singleMessage.userId)"
         >
           <mat-icon>comment</mat-icon>
         </div>
@@ -102,7 +102,7 @@
         <div
           (click)="
             this.chatService.doNotClose($event);
-            chatService.openProfil(singleMessage.userId)
+            directMessageService.openProfil(singleMessage.userId)
           "
           (mouseenter)="onMouseLeave()"
           class="mobile-chat-message-avatar-container"
@@ -119,7 +119,7 @@
             }"
           >
             <span
-              (click)="chatService.openProfil(singleMessage.userId)"
+              (click)="directMessageService.openProfil(singleMessage.userId)"
               class="mobile-chat-message-name"
             >
               {{ singleMessage.userName }}
