@@ -70,15 +70,9 @@ export class MainServiceService {
    * @function addNewDocOnFirebase
    * @returns {Promise<void>} A promise that resolves when the user is added.
    */
-  async addNewDocOnFirebase(
-    docName: string,
-    data: Channel | User | EmojiCollection | MentionUser | Message
-  ) {
+  async addNewDocOnFirebase(docName: string, data: Channel | User | EmojiCollection | MentionUser | Message) {
     try {
-      const docRef = await addDoc(
-        collection(this.firestore, docName),
-        data.toJSON()
-      );
+      const docRef = await addDoc(collection(this.firestore, docName), data.toJSON());
       this.docId = docRef.id;
     } catch (error) {
       console.error('Error adding user:', error);
@@ -95,8 +89,7 @@ export class MainServiceService {
     onAuthStateChanged(auth, (user) => {
       const userId = user?.uid;
       if (user) {
-        onSnapshot(
-          doc(this.firestore, 'users', userId ?? 'default'),
+        onSnapshot(doc(this.firestore, 'users', userId ?? 'default'),
           (item) => {
             if (item.exists()) {
               let userData = {
@@ -154,15 +147,8 @@ export class MainServiceService {
    * @param {Channel|User} data - The data to be stored, which should be an instance of Channel or User.
    * @returns {Promise<void>} A promise that resolves when the update is complete and logs any errors encountered.
    */
-  async addDoc(
-    collectionName: string,
-    docId: string,
-    data: Channel | User | Emoji | EmojiCollection
-  ) {
-    await updateDoc(
-      doc(collection(this.firestore, collectionName), docId),
-      data.toJSON()
-    )
+  async addDoc(collectionName: string, docId: string, data: Channel | User | Emoji | EmojiCollection) {
+    await updateDoc(doc(collection(this.firestore, collectionName), docId), data.toJSON())
       .catch((err) => {
         console.error(err);
       })
@@ -177,11 +163,7 @@ export class MainServiceService {
    * @param {string} docId - The ID of the document to update.
    * @param {Channel | User | Emoji | EmojiCollection} data - The data to set in the document.
    */
-  async setDocData(
-    collectionName: string,
-    docId: string,
-    data: Channel | User | Emoji | EmojiCollection
-  ) {
+  async setDocData(collectionName: string, docId: string, data: Channel | User | Emoji | EmojiCollection) {
     await setDoc(doc(this.firestore, collectionName, docId), data);
   }
 
