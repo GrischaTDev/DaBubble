@@ -77,5 +77,11 @@ export class LoginService {
     });
   }
 
+  isLoggedIn(): boolean {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    return user !== null;
+  }
+
 
 }
