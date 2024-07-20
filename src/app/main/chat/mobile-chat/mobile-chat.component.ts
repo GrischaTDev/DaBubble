@@ -15,6 +15,7 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { DirectMessageService } from '../../../service/direct-message.service';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -51,7 +52,8 @@ export class MobileChatComponent {
     public chatService: ChatService,
     public emojiService: EmojiService,
     public mainService: MainServiceService,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
+    public loginService: LoginService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -66,7 +68,6 @@ export class MobileChatComponent {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
-    this.loggedInUser = mainService.loggedInUser;
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

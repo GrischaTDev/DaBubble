@@ -1,7 +1,6 @@
 import {
   Component,
   inject,
-  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,13 +15,13 @@ import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import {  docData } from '@angular/fire/firestore';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { EmojiService } from '../../../service/emoji.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-direct-chat',
@@ -39,9 +38,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
   styleUrl: './direct-chat.component.scss',
 })
 
-export class DirectChatComponent implements OnInit {
-  items$;
-  items;
+export class DirectChatComponent {
   parmsId: string = '';
   text: string = '';
   public dialog = inject(MatDialog);
@@ -50,23 +47,11 @@ export class DirectChatComponent implements OnInit {
   loggedInUser: User = new User();
 
   constructor(
-    private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService,) {
-    if (this.parmsId) {
-      this.items$ = docData(
-        mainService.getDataRef(
-          this.directMessageService.directMessageId,
-          'direct-message'
-        )
-      );
-      this.items = this.items$.subscribe((directMessage: any) => {
-        this.directMessageService.dataDirectMessage = directMessage;
-      });
-    }
+    private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService,) {
     this.directMessageService.loadDirectChatContent(this.directMessageService.directMessageId);
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       this.text += content;
     });
-    this.loggedInUser = mainService.loggedInUser;
   }
 
   /**
@@ -84,7 +69,7 @@ export class DirectChatComponent implements OnInit {
             this.directMessageService.checkUserStatus();
           })
           .catch((error) => {
-            console.error('Fehler beim Laden des Chats:', error);
+            console.error(error);
           });
       }
     });

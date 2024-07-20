@@ -23,8 +23,10 @@ export class DirectMessageService {
   dialogOpen = false;
   messageToChannel: Message = new Message();
   directUser: User = new User();
+  loggedInUserUpdate: User = new User();
   directUserStatus: string = './assets/img/offline-icon.svg';
   directUserId: string = '';
+  loggedInUserId: string = '';
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
 
@@ -47,7 +49,6 @@ export class DirectMessageService {
   * @async
   */
   async validationOfTheOtherUser() {
-    console.log('232323', this.dataDirectMessage);
     this.dataDirectMessage.channelUsers.forEach((user) => {
       if (user.id !== this.mainService.loggedInUser.id) {
         this.directUser = new User(user);
@@ -165,11 +166,14 @@ export class DirectMessageService {
   * @param {string} userId - The ID of the user with whom to open a direct message.
   */
   async openDirectMessage(userId: string) {
+    
     this.chatService.clickedUser.id = userId;
     await this.loadDirectChatUser(userId);
+    console.log('°°°°°°', this.mainService.loggedInUser)
     await this.directMessageIsAvailable();
     await this.pushDirectMessageDocToFirebase();
     this.directMessageDocId = this.mainService.docId;
+    await this.loadDirectChatContent(this.directMessageId);
     this.navigateDirectMessage(this.directMessageId);
   }
 
@@ -177,18 +181,20 @@ export class DirectMessageService {
    * Checks for the availability of a direct message by comparing messages from the clicked user and the logged-in user.
    * If a common message is found, it sets the direct message ID and its availability status.
    */
-  directMessageIsAvailable() {
+  async directMessageIsAvailable() {
     this.directMessageIdIsAvailable = false;
     this.directMessageId = '';
-    this.chatService.clickedUser.message.forEach((clickedUserMessage) => {
-      this.mainService.loggedInUser.message.forEach((loggedInUserMessage) => {
+    for (let index = 0; index < this.chatService.clickedUser.message.length; index++) {
+      const clickedUserMessage = this.chatService.clickedUser.message[index];
+      for (let index = 0; index < this.mainService.loggedInUser.message.length; index++) {
+        const loggedInUserMessage = this.mainService.loggedInUser.message[index];
         if (clickedUserMessage === loggedInUserMessage) {
           let loggedInUserMessageString: string = loggedInUserMessage.toString();
           this.directMessageId = loggedInUserMessageString;
           this.directMessageIdIsAvailable = true;
-        }
-      });
-    });
+        };
+      }
+    }
   }
 
   /**
@@ -215,9 +221,7 @@ export class DirectMessageService {
     this.mainService.loggedInUser.message.push(this.mainService.docId);
     this.chatService.clickedUser.message.push(this.mainService.docId);
     this.directMessageId = this.mainService.docId;
-    this.newDataDirectMessage.channelUsers.push(
-      new User(this.mainService.loggedInUser)
-    );
+    this.newDataDirectMessage.channelUsers.push(new User(this.mainService.loggedInUser));
     this.newDataDirectMessage.channelUsers.push(new User(this.chatService.clickedUser));
     this.pushNewDirectmessageContenToFb();
   }
@@ -230,10 +234,8 @@ export class DirectMessageService {
   async pushNewDirectmessageContenToFb() {
     await this.mainService.addDoc(
       'users', this.mainService.loggedInUser.id, new User(this.mainService.loggedInUser));
-    if (this.mainService.loggedInUser.id !== this.chatService.clickedUser.id) {
-      await this.mainService.addDoc('users', this.chatService.clickedUser.id, new User(this.chatService.clickedUser)
-      );
-    }
+    await this.mainService.addDoc('users', this.chatService.clickedUser.id, new User(this.chatService.clickedUser)
+    );
     await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.newDataDirectMessage)
     );
   }
@@ -279,7 +281,7 @@ export class DirectMessageService {
         this.dataDirectMessage.id = userId;
       }
     } catch (error) {
-      console.error('Fehler beim Laden der Benutzerdaten:', error);
+      console.error('Error loading channel data:', error);
     }
   }
 }

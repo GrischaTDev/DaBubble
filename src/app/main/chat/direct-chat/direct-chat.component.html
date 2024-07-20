@@ -1,6 +1,11 @@
 <app-mobile-chat-header></app-mobile-chat-header>
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
-  <div class="user-container" (click)="openUserProfile(directMessageService.directUser)">
+  <div class="user-container" (click)="openUserProfile(directMessageService.directUser)"
+  *ngFor="
+let singleUser of directMessageService.dataDirectMessage.channelUsers;
+let singleUserIndex = index
+"
+  >
     <div class="user-img">
       <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}" />
       <img
@@ -12,7 +17,7 @@
         "
       />
     </div>
-    <span class="user-name">{{ directMessageService.directUser.name }}</span>
+    <span class="user-name">{{ singleUser.name }}</span>
   </div>
   <div
     class="mobile-chat-content"
