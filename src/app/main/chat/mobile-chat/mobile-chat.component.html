@@ -20,6 +20,7 @@
           'mobile-chat-message-container-clicked':
           activeMessageIndex === singleMessageIndex,
       }"
+      (mouseenter)="onMouseLeave()"
     >
       <div
         class="mobile-chat-message-date-container"
@@ -65,7 +66,9 @@
         <div
           (mouseenter)="onMouseLeave()"
           class="mobile-chat-edit-icon-container"
-          (click)="this.directMessageService.openDirectMessage(singleMessage.userId)"
+          (click)="
+            this.directMessageService.openDirectMessage(singleMessage.userId)
+          "
         >
           <mat-icon>comment</mat-icon>
         </div>
@@ -80,14 +83,14 @@
         >
           <mat-icon>more_vert</mat-icon>
         </div>
-        <div
-          (mouseenter)="onMouseEnter(singleMessageIndex)"
-          (mouseleave)="onMouseLeave()"
-          class="mobile-chat-edit-button-container"
-          *ngIf="hoveredMessageIndex === singleMessageIndex"
-        >
-          <span class="mobile-chat-edit-button">Nachricht bearbeiten</span>
-        </div>
+      </div>
+      <div
+        (mouseenter)="onMouseEnter(singleMessageIndex)"
+        (mouseleave)="onMouseLeave()"
+        class="mobile-chat-edit-button-container"
+        *ngIf="hoveredMessageIndex === singleMessageIndex"
+      >
+        <span class="mobile-chat-edit-button">Nachricht bearbeiten</span>
       </div>
 
       <div

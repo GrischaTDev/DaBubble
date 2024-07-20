@@ -97,6 +97,7 @@ export class DirectMessageService {
    * @param {MouseEvent} event - The mouse event associated with the action.
    */
   toggleIconContainer(index: number, event: MouseEvent): void {
+    
     event.stopPropagation();
     if (this.activeMessageIndex === index) {
       this.activeMessageIndex = null;
@@ -165,11 +166,9 @@ export class DirectMessageService {
   * @async
   * @param {string} userId - The ID of the user with whom to open a direct message.
   */
-  async openDirectMessage(userId: string) {
-    
+  async openDirectMessage(userId: string) { 
     this.chatService.clickedUser.id = userId;
     await this.loadDirectChatUser(userId);
-    console.log('°°°°°°', this.mainService.loggedInUser)
     await this.directMessageIsAvailable();
     await this.pushDirectMessageDocToFirebase();
     this.directMessageDocId = this.mainService.docId;
