@@ -7,7 +7,7 @@
       <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
     <div>
-      <div class="mobile-chat-header-icon"><mat-icon>person_add</mat-icon></div>
+      <div class="mobile-chat-header-icon" (click)="this.chatService.doNotClose($event); chatService.openDialogAddUser()"><mat-icon>person_add</mat-icon></div>
     </div>
   </div>
   <div #scrollContainer class="mobile-chat-content">
@@ -230,7 +230,7 @@
             <mat-icon
               (click)="
                 chatService.onButtonClick($event);
-                chatService.openDialogMentionUser()
+                chatService.openDialogMentionUser();
               "
               >alternate_email</mat-icon
             >

@@ -13,22 +13,19 @@ import { User } from '../../../../assets/models/user.class';
 import { MainServiceService } from '../../../service/main-service.service';
 
 @Component({
-  selector: 'app-dialog-mention-users',
+  selector: 'app-dialog-add-user',
   standalone: true,
-  imports: [
-    MatDialogActions,
+  imports: [MatDialogActions,
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
     CommonModule,
     MatIconModule,
-    FormsModule
-  ],
-  templateUrl: './dialog-mention-users.component.html',
-  styleUrl: './dialog-mention-users.component.scss',
+    FormsModule],
+  templateUrl: './dialog-add-user.component.html',
+  styleUrl: './dialog-add-user.component.scss'
 })
-export class DialogMentionUsersComponent {
-  inputContent = '';
+export class DialogAddUserComponent {
 
   constructor(
     public chatService: ChatService,
@@ -37,9 +34,4 @@ export class DialogMentionUsersComponent {
     this.chatService = chatService;
   }
 
-  addMentionUser(user: User) {
-    /* this.chatService.mentionUser.push(new User(user)); */
-    this.inputContent = ' ' + '@' + user.name;
-    this.mainService.changeInputContent(this.inputContent);
-  }
 }

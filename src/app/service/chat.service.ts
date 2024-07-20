@@ -11,6 +11,7 @@ import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DirectMessageService } from './direct-message.service';
+import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 @Injectable({
   providedIn: 'root',
 })
@@ -22,9 +23,11 @@ export class ChatService {
     | MatDialogRef<DialogEmojiComponent, any>
     | MatDialogRef<DialogMentionUsersComponent, any>
     | MatDialogRef<DialogUserChatComponent, any>
+    | MatDialogRef<DialogAddUserComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
+  dialogAddUserOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
@@ -84,6 +87,16 @@ export class ChatService {
     }
   }
 
+  openDialogAddUser() {
+    if (!this.dialogAddUserOpen) {
+      this.closeDialog();
+      this.dialogInstance = this.dialog.open(DialogAddUserComponent);
+      this.dialogAddUserOpen = true;
+    } else {
+      this.closeDialog();
+    }
+  }
+
   /**
    * Handles the emoji button click event.
    * Prevents the event from propagating to parent elements.
@@ -102,7 +115,7 @@ export class ChatService {
     if (this.dialogInstance) {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
-      this.dialogMentionUserOpen = false;
+      this.dialogAddUserOpen = false;
     }
   }
 
