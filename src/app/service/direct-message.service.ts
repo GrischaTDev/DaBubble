@@ -29,6 +29,7 @@ export class DirectMessageService {
   loggedInUserId: string = '';
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
+  indexUserDirectmessage: number = 0;
 
   constructor(public chatService: ChatService, public mainService: MainServiceService, private router: Router) { }
 
@@ -97,7 +98,6 @@ export class DirectMessageService {
    * @param {MouseEvent} event - The mouse event associated with the action.
    */
   toggleIconContainer(index: number, event: MouseEvent): void {
-    
     event.stopPropagation();
     if (this.activeMessageIndex === index) {
       this.activeMessageIndex = null;
@@ -281,6 +281,19 @@ export class DirectMessageService {
       }
     } catch (error) {
       console.error('Error loading channel data:', error);
+    }
+  }
+
+  otherUser(singleUserId: string): boolean  {
+    if (singleUserId !== this.mainService.loggedInUser.id) {
+      return true;
+    } else if (this.indexUserDirectmessage > 1){
+      return true;
+    } else if (singleUserId === this.mainService.loggedInUser.id) {
+      this.indexUserDirectmessage++;
+      return false;
+    } else {
+      return false;  
     }
   }
 }

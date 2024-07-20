@@ -1,34 +1,44 @@
 <app-mobile-chat-header></app-mobile-chat-header>
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
-  <div class="user-container" (click)="openUserProfile(directMessageService.directUser)"
-  *ngFor="
-let singleUser of directMessageService.dataDirectMessage.channelUsers;
-let singleUserIndex = index
-"
+  <div
+    class="user-container"
+    (click)="openUserProfile(directMessageService.directUser)"
   >
-    <div class="user-img">
-      <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}" />
+    <div>
+      <img
+        class="user-avatar"
+        src="{{ directMessageService.directUser.avatar }}"
+      />
       <img
         class="user-status"
         [src]="
-        directMessageService.directUser.online
+          directMessageService.directUser.online
             ? './assets/img/online-icon.svg'
             : './assets/img/offline-icon.svg'
         "
       />
     </div>
-    <span class="user-name">{{ singleUser.name }}</span>
+    <span class="user-name">{{ directMessageService.directUser.name }}</span>
   </div>
-  <div
-    class="mobile-chat-content"
-  
-  >
-    <div class="direct-chat-info"   [ngClass]="{
-      'd-none': directMessageService.dataDirectMessage.messageChannel.length !== 0
-    }">
-      <div class="user-img" (click)="openUserProfile(directMessageService.directUser)">
-        <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}" />
-        <span class="user-name">{{ directMessageService.directUser.name }}</span>
+  <div class="mobile-chat-content">
+    <div
+      class="direct-chat-info"
+      [ngClass]="{
+        'd-none':
+          directMessageService.dataDirectMessage.messageChannel.length !== 0
+      }"
+    >
+      <div
+        class="user-img"
+        (click)="openUserProfile(directMessageService.directUser)"
+      >
+        <img
+          class="user-avatar"
+          src="{{ directMessageService.directUser.avatar }}"
+        />
+        <span class="user-name">{{
+          directMessageService.directUser.name
+        }}</span>
       </div>
       <span class="description">
         Diese Unterhaltung findet nur zwischen <br />
@@ -44,7 +54,8 @@ let singleUserIndex = index
     <div #scrollContainer class="mobile-chat-content">
       <div
         *ngFor="
-          let singleMessage of directMessageService.dataDirectMessage.messageChannel;
+          let singleMessage of directMessageService.dataDirectMessage
+            .messageChannel;
           let singleMessageIndex = index
         "
         [ngClass]="{
@@ -89,7 +100,9 @@ let singleUserIndex = index
           <div
             (mouseenter)="directMessageService.onMouseLeave()"
             class="mobile-chat-edit-icon-container"
-            (click)="this.directMessageService.openDirectMessage(singleMessage.userId)"
+            (click)="
+              this.directMessageService.openDirectMessage(singleMessage.userId)
+            "
           >
             <mat-icon>comment</mat-icon>
           </div>
@@ -108,7 +121,9 @@ let singleUserIndex = index
             (mouseenter)="directMessageService.onMouseEnter(singleMessageIndex)"
             (mouseleave)="directMessageService.onMouseLeave()"
             class="mobile-chat-edit-button-container"
-            *ngIf="directMessageService.hoveredMessageIndex === singleMessageIndex"
+            *ngIf="
+              directMessageService.hoveredMessageIndex === singleMessageIndex
+            "
           >
             <span class="mobile-chat-edit-button">Nachricht bearbeiten</span>
           </div>
@@ -154,7 +169,12 @@ let singleUserIndex = index
               </div>
             </div>
             <div
-              (click)="directMessageService.toggleIconContainer(singleMessageIndex, $event)"
+              (click)="
+                directMessageService.toggleIconContainer(
+                  singleMessageIndex,
+                  $event
+                )
+              "
               class="mobile-chat-message-text-container"
               [ngClass]="{
               'mobile-chat-message-from-me': chatService.ifMessageFromMe(
@@ -263,7 +283,7 @@ let singleUserIndex = index
           <div>
             <mat-icon
               (click)="
-              directMessageService.sendMessageFromDirectMessage(
+                directMessageService.sendMessageFromDirectMessage(
                   this.directMessageService.directMessageDocId,
                   this.text
                 )
