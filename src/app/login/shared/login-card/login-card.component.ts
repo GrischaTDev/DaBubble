@@ -34,7 +34,7 @@ export class LoginCardComponent {
 
         const user = auth.currentUser;
 
-        if(user) {
+        if (user) {
           setDoc(doc(this.firestore, 'users', user.uid), {
             online: true
           }, { merge: true });
@@ -44,7 +44,7 @@ export class LoginCardComponent {
       })
       .catch((error: any) => {
         console.log('Fehler beim login', error);
-        if(error.code === 'auth/invalid-credential') {
+        if (error.code === 'auth/invalid-credential') {
           this.wrongEmail = 'Diese E-Mail-Adresse ist leider ungültig';
           this.wrongPassword = 'Falsches Passwort. Bitte noch einmal prüfen';
         } else if (error.code === 'auth/missing-password') {
@@ -59,30 +59,22 @@ export class LoginCardComponent {
   async loginAnonymus() {
     const auth = getAuth();
 
-    const userCredential = await signInAnonymously(auth);
-    const user = userCredential.user;
+    this.email = 'gaeste-login@dabubble.com';
+    this.password = 'Gaeste2024';
 
-    try {
-      if(user) {
-        const idName = user.uid.substring(0, 5);
-  
-        const newUser = new User({
-          id: user.uid,
-          name: 'Gast_' + idName,
-          email: '',
-          avatar: './assets/img/user/profile.png',
-          message: '',
-          online: true
-        });
-  
-        const userRef = doc(this.firestore, 'users', user.uid);
-        await setDoc(userRef, newUser.toJSON());
-      }
-      
-      this.router.navigate(['thread']);
-    } catch(error) {
-      console.log(error);
-    }
+    await signInWithEmailAndPassword(auth, this.email, this.password)
+      .then(() => {
+
+        const user = auth.currentUser;
+
+        if (user) {
+          setDoc(doc(this.firestore, 'users', user.uid), {
+            online: true
+          }, { merge: true });
+
+          this.router.navigate(['main']);
+        }
+      })
   }
 
   async loginWithGoogle() {
@@ -100,19 +92,16 @@ export class LoginCardComponent {
 
           const user = result.user;
           console.log(user);
-          if(user) {
-            const newUser = new User({
+          if (user) {
+            const userRef = doc(this.firestore, 'users', user.uid);
+            await setDoc(userRef, {
               id: user.uid,
               name: user.displayName,
               email: user.email,
               avatar: user.photoURL,
-              message: '',
               online: true
-            });
+            }, { merge: true });
 
-            const userRef = doc(this.firestore, 'users', user.uid);
-            await setDoc(userRef, newUser.toJSON());
-            
           }
 
           this.router.navigate(['main']);

@@ -55,7 +55,7 @@ export class DesktopLoginComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.isVisible = 'visible';
-    }, 0);
+    }, 1000);
   }
 
   toggleToHidden(event: any): void {

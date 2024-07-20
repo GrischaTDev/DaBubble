@@ -40,8 +40,8 @@ export class VerifyEmailCardComponent {
           await updateEmail(user, this.newEmail);
 
           await setDoc(doc(this.firestore, 'users', user.uid), {
-            email: this.newEmail
-          }, { merge: true });
+          email: this.newEmail
+        }, { merge: true });
 
           setTimeout(() => {
             this.loginService.setResetPasswordOverlay(false);

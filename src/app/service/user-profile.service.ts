@@ -10,17 +10,26 @@ import {
   onSnapshot,
   updateDoc,
 } from '@angular/fire/firestore';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserProfileService { // OnInit implementieren
-  currentUser = this.mainService.loggedInUser;
+export class UserProfileService { 
 
-  constructor(public mainService: MainServiceService, private firestore: Firestore) {}
+  currentUser: any;
+
+  constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService) {}
 
 
   async updateUserProfile(name: string, email: string) {
+
+    this.loginService.currentLoggedUser();
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.currentUser = user;
+      console.log('Nutzer Daten von ProfileService', this.currentUser);
+    });
+
     if(!name) { name = this.currentUser.name; } 
     if (!email) { email = this.currentUser.email; }
 
