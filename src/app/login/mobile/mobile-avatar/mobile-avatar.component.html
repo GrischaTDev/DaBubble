@@ -1,11 +1,15 @@
-<div class="login-container">
+<section>
 
-        <img src="./../../../assets/img/logo-name.svg" alt="DABubble Logo">
+        <div class="login-container">
 
-        <app-avatar-card class="avatar-card-component"></app-avatar-card>
+                <img src="./../../../assets/img/logo-name.svg" alt="DABubble Logo">
 
-        <div *ngIf="overlayRegistered$ | async" class="overlay">
-                Regestrierung erfolgreich!
+                <app-avatar-card class="avatar-card-component"></app-avatar-card>
+
+                <div *ngIf="overlayRegistered$ | async" class="overlay">
+                        Regestrierung erfolgreich!
+                </div>
+
         </div>
 
-</div>
+</section>
