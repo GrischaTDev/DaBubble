@@ -10,7 +10,6 @@ import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
-import { DirectMessageService } from './direct-message.service';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 @Injectable({
   providedIn: 'root',
@@ -116,6 +115,7 @@ export class ChatService {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;
+ 
     }
   }
 

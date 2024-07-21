@@ -1,8 +1,12 @@
 <div class="dialog-add-users-container">
+  <div *ngIf="!this.addUserClicked">
     <h2>Mitglieder</h2>
-    <div 
+    <div class="close" (click)="closeDialog()">
+      <mat-icon>close</mat-icon>
+    </div>
+    <div
       class="dialog-add-users-content"
-      *ngFor="let user of mainService.allUsers; let i = index"
+      *ngFor="let user of chatService.dataChannel.channelUsers; let i = index"
     >
       <div>
         <img [src]="user.avatar" />
@@ -10,7 +14,54 @@
       </div>
     </div>
     <div class="dialog-add-users">
-      <div class="dialog-add-icon-add"><mat-icon>person_add</mat-icon></div>
+      <div (click)="openSearchUser()" class="dialog-add-icon-add">
+        <mat-icon>person_add</mat-icon>
+      </div>
       <p>Mitglieder hinzufüngen</p>
     </div>
   </div>
+
+  <div *ngIf="this.addUserClicked">
+    <div class="dialog-add-users-container">
+      <h2>Leute hinzufügen</h2>
+      <div class="close" (click)="closePeopleSearch()">
+        <mat-icon>close</mat-icon>
+      </div>
+      <div class="dialog-add-users-input-container">
+        <div class="push-addet-user-container" *ngFor="let userAddet of addetUser; let i = index">
+          <img [src]="userAddet.avatar" />
+          <p>{{ userAddet.name }}</p>
+          <mat-icon>close</mat-icon>
+        </div>
+        <div
+          contenteditable="true"
+          [class.placeholder]="isEmpty"
+          [innerHTML]="content"
+          name="textarea"
+          (input)="updateContent($event);"
+        ></div>
+      </div>
+      <div
+        class="dialog-add-users-content"
+        *ngFor="let userFilter of filteredUsers; let i = index"
+      >
+        <div (click)="pushAddetUser(userFilter)">
+          <img [src]="userFilter.avatar" />
+          <p>{{ userFilter.name }}</p>
+        </div>
+      </div>
+      <div class="dialog-add-users-button-container">
+        <span
+          class="dialog-add-users-button"
+          [ngClass]="{
+          'dialog-add-users-button-not-available':
+            this.addetUser.length === 0,
+            'dialog-add-users-button-available':
+            this.addetUser.length > 0,
+        }"
+          >Hinzufügen</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

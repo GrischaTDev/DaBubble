@@ -26,6 +26,21 @@
   }
 }
 
+.close {
+  position: absolute;
+  top: 24px;
+  right: 12px;
+
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  &:hover {
+    color: $icon-purple-hover;
+    background-color: $background-lightblue;
+  }
+}
+
 .dialog-add-users-content {
   display: flex;
   justify-content: flex-start;
@@ -89,6 +104,102 @@
     &:hover {
       color: $background-purple;
     }
+  }
+}
+
+.dialog-add-users-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.dialog-add-users-input-container {
+  width: 280px;
+  min-height: 37px;
+  height: auto;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden; 
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid $border-gray;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-right: 12px;
+  >div {
+    all: unset;
+    min-width: 90%;
+    max-width: 90%;
+    font-size: 18px;
+    min-height: 55px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+    resize: none;
+    background-position: right 24px top 60px !important;
+    word-wrap: break-word;
+    font-family: Arial, "TwemojiMozilla";
+  }
+}
+
+.push-addet-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row !important;
+  gap: 12px;
+  height: 18px;
+  background-color: $background-lightblue !important;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  >img {
+    height: 16px;
+    width: 16px;
+    border-radius: 100%;
+  }
+
+}
+
+[contenteditable="true"] {
+  min-height: 37px;
+  height: auto;
+  overflow-y: auto;
+}
+
+.dialog-add-users-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: $background-white;
+  height: 49px;
+  width: 147px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-bottom: 24px;
+  margin-right: 12px;
+}
+
+.dialog-add-users-button-not-available {
+  background-color: $icon-gray;
+}
+
+.dialog-add-users-button-available {
+  background-color: $icon-blue;
+  &:hover {
+    background-color: $background-white;
+    color: $icon-blue;
+    border: 1px solid $icon-blue;
   }
 }
 
