@@ -42,7 +42,7 @@ import { animate, AnimationEvent, query, sequence, style, transition, trigger } 
     ]),
     trigger('movingLogo', [
       transition('center => final', [
-        style({ transform: 'translate(-10%, 300%)', zIndex: 10, opacity: 0 }),
+        style({ transform: 'translate(-10%, 500%)', zIndex: 10, opacity: 0 }),
         animate('1s ease-out', style({ transform: 'translate(0, 0)', opacity: 1 }))
       ])
     ])
@@ -66,15 +66,19 @@ export class MobileLoginComponent {
 
   toggleToHidden(event: any): void {
     if (this.isVisible === 'visible') {
-      this.isVisible = 'hidden';
-      this.hideAnimationContainer = false;
       setTimeout(() => {
-        this.showSection = true;
+        this.isVisible = 'hidden';
+        this.hideAnimationContainer = false;
+      }, 2000);
+      setTimeout(() => {
         this.isSectionVisible = 'visible';
-      }, 0); 
+        this.showSection = true;
+      }, 2000); 
       setTimeout(() => {
-         this.isLogoMoving = 'final'; 
-      }, 0);
+        if(this.showSection) {
+          this.isLogoMoving = 'final'; 
+        }
+      }, 2000);
     }
   }
 

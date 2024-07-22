@@ -23,15 +23,11 @@ import { CommonModule } from '@angular/common';
           ], { optional: true })
         ])
       ]),
-      transition('visible => hidden', [
-        style({ opacity: 1 }),
-        animate('1.5s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ opacity: 0 }))
-      ]),
     ]),
     trigger('desktopSectionAnimation', [
       transition('hidden => visible', [
         style({ opacity: 0 }),
-        animate('2s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ opacity: 1 }))
+        animate('3s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ opacity: 1 }))
       ])
     ]),
     trigger('movingLogo', [
@@ -60,15 +56,19 @@ export class DesktopLoginComponent implements OnInit {
 
   toggleToHidden(event: any): void {
     if (this.isVisible === 'visible') {
-      this.isVisible = 'hidden';
-      this.hideAnimationContainer = false;
       setTimeout(() => {
-        this.showSection = true;
+        this.isVisible = 'hidden';
+        this.hideAnimationContainer = false;
+      }, 2000);
+      setTimeout(() => {
         this.isSectionVisible = 'visible';
-      }, 0); 
+        this.showSection = true;
+      }, 2000); 
       setTimeout(() => {
-         this.isLogoMoving = 'final'; 
-      }, 0);
+        if(this.showSection) {
+          this.isLogoMoving = 'final'; 
+        }
+      }, 2000);
     }
   }
 

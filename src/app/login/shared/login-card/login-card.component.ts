@@ -7,6 +7,7 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { User } from '../../../../assets/models/user.class';
 import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login-card',
@@ -14,7 +15,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     RouterModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatIcon
   ],
   templateUrl: './login-card.component.html',
   styleUrl: './login-card.component.scss'
