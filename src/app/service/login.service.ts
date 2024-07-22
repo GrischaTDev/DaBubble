@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { doc, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../assets/models/user.class';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-
 
   private userRegisteredSubject = new BehaviorSubject<boolean>(false);
   isUserRegistered$ = this.userRegisteredSubject.asObservable();
@@ -22,10 +22,14 @@ export class LoginService {
   private newMailSubject = new BehaviorSubject<boolean>(false);
   isNewMail$ = this.newMailSubject.asObservable();
 
+
   private loggedInUserSubject = new BehaviorSubject<User | null>(null);
   loggedInUser$: Observable<User | null> = this.loggedInUserSubject.asObservable();
 
-  constructor(private firestore: Firestore) { }
+  constructor(private firestore: Firestore, private router: Router) {
+
+    this.checkLocalStorage();
+  }
 
   setUserRegistered(isRegistered: boolean) {
     this.userRegisteredSubject.next(isRegistered);
@@ -43,17 +47,10 @@ export class LoginService {
     this.newMailSubject.next(isVerifyMail);
   }
 
-
-  // Loggout 
-
-  logoutUser(auth: any) {
-    const user = auth.currentUser;
-
+  private checkLocalStorage() {
+    const user = localStorage.getItem('user');
     if (user) {
-      console.log(user.uid);
-      setDoc(doc(this.firestore, 'users', user.uid), {
-        online: false
-      }, { merge: true });
+      this.loggedInUserSubject.next(JSON.parse(user));
     }
   }
 
@@ -61,9 +58,9 @@ export class LoginService {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       const userId = user?.uid;
-      if (user) {
+      if (userId) {
         onSnapshot(
-          doc(this.firestore, 'users', userId ?? 'default'),
+          doc(this.firestore, 'users', userId),
           (item) => {
             if (item.exists()) {
               let userData = {
@@ -77,11 +74,39 @@ export class LoginService {
     });
   }
 
-  isLoggedIn(): boolean {
-    const auth = getAuth();
+  logoutUser(auth: any) {
     const user = auth.currentUser;
-    return user !== null;
+
+    if (user) {
+      setDoc(doc(this.firestore, 'users', user.uid), {
+        online: false
+      }, { merge: true });
+
+      signOut(auth).then(() => {
+
+        const localStorageUser = localStorage.getItem('user');
+        console.log("Vor dem Löschen von localStorage, user:", localStorageUser);
+
+        if (localStorageUser !== null) {
+          localStorage.removeItem('user');
+          console.log("Nach dem Löschen von localStorage, user:", localStorage.getItem('user'));
+        } else {
+          console.warn("Kein 'user' Eintrag im localStorage vorhanden");
+        }
+
+        this.loggedInUserSubject.next(null); // Update the subject
+
+        this.router.navigate(['login']);
+
+      })
+        .catch((error) => {
+          console.log('fehler beim abmelden:', error)
+        })
+
+    }
   }
 
-
+  isLoggedIn(): boolean {
+    return this.loggedInUserSubject.value !== null;
+  }
 }

@@ -50,9 +50,5 @@ export class DesktopHeaderComponent implements OnInit {
   logout() {
     const auth = getAuth();
     this.loginService.logoutUser(auth);
-
-    signOut(auth).then(() => {
-      this.router.navigate(['login']);
-    })
   }
 }

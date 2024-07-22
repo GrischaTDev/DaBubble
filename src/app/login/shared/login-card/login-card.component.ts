@@ -41,6 +41,8 @@ export class LoginCardComponent {
             online: true
           }, { merge: true });
 
+          localStorage.setItem('user', JSON.stringify(user));
+
           this.router.navigate(['main']);
         }
       })
@@ -74,6 +76,8 @@ export class LoginCardComponent {
             online: true
           }, { merge: true });
 
+          localStorage.setItem('user', JSON.stringify(user));
+
           this.router.navigate(['main']);
         }
       })
@@ -103,6 +107,8 @@ export class LoginCardComponent {
               avatar: user.photoURL,
               online: true
             }, { merge: true });
+
+            localStorage.setItem('user', JSON.stringify(user));
 
           }
 
