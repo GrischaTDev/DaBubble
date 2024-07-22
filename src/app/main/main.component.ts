@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
 import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-chat-header.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-main',
@@ -34,13 +35,23 @@ import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-ch
         MatDialogModule,
         UserProfileComponent,
         DirectChatComponent,
-        MobileChatHeaderComponent
+        MobileChatHeaderComponent,
+        MatIconModule
     ]
 })
 export class MainComponent  {
   isThreadOpen: boolean = false;
+  isWorkspaceOpen: boolean = true;
+  closeMenu: string = 'arrow_drop_up';
+  closeMenuText: string = 'Workspace-Menü schließen';
 
   constructor(private mainService: MainServiceService) {
       
+  }
+
+  closeOpenWorkspace() {
+    this.isWorkspaceOpen = !this.isWorkspaceOpen;
+    this.closeMenu = this.isWorkspaceOpen ? 'arrow_drop_up' : 'arrow_drop_down';
+    this.closeMenuText = this.isWorkspaceOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen';
   }
 }

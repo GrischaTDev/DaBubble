@@ -29,6 +29,33 @@ app-desktop-chat {
 }
 
 
+.hide-server-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  background-color: white;
+  transform-origin: top left; 
+  transform: rotate(270deg) translateX(-100%);
+  bottom: 30%;
+  left: 0;
+  position: fixed;
+  box-shadow: -4px 4px 7px 0px #00000033;
+  padding: 18px 14px;
+  border-radius: 0px 0px 30px 30px;
+  z-index: 999;
+  cursor: pointer;
+
+  &:hover span, &:hover mat-icon {
+    color: $background-blue;
+  }
+
+  >span {
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+
 //   /* Wenn app-desktop-thread angezeigt wird, sollte er wahrscheinlich unter app-desktop-chat platziert werden */
 //   app-desktop-thread {
 //     width: 100%; /* Nimmt die volle Breite ein, wenn sichtbar */
