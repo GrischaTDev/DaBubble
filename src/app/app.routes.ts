@@ -22,7 +22,7 @@ export const routes: Routes = [
     { path: 'new-password', component: NewPaswordComponent },
     { path: 'verify-email', component: VerifyEmailComponent },
     { path: 'create-avatar', component: AvatarComponent },
-    { path: 'main', component: MainComponent, }, //canActivate: [authGuard]
+    { path: 'main', component: MainComponent, canActivate: [authGuard] },
     { path: 'thread', component: DesktopThreadComponent },
     { path: 'user-profile', component: UserProfileComponent },
     { path: 'chat/:id', component: MobileChatComponent },
