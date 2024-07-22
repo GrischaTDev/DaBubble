@@ -17,7 +17,9 @@
   align-items: flex-start;
   flex-direction: column;
   overflow-y: scroll !important;
-  max-height: calc(100vh - 450px);
+  height: fit-content;
+  min-height: 224px;
+  max-height: calc(100vh - 350px);
   width: 304px;
   gap: 8px;
   h2 {
@@ -38,43 +40,6 @@
   &:hover {
     color: $icon-purple-hover;
     background-color: $background-lightblue;
-  }
-}
-
-.dialog-add-users-content {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding-bottom: 16px;
-  gap: 8px;
-  height: 58px;
-  div {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-top-left-radius: 30px;
-    border-top-right-radius: 30px;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    gap: 8px;
-    min-width: 240px;
-    p {
-      font-size: 18px;
-      font-weight: 400;
-    }
-    cursor: pointer;
-    img {
-      height: 50px;
-      width: 50px;
-      border-radius: 100%;
-    }
-    &:hover {
-      background-color: $background-lightblue;
-    }
   }
 }
 
@@ -116,13 +81,12 @@
 
 .dialog-add-users-input-container {
   width: 280px;
-  min-height: 37px;
   height: auto;
   padding-top: 4px;
   padding-bottom: 4px;
   display: flex;
   align-items: stretch;
-  overflow: hidden; 
+  overflow: hidden;
   justify-content: center;
   flex-direction: column;
   border: 1px solid $border-gray;
@@ -131,46 +95,50 @@
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   margin-right: 12px;
-  >div {
-    all: unset;
-    min-width: 90%;
-    max-width: 90%;
-    font-size: 18px;
-    min-height: 55px;
-    box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: auto;
-    resize: none;
-    background-position: right 24px top 60px !important;
-    word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
-  }
 }
 
 .push-addet-user-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  flex-direction: row !important;
+  padding-left: 8px;
+  padding-right: 8px;
   gap: 12px;
-  height: 18px;
-  background-color: $background-lightblue !important;
+  height: 32px;
+  background-color: $background-lightblue;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
-  >img {
+  > img {
     height: 16px;
     width: 16px;
     border-radius: 100%;
   }
-
+  width: fit-content;
+  margin-left: 8px;
+  margin-top: 4px;
 }
 
-[contenteditable="true"] {
-  min-height: 37px;
-  height: auto;
+.dialog-add-users-close-icon {
+  cursor: pointer;
+}
+
+.push-addet-user-textarea {
+  all: unset;
+  min-width: 90%;
+  max-width: 90%;
+  font-size: 18px;
+  box-sizing: border-box;
+  overflow-x: hidden;
   overflow-y: auto;
+  resize: none;
+  word-wrap: break-word;
+  font-family: Arial, "TwemojiMozilla";
+  height: 31px;
+  overflow-y: hidden;
+  margin-left: 12px;
+  margin-top: 8px;
 }
 
 .dialog-add-users-button {
@@ -186,6 +154,7 @@
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
+  margin-top: 8px;
   margin-bottom: 24px;
   margin-right: 12px;
 }
@@ -196,10 +165,72 @@
 
 .dialog-add-users-button-available {
   background-color: $icon-blue;
+  cursor: pointer;
   &:hover {
     background-color: $background-white;
     color: $icon-blue;
     border: 1px solid $icon-blue;
+  }
+}
+
+.dialog-add-users-content-container {
+  position: fixed;
+  top: 265px;
+  max-width: 320px;
+  max-height: calc(100vh - 450px);
+  left: calc((100vw - 260px) / 2) !important;
+  background-color: $background-white;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border: 0.5px solid $border-gray;
+}
+
+.dialog-add-users-scroll-container {
+  overflow-y: scroll;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  max-height: calc(100vh - 500px);
+}
+
+.dialog-add-users-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  height: 58px;
+  max-height: 200px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    gap: 8px;
+    min-width: 200px;
+    margin-left: 8px;
+    margin-right: 8px;
+    p {
+      font-size: 18px;
+      font-weight: 400;
+    }
+    cursor: pointer;
+    img {
+      height: 50px;
+      width: 50px;
+      border-radius: 100%;
+    }
+    &:hover {
+      background-color: $background-lightblue;
+    }
   }
 }
 

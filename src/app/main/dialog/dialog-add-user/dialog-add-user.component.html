@@ -27,31 +27,34 @@
       <div class="close" (click)="closePeopleSearch()">
         <mat-icon>close</mat-icon>
       </div>
-      <div class="dialog-add-users-input-container">
-        <div class="push-addet-user-container" *ngFor="let userAddet of addetUser; let i = index">
+      <div
+        class="dialog-add-users-input-container"
+        [style.min-height]="this.textareaHeight + 'px !important'"
+      >
+        <div
+          class="push-addet-user-container"
+          *ngFor="let userAddet of addetUser; let indexAddUser = index"
+        >
           <img [src]="userAddet.avatar" />
           <p>{{ userAddet.name }}</p>
-          <mat-icon>close</mat-icon>
+          <mat-icon
+            class="dialog-add-users-close-icon"
+            (click)="removeAddUser(userAddet, indexAddUser)"
+            >close</mat-icon
+          >
         </div>
-        <div
-          contenteditable="true"
+        <textarea
+          [(ngModel)]="content"
           [class.placeholder]="isEmpty"
           [innerHTML]="content"
           name="textarea"
-          (input)="updateContent($event);"
-        ></div>
-      </div>
-      <div
-        class="dialog-add-users-content"
-        *ngFor="let userFilter of filteredUsers; let i = index"
-      >
-        <div (click)="pushAddetUser(userFilter)">
-          <img [src]="userFilter.avatar" />
-          <p>{{ userFilter.name }}</p>
-        </div>
+          (input)="updateContent()"
+          class="push-addet-user-textarea"
+        ></textarea>
       </div>
       <div class="dialog-add-users-button-container">
         <span
+          (click)="pushNewUserToChannel()"
           class="dialog-add-users-button"
           [ngClass]="{
           'dialog-add-users-button-not-available':
@@ -61,6 +64,23 @@
         }"
           >Hinzufügen</span
         >
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!this.isEmpty" class="dialog-add-users-content-container">
+  <div class="dialog-add-users-scroll-container">
+    <div
+      class="dialog-add-users-content"
+      *ngFor="let userFilter of filteredUsers; let indexFilterUser = index"
+    >
+      <div
+        (click)="pushAddetUser(userFilter, indexFilterUser, $event)"
+        *ngIf="content"
+      >
+        <img [src]="userFilter.avatar" />
+        <p>{{ userFilter.name }}</p>
       </div>
     </div>
   </div>
