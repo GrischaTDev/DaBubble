@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, getAuth } from '@angular/fire/auth';
 import { addDoc, collection, doc, Firestore, getFirestore, setDoc } from '@angular/fire/firestore';
 import { FormsModule, NgForm } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
 
@@ -14,7 +14,8 @@ import { User } from '../../../../assets/models/user.class';
     MatIconModule,
     RouterModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    MatIcon
   ],
   templateUrl: './register-card.component.html',
   styleUrl: './register-card.component.scss'
