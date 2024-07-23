@@ -38,8 +38,8 @@ export class DialogMentionUsersComponent {
   }
 
   addMentionUser(user: User) {
-    /* this.chatService.mentionUser.push(new User(user)); */
     this.inputContent = ' ' + '@' + user.name;
     this.mainService.changeInputContent(this.inputContent);
+    this.chatService.closeDialog();
   }
 }

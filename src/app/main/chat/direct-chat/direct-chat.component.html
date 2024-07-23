@@ -36,11 +36,31 @@
           class="user-avatar"
           src="{{ directMessageService.directUser.avatar }}"
         />
-        <span class="user-name">{{
-          directMessageService.directUser.name
-        }}</span>
+        <span
+          class="user-name"
+          *ngIf="
+            directMessageService.directUser.id !==
+            this.mainService.loggedInUser.id
+          "
+          >{{ directMessageService.directUser.name }}</span
+        >
+        <span
+          class="user-name"
+          *ngIf="
+            directMessageService.directUser.id ===
+            this.mainService.loggedInUser.id
+          "
+        >
+        <br />  {{ directMessageService.directUser.name }} (Du)</span
+        >
       </div>
-      <span class="description">
+      <span
+        class="description"
+        *ngIf="
+          directMessageService.directUser.id !==
+          this.mainService.loggedInUser.id
+        "
+      >
         Diese Unterhaltung findet nur zwischen <br />
         <span
           class="user-name-description"
@@ -48,6 +68,21 @@
           >&#64; {{ directMessageService.directUser.name }}</span
         >
         und dir statt.
+      </span>
+      <span
+        class="description"
+        *ngIf="
+          directMessageService.directUser.id ===
+          this.mainService.loggedInUser.id
+        "
+      >
+        Dieser Raum ist nur für dich da. Mache dir Notizen, liste deine To-dos
+        auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier auch
+        gerne Dinge mit dir selbst besprechen. <br />
+        <span
+          class="user-name-description"
+          (click)="openUserProfile(directMessageService.directUser)"
+        ></span>
       </span>
     </div>
 
@@ -247,7 +282,7 @@
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
       <textarea
-        [(ngModel)]="text"
+        [(ngModel)]="chatService.text"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -285,7 +320,7 @@
               (click)="
                 directMessageService.sendMessageFromDirectMessage(
                   this.directMessageService.directMessageDocId,
-                  this.text
+                  this.chatService.text
                 )
               "
               class="mobile-chat-send-icon"

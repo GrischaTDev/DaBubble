@@ -45,16 +45,21 @@ export class DirectMessageService {
   }
 
   /**
-  * Validates the other user involved in the direct message by iterating over the channel users.
-  * It assigns the user details to 'this.directUser' if the user ID does not match the logged-in user's ID.
-  * @async
-  */
+ * Asynchronously validates and identifies the other user in a direct messaging context.
+ * If the current user is the only one in the channel, the current user is duplicated as 'directUser'.
+ * Otherwise, the 'directUser' is set to the first other user found in the channel.
+ */
   async validationOfTheOtherUser() {
-    this.dataDirectMessage.channelUsers.forEach((user) => {
-      if (user.id !== this.mainService.loggedInUser.id) {
+    const loggedInUserId = this.mainService.loggedInUser.id;
+    const otherUsers = this.dataDirectMessage.channelUsers.filter(user => user.id !== loggedInUserId);
+    if (otherUsers.length === 0) {
+      this.directUser = new User(this.mainService.loggedInUser);
+    } else {
+      for (let index = 0; index < this.dataDirectMessage.channelUsers.length; index++) {
+        const user = this.dataDirectMessage.channelUsers[index];
         this.directUser = new User(user);
       }
-    });
+    }
   }
 
   /**
@@ -166,48 +171,49 @@ export class DirectMessageService {
   * @async
   * @param {string} userId - The ID of the user with whom to open a direct message.
   */
-  async openDirectMessage(userId: string) { 
+  async openDirectMessage(userId: string) {
     this.chatService.clickedUser.id = userId;
     await this.loadDirectChatUser(userId);
-    await this.directMessageIsAvailable();
     await this.pushDirectMessageDocToFirebase();
     this.directMessageDocId = this.mainService.docId;
     await this.loadDirectChatContent(this.directMessageId);
+    await this.loadDirectChatUser(userId);
+    await this.directMessageIsAvailable();
     this.navigateDirectMessage(this.directMessageId);
   }
 
   /**
-   * Checks for the availability of a direct message by comparing messages from the clicked user and the logged-in user.
-   * If a common message is found, it sets the direct message ID and its availability status.
-   */
+ * Checks if a direct message is available between the clicked user and the logged-in user.
+ * Updates the `directMessageIdIsAvailable` to true if there is a common message, and assigns
+ * the first common message ID to `directMessageId`. Otherwise, resets the `directMessageId`.
+ */
   async directMessageIsAvailable() {
     this.directMessageIdIsAvailable = false;
     this.directMessageId = '';
-    for (let index = 0; index < this.chatService.clickedUser.message.length; index++) {
-      const clickedUserMessage = this.chatService.clickedUser.message[index];
-      for (let index = 0; index < this.mainService.loggedInUser.message.length; index++) {
-        const loggedInUserMessage = this.mainService.loggedInUser.message[index];
-        if (clickedUserMessage === loggedInUserMessage) {
-          let loggedInUserMessageString: string = loggedInUserMessage.toString();
-          this.directMessageId = loggedInUserMessageString;
-          this.directMessageIdIsAvailable = true;
-        };
-      }
+    const clickedUserMessages = this.chatService.clickedUser.message;
+    const loggedInUserMessages = this.mainService.loggedInUser.message;
+    const commonMessages = clickedUserMessages.filter(msg => loggedInUserMessages.includes(msg));
+    if (commonMessages.length > 0) {
+      this.directMessageId = commonMessages[0].toString();
+      this.directMessageIdIsAvailable = true;
     }
   }
 
-  /**
-   * Pushes a new direct message document to Firebase if no existing direct message ID is available.
-   * A new document is added and the message ID is then pushed to the user.
-   * @async
-   */
+ /**
+ * Pushes a new direct message document to Firebase if a direct message ID is not already available.
+ * It checks if the logged-in user is the same as the clicked user, and sets the `messageToMe`
+ * property accordingly. The document is added to Firebase under 'direct-message' collection,
+ * and the direct message ID is pushed to the user.
+ */
   async pushDirectMessageDocToFirebase() {
     if (!this.directMessageIdIsAvailable) {
       this.newDataDirectMessage.channelUsers = [];
-      await this.mainService.addNewDocOnFirebase(
-        'direct-message',
-        this.newDataDirectMessage
-      );
+      if (this.mainService.loggedInUser.id === this.chatService.clickedUser.id) {
+        this.newDataDirectMessage.messageToMe = true;
+      } else {
+        this.newDataDirectMessage.messageToMe = false;
+      }
+      await this.mainService.addNewDocOnFirebase('direct-message', this.newDataDirectMessage);
       this.pushDirectMessageIdToUser();
     }
   }
@@ -264,6 +270,7 @@ export class DirectMessageService {
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
     await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataDirectMessage)
     );
+    this.chatService.text = '';
   }
 
   /**
@@ -284,16 +291,16 @@ export class DirectMessageService {
     }
   }
 
-  otherUser(singleUserId: string): boolean  {
+  otherUser(singleUserId: string): boolean {
     if (singleUserId !== this.mainService.loggedInUser.id) {
       return true;
-    } else if (this.indexUserDirectmessage > 1){
+    } else if (this.indexUserDirectmessage > 1) {
       return true;
     } else if (singleUserId === this.mainService.loggedInUser.id) {
       this.indexUserDirectmessage++;
       return false;
     } else {
-      return false;  
+      return false;
     }
   }
 }

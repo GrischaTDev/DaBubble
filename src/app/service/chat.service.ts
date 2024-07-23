@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { ElementRef, HostListener, Injectable, ViewChild, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
@@ -11,6 +11,7 @@ import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
+import { channel } from 'diagnostics_channel';
 @Injectable({
   providedIn: 'root',
 })
@@ -34,6 +35,13 @@ export class ChatService {
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   clickedUser: User = new User();
+  activeMessageIndex: number | null = null;
+  hoveredMessageIndex: number | null = null;
+  editMessageIndex: number | null = null;
+  editMessageInputIndex: number | null = null;
+  editOpen: boolean = false;
+  text: string = '';
+  editText: string = '';
 
   constructor(public mainService: MainServiceService, private router: Router) { }
 
@@ -115,7 +123,7 @@ export class ChatService {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;
- 
+
     }
   }
 
@@ -143,6 +151,7 @@ export class ChatService {
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
     this.sendMessage('channels', channelId);
+    this.text = '';
   }
 
   /**
@@ -216,5 +225,83 @@ export class ChatService {
     } else {
       this.closeDialog();
     }
+  }
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
+
+  /**
+   * Lifecycle hook that is called after every check of the component's view.
+   * Checks if the scrollHeight of the container has increased since the last check,
+   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
+   * and updates the last known scrollHeight.
+   */
+  ngAfterViewChecked() {
+    if (
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+    ) {
+      this.scrollToBottom();
+      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+    }
+  }
+
+  toggleIconContainer(index: number, event: MouseEvent): void {
+    if (!this.editOpen) {
+      event.stopPropagation();
+      if (this.activeMessageIndex === index) {
+        this.activeMessageIndex = null;
+      } else {
+        this.activeMessageIndex = index;
+      }
+    }
+  }
+
+  toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
+    event.stopPropagation();
+    if (this.editMessageIndex === index) {
+      this.editMessageIndex = null;
+      this.editMessageInputIndex = null;
+    } else {
+      this.activeMessageIndex = null;
+      this.editOpen = true;
+      this.editText = messageContent;
+      this.editMessageIndex = index;
+      this.editMessageInputIndex = index;
+    }
+  }
+
+  closeWithoutSaving() {
+    this.editMessageIndex = null;
+    this.editMessageInputIndex = null;
+    this.editOpen = false;
+    this.activeMessageIndex = null;
+  }
+
+ async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex:number) {
+    this.dataChannel.messageChannel[singleMessageIndex].message = newText;
+    await this.sendMessage('channels', parmsId);
+    this.closeWithoutSaving();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(): void {
+    this.activeMessageIndex = null;
+  }
+
+  onMouseEnter(index: number): void {
+    this.hoveredMessageIndex = index;
+  }
+
+  onMouseLeave(): void {
+    this.hoveredMessageIndex = null;
+  }
+
+  /**
+   * Scrolls the content of the scrollable container to the bottom.
+   * This is typically used to ensure the user sees the most recent messages or content added to the container.
+   */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
   }
 }
