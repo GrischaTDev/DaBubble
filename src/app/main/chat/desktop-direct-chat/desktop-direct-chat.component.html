@@ -1,0 +1,44 @@
+<div class="mobile-chat-container" (click)="chatService.closeDialog()">
+    <div class="mobile-chat-header-container">
+        <div>
+            <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}" />
+            <img class="user-status"
+                [src]="directMessageService.directUser.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" />
+        </div>
+        <span class="user-name">{{ directMessageService.directUser.name }}</span>
+    </div>
+    <div class="mobile-chat-content"></div>
+    <div class="mobile-chat-input-container" id="meinTextarea">
+        <form class="mobile-chat-input-field-container br-20">
+
+
+            <div class="mobile-chat-input-field-icon-container">
+                <div class="mobile-chat-input-icon-container">
+                    <div class="mobile-chat-border-right">
+                        <div class="mobile-chat-input-icon">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                    </div>
+                    <div class="mobile-chat-input-icon">
+                        <mat-icon (click)="
+                  chatService.onButtonClick($event); chatService.openDialogEmoji()
+                ">sentiment_satisfied</mat-icon>
+                    </div>
+                    <div class="mobile-chat-input-icon">
+                        <mat-icon (click)="
+                  chatService.onButtonClick($event);
+                  chatService.openDialogMentionUser()
+                ">alternate_email</mat-icon>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <mat-icon class="mobile-chat-send-icon">send</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div></div>
+    </div>
+</div>

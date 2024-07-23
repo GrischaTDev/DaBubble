@@ -1,22 +1,9 @@
 <app-mobile-chat-header></app-mobile-chat-header>
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
-  <div
-    class="user-container"
-    (click)="openUserProfile(directMessageService.directUser)"
-  >
+  <div class="user-container" (click)="openUserProfile(directMessageService.directUser)">
     <div>
-      <img
-        class="user-avatar"
-        src="{{ directMessageService.directUser.avatar }}"
-      />
-      <img
-        class="user-status"
-        [src]="
-          directMessageService.directUser.online
-            ? './assets/img/online-icon.svg'
-            : './assets/img/offline-icon.svg'
-        "
-      />
+      <img class="user-avatar" src="{{ directMessageService.directUser.avatar }}"/>
+      <img class="user-status" [src]="directMessageService.directUser.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'"/>
     </div>
     <span class="user-name">{{ directMessageService.directUser.name }}</span>
   </div>

@@ -15,6 +15,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
 import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-chat-header.component';
 import { MatIconModule } from '@angular/material/icon';
+import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-direct-chat.component';
 
 @Component({
     selector: 'app-main',
@@ -36,7 +37,8 @@ import { MatIconModule } from '@angular/material/icon';
         UserProfileComponent,
         DirectChatComponent,
         MobileChatHeaderComponent,
-        MatIconModule
+        MatIconModule,
+        DesktopDirectChatComponent
     ]
 })
 export class MainComponent  {

@@ -16,15 +16,12 @@ body {
 
 
 app-desktop-channels {
-  /* Der Container mit fester Breite */
   width: 366px;
 }
 
 
-app-desktop-chat {
-  /* Der Container, der den restlichen Platz einnimmt */
+app-desktop-chat, app-desktop-direct-chat {
   flex-grow: 1;
-  /* Nimmt den gesamten verfügbaren Platz ein */
   margin-left: 25px;
 }
 
