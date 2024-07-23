@@ -174,11 +174,11 @@ export class DirectMessageService {
   async openDirectMessage(userId: string) {
     this.chatService.clickedUser.id = userId;
     await this.loadDirectChatUser(userId);
+    await this.directMessageIsAvailable();
     await this.pushDirectMessageDocToFirebase();
     this.directMessageDocId = this.mainService.docId;
     await this.loadDirectChatContent(this.directMessageId);
     await this.loadDirectChatUser(userId);
-    await this.directMessageIsAvailable();
     this.navigateDirectMessage(this.directMessageId);
   }
 
