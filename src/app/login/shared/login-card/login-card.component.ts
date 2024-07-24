@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FirebaseApp } from '@angular/fire/app';
 import { getAuth, signInAnonymously, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
@@ -8,6 +8,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { User } from '../../../../assets/models/user.class';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-login-card',
@@ -21,9 +22,16 @@ import { MatIcon } from '@angular/material/icon';
   templateUrl: './login-card.component.html',
   styleUrl: './login-card.component.scss'
 })
-export class LoginCardComponent {
+export class LoginCardComponent implements OnInit {
 
-  constructor(private firestore: Firestore, private router: Router) { }
+  constructor(private firestore: Firestore, private router: Router, private loginService: LoginService) { }
+
+  ngOnInit(): void {
+
+    const auth = getAuth();
+
+    this.loginService.logoutUser(auth);
+  }
   email: string = '';
   password: string = '';
   wrongPassword: string | undefined;
