@@ -55,13 +55,13 @@
             &:focus-within .icon {
                 color: black;
             }
+        }
 
-            p {
-                display: flex;
-                justify-content: flex-start;
-                color: #ED1E79;
-                font-size: 13px;
-            }
+        p {
+            display: flex;
+            justify-content: flex-start;
+            color: #ED1E79;
+            font-size: 13px;
         }
         
     }
