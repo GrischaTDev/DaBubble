@@ -17,7 +17,7 @@
       </div>
     </div>
   </div>
-  <div #scrollContainer class="mobile-chat-content">
+  <div (click)="chatService.closeIconContainer()" #scrollContainer class="mobile-chat-content">
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
@@ -129,7 +129,7 @@
         >
           <img
             (click)="
-              chatService.toggleIconContainer(singleMessageIndex, $event)
+              chatService.closeIconContainer()
             "
             src="{{ singleMessage.userAvatar }}"
             alt=""
@@ -137,11 +137,11 @@
         </div>
         <div
           class="mobile-chat-message-content"
-          (click)="chatService.toggleIconContainer(singleMessageIndex, $event)"
+          (click)="chatService.closeIconContainer()"
         >
           <div
             (click)="
-              chatService.toggleIconContainer(singleMessageIndex, $event)
+              chatService.closeIconContainer()
             "
             [ngClass]="{
               'mobile-chat-message-name-date-container-me':
@@ -153,7 +153,7 @@
             <span
               (click)="
                 directMessageService.openProfil(singleMessage.userId);
-                chatService.toggleIconContainer(singleMessageIndex, $event)
+                chatService.closeIconContainer()
               "
               class="mobile-chat-message-name"
             >

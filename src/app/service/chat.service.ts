@@ -246,17 +246,38 @@ export class ChatService {
     }
   }
 
+  /**
+ * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
+ * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
+ * @param {number} index - The index to check against the active message index.
+ * @param {MouseEvent} event - The mouse event to possibly stop propagation on.
+ */
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
       event.stopPropagation();
       if (this.activeMessageIndex === index) {
-        this.activeMessageIndex = null;
+        this.closeIconContainer();
       } else {
         this.activeMessageIndex = index;
       }
     }
   }
 
+  /**
+ * Closes the icon container by setting the active message index to null.
+ */
+  closeIconContainer() {
+    this.activeMessageIndex = null;
+  }
+
+  /**
+ * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
+ * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
+ * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
+ * @param {number} index - The index of the message to potentially edit.
+ * @param {MouseEvent} event - The mouse event, propagation of which is always stopped.
+ * @param {string} messageContent - The content of the message to edit if the editor is opened.
+ */
   toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
     event.stopPropagation();
     if (this.editMessageIndex === index) {
@@ -271,28 +292,50 @@ export class ChatService {
     }
   }
 
+  /**
+ * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
+ * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
+ */
   closeWithoutSaving() {
     this.editMessageIndex = null;
     this.editMessageInputIndex = null;
     this.editOpen = false;
-    this.activeMessageIndex = null;
+    setTimeout(() => {
+      this.activeMessageIndex = null;
+    }, 125);
   }
 
+  /**
+ * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
+ * @param {string} parmsId - The parameter ID associated with the channel to notify of the update.
+ * @param {string} newText - The new text to replace the existing message content.
+ * @param {number} singleMessageIndex - The index of the message in the channel to be updated.
+ */
  async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex:number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
     await this.sendMessage('channels', parmsId);
     this.closeWithoutSaving();
   }
 
+  /**
+ * Handles click events on the document by resetting the active message index. This method ensures that any active message interactions are closed when clicking outside of a specific UI component.
+ */
   @HostListener('document:click', ['$event'])
   onDocumentClick(): void {
     this.activeMessageIndex = null;
   }
 
+  /**
+ * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
+ * @param {number} index - The index of the message that the mouse has entered.
+ */
   onMouseEnter(index: number): void {
     this.hoveredMessageIndex = index;
   }
 
+  /**
+ * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
+ */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
   }

@@ -31,7 +31,7 @@ import { LoginService } from '../../../service/login.service';
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
 })
-export class MobileChatComponent implements OnInit{
+export class MobileChatComponent implements OnInit {
   items$;
   items;
   parmsId: string = '';
@@ -40,7 +40,7 @@ export class MobileChatComponent implements OnInit{
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-  
+
 
   constructor(
     private route: ActivatedRoute,
@@ -61,7 +61,7 @@ export class MobileChatComponent implements OnInit{
       });
     }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      if(!this.chatService.editOpen) {
+      if (!this.chatService.editOpen) {
         this.chatService.text += content;
       } else {
         this.chatService.editText += content;
@@ -70,14 +70,17 @@ export class MobileChatComponent implements OnInit{
     this.chatService.loggedInUser = this.mainService.loggedInUser;
   }
 
+  /**
+ * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+ * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+ * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+ */
   ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
   }
-
-
 
   /**
    * A lifecycle hook that is called when the component is destroyed.
