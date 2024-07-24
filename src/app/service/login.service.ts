@@ -51,6 +51,8 @@ export class LoginService {
     const user = localStorage.getItem('user');
     if (user) {
       this.loggedInUserSubject.next(JSON.parse(user));
+    } else {
+      console.log('No User in localStorage.')
     }
   }
 
@@ -107,6 +109,6 @@ export class LoginService {
   }
 
   isLoggedIn(): boolean {
-    return this.loggedInUserSubject.value !== null;
+    return !!localStorage.getItem('user');
   }
 }
