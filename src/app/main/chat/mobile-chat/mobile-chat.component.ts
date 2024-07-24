@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild, HostListener } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -31,7 +31,7 @@ import { LoginService } from '../../../service/login.service';
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
 })
-export class MobileChatComponent {
+export class MobileChatComponent implements OnInit{
   items$;
   items;
   parmsId: string = '';
@@ -40,7 +40,7 @@ export class MobileChatComponent {
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-  loggedInUser: User = new User();
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -66,6 +66,14 @@ export class MobileChatComponent {
       } else {
         this.chatService.editText += content;
       }
+    });
+    this.chatService.loggedInUser = this.mainService.loggedInUser;
+  }
+
+  ngOnInit() {
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.mainService.loggedInUser = new User(user);
     });
   }
 
