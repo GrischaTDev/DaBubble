@@ -190,14 +190,16 @@ export class DirectMessageService {
   async directMessageIsAvailable() {
     this.directMessageIdIsAvailable = false;
     this.directMessageId = '';
-    const clickedUserMessages = this.chatService.clickedUser.message;
-    const loggedInUserMessages = this.mainService.loggedInUser.message;
-    const commonMessages = clickedUserMessages.filter(msg => loggedInUserMessages.includes(msg));
-    if (commonMessages.length > 0) {
-      this.directMessageId = commonMessages[0].toString();
-      this.directMessageIdIsAvailable = true;
+    let clickedUserMessages = await this.chatService.clickedUser.message;
+    let loggedInUserMessages = await this.mainService.loggedInUser.message;
+    if (Array.isArray(clickedUserMessages) && Array.isArray(loggedInUserMessages)) {
+        let commonMessages = clickedUserMessages.filter(msg => loggedInUserMessages.includes(msg));
+        if (commonMessages.length > 0) {
+            this.directMessageId = commonMessages[0].toString();
+            this.directMessageIdIsAvailable = true;
+        }
     }
-  }
+}
 
  /**
  * Pushes a new direct message document to Firebase if a direct message ID is not already available.
