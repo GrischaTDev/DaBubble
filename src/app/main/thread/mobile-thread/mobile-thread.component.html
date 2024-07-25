@@ -1,1 +1,72 @@
-<p>mobile-thread works!</p>
+<app-mobile-chat-header></app-mobile-chat-header>
+<div class="mobile-thread-container">
+
+    <div class="mobile-chat-header-container">
+        <div class="mobile-chat-header-headline">
+            <p>Thread</p>
+            <p class="channel-name"> # NameOfChannel</p>
+        </div>
+        <div>
+            <div class="mobile-chat-header-icon">
+                <mat-icon>close</mat-icon>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-chat-content"></div>
+
+
+    <div class="mobile-chat-input-container" id="meinTextarea">
+        <form class="mobile-chat-input-field-container br-20">
+          <textarea
+            [(ngModel)]="chatService.text"
+            name="textarea"
+            (input)="chatService.adjustHeight($event.target)"
+            style="min-height: 50px; width: 100%"
+            [placeholder]="'Antworten...'"
+          ></textarea>
+    
+          <div class="mobile-chat-input-field-icon-container">
+            <div class="mobile-chat-input-icon-container">
+              <div class="mobile-chat-border-right">
+                <div class="mobile-chat-input-icon">
+                  <mat-icon>add</mat-icon>
+                </div>
+              </div>
+              <div class="mobile-chat-input-icon">
+                <mat-icon
+                  (click)="
+                    chatService.onButtonClick($event); chatService.openDialogEmoji()
+                  "
+                  >sentiment_satisfied</mat-icon
+                >
+              </div>
+              <div class="mobile-chat-input-icon">
+                <mat-icon
+                  (click)="
+                    chatService.onButtonClick($event);
+                    chatService.openDialogMentionUser()
+                  "
+                  >alternate_email</mat-icon
+                >
+              </div>
+            </div>
+            <div>
+              <div>
+                <mat-icon
+                  (click)="
+                    chatService.sendMessageFromChannel(
+                      this.parmsId,
+                      this.chatService.text
+                    )
+                  "
+                  class="mobile-chat-send-icon"
+                  >send</mat-icon
+                >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+</div>
