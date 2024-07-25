@@ -9,6 +9,9 @@ import { NewPaswordComponent } from './login/new-pasword/new-pasword.component';
 import { DirectChatComponent } from './main/chat/direct-chat/direct-chat.component';
 import { VerifyEmailComponent } from './login/verify-email/verify-email.component';
 import { UserProfileComponent } from './main/user-profile/user-profile.component';
+import { MobileThreadComponent } from './main/thread/mobile-thread/mobile-thread.component';
+import { DesktopThreadComponent } from './main/thread/desktop-thread/desktop-thread.component';
+import { authGuard } from './auth.guard';
 
 
 export const routes: Routes = [
@@ -19,8 +22,9 @@ export const routes: Routes = [
     { path: 'new-password', component: NewPaswordComponent },
     { path: 'verify-email', component: VerifyEmailComponent },
     { path: 'create-avatar', component: AvatarComponent },
-    { path: 'main', component: MainComponent },
-    { path: 'user-profile', component: UserProfileComponent },
-    { path: 'chat/:id', component: MobileChatComponent },
-    { path: 'direct-chat/:userId', component: DirectChatComponent },
+    { path: 'main', component: MainComponent, resolve: {auth: authGuard} },
+    { path: 'thread', component: MobileThreadComponent },
+    { path: 'user-profile', component: UserProfileComponent, resolve: {auth: authGuard} },
+    { path: 'chat/:id', component: MobileChatComponent, resolve: {auth: authGuard} },
+    { path: 'direct-chat/:userId', component: DirectChatComponent, resolve: {auth: authGuard} },
 ];

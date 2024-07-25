@@ -1,13 +1,18 @@
-<div *ngIf="isDesktop">
+<div class="desktop">
     <app-desktop-header></app-desktop-header>
     <div class="main-desktop">
-        <app-desktop-channels></app-desktop-channels>
+        <div class="hide-server-sidebar" (click)="closeOpenWorkspace()">
+            <span> {{ closeMenuText }}</span>
+            <mat-icon>{{ closeMenu }}</mat-icon>
+        </div>
+        <app-desktop-channels *ngIf="isWorkspaceOpen"></app-desktop-channels>
         <app-desktop-chat></app-desktop-chat>
+        <app-desktop-direct-chat *ngIf="directChatOpen"></app-desktop-direct-chat>
         <app-desktop-thread *ngIf="isThreadOpen"></app-desktop-thread>
     </div>
 </div>
 
-<div *ngIf="!isDesktop" class="mobile-main">
+<div class="mobile">
     <app-mobile-header></app-mobile-header>
     <app-mobile-channels></app-mobile-channels>
 </div>

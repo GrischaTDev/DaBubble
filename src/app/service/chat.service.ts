@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { ElementRef, HostListener, Injectable, ViewChild, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
@@ -10,6 +10,9 @@ import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
+import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,9 +24,11 @@ export class ChatService {
     | MatDialogRef<DialogEmojiComponent, any>
     | MatDialogRef<DialogMentionUsersComponent, any>
     | MatDialogRef<DialogUserChatComponent, any>
+    | MatDialogRef<DialogAddUserComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
+  dialogAddUserOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   messageChannel: Message = new Message();
@@ -31,10 +36,16 @@ export class ChatService {
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   clickedUser: User = new User();
-  directMessageId: string = '';
-  dataDirectMessage: Channel = new Channel();
+  activeMessageIndex: number | null = null;
+  hoveredMessageIndex: number | null = null;
+  editMessageIndex: number | null = null;
+  editMessageInputIndex: number | null = null;
+  editOpen: boolean = false;
+  text: string = '';
+  editText: string = '';
+  loggedInUser: User = new User();
 
-  constructor(public mainService: MainServiceService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private router: Router) { }
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
@@ -85,6 +96,16 @@ export class ChatService {
     }
   }
 
+  openDialogAddUser() {
+    if (!this.dialogAddUserOpen) {
+      this.closeDialog();
+      this.dialogInstance = this.dialog.open(DialogAddUserComponent);
+      this.dialogAddUserOpen = true;
+    } else {
+      this.closeDialog();
+    }
+  }
+
   /**
    * Handles the emoji button click event.
    * Prevents the event from propagating to parent elements.
@@ -103,7 +124,8 @@ export class ChatService {
     if (this.dialogInstance) {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
-      this.dialogMentionUserOpen = false;
+      this.dialogAddUserOpen = false;
+
     }
   }
 
@@ -131,6 +153,7 @@ export class ChatService {
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataChannel.messageChannel.push(this.messageChannel);
     this.sendMessage('channels', channelId);
+    this.text = '';
   }
 
   /**
@@ -206,62 +229,124 @@ export class ChatService {
     }
   }
 
-  async openProfil(userId:string) {  
-    this.clickedUser.id = userId;
-    await this.loadDirectChatUser(userId);   
-    this.dialogInstance = this.dialog.open(DialogUserChatComponent);
-  }
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
 
-  async loadDirectChatUser(userId: string) {
-    try {
-      const userDocRef = doc(this.firestore, 'users', userId);
-      const userDocSnap = await getDoc(userDocRef);
-      if (userDocSnap.exists()) {
-        this.clickedUser = new User(userDocSnap.data());
-      } 
-    } catch (error) {
-      console.error("Fehler beim Laden der Benutzerdaten:", error);
+  /**
+   * Lifecycle hook that is called after every check of the component's view.
+   * Checks if the scrollHeight of the container has increased since the last check,
+   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
+   * and updates the last known scrollHeight.
+   */
+  ngAfterViewChecked() {
+    if (
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+    ) {
+      this.scrollToBottom();
+      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
   }
 
-async openDirectMessage(userId:string) {
-  this.clickedUser.id = userId;
-  await this.directMessageIsAvailable();
-  await this.pushDirectMessageToFirebase();  
-  this.navigateDirectMessage(this.clickedUser.id)
-}
-
-directMessageIsAvailable() {
-  this.directMessageId = '';
-  this.clickedUser.message.forEach(clickedUserMessage => {
-    this.mainService.loggedInUser.message.forEach(loggedInUserMessage => {
-      if (clickedUserMessage === loggedInUserMessage) {
-        this.directMessageId === loggedInUserMessage;
+  /**
+ * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
+ * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
+ * @param {number} index - The index to check against the active message index.
+ * @param {MouseEvent} event - The mouse event to possibly stop propagation on.
+ */
+  toggleIconContainer(index: number, event: MouseEvent): void {
+    if (!this.editOpen) {
+      event.stopPropagation();
+      if (this.activeMessageIndex === index) {
+        this.closeIconContainer();
+      } else {
+        this.activeMessageIndex = index;
       }
-    });
-  });
-}
-
-async pushDirectMessageToFirebase() {
-  if (this.directMessageId === '') {
-    await this.mainService.addNewDocOnFirebase(
-      'direct-message',
-      this.dataDirectMessage
-    ) 
-    this.pushDirectMessageIdToUser();
-  } else {
-    this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataChannel));
+    }
   }
-}
 
-async pushDirectMessageIdToUser() {
-  this.mainService.loggedInUser.message.push(this.mainService.docId);
-  this.clickedUser.message.push(this.mainService.docId);
-  await this.mainService.addDoc('users', this.mainService.loggedInUser.id, new Channel(this.mainService.loggedInUser));
-  await this.mainService.addDoc('users', this.clickedUser.id, new Channel(this.clickedUser));
-}
+  /**
+ * Closes the icon container by setting the active message index to null.
+ */
+  closeIconContainer() {
+    this.activeMessageIndex = null;
+  }
 
-navigateDirectMessage(userId: string) {
-  this.router.navigate(['/direct-chat', userId]); 
-}
+  /**
+ * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
+ * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
+ * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
+ * @param {number} index - The index of the message to potentially edit.
+ * @param {MouseEvent} event - The mouse event, propagation of which is always stopped.
+ * @param {string} messageContent - The content of the message to edit if the editor is opened.
+ */
+  toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
+    event.stopPropagation();
+    if (this.editMessageIndex === index) {
+      this.editMessageIndex = null;
+      this.editMessageInputIndex = null;
+    } else {
+      this.activeMessageIndex = null;
+      this.editOpen = true;
+      this.editText = messageContent;
+      this.editMessageIndex = index;
+      this.editMessageInputIndex = index;
+    }
+  }
+
+  /**
+ * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
+ * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
+ */
+  closeWithoutSaving() {
+    this.editMessageIndex = null;
+    this.editMessageInputIndex = null;
+    this.editOpen = false;
+    setTimeout(() => {
+      this.activeMessageIndex = null;
+    }, 125);
+  }
+
+  /**
+ * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
+ * @param {string} parmsId - The parameter ID associated with the channel to notify of the update.
+ * @param {string} newText - The new text to replace the existing message content.
+ * @param {number} singleMessageIndex - The index of the message in the channel to be updated.
+ */
+ async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex:number) {
+    this.dataChannel.messageChannel[singleMessageIndex].message = newText;
+    await this.sendMessage('channels', parmsId);
+    this.closeWithoutSaving();
+  }
+
+  /**
+ * Handles click events on the document by resetting the active message index. This method ensures that any active message interactions are closed when clicking outside of a specific UI component.
+ */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(): void {
+    this.activeMessageIndex = null;
+  }
+
+  /**
+ * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
+ * @param {number} index - The index of the message that the mouse has entered.
+ */
+  onMouseEnter(index: number): void {
+    this.hoveredMessageIndex = index;
+  }
+
+  /**
+ * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
+ */
+  onMouseLeave(): void {
+    this.hoveredMessageIndex = null;
+  }
+
+  /**
+   * Scrolls the content of the scrollable container to the bottom.
+   * This is typically used to ensure the user sees the most recent messages or content added to the container.
+   */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
+  }
 }

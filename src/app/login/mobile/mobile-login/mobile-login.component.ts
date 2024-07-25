@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoginCardComponent } from './../../shared/login-card/login-card.component';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { animate, AnimationEvent, query, sequence, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-mobile-login',
@@ -15,17 +17,76 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
     LoginCardComponent,
+    CommonModule
+  ],
+  animations: [
+    trigger('mobileStartAnimation', [
+      transition('hidden => visible', [
+        sequence([
+          query('h1', [
+            style({ display: 'none', transform: 'translateX(-100%)' }),
+            animate('1.5s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ display: 'block', transform: 'translateX(0)' }))
+          ], { optional: true })
+        ])
+      ]),
+      transition('visible => hidden', [
+        style({ opacity: 1 }),
+        animate('1.5s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ opacity: 0 }))
+      ]),
+    ]),
+    trigger('mobileSectionAnimation', [
+      transition('hidden => visible', [
+        style({ opacity: 0 }),
+        animate('2s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ opacity: 1 }))
+      ])
+    ]),
+    trigger('movingLogo', [
+      transition('center => final', [
+        style({ transform: 'translate(-10%, 500%)', zIndex: 10, opacity: 0 }),
+        animate('1s ease-out', style({ transform: 'translate(0, 0)', opacity: 1 }))
+      ])
+    ])
   ],
   templateUrl: './mobile-login.component.html',
   styleUrl: './mobile-login.component.scss'
 })
 export class MobileLoginComponent {
 
+  isVisible = 'hidden';
+  isSectionVisible = 'hidden';
+  showSection: boolean = false;
+  hideAnimationContainer: boolean = true;
+  isLogoMoving = 'center';
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.isVisible = 'visible';
+    }, 0);
+  }
+
+  toggleToHidden(event: any): void {
+    if (this.isVisible === 'visible') {
+      setTimeout(() => {
+        this.isVisible = 'hidden';
+        this.hideAnimationContainer = false;
+      }, 2000);
+      setTimeout(() => {
+        this.isSectionVisible = 'visible';
+        this.showSection = true;
+      }, 2000); 
+      setTimeout(() => {
+        if(this.showSection) {
+          this.isLogoMoving = 'final'; 
+        }
+      }, 2000);
+    }
+  }
+
   constructor(private router: Router) { }
 
-routeToRegister() {
-  this.router.navigate(['/register']);
-}
+  routeToRegister() {
+    this.router.navigate(['/register']);
+  }
 
   email: string = '';
   password: string = '';

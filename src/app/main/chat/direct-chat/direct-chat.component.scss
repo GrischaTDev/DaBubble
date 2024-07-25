@@ -9,7 +9,7 @@
 
 .mobile-chat-container {
   height: calc(100vh - 80px);
-  width: 100vw;
+  width: 100%;
   position: absolute;
   bottom: 0;
   display: flex;
@@ -33,25 +33,27 @@
     >.user-img {
         display: flex;
         position: relative;
+        border-radius: 100%;
 
-        >.user-avatar {
-            height: 50px;
-            width: 50px;
-            border-radius: 50px;
-        }
-
-        >.user-status {
-            height: 14px;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
     }
 
     >.user-name {
         font-size: 20px;
         font-weight: 700;
     }
+}
+
+.user-status {
+  height: 14px;
+  position: absolute;
+  left: 52px;
+  top: 46px;
+}
+
+.user-avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%; 
 }
 
 .direct-chat-info {
@@ -69,6 +71,7 @@
 
         >.user-avatar {
             height: 88px;
+            width: 88px;
             border-radius: 50px;
         }
 
@@ -100,7 +103,6 @@
 
 .mobile-chat-container {
   height: calc(100vh - 80px);
-  width: 100vw;
   position: absolute;
   bottom: 0;
   display: flex;
@@ -156,6 +158,7 @@
 
 .mobile-chat-content {
   width: 100vw;
+  overflow-x: hidden;
   max-height: calc(100vh - 280px);
   height: 100%;
   overflow-y: scroll;

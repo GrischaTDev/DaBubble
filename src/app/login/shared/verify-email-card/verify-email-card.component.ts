@@ -5,7 +5,7 @@ import { UserProfileService } from '../../../service/user-profile.service';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { LoginService } from '../../../service/login.service';
-import { Firestore } from '@angular/fire/firestore';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-verify-email-card',
@@ -38,6 +38,10 @@ export class VerifyEmailCardComponent {
 
         if (user) {
           await updateEmail(user, this.newEmail);
+
+          await setDoc(doc(this.firestore, 'users', user.uid), {
+          email: this.newEmail
+        }, { merge: true });
 
           setTimeout(() => {
             this.loginService.setResetPasswordOverlay(false);

@@ -55,7 +55,7 @@ section {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 18px;
+    padding: 10px;
     box-sizing: border-box;
     cursor: pointer;
 
@@ -83,6 +83,69 @@ section {
     }
 
     >.icon-and-name {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 700;
+
+        &:hover {
+            color: $background-blue;
+        }
+
+        >div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+
+    >.add-icon {
+        display: flex;
+        text-align: center;
+        padding: 4px;
+
+        &:hover {
+            color: $background-blue;
+            background-color: $background-lightblue;
+            border-radius: 50px;
+        }
+    }
+}
+
+
+.add-btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 25px 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    >.icon-and-name-add {
+        width: 100%;
+        padding-left: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 700;
+
+        &:hover {
+            color: $background-blue;
+        }
+
+        >div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+
+
+    >.icon-and-name-add {
         width: 100%;
         padding-left: 24px;
         display: flex;
@@ -116,6 +179,13 @@ section {
 }
 
 .sub-channel {
+    padding: 4px 20px;
+    
+    &:hover {
+        border-radius: 20px;
+        background-color: $background-lightblue;
+    }
+
     >a {
         color: unset;
         font-weight: bold;
@@ -123,8 +193,12 @@ section {
     }
 }
 
+.active-channel {
+    border-radius: 20px;
+    background-color: $background-lightblue;
+}
+
 .add-channel {
-    color: $background-blue;
     cursor: pointer;
 
     >span {
@@ -167,7 +241,7 @@ section {
         >.user {
             display: flex;
             align-items: center;
-            padding: 8px 48px;
+            padding: 8px 8px 8px 48px;
             gap: 18px;
             font-size: 17px;
             cursor: pointer;

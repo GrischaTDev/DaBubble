@@ -18,12 +18,13 @@ import { Router } from '@angular/router';
 })
 export class MobileChatHeaderComponent implements OnInit {
   constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router) {}
-  currentUser = this.mainService.loggedInUser;
+  currentUser: any;
 
   ngOnInit() {
-    this.mainService.currentLoggedUser();
-    console.log('Logged in user', this.currentUser);
-    console.log('User avatar', this.currentUser.avatar);
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.currentUser = user;
+    });
   }
 
   

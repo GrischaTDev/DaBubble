@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MobileHeaderComponent } from "./header/mobile-header/mobile-header.component";
 import { DesktopHeaderComponent } from "./header/desktop-header/desktop-header.component";
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { DesktopChatComponent } from "./chat/desktop-chat/desktop-chat.component";
 import { MobileChatComponent } from "./chat/mobile-chat/mobile-chat.component";
@@ -15,6 +14,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
 import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-chat-header.component';
+import { MatIconModule } from '@angular/material/icon';
+import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-direct-chat.component';
 
 @Component({
     selector: 'app-main',
@@ -35,25 +36,28 @@ import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-ch
         MatDialogModule,
         UserProfileComponent,
         DirectChatComponent,
-        MobileChatHeaderComponent
+        MobileChatHeaderComponent,
+        MatIconModule,
+        DesktopDirectChatComponent
     ]
 })
-export class MainComponent implements OnInit {
-  isDesktop: boolean = false;
+export class MainComponent  implements OnInit {
   isThreadOpen: boolean = false;
+  isWorkspaceOpen: boolean = true;
+  closeMenu: string = 'arrow_drop_up';
+  closeMenuText: string = 'Workspace-Menü schließen';
+  currentChannel: any = [];
+  directChatOpen: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private mainService: MainServiceService) {
-      
+  constructor(public mainService: MainServiceService) {}
+
+  ngOnInit(): void {
+
   }
 
- ngOnInit() {
-    this.breakpointObserver.observe([
-      Breakpoints.Handset,
-      Breakpoints.Tablet
-    ]).subscribe(result => {
-      this.isDesktop = !result.matches; // Wenn es KEIN Handset oder Tablet ist, ist es Desktop
-    });
-
-    this.mainService.currentLoggedUser();
+  closeOpenWorkspace() {
+    this.isWorkspaceOpen = !this.isWorkspaceOpen;
+    this.closeMenu = this.isWorkspaceOpen ? 'arrow_drop_up' : 'arrow_drop_down';
+    this.closeMenuText = this.isWorkspaceOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen';
   }
 }

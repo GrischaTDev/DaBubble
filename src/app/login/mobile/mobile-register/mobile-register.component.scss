@@ -1,5 +1,9 @@
 @import './../../shared/container-styles.scss';
 
+section {
+    background-color: #eceefe;
+}
+
 .register-card-component {
     display: flex;
     justify-content: center;

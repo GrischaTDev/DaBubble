@@ -14,7 +14,9 @@
             <img [@movingLogo]="isLogoMoving" src="./../../../assets/img/logo-name.svg" alt="DABubble Logo">
             <div class="register-container">
                 Neu bei DABubble?
-                <a routerLink='/register' >Konto erstellen</a>
+                <div class="register-link-container">
+                    <a class="desktop-links" routerLink='/register' >Konto erstellen</a>
+                </div>
             </div>
         </div>
     
@@ -27,8 +29,8 @@
     </div>
     
     <div class="impress-policy">
-        <a href="#">Datenschutz</a>
-        <a href="#">Impressum</a>
+        <a class="desktop-links" href="#">Datenschutz</a>
+        <a class="desktop-links" href="#">Impressum</a>
     </div>
 
 </section>

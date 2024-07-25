@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FirebaseApp } from '@angular/fire/app';
 import { getAuth, signInAnonymously, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
@@ -7,6 +7,8 @@ import { Router, RouterLink, RouterModule } from '@angular/router';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { User } from '../../../../assets/models/user.class';
 import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-login-card',
@@ -14,14 +16,22 @@ import { CommonModule } from '@angular/common';
   imports: [
     RouterModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatIcon
   ],
   templateUrl: './login-card.component.html',
   styleUrl: './login-card.component.scss'
 })
-export class LoginCardComponent {
+export class LoginCardComponent implements OnInit {
 
-  constructor(private firestore: Firestore, private router: Router) { }
+  constructor(private firestore: Firestore, private router: Router, private loginService: LoginService) { }
+
+  ngOnInit(): void {
+
+    const auth = getAuth();
+
+    this.loginService.logoutUser(auth);
+  }
   email: string = '';
   password: string = '';
   wrongPassword: string | undefined;
@@ -34,17 +44,19 @@ export class LoginCardComponent {
 
         const user = auth.currentUser;
 
-        if(user) {
+        if (user) {
           setDoc(doc(this.firestore, 'users', user.uid), {
             online: true
           }, { merge: true });
+
+          localStorage.setItem('user', JSON.stringify(user));
 
           this.router.navigate(['main']);
         }
       })
       .catch((error: any) => {
         console.log('Fehler beim login', error);
-        if(error.code === 'auth/invalid-credential') {
+        if (error.code === 'auth/invalid-credential') {
           this.wrongEmail = 'Diese E-Mail-Adresse ist leider ungültig';
           this.wrongPassword = 'Falsches Passwort. Bitte noch einmal prüfen';
         } else if (error.code === 'auth/missing-password') {
@@ -59,30 +71,24 @@ export class LoginCardComponent {
   async loginAnonymus() {
     const auth = getAuth();
 
-    const userCredential = await signInAnonymously(auth);
-    const user = userCredential.user;
+    this.email = 'gaeste-login@dabubble.com';
+    this.password = 'Gaeste2024';
 
-    try {
-      if(user) {
-        const idName = user.uid.substring(0, 5);
-  
-        const newUser = new User({
-          id: user.uid,
-          name: 'Gast_' + idName,
-          email: '',
-          avatar: './assets/img/user/profile.png',
-          message: '',
-          online: true
-        });
-  
-        const userRef = doc(this.firestore, 'users', user.uid);
-        await setDoc(userRef, newUser.toJSON());
-      }
-      
-      this.router.navigate(['main']);
-    } catch(error) {
-      console.log(error);
-    }
+    await signInWithEmailAndPassword(auth, this.email, this.password)
+      .then(() => {
+
+        const user = auth.currentUser;
+
+        if (user) {
+          setDoc(doc(this.firestore, 'users', user.uid), {
+            online: true
+          }, { merge: true });
+
+          localStorage.setItem('user', JSON.stringify(user));
+
+          this.router.navigate(['main']);
+        }
+      })
   }
 
   async loginWithGoogle() {
@@ -100,19 +106,18 @@ export class LoginCardComponent {
 
           const user = result.user;
           console.log(user);
-          if(user) {
-            const newUser = new User({
+          if (user) {
+            const userRef = doc(this.firestore, 'users', user.uid);
+            await setDoc(userRef, {
               id: user.uid,
               name: user.displayName,
               email: user.email,
               avatar: user.photoURL,
-              message: '',
               online: true
-            });
+            }, { merge: true });
 
-            const userRef = doc(this.firestore, 'users', user.uid);
-            await setDoc(userRef, newUser.toJSON());
-            
+            localStorage.setItem('user', JSON.stringify(user));
+
           }
 
           this.router.navigate(['main']);

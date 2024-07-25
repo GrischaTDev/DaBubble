@@ -1,11 +1,13 @@
 <header>
     <img class="logo" src="./assets/img/logo-name.svg" alt="DaBubble logo">
+
     <div class="input-container">
         <input type="search" placeholder="Code learning durchsuchen">
         <mat-icon>search</mat-icon>
     </div>
-    <div class="user-container">
-        <span>{{ currentUser.name }}</span>
+
+    <div *ngIf="currentUser" class="user-container" (click)="openUserMenu()">
+        <span class="name">{{ currentUser.name }}</span>
         <div class="user-img">
             <img class="user-avatar" src="{{ currentUser.avatar }}">
             <img class="user-status" src="./assets/img/online-icon-desktop.svg" >
@@ -13,3 +15,10 @@
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
 </header>
+
+<div *ngIf="userMenu" class="user-menu" (click)="openUserMenu()">
+    <div class="menu-container" (click)="doNotClose($event)">
+        <span (click)="openUserProfile()">Profile</span>
+        <span (click)="logout()">Logout</span>
+    </div>
+</div>

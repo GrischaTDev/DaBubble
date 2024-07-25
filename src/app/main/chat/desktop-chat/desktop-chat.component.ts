@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component,Input, ElementRef, inject, ViewChild, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -9,32 +9,53 @@ import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Firestore, docData } from '@angular/fire/firestore';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiService } from '../../../service/emoji.service';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-desktop-chat',
   standalone: true,
-  imports: [MatIconModule, FormsModule, MobileHeaderComponent, CommonModule],
+  imports: [
+    MatIconModule,
+    FormsModule,
+    MobileHeaderComponent,
+    CommonModule,
+    PickerComponent,
+    MobileHeaderComponent,
+    MobileChatHeaderComponent,
+  ],
   templateUrl: './desktop-chat.component.html',
   styleUrl: './desktop-chat.component.scss',
 })
-export class DesktopChatComponent {
+export class DesktopChatComponent implements OnInit {
+
+
   items$;
   items;
   parmsId: string = '';
-  text: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
 
+
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
-    mainService: MainServiceService
+    public emojiService: EmojiService,
+    public mainService: MainServiceService,
+    public directMessageService: DirectMessageService,
+    public loginService: LoginService,
+    
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
+      chatService.idOfChannel = params.id;
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
@@ -43,8 +64,28 @@ export class DesktopChatComponent {
       });
     }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      this.text += content;
+      if (!this.chatService.editOpen) {
+        this.chatService.text += content;
+      } else {
+        this.chatService.editText += content;
+      }
     });
+    this.chatService.loggedInUser = this.mainService.loggedInUser;
+  }
+
+  /**
+ * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+ * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+ * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+ */
+  ngOnInit() {
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.mainService.loggedInUser = new User(user);
+    });
+    setTimeout(() => {
+      console.log('Chat Daten', this.chatService.dataChannel);
+    }, 1000);
   }
 
   /**
@@ -55,3 +96,4 @@ export class DesktopChatComponent {
     this.subscription.unsubscribe();
   }
 }
+

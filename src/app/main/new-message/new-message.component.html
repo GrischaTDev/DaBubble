@@ -1,0 +1,40 @@
+<app-mobile-chat-header></app-mobile-chat-header>
+<div class="test">
+    
+
+    <div class="input-container">
+        <h2>Neue Nachricht</h2>
+        <input type="search" placeholder="An: #channel, oder @jemand">
+    </div>
+  
+    <div class="mobile-chat-input-container" id="meinTextarea">
+        <form class="mobile-chat-input-field-container br-20">
+            <textarea [(ngModel)]="text" name="textarea" (input)="chatService.adjustHeight($event.target)"
+                style="min-height: 50px; width: 100%" placeholder="Starte eine neue Nachricht"></textarea>
+  
+            <div class="mobile-chat-input-field-icon-container">
+                <div class="mobile-chat-input-icon-container">
+                    <div class="mobile-chat-border-right">
+                        <div class="mobile-chat-input-icon">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                    </div>
+                    <div class="mobile-chat-input-icon">
+                        <mat-icon
+                            (click)="chatService.onButtonClick($event); chatService.openDialogEmoji()">sentiment_satisfied</mat-icon>
+                    </div>
+                    <div class="mobile-chat-input-icon">
+                        <mat-icon
+                            (click)="chatService.onButtonClick($event); chatService.openDialogMentionUser()">alternate_email</mat-icon>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <mat-icon (click)="chatService.sendMessageFromChannel(this.parmsId, this.text)"
+                            class="mobile-chat-send-icon">send</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>

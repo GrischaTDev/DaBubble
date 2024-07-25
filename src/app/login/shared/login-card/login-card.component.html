@@ -4,16 +4,23 @@
             <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
             <div class="input-fields">
                 <div>
-                    <input [(ngModel)]="email" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}">
+                    <div class="form-field">
+                        <mat-icon class="icon">email</mat-icon>
+                        <input [(ngModel)]="email" class="email-input" type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}">
+                    </div>
                     <p *ngIf="wrongEmail" > {{ wrongEmail }} </p>
                 </div>
                 <div>
-                    <input [(ngModel)]="password" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}">
+                    <div class="form-field">
+                        <mat-icon class="icon">lock</mat-icon>
+                        <input [(ngModel)]="password" type="password" placeholder="Passwort" [ngModelOptions]="{standalone: true}">
+                    </div>
                     <p *ngIf="wrongPassword" > {{ wrongPassword }} </p>
                 </div>
             </div>
-    
-            <a routerLink="/reset-password" href="#">Passwort vergessen?</a>
+            <div class="forget-register-container">
+                <a class="forget-password" routerLink="/reset-password" href="#">Passwort vergessen?</a>
+            </div>
     
             <div class="parting-line">
                 <div class="line"></div>

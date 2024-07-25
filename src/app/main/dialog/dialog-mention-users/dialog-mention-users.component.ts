@@ -28,8 +28,6 @@ import { MainServiceService } from '../../../service/main-service.service';
   styleUrl: './dialog-mention-users.component.scss',
 })
 export class DialogMentionUsersComponent {
-  loggedInUserId = '4m4EZCAqmNAl0EwzHTgG';
-
   inputContent = '';
 
   constructor(
@@ -40,8 +38,8 @@ export class DialogMentionUsersComponent {
   }
 
   addMentionUser(user: User) {
-    /* this.chatService.mentionUser.push(new User(user)); */
     this.inputContent = ' ' + '@' + user.name;
     this.mainService.changeInputContent(this.inputContent);
+    this.chatService.closeDialog();
   }
 }

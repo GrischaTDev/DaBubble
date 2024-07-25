@@ -5,19 +5,20 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 30px;
     font-size: 17px;
     min-height: 100vh;
     height: 100vh;
-    background-color: #eceefe;
     padding-top: 16px;
     padding-bottom: 16px;
+    position: relative;
+    z-index: 1;
 
     img {
-        display: flex;
-        align-items: center;
-        margin: 0 auto;
+        position: relative;
         width: 200px;
+        z-index: 10;
     }
 
     .mobile-register-container {
@@ -52,6 +53,21 @@
    align-items: flex-end;
    gap: 30px;
    margin-top: 30px;
+}
+
+.desktop-links {
+    display: inline-block;
+    width: fit-content;
+    border-radius: 30px;
+    padding: 10px 15px;
+    color: #797EF3;
+    border: 1px solid transparent;
+
+    &:hover {
+        border: 1px solid #ADB0D9;
+        color: #444DF2;
+        font-weight: 500;
+    }
 }
 
 // General Container Styles

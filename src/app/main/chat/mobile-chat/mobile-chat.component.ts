@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild, HostListener } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -9,11 +9,12 @@ import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Firestore, docData } from '@angular/fire/firestore';
-import { Message } from '../../../../assets/models/message.class';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { LoginService } from '../../../service/login.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -30,26 +31,24 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
   templateUrl: './mobile-chat.component.html',
   styleUrl: './mobile-chat.component.scss',
 })
-export class MobileChatComponent {
+export class MobileChatComponent implements OnInit {
   items$;
   items;
   parmsId: string = '';
-  text: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-  messageToChannel: Message = new Message();
-  loggedInUser: User = new User();
-  activeMessageIndex: number | null = null;
-  hoveredMessageIndex: number | null = null;
+
 
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public directMessageService: DirectMessageService,
+    public loginService: LoginService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -62,58 +61,25 @@ export class MobileChatComponent {
       });
     }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      this.text += content;
+      if (!this.chatService.editOpen) {
+        this.chatService.text += content;
+      } else {
+        this.chatService.editText += content;
+      }
     });
-    this.loggedInUser = mainService.loggedInUser;
-  }
-
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
-
-  /**
-   * Lifecycle hook that is called after every check of the component's view.
-   * Checks if the scrollHeight of the container has increased since the last check,
-   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
-   * and updates the last known scrollHeight.
-   */
-  ngAfterViewChecked() {
-    if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
-    ) {
-      this.scrollToBottom();
-      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
-    }
-  }
-
-  toggleIconContainer(index: number, event: MouseEvent): void {
-    event.stopPropagation(); 
-    if (this.activeMessageIndex === index) {
-      this.activeMessageIndex = null;
-    } else {
-      this.activeMessageIndex = index;
-    }
-  }
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(): void {
-    this.activeMessageIndex = null;
-  }
-
-  onMouseEnter(index: number): void {
-    this.hoveredMessageIndex = index;
-  }
-
-  onMouseLeave(): void {
-    this.hoveredMessageIndex = null;
+    this.chatService.loggedInUser = this.mainService.loggedInUser;
   }
 
   /**
-   * Scrolls the content of the scrollable container to the bottom.
-   * This is typically used to ensure the user sees the most recent messages or content added to the container.
-   */
-  scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
+ * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+ * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+ * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+ */
+  ngOnInit() {
+    this.loginService.currentLoggedUser()
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.mainService.loggedInUser = new User(user);
+    });
   }
 
   /**

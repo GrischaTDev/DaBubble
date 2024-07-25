@@ -10,7 +10,7 @@ export class EmojiService {
   constructor(
     public mainService: MainServiceService,
     public chatService: ChatService
-  ) {}
+  ) { }
   emojiIsAvailable = false;
   userIsAvailable = false;
   newEmoji: Emoji = new Emoji();
@@ -24,9 +24,7 @@ export class EmojiService {
    */
   addReactionToMessage(emoji: string) {
     let data =
-      this.chatService.dataChannel.messageChannel[
-        this.chatService.indexOfChannelMessage
-      ].emojiReaction;
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction;
     if (data.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, data);
       this.selectionTheAddedEmoji(emoji);
@@ -80,17 +78,11 @@ export class EmojiService {
       if (emoji === emojiFb && user === this.mainService.loggedInUser.id) {
         this.emojiIsAvailable = true;
         this.userIsAvailable = true;
-      } else if (
-        emoji === emojiFb &&
-        user !== this.mainService.loggedInUser.id
-      ) {
+      } else if (emoji === emojiFb && user !== this.mainService.loggedInUser.id) {
         this.emojiIsAvailable = true;
-      } else if (
-        emoji !== emojiFb &&
-        user === this.mainService.loggedInUser.id
-      ) {
+      } else if (emoji !== emojiFb && user === this.mainService.loggedInUser.id) {
         this.userIsAvailable = true;
-      } 
+      }
     }
   }
 
@@ -100,9 +92,7 @@ export class EmojiService {
    */
   selectionTheAddedEmoji(emoji: string) {
     let usersFromEmoji =
-      this.chatService.dataChannel.messageChannel[
-        this.chatService.indexOfChannelMessage
-      ].emojiReaction[this.emojiIndex].user;
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex].user;
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
       this.pushEmojiToArray(emoji);
     } else if (!this.userIsAvailable && this.emojiIsAvailable) {
@@ -127,9 +117,7 @@ export class EmojiService {
     this.newEmoji.emoji = emoji;
     this.newEmoji.user = [];
     this.newEmoji.user.push(this.mainService.loggedInUser.id);
-    this.chatService.dataChannel.messageChannel[
-      this.chatService.indexOfChannelMessage
-    ].emojiReaction.push(this.newEmoji.toJSON());
+    this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
   }
 
   /**
@@ -174,10 +162,7 @@ export class EmojiService {
     this.emojiIsAvailable = false;
     this.userIsAvailable = false;
     this.mainService.emojiReactionMessage = false;
-    this.mainService.setDocData(
-      'channels',
-      this.chatService.idOfChannel,
-      this.chatService.dataChannel
+    this.mainService.setDocData('channels', this.chatService.idOfChannel, this.chatService.dataChannel
     );
   }
 }
