@@ -48,7 +48,7 @@ export class DesktopChannelsComponent implements OnInit {
   openChannel(channel: any) {
     this.activeChannelId = channel.id;
     console.log('Channel Daten', channel);
-    console.log('Chat Daten', this.chatService.dataChannel);
+    
     this.chatService.dataChannel = channel;
   }
 
