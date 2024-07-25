@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MainServiceService } from '../../../service/main-service.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -27,6 +27,9 @@ export class DesktopChannelsComponent implements OnInit {
   currentUser: any;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
+  selectedChannel: any;
+
+  activeChannelId: string | null = null;
 
 
   ngOnInit() {
@@ -34,6 +37,19 @@ export class DesktopChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
+
+    setTimeout(() => {
+      this.selectedChannel = this.mainService.allChannels;
+      this.openChannel(this.selectedChannel[0]);
+    }, 1500);
+  }
+
+
+  openChannel(channel: any) {
+    this.activeChannelId = channel.id;
+    console.log('Channel Daten', channel);
+    console.log('Chat Daten', this.chatService.dataChannel);
+    this.chatService.dataChannel = channel;
   }
 
 

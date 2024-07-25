@@ -26,16 +26,16 @@
                 <div class="channels" *ngFor="let channel of mainService.allChannels; let i = index">
                     <mat-icon></mat-icon>
                     <div class="icon-and-name">
-                        <div class="sub-channel">
+                        <div class="sub-channel active-channel" [ngClass]="{'active-channel': channel.id === activeChannelId}" (click)="openChannel(channel)">
                             <mat-icon>tag</mat-icon>
-                            <a (click)="mainService.goToCollectionPath(channel, '/chat/')">{{ channel.name }} </a>
+                            <a>{{ channel.name }} </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="channels" *ngIf="channelListOpen">
+            <div class="add-btn-container" *ngIf="channelListOpen">
                 <mat-icon></mat-icon>
-                <div class="icon-and-name">
+                <div class="icon-and-name-add">
                     <div class="add-channel" (click)="openDialogAddChannel()">
                         <mat-icon>add_circle_outline</mat-icon>
                         <span>Channel hinzufügen</span>

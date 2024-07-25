@@ -11,7 +11,8 @@ import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
-import { channel } from 'diagnostics_channel';
+
+
 @Injectable({
   providedIn: 'root',
 })

@@ -41,14 +41,18 @@ import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-d
         DesktopDirectChatComponent
     ]
 })
-export class MainComponent  {
+export class MainComponent  implements OnInit {
   isThreadOpen: boolean = false;
   isWorkspaceOpen: boolean = true;
   closeMenu: string = 'arrow_drop_up';
   closeMenuText: string = 'Workspace-Menü schließen';
+  currentChannel: any = [];
+  directChatOpen: boolean = false;
 
-  constructor(private mainService: MainServiceService) {
-      
+  constructor(public mainService: MainServiceService) {}
+
+  ngOnInit(): void {
+
   }
 
   closeOpenWorkspace() {
