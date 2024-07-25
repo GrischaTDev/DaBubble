@@ -1,0 +1,20 @@
+@import './../../chat/mobile-chat/mobile-chat.component.scss';
+
+.mobile-thread-container {
+    height: calc(100vh - 80px);
+    width: 100vw;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: $background-white;
+    overflow-x: hidden;
+  }
+
+  .channel-name {
+    font-size: 14px !important;
+    color: #797EF3;
+    font-weight: 400 !important;
+  }

@@ -23,7 +23,7 @@ export const routes: Routes = [
     { path: 'verify-email', component: VerifyEmailComponent },
     { path: 'create-avatar', component: AvatarComponent },
     { path: 'main', component: MainComponent, resolve: {auth: authGuard} },
-    { path: 'thread', component: DesktopThreadComponent, resolve: {auth: authGuard} },
+    { path: 'thread', component: MobileThreadComponent },
     { path: 'user-profile', component: UserProfileComponent, resolve: {auth: authGuard} },
     { path: 'chat/:id', component: MobileChatComponent, resolve: {auth: authGuard} },
     { path: 'direct-chat/:userId', component: DirectChatComponent, resolve: {auth: authGuard} },
