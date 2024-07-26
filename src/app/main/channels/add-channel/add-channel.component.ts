@@ -77,6 +77,7 @@ export class AddChannelComponent implements OnInit{
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.messageToMe = false;
+    this.dataChannel.ownerUser = this.mainService.loggedInUser;
     this.mainService.addNewDocOnFirebase(
       'channels',
       new Channel(this.dataChannel)
