@@ -193,6 +193,17 @@
   max-height: calc(100vh - 500px);
 }
 
+.dialog-add-users-not-found-container {
+  overflow-y: scroll;
+  max-height: calc(100vh - 500px);
+  > div {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
 .dialog-add-users-content {
   display: flex;
   justify-content: flex-start;

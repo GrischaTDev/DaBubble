@@ -13,6 +13,7 @@ export class ChannelService {
   addUserClicked = false;
   addetUser: User[] = [];
   filteredUsers: User[] = [];
+  usersNotYetAdded: User[] = [];
   isEmpty: boolean = true;
   textareaHeight: number = 37;
   editUserList: User[] = [];
@@ -40,12 +41,13 @@ export class ChannelService {
 * empties the added user list, updates the user edit list, and marks the component as empty and inactive for adding users.
 */
   closePeopleSearch() {
+    this.resetArrays();
     this.textareaHeight = 37;
     this.content = '';
     this.addetUser = [];
     this.pushUserToEditList();
     this.isEmpty = true;
-    this.addUserClicked = false;
+    this.addUserClicked = false; 
   }
 
   /**
@@ -53,6 +55,7 @@ export class ChannelService {
 * This method is typically used to prepare a list of users that can be edited or managed in the UI.
 */
   pushUserToEditList() {
+    this.editUserList.splice(0, this.editUserList.length);
     for (let index = 0; index < this.mainService.allUsers.length; index++) {
       const user = this.mainService.allUsers[index];
       if (user.id !== this.mainService.loggedInUser.id) {
@@ -67,13 +70,30 @@ export class ChannelService {
 * @param {string} content - The string content used to filter the user names.
 */
   filterUserContent(content: string) {
-    this.filteredUsers = [];
+    this.resetArrays();
     this.filteredUsers = this.editUserList.filter(user => {
       const userNameLower = user.name.toLowerCase();
       const contentLower = content.toLowerCase();
       const match = userNameLower.includes(contentLower);
       return match;
     });
+    this.removeExistingUsers();
+  }
+
+  removeExistingUsers() {
+    const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id); // Annahme, dass User-Objekte eine `id` Eigenschaft haben.
+    const ownerId = this.chatService.dataChannel.ownerUser.map(user => user.id); // Annahme, dass `ownerUser` auch ein User-Objekt ist.
+    this.filteredUsers.forEach(user => {
+        // Überprüfen, ob der User nicht im channelUsers-Array und nicht der ownerUser ist
+        if (!channelUserIds.includes(user.id) && !ownerId.includes(user.id)) {
+            this.usersNotYetAdded.push(new User(user));  // Annahme, dass User als Objekte hinzugefügt werden sollen.
+        }
+    });   
+  }
+
+  resetArrays() {
+    this.filteredUsers.splice(0, this.filteredUsers.length);
+    this.usersNotYetAdded.splice(0, this.usersNotYetAdded.length);
   }
 
   /**
