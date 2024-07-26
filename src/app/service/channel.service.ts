@@ -1,8 +1,10 @@
-import { Injectable, Input } from '@angular/core';
+import { inject, Injectable, Input } from '@angular/core';
 import { User } from '../../assets/models/user.class';
 import { ChatService } from './chat.service';
 import { MainServiceService } from './main-service.service';
 import { Channel } from '../../assets/models/channel.class';
+import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,13 @@ export class ChannelService {
   isEmpty: boolean = true;
   textareaHeight: number = 37;
   editUserList: User[] = [];
+  public dialog = inject(MatDialog);
+  dialogInstance: MatDialogRef<DialogEditChannelComponent, any> | undefined;
+  editChannelNameIsOpen: boolean = false;
+  editChannelDescriptionIsOpen: boolean = false;
+  textName: string = '';
+  textDescription: string = '';
+
   constructor(public chatService: ChatService,
     public mainService: MainServiceService,) { }
 
@@ -47,7 +56,7 @@ export class ChannelService {
     this.addetUser = [];
     this.pushUserToEditList();
     this.isEmpty = true;
-    this.addUserClicked = false; 
+    this.addUserClicked = false;
   }
 
   /**
@@ -84,11 +93,11 @@ export class ChannelService {
     const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id); // Annahme, dass User-Objekte eine `id` Eigenschaft haben.
     const ownerId = this.chatService.dataChannel.ownerUser.map(user => user.id); // Annahme, dass `ownerUser` auch ein User-Objekt ist.
     this.filteredUsers.forEach(user => {
-        // Überprüfen, ob der User nicht im channelUsers-Array und nicht der ownerUser ist
-        if (!channelUserIds.includes(user.id) && !ownerId.includes(user.id)) {
-            this.usersNotYetAdded.push(new User(user));  // Annahme, dass User als Objekte hinzugefügt werden sollen.
-        }
-    });   
+      // Überprüfen, ob der User nicht im channelUsers-Array und nicht der ownerUser ist
+      if (!channelUserIds.includes(user.id) && !ownerId.includes(user.id)) {
+        this.usersNotYetAdded.push(new User(user));  // Annahme, dass User als Objekte hinzugefügt werden sollen.
+      }
+    });
   }
 
   resetArrays() {
@@ -103,5 +112,37 @@ export class ChannelService {
   closeDialogAddUser() {
     this.chatService.closeDialog();
     this.addUserClicked = false;
+  }
+
+  openEditDialog() {
+    this.dialogInstance = this.dialog.open(DialogEditChannelComponent);
+  }
+
+  closeEditChannelDialog() {
+    if (this.dialogInstance) {
+      this.dialogInstance.close()
+    }
+    this.editChannelNameIsOpen = false;
+  }
+
+
+  editChannelName() {
+    this.editChannelNameIsOpen = true;
+  }
+
+  async saveChannelName() {
+    /* this.chatService.dataChannel.name = this.textName; */
+    /* await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel)); */
+    this.editChannelNameIsOpen = false;
+  }
+
+  editChannelDescription() {
+    this.editChannelDescriptionIsOpen = true;
+  }
+
+  async saveChannelDescription() {
+    this.chatService.dataChannel.name = this.textName;
+    /* await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel)); */
+    this.editChannelDescriptionIsOpen = false;
   }
 }

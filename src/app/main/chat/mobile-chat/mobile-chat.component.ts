@@ -15,6 +15,7 @@ import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
+import { ChannelService } from '../../../service/channel.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -48,7 +49,8 @@ export class MobileChatComponent implements OnInit {
     public emojiService: EmojiService,
     public mainService: MainServiceService,
     public directMessageService: DirectMessageService,
-    public loginService: LoginService
+    public loginService: LoginService,
+    public channelService: ChannelService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;

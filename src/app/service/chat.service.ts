@@ -11,7 +11,7 @@ import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
-
+import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +25,7 @@ export class ChatService {
     | MatDialogRef<DialogMentionUsersComponent, any>
     | MatDialogRef<DialogUserChatComponent, any>
     | MatDialogRef<DialogAddUserComponent, any>
+    | MatDialogRef<DialogEditChannelComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
@@ -348,9 +349,5 @@ export class ChatService {
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
-  }
-
-  openEditDialog() {
-    
   }
 }

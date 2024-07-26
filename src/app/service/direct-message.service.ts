@@ -270,8 +270,7 @@ export class DirectMessageService {
     this.chatService.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.chatService.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
-    await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataDirectMessage)
-    );
+    await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataDirectMessage));
     this.chatService.text = '';
   }
 

@@ -1,3 +1,125 @@
 <div class="edit-channel-container">
-
+  <div class="edit-channel-header">
+    <p>#</p>
+    <p>{{ chatService.dataChannel.name }}</p>
+    <div
+      class="edit-channel-icon edit-channel-icon-close"
+      (click)="channelService.closeEditChannelDialog()"
+    >
+      <mat-icon>close</mat-icon>
+    </div>
+  </div>
+  <div
+    class="edit-channel-content-container"
+    [ngClass]="{
+      'edit-channel-content-open-container':
+        !this.channelService.editChannelNameIsOpen
+    }"
+  >
+    <div
+      class="edit-channel-name-discription-container"
+      [ngClass]="{
+        'edit-channel-border-discription-container':
+          !this.channelService.editChannelNameIsOpen
+      }"
+    >
+      <div
+        class="edit-channel-name-discription-headline"
+        [ngClass]="{
+          'edit-channel-name-discription-headline-bottom':
+            this.channelService.editChannelNameIsOpen
+        }"
+      >
+        <span>Channel-Name</span>
+        <div
+          class="edit-channel-icon"
+          *ngIf="!channelService.editChannelNameIsOpen"
+          (click)="channelService.editChannelName()"
+        >
+          <mat-icon>edit</mat-icon>
+        </div>
+        <div
+          class="edit-channel-icon"
+          *ngIf="channelService.editChannelNameIsOpen"
+          (click)="channelService.saveChannelName()"
+        >
+          <mat-icon>check_circle</mat-icon>
+        </div>
+      </div>
+      <div
+        class="edit-channel-name-content"
+        *ngIf="!channelService.editChannelNameIsOpen"
+      >
+        <p class="edit-channel-hashtag">#</p>
+        <p class="edit-channel-name">{{ chatService.dataChannel.name }}</p>
+      </div>
+      <div
+        class="edit-channel-name-input-container"
+        *ngIf="channelService.editChannelNameIsOpen"
+      >
+        <p>#</p>
+        <textarea
+          [(ngModel)]="channelService.textName"
+          name="textarea"
+          [placeholder]="chatService.dataChannel.name"
+        ></textarea>
+      </div>
+    </div>
+    <div
+      class="edit-channel-name-discription-container"
+      [ngClass]="{
+        'edit-channel-border-discription-container':
+          !this.channelService.editChannelDescriptionIsOpen
+      }"
+    >
+      <div
+        class="edit-channel-name-discription-headline"
+        [ngClass]="{
+          'edit-channel-name-discription-headline-bottom ':
+            this.channelService.editChannelDescriptionIsOpen
+        }"
+      >
+        <span>Beschreibung</span>
+        <div
+          class="edit-channel-icon"
+          *ngIf="!channelService.editChannelDescriptionIsOpen"
+          (click)="channelService.editChannelDescription()"
+        >
+          <mat-icon>edit</mat-icon>
+        </div>
+        <div
+          class="edit-channel-icon"
+          *ngIf="channelService.editChannelDescriptionIsOpen"
+          (click)="channelService.saveChannelDescription()"
+        >
+          <mat-icon>check_circle</mat-icon>
+        </div>
+      </div>
+      <div
+        class="edit-channel-name-content"
+        *ngIf="!channelService.editChannelDescriptionIsOpen"
+      >
+        <p class="edit-channel-name">
+          {{ chatService.dataChannel.description }}
+        </p>
+      </div>
+      <div
+        class="edit-channel-description-input-container"
+        *ngIf="channelService.editChannelDescriptionIsOpen"
+      >
+        <textarea
+          [(ngModel)]="channelService.textDescription"
+          name="textarea"
+          (input)="chatService.adjustHeight($event.target)"
+          [placeholder]="'Dein Text hier'"
+        ></textarea>
+      </div>
+      <div class="edit-channel-description-separating-line"></div>
+    <div>
+      <p>Erstellt von</p>
+      <p> {{ chatService.dataChannel.ownerUser[0].name }}</p>
+    </div>
+    
+    </div>
+  </div>
 </div>
