@@ -7,6 +7,7 @@
     url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
 }
 
+/* -----------DESKTOP-------------- */
 .mobile-chat-container {
   height: 100%;
   padding: 25px;
@@ -69,6 +70,10 @@
   height: 100%;
   overflow: auto;
 }
+
+/* -----------DESKTOP-------------- */
+
+
 
 .mobile-chat-message-container-clicked {
   background-color: $background-lightblue;

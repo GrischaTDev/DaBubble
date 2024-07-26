@@ -85,7 +85,7 @@ export class DesktopChatComponent implements OnInit {
     });
     setTimeout(() => {
       console.log('Chat Daten', this.chatService.dataChannel);
-    }, 1000);
+    }, 3000);
   }
 
   /**
