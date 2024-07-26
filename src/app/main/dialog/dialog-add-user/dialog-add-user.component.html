@@ -70,7 +70,10 @@
 </div>
 
 <div *ngIf="!this.isEmpty" class="dialog-add-users-content-container">
-  <div class="dialog-add-users-scroll-container">
+  <div
+    class="dialog-add-users-scroll-container"
+    *ngIf="filteredUsers.length !== 0"
+  >
     <div
       class="dialog-add-users-content"
       *ngFor="let userFilter of filteredUsers; let indexFilterUser = index"

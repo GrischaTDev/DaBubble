@@ -7,6 +7,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { LoginService } from '../../../service/login.service';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class DesktopHeaderComponent implements OnInit {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
+      this.mainService.loggedInUser = new User(user);
     });
   }
 
