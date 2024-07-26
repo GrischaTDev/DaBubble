@@ -349,4 +349,8 @@ export class ChatService {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
   }
+
+  openEditDialog() {
+    
+  }
 }

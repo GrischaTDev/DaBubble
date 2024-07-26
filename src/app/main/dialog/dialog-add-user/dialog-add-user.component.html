@@ -1,7 +1,7 @@
 <div class="dialog-add-users-container">
-  <div *ngIf="!this.addUserClicked">
+  <div *ngIf="!this.channelService.addUserClicked">
     <h2>Mitglieder</h2>
-    <div class="close" (click)="closeDialog()">
+    <div class="close" (click)="channelService.closeDialogAddUser()">
       <mat-icon>close</mat-icon>
     </div>
     <div
@@ -21,19 +21,19 @@
     </div>
   </div>
 
-  <div *ngIf="this.addUserClicked">
+  <div *ngIf="this.channelService.addUserClicked">
     <div class="dialog-add-users-container">
       <h2>Leute hinzufügen</h2>
-      <div class="close" (click)="closePeopleSearch()">
+      <div class="close" (click)="channelService.closePeopleSearch()">
         <mat-icon>close</mat-icon>
       </div>
       <div
         class="dialog-add-users-input-container"
-        [style.min-height]="this.textareaHeight + 'px !important'"
+        [style.min-height]="this.channelService.textareaHeight + 'px !important'"
       >
         <div
           class="push-addet-user-container"
-          *ngFor="let userAddet of addetUser; let indexAddUser = index"
+          *ngFor="let userAddet of channelService.addetUser; let indexAddUser = index"
         >
           <img [src]="userAddet.avatar" />
           <p>{{ userAddet.name }}</p>
@@ -44,9 +44,9 @@
           >
         </div>
         <textarea
-          [(ngModel)]="content"
-          [class.placeholder]="isEmpty"
-          [innerHTML]="content"
+          [(ngModel)]="channelService.content"
+          [class.placeholder]="channelService.isEmpty"
+          [innerHTML]="channelService.content"
           name="textarea"
           (input)="updateContent()"
           class="push-addet-user-textarea"
@@ -54,13 +54,13 @@
       </div>
       <div class="dialog-add-users-button-container">
         <span
-          (click)="pushNewUserToChannel()"
+          (click)="channelService.pushNewUserToChannel()"
           class="dialog-add-users-button"
           [ngClass]="{
           'dialog-add-users-button-not-available':
-            this.addetUser.length === 0,
+            this.channelService.addetUser.length === 0,
             'dialog-add-users-button-available':
-            this.addetUser.length > 0,
+            this.channelService.addetUser.length > 0,
         }"
           >Hinzufügen</span
         >
@@ -69,18 +69,16 @@
   </div>
 </div>
 
-<div *ngIf="!this.isEmpty" class="dialog-add-users-content-container">
-  <div
-    class="dialog-add-users-scroll-container"
-    *ngIf="filteredUsers.length !== 0"
-  >
+<div *ngIf="!this.channelService.isEmpty" class="dialog-add-users-content-container">
+  <div class="dialog-add-users-scroll-container">
     <div
       class="dialog-add-users-content"
-      *ngFor="let userFilter of filteredUsers; let indexFilterUser = index"
+      *ngFor="let userFilter of channelService.filteredUsers; let indexFilterUser = index"
     >
       <div
         (click)="pushAddetUser(userFilter, indexFilterUser, $event)"
-        *ngIf="content"
+        *ngIf="channelService.content || this.chatService.dataChannel.ownerUser[0].id !== userFilter.id 
+        "
       >
         <img [src]="userFilter.avatar" />
         <p>{{ userFilter.name }}</p>
