@@ -74,14 +74,14 @@ export class AddChannelComponent implements OnInit{
    * and adding it to Firebase.
    */
   addChannel() {
-    this.closeDialog();
+    this.closeDialog();  
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
-    this.dataChannel.messageToMe = false;
-    this.dataChannel.ownerUser.push(this.mainService.loggedInUser);
+    this.dataChannel.messageToMe = false;   
+    this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
     this.mainService.addNewDocOnFirebase(
       'channels',
-      new Channel(this.dataChannel)
+      this.dataChannel
     );
   }
 

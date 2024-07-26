@@ -58,7 +58,7 @@ export class Channel {
       })),
       avatarChannel: this.avatarChannel,
       messageToMe: this.messageToMe,
-      ownerUser: this.channelUsers.map((user) => ({
+      ownerUser: this.ownerUser.map((user) => ({
         id: user.id,
         name: user.name,
         email: user.email,
