@@ -16,6 +16,7 @@ import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
 import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-chat-header.component';
 import { MatIconModule } from '@angular/material/icon';
 import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-direct-chat.component';
+import { DirectMessageService } from '../service/direct-message.service';
 
 @Component({
     selector: 'app-main',
@@ -47,9 +48,9 @@ export class MainComponent  implements OnInit {
   closeMenu: string = 'arrow_drop_up';
   closeMenuText: string = 'Workspace-Menü schließen';
   currentChannel: any = [];
-  directChatOpen: boolean = false;
+  
 
-  constructor(public mainService: MainServiceService) {}
+  constructor(public mainService: MainServiceService, public directMessage: DirectMessageService) {}
 
   ngOnInit(): void {
 

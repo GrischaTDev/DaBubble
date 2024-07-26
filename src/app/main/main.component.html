@@ -6,8 +6,8 @@
             <mat-icon>{{ closeMenu }}</mat-icon>
         </div>
         <app-desktop-channels *ngIf="isWorkspaceOpen"></app-desktop-channels>
-        <app-desktop-chat></app-desktop-chat>
-        <app-desktop-direct-chat *ngIf="directChatOpen"></app-desktop-direct-chat>
+        <app-desktop-chat *ngIf="directMessage.desktopChatOpen"></app-desktop-chat>
+        <app-desktop-direct-chat *ngIf="directMessage.directChatOpen"></app-desktop-direct-chat>
         <app-desktop-thread *ngIf="isThreadOpen"></app-desktop-thread>
     </div>
 </div>

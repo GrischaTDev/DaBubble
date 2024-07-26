@@ -30,6 +30,9 @@ export class DirectMessageService {
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
   indexUserDirectmessage: number = 0;
+  directChatOpen: boolean = false;
+  desktopChatOpen: boolean = true;;
+
 
   constructor(public chatService: ChatService, public mainService: MainServiceService, private router: Router) { }
 
