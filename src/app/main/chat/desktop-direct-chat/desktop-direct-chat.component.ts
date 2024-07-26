@@ -1,64 +1,108 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
-import { NewMessageComponent } from '../../new-message/new-message.component';
-import { LoginService } from '../../../service/login.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { EmojiService } from '../../../service/emoji.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
-import { AddChannelComponent } from '../../channels/add-channel/add-channel.component';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { LoginService } from '../../../service/login.service';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-direct-chat',
   standalone: true,
-  imports: [CommonModule, MatIconModule, AddChannelComponent, NewMessageComponent],
+  imports: [
+    MatIconModule,
+    FormsModule,
+    MobileHeaderComponent,
+    CommonModule,
+    PickerComponent,
+    MobileChatHeaderComponent,
+  ],
   templateUrl: './desktop-direct-chat.component.html',
   styleUrl: './desktop-direct-chat.component.scss'
 })
 export class DesktopDirectChatComponent implements OnInit {
-  private dialog = inject(MatDialog);
+  public dialog = inject(MatDialog);
+  dialogInstance?: MatDialogRef<DialogEmojiComponent>;
+  subscription;
+  loggedInUser: User = new User();
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) {}
-  channelListOpen: boolean = true;
-  userListOpen: boolean = true;
-  currentUser: any;
-  arrowIconChannels: string = 'arrow_drop_down';
-  arrowIconUser: string = 'arrow_drop_down';
-
-
-  ngOnInit() {
-    this.loginService.currentLoggedUser()
-    this.loginService.loggedInUser$.subscribe((user) => {
-      this.currentUser = user;
+  constructor(
+    private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService,) {
+    this.directMessageService.loadDirectChatContent(this.directMessageService.directMessageId);
+    this.subscription = mainService.currentContentEmoji.subscribe((content) => {
+      this.chatService.text += content;
     });
   }
 
-
-  navigateToChat(userId: string) {
-    this.router.navigate(['/direct-chat', userId]); 
+  /**
+   * Initializes the component by subscribing to route parameters.
+   * It delegates the handling of user ID from the route to another function.
+   */
+  ngOnInit() {
+    this.route.paramMap.pipe(
+      switchMap(params => this.handleDirectChat(params))
+    ).subscribe();
   }
 
-
-  openDialogAddChannel() {
-    this.dialog.open(AddChannelComponent);
+  /**
+   * Handles loading of direct chat content based on the user ID.
+   * @param {ParamMap} params - The Angular route snapshot paramMap.
+   * @returns {Observable<any>} An observable that emits chat content or null.
+   */
+  handleDirectChat(params: ParamMap): Observable<any> {
+    const userId = params.get('userId');
+    if (userId) {
+      return from(this.directMessageService.loadDirectChatContent(userId)).pipe(
+        tap(() => {
+          this.directMessageService.validationOfTheOtherUser();
+          this.directMessageService.checkUserStatus();
+        }),
+        catchError(error => {
+          console.error(error);
+          return of(null);
+        })
+      );
+    }
+    return of(null);
   }
 
-  
-  openDialogNewMessage() {
-    this.dialog.open(NewMessageComponent);
+  /**
+* Opens a user profile in a modal dialog using Angular Material's Dialog component.
+* The function configures the dialog to display details about a specified user.
+* @param {User} directUser - The user whose profile is to be displayed in the dialog.
+*/
+  openUserProfile(directUser: User) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = directUser;
+    this.dialog.open(UserProfileComponent, dialogConfig);
   }
 
-
-  openChannels() {
-    this.channelListOpen = !this.channelListOpen;
-    this.arrowIconChannels = this.arrowIconChannels === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
+  /**
+ * A lifecycle hook that is called when the component is destroyed.
+ * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+ */
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
-  openUserList() {
-    this.userListOpen = !this.userListOpen;
-    this.arrowIconUser = this.arrowIconUser === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
-  }
 }
-

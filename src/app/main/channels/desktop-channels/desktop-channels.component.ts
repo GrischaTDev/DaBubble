@@ -9,12 +9,14 @@ import { ChatService } from '../../../service/chat.service';
 import { NewMessageComponent } from '../../new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
+import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
+
 
 
 @Component({
   selector: 'app-desktop-channels',
   standalone: true,
-  imports: [CommonModule, MatIconModule, AddChannelComponent, NewMessageComponent],
+  imports: [CommonModule, MatIconModule, AddChannelComponent, NewMessageComponent, DirectChatComponent],
   templateUrl: './desktop-channels.component.html',
   styleUrl: './desktop-channels.component.scss'
 })
@@ -46,10 +48,19 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   openChannel(channel: any) {
+    this.directMessageService.desktopChatOpen = true;
+    this.directMessageService.directChatOpen = false;
     this.activeChannelId = channel.id;
     console.log('Channel Daten', channel);
     
     this.chatService.dataChannel = channel;
+  }
+
+  openDirectChat(user: any) {
+    this.directMessageService.desktopChatOpen = false;
+    this.directMessageService.directChatOpen = true;
+    console.log('Direct Chat User', user);
+    this.chatService.clickedUser = user;
   }
 
 
