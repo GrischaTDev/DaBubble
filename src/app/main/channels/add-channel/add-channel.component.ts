@@ -7,6 +7,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChatService } from '../../../service/chat.service';
+import { User } from '../../../../assets/models/user.class';
 
 
 @Component({
@@ -77,7 +78,7 @@ export class AddChannelComponent implements OnInit{
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.messageToMe = false;
-    this.dataChannel.ownerUser = this.mainService.loggedInUser;
+    this.dataChannel.ownerUser.push(this.mainService.loggedInUser);
     this.mainService.addNewDocOnFirebase(
       'channels',
       new Channel(this.dataChannel)
