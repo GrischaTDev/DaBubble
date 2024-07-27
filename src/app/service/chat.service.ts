@@ -5,7 +5,7 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
@@ -313,7 +313,7 @@ export class ChatService {
  * @param {string} newText - The new text to replace the existing message content.
  * @param {number} singleMessageIndex - The index of the message in the channel to be updated.
  */
- async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex:number) {
+  async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
     await this.sendMessage('channels', parmsId);
     this.closeWithoutSaving();

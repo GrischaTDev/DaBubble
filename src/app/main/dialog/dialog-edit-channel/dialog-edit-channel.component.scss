@@ -341,8 +341,177 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
   > div {
     display: flex;
+  }
+}
+
+.edit-channel-add-users-input-container {
+  height: auto;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid $border-gray;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-right: 12px;
+}
+
+.edit-channel-push-addet-user-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  gap: 12px;
+  height: 32px;
+  background-color: $background-lightblue;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  > img {
+    height: 16px;
+    width: 16px;
+    border-radius: 100%;
+  }
+  width: fit-content;
+  margin-left: 8px;
+  margin-top: 4px;
+}
+
+.edit-channel-push-addet-user-textarea {
+  all: unset;
+  min-width: 90%;
+  max-width: 90%;
+  font-size: 18px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  resize: none;
+  word-wrap: break-word;
+  font-family: Arial, "TwemojiMozilla";
+  height: 31px;
+  overflow-y: hidden;
+  margin-left: 12px;
+  margin-top: 8px;
+}
+
+.edit-channel-add-users-button-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-top: 12px;
+}
+
+.edit-channel-users-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: $background-white;
+  height: 49px;
+  width: 147px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  margin-right: 12px;
+}
+
+.edit-channel-add-users-button-not-available {
+  background-color: $icon-gray;
+}
+
+.edit-channel-add-users-button-available {
+  background-color: $icon-blue;
+  cursor: pointer;
+  &:hover {
+    margin-top: 6px;
+    background-color: $background-white;
+    color: $icon-blue;
+    border: 1px solid $icon-blue;
+  }
+}
+
+.edit-channel-add-users-content-container {
+  margin-left: 24px;
+  margin-top: -100px;
+  max-width: 320px;
+  max-height: calc(100vh - 450px);
+  left: calc((100vw - 260px) / 2) !important;
+  background-color: $background-white;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border: 0.5px solid $border-gray;
+}
+
+.edit-channel-add-users-scroll-container {
+  overflow-y: scroll;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  max-height: calc(100vh - 500px);
+}
+
+.edit-channel-add-users-not-found-container {
+  overflow-y: scroll;
+  max-height: calc(100vh - 500px);
+  > div {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.edit-channel-add-users-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  height: 58px;
+  max-height: 200px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    gap: 8px;
+    min-width: 200px;
+    margin-left: 8px;
+    margin-right: 8px;
+    p {
+      font-size: 18px;
+      font-weight: 400;
+    }
+    cursor: pointer;
+    img {
+      height: 50px;
+      width: 50px;
+      border-radius: 100%;
+    }
+    &:hover {
+      background-color: $background-lightblue;
+    }
   }
 }

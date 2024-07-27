@@ -76,7 +76,7 @@ export class DialogAddUserComponent {
    * Updates the `isEmpty` state of the content based on its presence or if it matches the placeholder.
    * @param {string} [content] - Optional content string to check against the placeholder for emptiness.
    */
-  updateIsEmpty(content?: string) {
+  updateIsEmpty(content?: string, ) {
     this.channelService.isEmpty = !content || content === this.channelService.placeholder;
   }
 

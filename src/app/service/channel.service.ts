@@ -11,12 +11,17 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class ChannelService {
   @Input() content: string = '';
+  @Input() textareaChannelName: string = '';
+  @Input() textareaChannelDescription: string = '';
+
   @Input() placeholder: string = 'Name eingeben';
   addUserClicked = false;
   addetUser: User[] = [];
   filteredUsers: User[] = [];
   usersNotYetAdded: User[] = [];
   isEmpty: boolean = true;
+  isChannelNameEmpty: boolean = true;
+  isChannelDescriptionEmpty: boolean = true;
   textareaHeight: number = 37;
   editUserList: User[] = [];
   public dialog = inject(MatDialog);
@@ -91,12 +96,12 @@ export class ChannelService {
   }
 
   removeExistingUsers() {
-    const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id); 
+    const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id);
     const ownerId = this.chatService.dataChannel.ownerUser.map(user => user.id);
-    const addedUserId = this.addetUser.map(user => user.id);  
+    const addedUserId = this.addetUser.map(user => user.id);
     this.filteredUsers.forEach(user => {
       if (!channelUserIds.includes(user.id) && !ownerId.includes(user.id) && !addedUserId.includes(user.id)) {
-        this.usersNotYetAdded.push(new User(user));  
+        this.usersNotYetAdded.push(new User(user));
       }
     });
   }
@@ -131,14 +136,15 @@ export class ChannelService {
     this.editChannelNameIsOpen = false;
   }
 
-
   editChannelName() {
     this.editChannelNameIsOpen = true;
   }
 
   async saveChannelName() {
-    /* this.chatService.dataChannel.name = this.textName; */
-    /* await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel)); */
+    if (!this.isChannelNameEmpty) {
+      this.chatService.dataChannel.name = this.textareaChannelName;
+      await this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+    }
     this.editChannelNameIsOpen = false;
   }
 
@@ -147,18 +153,20 @@ export class ChannelService {
   }
 
   async saveChannelDescription() {
-    this.chatService.dataChannel.name = this.textName;
-    /* await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel)); */
+    console.log('this.isEmpty', this.isEmpty)
+    if (!this.isChannelDescriptionEmpty) {
+      this.chatService.dataChannel.description = this.textareaChannelDescription;
+      await this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+    }
     this.editChannelDescriptionIsOpen = false;
   }
 
-  
-editChannelAddUserOpen() {
-  this.editChannelAddUserIsOpen = true;
-  
-}
+  editChannelAddUserOpen() {
+    this.editChannelAddUserIsOpen = true;
 
-editChannelAddUserClose() {
-  this.editChannelAddUserIsOpen = false;
-}
+  }
+
+  editChannelAddUserClose() {
+    this.editChannelAddUserIsOpen = false;
+  }
 }

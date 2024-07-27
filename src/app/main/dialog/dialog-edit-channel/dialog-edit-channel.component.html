@@ -1,4 +1,3 @@
-
 <div class="edit-channel-container">
   <div class="edit-channel-header">
     <p>#</p>
@@ -60,8 +59,9 @@
       >
         <p>#</p>
         <textarea
-          [(ngModel)]="channelService.textName"
-          name="textarea"
+          [(ngModel)]="channelService.textareaChannelName"
+          name="textareaChannelName"
+          (input)="updateChannelNameContent()"
           [placeholder]="chatService.dataChannel.name"
         ></textarea>
       </div>
@@ -109,9 +109,9 @@
         *ngIf="channelService.editChannelDescriptionIsOpen"
       >
         <textarea
-          [(ngModel)]="channelService.textDescription"
-          name="textarea"
-          (input)="chatService.adjustHeight($event.target)"
+          [(ngModel)]="channelService.textareaChannelDescription"
+          name="textareaChannelDescription"
+          (input)="chatService.adjustHeight($event.target); updateChannelDescriptionContent()"
           [placeholder]="'Dein Text hier'"
         ></textarea>
       </div>
@@ -148,27 +148,117 @@
         </div>
       </div>
       <div class="dialog-add-users-edit-channel">
-        <div (click)="channelService.editChannelAddUserOpen()" class="dialog-add-icon-edit-channel">
+        <div
+          (click)="channelService.editChannelAddUserOpen()"
+          class="dialog-add-icon-edit-channel"
+        >
           <mat-icon>person_add</mat-icon>
         </div>
         <p>Mitglieder hinzufüngen</p>
       </div>
     </div>
   </div>
-  <div *ngIf="channelService.editChannelAddUserIsOpen " class="edit-channel-add-user">
-    <div class="edit-channel-menu-container" (click)="chatService.doNotClose($event)">
-        <div class="edit-channel-border-container">
-            <div></div>
+  <div
+    *ngIf="channelService.editChannelAddUserIsOpen"
+    class="edit-channel-add-user"
+  >
+    <div
+      class="edit-channel-menu-container"
+      (click)="chatService.doNotClose($event)"
+    >
+      <div class="edit-channel-border-container">
+        <div></div>
+      </div>
+      <div class="edit-channel-add-headline">
+        <h2>Leute hinzufügen</h2>
+        <div
+          class="edit-channel-icon"
+          (click)="channelService.editChannelAddUserClose()"
+        >
+          <mat-icon>close</mat-icon>
         </div>
-        <div class="edit-channel-add-headline">
-            <h2>Leute hinzufügen</h2>
-            <div class="edit-channel-icon" (click)="channelService.editChannelAddUserClose()">
-                <mat-icon>close</mat-icon>
+      </div>
+
+      <div (click)="channelService.clearInput()">
+        <div
+          class="edit-channel-add-users-input-container"
+          [style.min-height]="
+            this.channelService.textareaHeight + 'px !important'
+          "
+        >
+          <div
+            class="edit-channel-push-addet-user-container"
+            *ngFor="
+              let userAddet of channelService.addetUser;
+              let indexAddUser = index
+            "
+          >
+            <img [src]="userAddet.avatar" />
+            <p>{{ userAddet.name }}</p>
+            <div class="edit-channel-icon">
+              <mat-icon (click)="removeAddUser(userAddet, indexAddUser)"
+                >close</mat-icon
+              >
             </div>
+          </div>
+          <textarea
+            [(ngModel)]="channelService.content"
+            [class.channelService.placeholder]="channelService.isEmpty"
+            [innerHTML]="channelService.content"
+            name="textarea"
+            (input)="updateContent()"
+            class="edit-channel-push-addet-user-textarea"
+          ></textarea>
         </div>
-        <div>
-           
+        <div class="edit-channel-add-users-button-container">
+          <span
+            (click)="channelService.pushNewUserToChannel()"
+            class="edit-channel-users-button"
+            [ngClass]="{
+            'edit-channel-add-users-button-not-available':
+              this.channelService.addetUser.length === 0,
+              'edit-channel-add-users-button-available':
+              this.channelService.addetUser.length > 0,
+          }"
+            >Hinzufügen</span
+          >
         </div>
-    </div>  
-</div>
+        <div
+          *ngIf="!this.channelService.isEmpty"
+          class="edit-channel-add-users-content-container"
+        >
+          <div
+            class="edit-channel-add-users-not-found-container"
+            *ngIf="channelService.usersNotYetAdded.length === 0"
+          >
+            <div>
+              <p>kein Benutzer gefunden</p>
+            </div>
+          </div>
+          <div
+            class="edit-channel-add-users-scroll-container"
+            *ngIf="channelService.usersNotYetAdded.length !== 0"
+          >
+            <div
+              class="edit-channel-add-users-content"
+              *ngFor="
+                let usersNotYetAdded of channelService.usersNotYetAdded;
+                let indexusersNotYetAdded = index
+              "
+            >
+              <div
+                (click)="
+                  pushAddetUser(usersNotYetAdded, indexusersNotYetAdded, $event)
+                "
+                *ngIf="channelService.content"
+              >
+                <img [src]="usersNotYetAdded.avatar" />
+                <p>{{ usersNotYetAdded.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
