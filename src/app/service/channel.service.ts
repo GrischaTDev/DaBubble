@@ -23,6 +23,7 @@ export class ChannelService {
   isChannelNameEmpty: boolean = true;
   isChannelDescriptionEmpty: boolean = true;
   textareaHeight: number = 37;
+  filterContentMarginTop: number = 0;
   editUserList: User[] = [];
   public dialog = inject(MatDialog);
   dialogInstance: MatDialogRef<DialogEditChannelComponent, any> | undefined;
@@ -48,6 +49,7 @@ export class ChannelService {
       }
       this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
       this.closePeopleSearch();
+      this.editChannelAddUserIsOpen = false;
     }
   }
 
@@ -58,6 +60,7 @@ export class ChannelService {
   closePeopleSearch() {
     this.resetArrays();
     this.textareaHeight = 37;
+    this.filterContentMarginTop = 0;
     this.content = '';
     this.addetUser = [];
     this.pushUserToEditList();
@@ -163,7 +166,6 @@ export class ChannelService {
 
   editChannelAddUserOpen() {
     this.editChannelAddUserIsOpen = true;
-
   }
 
   editChannelAddUserClose() {

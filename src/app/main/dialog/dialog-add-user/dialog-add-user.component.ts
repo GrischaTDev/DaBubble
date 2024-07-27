@@ -131,7 +131,8 @@ export class DialogAddUserComponent {
   * This method is typically used to adjust the layout dynamically based on content or interaction changes.
   */
   calculateHeight() {
-    this.channelService.textareaHeight = this.channelService.textareaHeight + 37
+    this.channelService.textareaHeight = this.channelService.textareaHeight + 37;
+    this.channelService.filterContentMarginTop = this.channelService.filterContentMarginTop + 37;
     this.cdr.detectChanges();
   }
 

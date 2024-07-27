@@ -86,6 +86,9 @@
 <div
   *ngIf="!this.channelService.isEmpty"
   class="dialog-add-users-content-container"
+  [style.margin-top]="
+  this.channelService.filterContentMarginTop + 'px !important'
+"
 >
   <div
     class="dialog-add-users-not-found-container"
