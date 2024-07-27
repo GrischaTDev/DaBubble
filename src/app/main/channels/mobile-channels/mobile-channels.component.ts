@@ -66,7 +66,6 @@ export class MobileChannelsComponent  implements OnInit {
     this.directMessageService.desktopChatOpen = false;
     this.directMessageService.directChatOpen = true;
     this.chatService.clickedUser = user;
-
     this.searchValue = '';
   }
 
@@ -77,10 +76,8 @@ export class MobileChannelsComponent  implements OnInit {
    */
   openChannel(channel: any) {
     this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;
-    
+    this.directMessageService.directChatOpen = false;  
     this.chatService.dataChannel = channel;
-
     this.searchValue = '';
   }
 }

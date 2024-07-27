@@ -131,7 +131,9 @@
     </div>
     <div class="edit-channel-members-container">
       <span>Mitglieder</span>
-      <div class="edit-channel-members-users-content">
+      <div class="edit-channel-members-users-content"
+      (click)="directMessageService.openProfil(this.mainService.loggedInUser.id)"
+      >
         <div>
           <img [src]="this.mainService.loggedInUser.avatar" />
           <p>{{ this.mainService.loggedInUser.name }}</p>
@@ -142,21 +144,28 @@
         class="edit-channel-members-users-content"
         *ngFor="let user of chatService.dataChannel.channelUsers; let i = index"
       >
-        <div *ngIf="this.mainService.loggedInUser.id !== user.id">
+        <div *ngIf="this.mainService.loggedInUser.id !== user.id" (click)="directMessageService.openProfil(user.id)">
           <img [src]="user.avatar" />
           <p>{{ user.name }}</p>
         </div>
       </div>
-      <div class="dialog-add-users-edit-channel">
+      <div class="edit-channel-add-users-edit-channel">
         <div
           (click)="channelService.editChannelAddUserOpen()"
-          class="dialog-add-icon-edit-channel"
+          class="edit-channel-add-icon-edit-channel"
         >
           <mat-icon>person_add</mat-icon>
         </div>
         <p>Mitglieder hinzufüngen</p>
       </div>
     </div>
+    <div class="edit-channel-remove-users-button-container">
+      <span
+      (click)="channelService.leaveChannel()"
+      class="edit-channel-add-users-button"
+      >Channel verlassen</span
+    >
+    </div>  
   </div>
   <div
     *ngIf="channelService.editChannelAddUserIsOpen"

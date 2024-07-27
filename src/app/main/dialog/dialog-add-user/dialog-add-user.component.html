@@ -70,12 +70,6 @@
         <span
           (click)="channelService.pushNewUserToChannel()"
           class="dialog-add-users-button"
-          [ngClass]="{
-          'dialog-add-users-button-not-available':
-            this.channelService.addetUser.length === 0,
-            'dialog-add-users-button-available':
-            this.channelService.addetUser.length > 0,
-        }"
           >Hinzufügen</span
         >
       </div>

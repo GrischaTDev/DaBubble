@@ -256,6 +256,7 @@
     min-width: 200px;
     margin-left: 8px;
     margin-right: 8px;
+    cursor: pointer;
     p {
       font-size: 18px;
       font-weight: 400;
@@ -265,10 +266,13 @@
       width: 50px;
       border-radius: 100%;
     }
+    &:hover {
+      background-color: $background-lightblue;
+    }
   }
 }
 
-.dialog-add-users-edit-channel {
+.edit-channel-add-users-edit-channel {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -280,7 +284,7 @@
   }
 }
 
-.dialog-add-icon-edit-channel {
+.edit-channel-add-icon-edit-channel {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -513,5 +517,37 @@
     &:hover {
       background-color: $background-lightblue;
     }
+  }
+}
+
+.edit-channel-remove-users-button-container {
+  width: calc(100vw - 24px);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 24px;
+}
+
+.edit-channel-add-users-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: $background-white;
+  height: 49px;
+  width: 200px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-bottom: 24px;
+  margin-right: 12px;
+  background-color: $icon-blue;
+  cursor: pointer;
+  &:hover {
+    background-color: $background-white;
+    color: $icon-blue;
+    border: 1px solid $icon-blue;
   }
 }

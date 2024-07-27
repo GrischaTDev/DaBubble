@@ -6,6 +6,7 @@ import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
 import { MainServiceService } from '../../../service/main-service.service';
 import { User } from '../../../../assets/models/user.class';
+import { DirectMessageService } from '../../../service/direct-message.service';
 
 @Component({
   selector: 'app-dialog-edit-channel',
@@ -20,6 +21,7 @@ export class DialogEditChannelComponent {
     public chatService: ChatService,
     public channelService: ChannelService,
     public mainService: MainServiceService,
+    public directMessageService: DirectMessageService,
     private cdr: ChangeDetectorRef
   ) {
     this.channelService.pushUserToEditList();

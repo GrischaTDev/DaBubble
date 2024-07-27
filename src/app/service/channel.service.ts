@@ -5,6 +5,7 @@ import { MainServiceService } from './main-service.service';
 import { Channel } from '../../assets/models/channel.class';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class ChannelService {
   textDescription: string = '';
 
   constructor(public chatService: ChatService,
-    public mainService: MainServiceService,) { }
+    public mainService: MainServiceService, private router: Router) { }
 
   /**
 * Adds each user from the added users list to the current channel and updates the channel's document in the database.
@@ -171,4 +172,18 @@ export class ChannelService {
   editChannelAddUserClose() {
     this.editChannelAddUserIsOpen = false;
   }
-}
+
+async leaveChannel() {
+      const loggedInUserId = this.mainService.loggedInUser.id;
+      const channelUsers = this.chatService.dataChannel.channelUsers; 
+      for (let index = 0; index < channelUsers.length; index++) {
+        if (channelUsers[index].id === loggedInUserId) {
+          this.chatService.dataChannel.channelUsers.splice(index, 1);
+        }
+      }
+      await this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+      this.closeEditChannelDialog();
+      this.router.navigate(['/main']);
+    }
+  }
+
