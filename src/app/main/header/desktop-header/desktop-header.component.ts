@@ -12,6 +12,7 @@ import { collection, doc, DocumentData, Firestore, onSnapshot, QuerySnapshot } f
 import { FormsModule } from '@angular/forms';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 
 @Component({
@@ -28,13 +29,9 @@ export class DesktopHeaderComponent implements OnInit {
   userMenu: boolean = false;
 
   searchValue: string = '';
-  allUser: DocumentData[] = [];
-
-  filterUser: DocumentData[] = [];
-  filterChannel: DocumentData[] = [];
 
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore, private directMessageService: DirectMessageService, private chatService: ChatService) {}
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore, private directMessageService: DirectMessageService, private chatService: ChatService, public searchField: SearchFieldService) {}
 
 
   ngOnInit() {
@@ -43,59 +40,6 @@ export class DesktopHeaderComponent implements OnInit {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });
-  }
-
-  /**
-   * 
-   * After entering a query in the search field, the data is filtered.
-   */
-  filterData() {
-    this.setUser();
-    this.setChannel();
-  }
-
-  /**
-   * 
-   * This function loads user data from Firestore and then filters it based on the search field input.
-   * @returns - Data is being loaded from Firestore.
-   */
-  setUser() {
-    const docRef = collection(this.firestore, 'users');
-    return onSnapshot(docRef, (userList: QuerySnapshot<DocumentData>) => {
-      this.filterUser = [];
-      userList.forEach(user => {
-        const userData = user.data();
-        if (userData && userData['name'] && this.searchValue) {
-          const name = userData['name'].toLowerCase();
-          const searchValue = this.searchValue.toLowerCase();
-          if (name.includes(searchValue)) {
-            this.filterUser.push(userData);
-          }
-        }
-      });
-    })
-  }
-
-  /**
-   * 
-   * This function loads user data from Firestore and then filters it based on the search field input.
-   * @returns - Data is being loaded from Firestore.
-   */
-  setChannel() {
-    const docRef = collection(this.firestore, 'channels');
-    return onSnapshot(docRef, (channelList: QuerySnapshot<DocumentData>) => {
-      this.filterChannel = [];
-      channelList.forEach(channel => {
-        const channelData = channel.data();
-        if (channelData && channelData['name'] && this.searchValue) {
-          const name = channelData['name'].toLowerCase();
-          const searchValue = this.searchValue.toLowerCase();
-          if (name.includes(searchValue)) {
-            this.filterChannel.push(channelData);
-          }
-        }
-      });
-    })
   }
 
   /**

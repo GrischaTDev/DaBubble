@@ -8,6 +8,38 @@ section {
     overflow: unset !important;
 }
 
+.result-container {
+    border-radius: 30px;
+    background-color: #fff;
+    padding: 25px;
+    position: absolute;
+    top: 180px;
+    z-index: 99;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+    p {
+        font-weight: bold;
+    }
+
+    .user-list-container {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        padding: 8px 8px 8px 48px;
+        cursor: pointer;
+        border-radius: 30px;
+
+        &:hover {
+            background-color: $background-lightblue;
+        }
+
+        img {
+            height: 50px;
+            border-radius: 50%;
+        }
+    }
+}
+
 .input-container {
     position: relative;
     display: flex;
@@ -15,6 +47,11 @@ section {
     align-items: center;
     padding: 20px 0;
     margin-top: 80px;
+
+    .input-and-result-container {
+        display: flex;
+        flex-direction: column;
+    }
 
     >input {
         font-size: 17px;
