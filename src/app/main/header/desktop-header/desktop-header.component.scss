@@ -18,14 +18,51 @@ header {
         margin-right: 65px;
     }
 
-    >.input-container {
+    .input-and-result-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .result-container {
+        border-radius: 30px;
+        background-color: #fff;
+        padding: 25px;
+        position: absolute;
+        top: 100px;
+        z-index: 99;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+        p {
+            font-weight: bold;
+        }
+
+        .user-list-container {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 8px 8px 8px 48px;
+            cursor: pointer;
+            border-radius: 30px;
+
+            &:hover {
+                background-color: $background-lightblue;
+            }
+
+            img {
+                height: 50px;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .input-container {
         width: 989px;
         position: relative;
         display: flex;
         justify-content: flex-end;
         align-items: center;
 
-        >input {
+        input {
             font-size: 24px;
             height: 70px;
             width: 100%;
@@ -34,7 +71,7 @@ header {
             padding: 17.5px 45px 17.5px 45px;
         }
 
-        >.mat-icon {
+        .mat-icon {
             position: absolute;
             padding-right: 30px;
             width: 35px;

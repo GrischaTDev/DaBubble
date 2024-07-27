@@ -1,9 +1,23 @@
 <header>
     <img class="logo" src="./assets/img/logo-name.svg" alt="DaBubble logo">
 
-    <div class="input-container">
-        <input type="search" placeholder="Code learning durchsuchen">
-        <mat-icon>search</mat-icon>
+    <div class="input-and-result-container">
+        <div class="input-container">
+            <input [(ngModel)]="searchValue" (ngModelChange)="filterData()" type="search" placeholder="Code learning durchsuchen">
+            <mat-icon>search</mat-icon>
+        </div>
+        <div *ngIf="searchValue" class="result-container">
+            <p>Benutzer:</p>
+            <div class="user-list-container" *ngFor="let user of filterUser" (click)="openDirectChat(user)" >
+                <img src="{{ user['avatar'] }}" alt="">
+                {{ user['name'] }}
+            </div>
+            <p>Channel:</p>
+            <div class="user-list-container" *ngFor="let channel of filterChannel" (click)="openChannel(channel)" >
+                <span>#</span>
+                {{ channel['name'] }}
+            </div>
+        </div>
     </div>
 
     <div *ngIf="currentUser" class="user-container" (click)="openUserMenu()">
