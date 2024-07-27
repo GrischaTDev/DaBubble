@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ChatService } from '../../../service/chat.service';
 import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
+import { MainServiceService } from '../../../service/main-service.service';
 
 @Component({
   selector: 'app-dialog-edit-channel',
@@ -16,7 +17,7 @@ export class DialogEditChannelComponent {
  
   constructor(
     public chatService: ChatService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public mainService: MainServiceService
   ) {}
-
 }

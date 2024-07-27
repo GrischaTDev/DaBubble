@@ -23,6 +23,7 @@ export class ChannelService {
   dialogInstance: MatDialogRef<DialogEditChannelComponent, any> | undefined;
   editChannelNameIsOpen: boolean = false;
   editChannelDescriptionIsOpen: boolean = false;
+  editChannelAddUserIsOpen: boolean = false;
   textName: string = '';
   textDescription: string = '';
 
@@ -90,14 +91,19 @@ export class ChannelService {
   }
 
   removeExistingUsers() {
-    const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id); // Annahme, dass User-Objekte eine `id` Eigenschaft haben.
-    const ownerId = this.chatService.dataChannel.ownerUser.map(user => user.id); // Annahme, dass `ownerUser` auch ein User-Objekt ist.
+    const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id); 
+    const ownerId = this.chatService.dataChannel.ownerUser.map(user => user.id);
+    const addedUserId = this.addetUser.map(user => user.id);  
     this.filteredUsers.forEach(user => {
-      // Überprüfen, ob der User nicht im channelUsers-Array und nicht der ownerUser ist
-      if (!channelUserIds.includes(user.id) && !ownerId.includes(user.id)) {
-        this.usersNotYetAdded.push(new User(user));  // Annahme, dass User als Objekte hinzugefügt werden sollen.
+      if (!channelUserIds.includes(user.id) && !ownerId.includes(user.id) && !addedUserId.includes(user.id)) {
+        this.usersNotYetAdded.push(new User(user));  
       }
     });
+  }
+
+  clearInput() {
+    this.content = '';
+    this.isEmpty = true;
   }
 
   resetArrays() {
@@ -145,4 +151,14 @@ export class ChannelService {
     /* await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel)); */
     this.editChannelDescriptionIsOpen = false;
   }
+
+  
+editChannelAddUserOpen() {
+  this.editChannelAddUserIsOpen = true;
+  
+}
+
+editChannelAddUserClose() {
+  this.editChannelAddUserIsOpen = false;
+}
 }

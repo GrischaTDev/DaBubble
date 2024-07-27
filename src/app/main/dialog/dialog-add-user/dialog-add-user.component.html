@@ -31,7 +31,7 @@
   </div>
 
   <div *ngIf="this.channelService.addUserClicked">
-    <div class="dialog-add-users-container">
+    <div class="dialog-add-users-container" (click)="channelService.clearInput()">
       <h2>Leute hinzufügen</h2>
       <div class="close" (click)="channelService.closePeopleSearch()">
         <mat-icon>close</mat-icon>

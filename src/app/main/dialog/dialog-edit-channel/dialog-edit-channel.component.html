@@ -1,3 +1,4 @@
+
 <div class="edit-channel-container">
   <div class="edit-channel-header">
     <p>#</p>
@@ -114,12 +115,60 @@
           [placeholder]="'Dein Text hier'"
         ></textarea>
       </div>
-      <div class="edit-channel-description-separating-line"></div>
-    <div>
-      <p>Erstellt von</p>
-      <p> {{ chatService.dataChannel.ownerUser[0].name }}</p>
+      <div
+        class="edit-channel-description-separating-line"
+        [ngClass]="{
+          'edit-channel-description-open-separating-line':
+            this.channelService.editChannelDescriptionIsOpen
+        }"
+      ></div>
+      <div class="edit-channel-owner-container">
+        <p class="edit-channel-owner-description">Erstellt von</p>
+        <p class="edit-channel-owner-name">
+          {{ chatService.dataChannel.ownerUser[0].name }}
+        </p>
+      </div>
     </div>
-    
+    <div class="edit-channel-members-container">
+      <span>Mitglieder</span>
+      <div class="edit-channel-members-users-content">
+        <div>
+          <img [src]="this.mainService.loggedInUser.avatar" />
+          <p>{{ this.mainService.loggedInUser.name }}</p>
+          <p>(Du)</p>
+        </div>
+      </div>
+      <div
+        class="edit-channel-members-users-content"
+        *ngFor="let user of chatService.dataChannel.channelUsers; let i = index"
+      >
+        <div *ngIf="this.mainService.loggedInUser.id !== user.id">
+          <img [src]="user.avatar" />
+          <p>{{ user.name }}</p>
+        </div>
+      </div>
+      <div class="dialog-add-users-edit-channel">
+        <div (click)="channelService.editChannelAddUserOpen()" class="dialog-add-icon-edit-channel">
+          <mat-icon>person_add</mat-icon>
+        </div>
+        <p>Mitglieder hinzufüngen</p>
+      </div>
     </div>
   </div>
+  <div *ngIf="channelService.editChannelAddUserIsOpen " class="edit-channel-add-user">
+    <div class="edit-channel-menu-container" (click)="chatService.doNotClose($event)">
+        <div class="edit-channel-border-container">
+            <div></div>
+        </div>
+        <div class="edit-channel-add-headline">
+            <h2>Leute hinzufügen</h2>
+            <div class="edit-channel-icon" (click)="channelService.editChannelAddUserClose()">
+                <mat-icon>close</mat-icon>
+            </div>
+        </div>
+        <div>
+           
+        </div>
+    </div>  
+</div>
 </div>
