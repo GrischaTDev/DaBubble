@@ -75,8 +75,6 @@
 
 /* -----------DESKTOP-------------- */
 
-
-
 .desktop-chat-message-container-clicked {
   background-color: $background-lightblue;
 }
@@ -128,12 +126,11 @@
 }
 
 .desktop-chat-edit-message-container-left {
-  left: 120px;
   width: 200px;
 }
-
+ 
 .desktop-chat-edit-message-container-right {
-  margin-left: calc(100vw - 350px);
+  margin-left: 24px;
   width: 255px;
 }
 
@@ -153,7 +150,7 @@
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.08);
   font-size: 20px;
   font-weight: 500;
-  margin-left: calc(100vw - 300px);
+  margin-left: 220px;
   width: 255px;
   margin-top: 40px;
   margin-bottom: -108px;
@@ -209,9 +206,13 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: row-reverse;
-  margin-left: 16px;
-  margin-right: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
   z-index: 1;
+}
+
+.desktop-chat-message-container-from-others-hover {
+  margin-bottom: 23px;
 }
 
 .desktop-chat-message-avatar-container {
@@ -423,5 +424,60 @@
   cursor: pointer;
   &:hover {
     color: $background-purple;
+  }
+}
+
+.desktop-chat-message-reaction-right-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+  width: 200px;
+  flex-wrap: wrap;
+}
+
+.desktop-chat-message-reaction-left-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+  width: 200px;
+  flex-wrap: wrap;
+}
+
+.desktop-chat-message-reaction-content {
+  border: 1px solid $background-lightgray;
+  border-radius: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid $background-lightblue;
+  }
+}
+
+.desktop-chat-message-reaction-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  &:hover {
+    background-color: $background-lightblue;
+  }
+  mat-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    color: $icon-gray;
+    border-radius: 100%;
+    &:hover {
+      color: $background-purple;
+    }
   }
 }
