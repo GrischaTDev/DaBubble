@@ -42,20 +42,80 @@ export class AddChannelComponent implements OnInit {
   }
 
 
+  ngOnInit() {
+    this.breakpointObserver.observe([
+      Breakpoints.Handset,
+      Breakpoints.Tablet
+    ]).subscribe(result => {
+      this.isDesktop = !result.matches; // Wenn es KEIN Handset oder Tablet ist, ist es Desktop
+    });
+
+    this.mainService.currentLoggedUser();
+    this.updateIsEmpty();
+    if (this.channelService.isEmpty) {
+      this.channelService.content = this.channelService.placeholder;
+    }
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+    setTimeout(() => {
+      this.isAddUserMenuOpen = false;
+    }, 2000);
+  }
+
+
+  doNotClose(event: Event) {
+    event.stopPropagation();
+  }
+
+  openAddUserMenu(event: Event) {
+    event.stopPropagation();
+    this.addUserMenu = !this.addUserMenu;
+    if (this.isDesktop) {
+      this.isAddUserMenuOpen = true;
+    }
+  }
+
+  addUserInputfield() {
+    this.addUserInput = !this.addUserInput;
+  }
+
+  addUserInputfieldOff() {
+    this.addUserInput = false;
+  }
+
   /**
- * Activates the user search interface and triggers change detection.
- * This method is called when the user initiates a search for adding a new user.
- */
+   * Creates a new channel by setting the necessary properties and then adds it to Firestore under the 'channels' collection.
+   * This function sets the channel's name and description based on class properties before creating a new Channel instance
+   * and adding it to Firebase.
+   */
+  addChannel() {
+    this.closeDialog();
+    this.dataChannel.name = this.newChannelName;
+    this.dataChannel.description = this.newChannelDescription;
+    this.dataChannel.messageToMe = false;
+    this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
+    this.mainService.addNewDocOnFirebase(
+      'channels',
+      this.dataChannel
+    );
+    this.chatService.mobileChatIsOpen = true;
+  }
+
+  /**
+   * Activates the user search interface and triggers change detection.
+   * This method is called when the user initiates a search for adding a new user.
+   */
   openSearchUser() {
     this.channelService.addUserClicked = true;
     this.cdr.detectChanges();
   }
 
-
   /**
-* Updates the content based on user input, filters user-related content, and emits an event if the content is not empty.
-* @param {Event} [event] - Optional event parameter that can be used to pass event data.
-*/
+  * Updates the content based on user input, filters user-related content, and emits an event if the content is not empty.
+  * @param {Event} [event] - Optional event parameter that can be used to pass event data.
+  */
   updateContent(event?: Event): void {
     this.updateIsEmpty(this.channelService.content);
     this.channelService.filterUserContent(this.channelService.content);
@@ -118,77 +178,26 @@ export class AddChannelComponent implements OnInit {
     this.calculateHeight();
   }
 
-
   /**
-* Increases the height of the textarea by a set increment and triggers change detection to update the view.
-* This method is typically used to adjust the layout dynamically based on content or interaction changes.
-*/
+  * Increases the height of the textarea by a set increment and triggers change detection to update the view.
+  * This method is typically used to adjust the layout dynamically based on content or interaction changes.
+  */
   calculateHeight() {
     this.channelService.textareaHeight = this.channelService.textareaHeight + 37;
     this.channelService.filterContentMarginTop = this.channelService.filterContentMarginTop + 37;
     this.cdr.detectChanges();
   }
 
-
-  closeDialog() {
-    this.dialogRef.close();
-    setTimeout(() => {
-      this.isAddUserMenuOpen = false;
-    }, 2000);
-  }
-
-
-  doNotClose(event: Event) {
-    event.stopPropagation();
-  }
-
-
-  openAddUserMenu(event: Event) {
-    event.stopPropagation();
-    this.addUserMenu = !this.addUserMenu;
-    if (this.isDesktop) {
-      this.isAddUserMenuOpen = true;
-    }
-  }
-
-
-  addUserInputfield() {
-    this.addUserInput = !this.addUserInput;
-  }
-
-
-  addUserInputfieldOff() {
-    this.addUserInput = false;
-  }
-
-
   /**
-   * Creates a new channel by setting the necessary properties and then adds it to Firestore under the 'channels' collection.
-   * This function sets the channel's name and description based on class properties before creating a new Channel instance
-   * and adding it to Firebase.
+   * Removes a user from the added users list, adds them back to the editable user list, and adjusts the textarea height.
+   * This method manages user lists dynamically and updates the UI correspondingly when a user is removed.
+   * @param {User} deletUser - The user to be removed from the added users list and added back to the editable list.
+   * @param {number} indexAddUser - The index of the user in the added users list to be removed.
    */
-  addChannel() {
-    this.closeDialog();
-    this.dataChannel.name = this.newChannelName;
-    this.dataChannel.description = this.newChannelDescription;
-    this.dataChannel.messageToMe = false;
-    this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
-    this.mainService.addNewDocOnFirebase(
-      'channels',
-      this.dataChannel
-    );
-    this.chatService.mobileChatIsOpen = true;
-  }
-
-
-  ngOnInit() {
-    this.breakpointObserver.observe([
-      Breakpoints.Handset,
-      Breakpoints.Tablet
-    ]).subscribe(result => {
-      this.isDesktop = !result.matches; // Wenn es KEIN Handset oder Tablet ist, ist es Desktop
-    });
-
-    this.mainService.currentLoggedUser();
+  removeAddUser(deletUser: User, indexAddUser: number) {
+    this.channelService.editUserList.push(deletUser);
+    this.channelService.addetUser.splice(indexAddUser, 1);
+    this.channelService.textareaHeight = this.channelService.textareaHeight - 37;
+    this.cdr.detectChanges();
   }
 }

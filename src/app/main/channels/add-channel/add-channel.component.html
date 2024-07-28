@@ -48,28 +48,88 @@
                     <input (click)="addUserInputfield()" type="radio" name="memberSelection" id="specific-members">
                     <label for="specific-members">Bestimmte Leute hinzufügen</label>
                 </div>
-                <input [(ngModel)]="channelService.content" *ngIf="addUserInput" class="inputfield" type="text" placeholder="Name eingeben">
+                       
+                
+         <!---------------  Start textarea ----------------->      
+                
+                <div class="inputfield" *ngIf="addUserInput">
+                    <div
+                    class="add-channel-push-addet-user-container"
+                    *ngFor="
+                      let userAddet of channelService.addetUser;
+                      let indexAddUser = index
+                    "
+                  >
+                    <img [src]="userAddet.avatar" />
+                    <p>{{ userAddet.name }}</p>
+                    <mat-icon
+                      class="add-channel-add-users-close-icon"
+                      (click)="removeAddUser(userAddet, indexAddUser)"
+                      >close</mat-icon
+                    >
+                  </div>
+                  <textarea
+                    [(ngModel)]="channelService.content"
+                    placeholder="Name eingeben"
+                    [innerHTML]="channelService.content"
+                    name="textarea"
+                    (input)="updateContent()"
+                    class="add-channel-push-addet-user-textarea"
+                  ></textarea>
+                </div>
+                
+                
+                
+               <!---------------  End textarea ----------------->         
+                
+                
+                
                 <div class="create-btn">
                     <button class="primary-btn" (click)="addChannel()">Erstellen</button>
                 </div>
             </div>
         </div>
-
-        <div *ngIf="!this.channelService.isEmpty" class="dialog-add-users-content-container" [style.margin-top]="this.channelService.filterContentMarginTop + 'px !important'">
-            <div class="dialog-add-users-not-found-container" *ngIf="channelService.usersNotYetAdded.length === 0">
-                <div>
-                    <p>kein Benutzer gefunden</p>
-                </div>
-            </div>
-            <div class="dialog-add-users-scroll-container" *ngIf="channelService.usersNotYetAdded.length !== 0">
-                <div class="dialog-add-users-content" *ngFor="let usersNotYetAdded of channelService.usersNotYetAdded; let indexusersNotYetAdded = index">
-                    <div (click)="pushAddetUser(usersNotYetAdded, indexusersNotYetAdded, $event)"
-                        *ngIf="channelService.content">
-                        <img [src]="usersNotYetAdded.avatar" />
-                        <p>{{ usersNotYetAdded.name }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
+
+
+ <!---------------  Start User Content ----------------->      
+<div
+  *ngIf="!this.channelService.isEmpty"
+  class="add-channel-add-users-content-container"
+  [style.margin-top]="
+  this.channelService.filterContentMarginTop + 'px !important'
+"
+>
+  <div
+    class="add-channel-add-users-not-found-container"
+    *ngIf="channelService.usersNotYetAdded.length === 0"
+  >
+    <div>
+      <p>kein Benutzer gefunden</p>
+    </div>
+  </div>
+  <div
+    class="add-channel-add-users-scroll-container"
+    *ngIf="channelService.usersNotYetAdded.length !== 0"
+  >
+    <div
+      class="add-channel-add-users-content"
+      *ngFor="
+        let usersNotYetAdded of channelService.usersNotYetAdded;
+        let indexusersNotYetAdded = index
+      "
+    >
+      <div
+        (click)="pushAddetUser(usersNotYetAdded, indexusersNotYetAdded, $event)"
+        *ngIf="channelService.content"
+      >
+        <img [src]="usersNotYetAdded.avatar" />
+        <p>{{ usersNotYetAdded.name }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!---------------  End User Content ----------------->    
