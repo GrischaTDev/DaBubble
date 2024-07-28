@@ -58,7 +58,7 @@ export class SearchFieldService {
             const searchValueLower = searchValue.toLowerCase();
             if (name.includes(searchValueLower)) {
               this.filterChannel.push(channelData);
-            }
+            } 
           }
         });
       })

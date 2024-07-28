@@ -7,7 +7,7 @@
                 placeholder="Code learning durchsuchen">
             <mat-icon>search</mat-icon>
         </div>
-        <div *ngIf="searchValue && searchField.filterUser.length > 0 || searchField.filterChannel.length > 0"
+        <div *ngIf="searchValue"
             class="result-container">
             <div *ngIf="searchField.filterUser.length > 0">
                 <p>Benutzer:</p>
@@ -24,6 +24,9 @@
                     <span>#</span>
                     {{ channel['name'] }}
                 </div>
+            </div>
+            <div *ngIf="searchField.filterChannel.length === 0 && searchField.filterUser.length === 0" >
+                <p>Keine Ergebnisse gefunden.</p>
             </div>
 
         </div>
