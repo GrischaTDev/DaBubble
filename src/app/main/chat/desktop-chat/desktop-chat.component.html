@@ -3,7 +3,9 @@
     <div class="desktop-chat-header-headline">
       <p>#</p>
       <p>{{ chatService.dataChannel.name }}</p>
-      <mat-icon (click)="channelService.openEditDialog()">keyboard_arrow_down</mat-icon>
+      <mat-icon (click)="channelService.openEditDialog()"
+        >keyboard_arrow_down</mat-icon
+      >
     </div>
     <div>
       <div
@@ -16,21 +18,25 @@
       </div>
     </div>
   </div>
-  <div (click)="chatService.closeIconContainer()" #scrollContainer class="desktop-chat-content">
+  <div
+    (click)="chatService.closeIconContainer()"
+    #scrollContainer
+    class="desktop-chat-content"
+  >
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
         let singleMessageIndex = index
       "
-      [ngClass]="{
-          'desktop-chat-message-container-clicked':
-          chatService.activeMessageIndex === singleMessageIndex,
-      }"
       (mouseenter)="chatService.onMouseLeave()"
     >
       <div
         class="desktop-chat-message-date-container"
         (mouseenter)="chatService.onMouseLeave()"
+        [ngClass]="{
+          'desktop-chat-message-container-from-others-hover':
+          chatService.hoveredMessageIndex === singleMessageIndex,
+     }"
       >
         <div class="desktop-chat-message-line"></div>
         <span class="desktop-chat-message-date">{{
@@ -110,12 +116,15 @@
       </div>
 
       <div
+        (mouseenter)="chatService.onMouseLeave()"
         [ngClass]="{
           'desktop-chat-message-container-from-me': chatService.ifMessageFromMe(
             singleMessage.userId
           ),
           'desktop-chat-message-container-from-others':
-            !chatService.ifMessageFromMe(singleMessage.userId)
+            !chatService.ifMessageFromMe(singleMessage.userId),
+            'desktop-chat-message-container-clicked':
+             chatService.activeMessageIndex === singleMessageIndex,
         }"
       >
         <div
@@ -127,9 +136,7 @@
           class="desktop-chat-message-avatar-container"
         >
           <img
-            (click)="
-              chatService.closeIconContainer()
-            "
+            (click)="chatService.closeIconContainer()"
             src="{{ singleMessage.userAvatar }}"
             alt=""
           />
@@ -139,9 +146,7 @@
           (click)="chatService.closeIconContainer()"
         >
           <div
-            (click)="
-              chatService.closeIconContainer()
-            "
+            (click)="chatService.closeIconContainer()"
             [ngClass]="{
               'desktop-chat-message-name-date-container-me':
                 chatService.ifMessageFromMe(singleMessage.userId),
