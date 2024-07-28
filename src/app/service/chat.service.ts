@@ -258,11 +258,7 @@ export class ChatService {
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
       event.stopPropagation();
-      if (this.activeMessageIndex === index) {
-        this.closeIconContainer();
-      } else {
-        this.activeMessageIndex = index;
-      }
+      this.activeMessageIndex = index;
     }
   }
 
@@ -316,7 +312,7 @@ export class ChatService {
  */
   async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-    await this.sendMessage('channels', parmsId);
+    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
     this.closeWithoutSaving();
   }
 

@@ -17,6 +17,7 @@ import { Emoji } from '../../assets/models/emoji.class';
 import { Message } from '../../assets/models/message.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
+import { ChatService } from './chat.service';
 
 @Injectable({
   providedIn: 'root',
@@ -74,10 +75,18 @@ export class MainServiceService {
     try {
       const docRef = await addDoc(collection(this.firestore, docName), data.toJSON());
       this.docId = docRef.id;
+      if (docName === 'channels') {
+        this.setChannelIdOnFirebase(docRef.id)
+      }
     } catch (error) {
       console.error('Error adding user:', error);
     } finally {
     }
+  }
+
+ setChannelIdOnFirebase(docRef: string) {
+  setDoc(doc(this.firestore, 'channels', docRef), {
+    id: docRef}, { merge: true });
   }
 
   /**

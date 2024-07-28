@@ -30,6 +30,7 @@ export class AddChannelComponent implements OnInit{
 
   constructor(
     private breakpointObserver: BreakpointObserver,
+    private chatService: ChatService,
     public dialogRef: MatDialogRef<AddChannelComponent>,
     public mainService: MainServiceService,
     public ChatService: ChatService
@@ -83,6 +84,7 @@ export class AddChannelComponent implements OnInit{
       'channels',
       this.dataChannel
     );
+    this.chatService.mobileChatIsOpen = true;
   }
 
 

@@ -18,17 +18,14 @@
       </div>
     </div>
   </div>
-  <div
-    (click)="chatService.closeIconContainer()"
-    #scrollContainer
-    class="desktop-chat-content"
-  >
+  <div #scrollContainer class="desktop-chat-content">
     <div
+      (mouseleave)="chatService.closeIconContainer()"
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
         let singleMessageIndex = index
       "
-      (mouseenter)="chatService.onMouseLeave()"
+      (click)="chatService.onMouseLeave()"
     >
       <div
         class="desktop-chat-message-date-container"
@@ -86,7 +83,10 @@
         </div>
         <div
           class="desktop-chat-edit-icon-container"
-          (mouseenter)="chatService.onMouseEnter(singleMessageIndex)"
+          (click)="
+            this.chatService.doNotClose($event);
+            chatService.onMouseEnter(singleMessageIndex)
+          "
           [ngClass]="{
             'desktop-chat-edit-icon-left': !chatService.ifMessageFromMe(
               singleMessage.userId
@@ -135,18 +135,10 @@
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-message-avatar-container"
         >
-          <img
-            (click)="chatService.closeIconContainer()"
-            src="{{ singleMessage.userAvatar }}"
-            alt=""
-          />
+          <img src="{{ singleMessage.userAvatar }}" alt="" />
         </div>
-        <div
-          class="desktop-chat-message-content"
-          (click)="chatService.closeIconContainer()"
-        >
+        <div class="desktop-chat-message-content">
           <div
-            (click)="chatService.closeIconContainer()"
             [ngClass]="{
               'desktop-chat-message-name-date-container-me':
                 chatService.ifMessageFromMe(singleMessage.userId),
@@ -155,10 +147,7 @@
             }"
           >
             <span
-              (click)="
-                directMessageService.openProfil(singleMessage.userId);
-                chatService.closeIconContainer()
-              "
+              (click)="directMessageService.openProfil(singleMessage.userId)"
               class="desktop-chat-message-name"
             >
               {{ singleMessage.userName }}
@@ -170,7 +159,7 @@
             </div>
           </div>
           <div
-            (click)="
+            (mouseover)="
               chatService.toggleIconContainer(singleMessageIndex, $event)
             "
             class="desktop-chat-message-text-container"
@@ -186,6 +175,9 @@
             }"
           >
             <span
+              (mouseover)="
+                chatService.toggleIconContainer(singleMessageIndex, $event)
+              "
               *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
             >
               {{ singleMessage.message }}
@@ -335,7 +327,7 @@
             <mat-icon
               (click)="
                 chatService.sendMessageFromChannel(
-                  this.parmsId,
+                  this.chatService.dataChannel.id,
                   this.chatService.text
                 )
               "

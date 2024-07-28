@@ -331,7 +331,7 @@
             <mat-icon
               (click)="
                 chatService.sendMessageFromChannel(
-                  this.parmsId,
+                  this.chatService.dataChannel.id,
                   this.chatService.text
                 )
               "

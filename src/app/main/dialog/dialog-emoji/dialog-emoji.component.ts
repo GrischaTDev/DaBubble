@@ -44,7 +44,6 @@ export class DialogEmojiComponent {
       this.mainService.changeInputContent(this.inputContent);
     } else {
       this.emojiService.addReactionToMessage(event.emoji.native);
-      this.mainService.changeReactionContent(event.emoji.native);
     }
     this.chatService.closeDialog();
   }
