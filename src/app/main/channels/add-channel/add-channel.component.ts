@@ -92,6 +92,7 @@ export class AddChannelComponent implements OnInit {
    */
   addChannel() {
     this.closeDialog();
+    this.dataChannel.channelUsers =  this.channelService.addetUser;
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.messageToMe = false;
@@ -177,6 +178,8 @@ export class AddChannelComponent implements OnInit {
     if (editableDiv) editableDiv.innerHTML = '';
     this.calculateHeight();
   }
+
+
 
   /**
   * Increases the height of the textarea by a set increment and triggers change detection to update the view.
