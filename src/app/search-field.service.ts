@@ -8,6 +8,7 @@ export class SearchFieldService {
 
   filterUser: DocumentData[] = [];
   filterChannel: DocumentData[] = [];
+  filterMessage: DocumentData[] = [];
 
   constructor(private firestore: Firestore) { }
 
@@ -51,8 +52,11 @@ export class SearchFieldService {
       const docRef = collection(this.firestore, 'channels');
       return onSnapshot(docRef, (channelList: QuerySnapshot<DocumentData>) => {
         this.filterChannel = [];
+        this.filterMessage = [];
+
         channelList.forEach(channel => {
           const channelData = channel.data();
+
           if (channelData && channelData['name'] && searchValue) {
             const name = channelData['name'].toLowerCase();
             const searchValueLower = searchValue.toLowerCase();
@@ -60,8 +64,21 @@ export class SearchFieldService {
               this.filterChannel.push(channelData);
             } 
           }
+
+          if(channelData && channelData['messageChannel'] && searchValue) {
+            channelData["messageChannel"].forEach((message: { [x: string]: string; }) => {
+              const messageLower = message['message'].toLowerCase();
+              const searchValueLower = searchValue.toLowerCase();
+              if(messageLower.includes(searchValueLower)) {
+                this.filterMessage.push( { channelData: channelData, channelName: channelData['name'] , message: message['message']} );
+              }
+            });
+            console.log(this.filterMessage);
+          }
         });
       })
     }
+
+
 
 }

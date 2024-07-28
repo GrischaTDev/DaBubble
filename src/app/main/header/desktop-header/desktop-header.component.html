@@ -7,8 +7,7 @@
                 placeholder="Code learning durchsuchen">
             <mat-icon>search</mat-icon>
         </div>
-        <div *ngIf="searchValue"
-            class="result-container">
+        <div *ngIf="searchValue" class="result-container">
             <div *ngIf="searchField.filterUser.length > 0">
                 <p>Benutzer:</p>
                 <div class="user-list-container" *ngFor="let user of searchField.filterUser"
@@ -25,7 +24,16 @@
                     {{ channel['name'] }}
                 </div>
             </div>
-            <div *ngIf="searchField.filterChannel.length === 0 && searchField.filterUser.length === 0" >
+            <div *ngIf="searchField.filterMessage.length > 0">
+                <p>Nachrichten:</p>
+                <div class="user-list-container" *ngFor="let message of searchField.filterMessage"
+                    (click)="openChannel(message['channelData'])">
+                    [{{ message['channelName'] }}]
+                    {{ message['message'] }}
+                </div>
+            </div>
+
+            <div *ngIf="searchField.filterChannel.length === 0 && searchField.filterUser.length === 0">
                 <p>Keine Ergebnisse gefunden.</p>
             </div>
 
