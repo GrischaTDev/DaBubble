@@ -45,6 +45,7 @@ export class ChatService {
   text: string = '';
   editText: string = '';
   loggedInUser: User = new User();
+  mobileChatIsOpen: boolean = false;
 
   constructor(public mainService: MainServiceService, private router: Router) { }
 

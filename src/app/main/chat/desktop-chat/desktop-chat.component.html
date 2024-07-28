@@ -1,13 +1,13 @@
-<div class="mobile-chat-container" (click)="chatService.closeDialog()">
-  <div class="mobile-chat-header-container">
-    <div class="mobile-chat-header-headline">
+<div class="desktop-chat-container" (click)="chatService.closeDialog()">
+  <div class="desktop-chat-header-container">
+    <div class="desktop-chat-header-headline">
       <p>#</p>
       <p>{{ chatService.dataChannel.name }}</p>
-      <mat-icon>keyboard_arrow_down</mat-icon>
+      <mat-icon (click)="channelService.openEditDialog()">keyboard_arrow_down</mat-icon>
     </div>
     <div>
       <div
-        class="mobile-chat-header-icon"
+        class="desktop-chat-header-icon"
         (click)="
           this.chatService.doNotClose($event); chatService.openDialogAddUser()
         "
@@ -16,52 +16,52 @@
       </div>
     </div>
   </div>
-  <div (click)="chatService.closeIconContainer()" #scrollContainer class="mobile-chat-content">
+  <div (click)="chatService.closeIconContainer()" #scrollContainer class="desktop-chat-content">
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
         let singleMessageIndex = index
       "
       [ngClass]="{
-          'mobile-chat-message-container-clicked':
+          'desktop-chat-message-container-clicked':
           chatService.activeMessageIndex === singleMessageIndex,
       }"
       (mouseenter)="chatService.onMouseLeave()"
     >
       <div
-        class="mobile-chat-message-date-container"
+        class="desktop-chat-message-date-container"
         (mouseenter)="chatService.onMouseLeave()"
       >
-        <div class="mobile-chat-message-line"></div>
-        <span class="mobile-chat-message-date">{{
+        <div class="desktop-chat-message-line"></div>
+        <span class="desktop-chat-message-date">{{
           chatService.setDate(singleMessage.date)
         }}</span>
-        <div class="mobile-chat-message-line"></div>
+        <div class="desktop-chat-message-line"></div>
       </div>
       <div
-        class="mobile-chat-edit-message-container"
+        class="desktop-chat-edit-message-container"
         *ngIf="chatService.activeMessageIndex === singleMessageIndex"
         [ngClass]="{
-          'mobile-chat-edit-message-container-right':
+          'desktop-chat-edit-message-container-right':
             chatService.ifMessageFromMe(singleMessage.userId),
-          'mobile-chat-edit-message-container-left':
+          'desktop-chat-edit-message-container-left':
             !chatService.ifMessageFromMe(singleMessage.userId),
         }"
       >
         <div
-          class="mobile-chat-edit-icon-container"
+          class="desktop-chat-edit-icon-container"
           (click)="this.emojiService.addReactionToMessage('✅')"
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
-          class="mobile-chat-edit-icon-container"
+          class="desktop-chat-edit-icon-container"
           (click)="this.emojiService.addReactionToMessage('🙌')"
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
         </div>
         <div
-          class="mobile-chat-edit-icon-container"
+          class="desktop-chat-edit-icon-container"
           (click)="
             chatService.onButtonClick($event);
             chatService.openDialogEmojiReactionMessage(singleMessageIndex)
@@ -71,7 +71,7 @@
         </div>
         <div
           (mouseenter)="chatService.onMouseLeave()"
-          class="mobile-chat-edit-icon-container"
+          class="desktop-chat-edit-icon-container"
           (click)="
             this.directMessageService.openDirectMessage(singleMessage.userId)
           "
@@ -79,10 +79,10 @@
           <mat-icon>comment</mat-icon>
         </div>
         <div
-          class="mobile-chat-edit-icon-container"
+          class="desktop-chat-edit-icon-container"
           (mouseenter)="chatService.onMouseEnter(singleMessageIndex)"
           [ngClass]="{
-            'mobile-chat-edit-icon-left': !chatService.ifMessageFromMe(
+            'desktop-chat-edit-icon-left': !chatService.ifMessageFromMe(
               singleMessage.userId
             )
           }"
@@ -93,7 +93,7 @@
       <div
         (mouseenter)="chatService.onMouseEnter(singleMessageIndex)"
         (mouseleave)="chatService.onMouseLeave()"
-        class="mobile-chat-edit-button-container"
+        class="desktop-chat-edit-button-container"
         *ngIf="chatService.hoveredMessageIndex === singleMessageIndex"
       >
         <span
@@ -104,17 +104,17 @@
               singleMessage.message
             )
           "
-          class="mobile-chat-edit-button"
+          class="desktop-chat-edit-button"
           >Nachricht bearbeiten</span
         >
       </div>
 
       <div
         [ngClass]="{
-          'mobile-chat-message-container-from-me': chatService.ifMessageFromMe(
+          'desktop-chat-message-container-from-me': chatService.ifMessageFromMe(
             singleMessage.userId
           ),
-          'mobile-chat-message-container-from-others':
+          'desktop-chat-message-container-from-others':
             !chatService.ifMessageFromMe(singleMessage.userId)
         }"
       >
@@ -124,7 +124,7 @@
             directMessageService.openProfil(singleMessage.userId)
           "
           (mouseenter)="chatService.onMouseLeave()"
-          class="mobile-chat-message-avatar-container"
+          class="desktop-chat-message-avatar-container"
         >
           <img
             (click)="
@@ -135,7 +135,7 @@
           />
         </div>
         <div
-          class="mobile-chat-message-content"
+          class="desktop-chat-message-content"
           (click)="chatService.closeIconContainer()"
         >
           <div
@@ -143,9 +143,9 @@
               chatService.closeIconContainer()
             "
             [ngClass]="{
-              'mobile-chat-message-name-date-container-me':
+              'desktop-chat-message-name-date-container-me':
                 chatService.ifMessageFromMe(singleMessage.userId),
-              'mobile-chat-message-name-date-container-from-others':
+              'desktop-chat-message-name-date-container-from-others':
                 !chatService.ifMessageFromMe(singleMessage.userId)
             }"
           >
@@ -154,12 +154,12 @@
                 directMessageService.openProfil(singleMessage.userId);
                 chatService.closeIconContainer()
               "
-              class="mobile-chat-message-name"
+              class="desktop-chat-message-name"
             >
               {{ singleMessage.userName }}
             </span>
             <div>
-              <span class="mobile-chat-message-time">
+              <span class="desktop-chat-message-time">
                 {{ chatService.setTime(singleMessage.date) }} Uhr
               </span>
             </div>
@@ -168,15 +168,15 @@
             (click)="
               chatService.toggleIconContainer(singleMessageIndex, $event)
             "
-            class="mobile-chat-message-text-container"
+            class="desktop-chat-message-text-container"
             [ngClass]="{
-              'mobile-chat-message-from-me': chatService.ifMessageFromMe(
+              'desktop-chat-message-from-me': chatService.ifMessageFromMe(
                 singleMessage.userId
               ),
-              'mobile-chat-message-from-others': !chatService.ifMessageFromMe(
+              'desktop-chat-message-from-others': !chatService.ifMessageFromMe(
                 singleMessage.userId
               ),
-              'mobile-chat-message-clicked':
+              'desktop-chat-message-clicked':
               chatService.activeMessageIndex === singleMessageIndex,
             }"
           >
@@ -191,12 +191,12 @@
                 name="newTextarea"
                 (input)="chatService.adjustHeight($event.target)"
                 style="min-height: 50px; width: 100%"
-                class="mobile-chat-message-edit-textarea"
+                class="desktop-chat-message-edit-textarea"
               ></textarea>
-              <div class="mobile-chat-input-field-icon-container">
-                <div class="mobile-chat-edit-message-icon-container">
-                  <div class="mobile-chat-edit-message-icon">
-                    <div class="mobile-chat-input-icon">
+              <div class="desktop-chat-input-field-icon-container">
+                <div class="desktop-chat-edit-message-icon-container">
+                  <div class="desktop-chat-edit-message-icon">
+                    <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
                           chatService.onButtonClick($event);
@@ -205,7 +205,7 @@
                         >sentiment_satisfied</mat-icon
                       >
                     </div>
-                    <div class="mobile-chat-input-icon">
+                    <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
                           chatService.onButtonClick($event);
@@ -217,7 +217,7 @@
                   </div>
                   <div>
                     <div>
-                      <div class="mobile-chat-edit-message-save-container">
+                      <div class="desktop-chat-edit-message-save-container">
                         <p (click)="chatService.closeWithoutSaving()">
                           Abbrechen
                         </p>
@@ -242,14 +242,14 @@
 
           <div
             [ngClass]="{
-              'mobile-chat-message-reaction-right-container':
+              'desktop-chat-message-reaction-right-container':
                 chatService.ifMessageFromMe(singleMessage.userId),
-              'mobile-chat-message-reaction-left-container':
+              'desktop-chat-message-reaction-left-container':
                 !chatService.ifMessageFromMe(singleMessage.userId)
             }"
           >
             <div
-              class="mobile-chat-message-reaction-content"
+              class="desktop-chat-message-reaction-content"
               *ngFor="
                 let emojie of chatService.dataChannel.messageChannel[
                   singleMessageIndex
@@ -270,7 +270,7 @@
               {{ emojie.emoji }}
               {{ emojie.user.length }}
             </div>
-            <div class="mobile-chat-message-reaction-icon">
+            <div class="desktop-chat-message-reaction-icon">
               <mat-icon
                 *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
@@ -290,8 +290,8 @@
       </div>
     </div>
   </div>
-  <div class="mobile-chat-input-container" id="meinTextarea">
-    <form class="mobile-chat-input-field-container br-20">
+  <div class="desktop-chat-input-container" id="meinTextarea">
+    <form class="desktop-chat-input-field-container br-20">
       <textarea
         [(ngModel)]="chatService.text"
         name="textarea"
@@ -300,14 +300,14 @@
         [placeholder]="'Antworten...'"
       ></textarea>
 
-      <div class="mobile-chat-input-field-icon-container">
-        <div class="mobile-chat-input-icon-container">
-          <div class="mobile-chat-border-right">
-            <div class="mobile-chat-input-icon">
+      <div class="desktop-chat-input-field-icon-container">
+        <div class="desktop-chat-input-icon-container">
+          <div class="desktop-chat-border-right">
+            <div class="desktop-chat-input-icon">
               <mat-icon>add</mat-icon>
             </div>
           </div>
-          <div class="mobile-chat-input-icon">
+          <div class="desktop-chat-input-icon">
             <mat-icon
               (click)="
                 chatService.onButtonClick($event); chatService.openDialogEmoji()
@@ -315,7 +315,7 @@
               >sentiment_satisfied</mat-icon
             >
           </div>
-          <div class="mobile-chat-input-icon">
+          <div class="desktop-chat-input-icon">
             <mat-icon
               (click)="
                 chatService.onButtonClick($event);
@@ -334,7 +334,7 @@
                   this.chatService.text
                 )
               "
-              class="mobile-chat-send-icon"
+              class="desktop-chat-send-icon"
               >send</mat-icon
             >
           </div>

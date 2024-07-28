@@ -15,6 +15,7 @@ import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
+import { ChannelService } from '../../../service/channel.service';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -50,6 +51,7 @@ export class DesktopChatComponent implements OnInit {
     public emojiService: EmojiService,
     public mainService: MainServiceService,
     public directMessageService: DirectMessageService,
+    public channelService: ChannelService,
     public loginService: LoginService,
     
   ) {
@@ -83,9 +85,6 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    setTimeout(() => {
-      console.log('Chat Daten', this.chatService.dataChannel);
-    }, 3000);
   }
 
   /**

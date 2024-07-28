@@ -23,7 +23,7 @@ import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.componen
 export class DesktopChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) {}
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   currentUser: any;
@@ -52,7 +52,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.directMessageService.directChatOpen = false;
     this.activeChannelId = channel.id;
     console.log('Channel Daten', channel);
-    
+
     this.chatService.dataChannel = channel;
   }
 
@@ -65,7 +65,7 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   navigateToChat(userId: string) {
-    this.router.navigate(['/direct-chat', userId]); 
+    this.router.navigate(['/direct-chat', userId]);
   }
 
 
@@ -73,7 +73,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.dialog.open(AddChannelComponent);
   }
 
-  
+
   openDialogNewMessage() {
     this.dialog.open(NewMessageComponent);
   }
@@ -87,5 +87,12 @@ export class DesktopChannelsComponent implements OnInit {
   openUserList() {
     this.userListOpen = !this.userListOpen;
     this.arrowIconUser = this.arrowIconUser === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
+  }
+
+  /**
+  * Sets the mobile chat status to open in the chat service.
+  */
+  setVariableOpenChat() {
+    this.chatService.mobileChatIsOpen = true;
   }
 }

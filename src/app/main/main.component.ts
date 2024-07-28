@@ -17,45 +17,48 @@ import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-ch
 import { MatIconModule } from '@angular/material/icon';
 import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-direct-chat.component';
 import { DirectMessageService } from '../service/direct-message.service';
+import { ChatService } from '../service/chat.service';
 
 @Component({
-    selector: 'app-main',
-    standalone: true,
-    templateUrl: './main.component.html',
-    styleUrl: './main.component.scss',
-    imports: [
-        MobileHeaderComponent,
-        DesktopHeaderComponent,
-        CommonModule,
-        DesktopChatComponent,
-        MobileChatComponent,
-        DesktopThreadComponent,
-        MobileThreadComponent,
-        DesktopChannelsComponent,
-        MobileChannelsComponent,
-        AddChannelComponent,
-        MatDialogModule,
-        UserProfileComponent,
-        DirectChatComponent,
-        MobileChatHeaderComponent,
-        MatIconModule,
-        DesktopDirectChatComponent
-    ]
+  selector: 'app-main',
+  standalone: true,
+  templateUrl: './main.component.html',
+  styleUrl: './main.component.scss',
+  imports: [
+    MobileHeaderComponent,
+    DesktopHeaderComponent,
+    CommonModule,
+    DesktopChatComponent,
+    MobileChatComponent,
+    DesktopThreadComponent,
+    MobileThreadComponent,
+    DesktopChannelsComponent,
+    MobileChannelsComponent,
+    AddChannelComponent,
+    MatDialogModule,
+    UserProfileComponent,
+    DirectChatComponent,
+    MobileChatHeaderComponent,
+    MatIconModule,
+    DesktopDirectChatComponent
+  ]
 })
-export class MainComponent  implements OnInit {
+export class MainComponent implements OnInit {
   isThreadOpen: boolean = false;
   isWorkspaceOpen: boolean = true;
   closeMenu: string = 'arrow_drop_up';
   closeMenuText: string = 'Workspace-Menü schließen';
   currentChannel: any = [];
-  
 
-  constructor(public mainService: MainServiceService, public directMessage: DirectMessageService) {}
+
+  constructor(public mainService: MainServiceService, public directMessage: DirectMessageService, public chatService: ChatService) { }
 
   ngOnInit(): void {
-
   }
 
+  /**
+  * Toggles the state of the workspace and updates the menu icon and text accordingly.
+  */
   closeOpenWorkspace() {
     this.isWorkspaceOpen = !this.isWorkspaceOpen;
     this.closeMenu = this.isWorkspaceOpen ? 'arrow_drop_up' : 'arrow_drop_down';

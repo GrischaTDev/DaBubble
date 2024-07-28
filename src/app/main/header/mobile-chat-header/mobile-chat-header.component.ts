@@ -9,6 +9,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
+import { ChatService } from '../../../service/chat.service';
 
 @Component({
   selector: 'app-mobile-chat-header',
@@ -18,9 +19,10 @@ import { User } from '../../../../assets/models/user.class';
   styleUrl: './mobile-chat-header.component.scss'
 })
 export class MobileChatHeaderComponent implements OnInit {
-  constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService, private router: Router, public chatService: ChatService) {}
   currentUser: any;
 
+  
   ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -55,4 +57,9 @@ export class MobileChatHeaderComponent implements OnInit {
       this.router.navigate(['login']);
     })
   }
+
+  closeMobileChat() {
+    this.router.navigate(['/main']);
+    this.chatService.mobileChatIsOpen = false;
+  } 
 }

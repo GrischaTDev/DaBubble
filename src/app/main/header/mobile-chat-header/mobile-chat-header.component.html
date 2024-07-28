@@ -1,9 +1,9 @@
 <header>
-    <a class="logo-container" href="main">
+    <div class="logo-container" (click)="closeMobileChat()">
         <mat-icon>chevron_left</mat-icon>
         <img class="logo" src="./assets/img/devscpace-logo.svg" alt="DaBubble logo">
         <span class="space-name">Devspace</span>
-    </a>
+    </div>
     <img (click)="openUserMenu()" class="user" src="{{ currentUser.avatar }}" alt="User avatar">
 </header>
 
