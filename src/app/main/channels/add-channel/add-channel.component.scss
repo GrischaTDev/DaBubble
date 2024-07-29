@@ -68,7 +68,6 @@
     right: 0;
     left: 0;
     height: 100vh;
-    background: #00000040;
     z-index: 400;
 
     >.menu-container {
@@ -155,6 +154,7 @@
         background-color: #796e6e52;
         width: 100%;
         top: 0;
+        z-index: 1000;
     }
     .add-channel-dialog {
         position: unset;
@@ -167,7 +167,6 @@
     .add-user {
         position: fixed;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.2509803922);
         z-index: 10;
         display: flex;
         align-items: center;
@@ -197,18 +196,14 @@
   gap: 12px;
   height: 32px;
   background-color: $background-lightblue;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+  border-radius: 25px;
   > img {
     height: 16px;
     width: 16px;
     border-radius: 100%;
   }
   width: fit-content;
-  margin-left: 8px;
-  margin-top: 4px;
+  margin-bottom: 10px;
 }
 
 .add-channel-add-users-close-icon {
@@ -216,7 +211,6 @@
 }
 
 .add-channel-push-addet-user-textarea {
-  all: unset;
   min-width: 90%;
   max-width: 90%;
   font-size: 18px;
@@ -226,24 +220,23 @@
   resize: none;
   word-wrap: break-word;
   font-family: Arial, "TwemojiMozilla";
-  height: 31px;
+  height: 65px;
   overflow-y: hidden;
-  margin-left: 12px;
-  margin-top: 8px;
+}
+
+.add-channel-user {
+  position: relative;
 }
 
 
 
 .add-channel-add-users-content-container {
-  position: fixed;
-  top: 265px;
+  position: absolute;
+  left: 0;
   max-width: 320px;
   max-height: calc(100vh - 450px);
-  left: calc((100vw - 260px) / 2) !important;
   background-color: $background-white;
-  border-top-right-radius: 25px;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+  border-radius: 25px;
   border: 0.5px solid $border-gray;
 }
 
