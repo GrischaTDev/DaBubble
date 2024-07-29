@@ -1,6 +1,5 @@
 import { Message } from './message.class';
 import { User } from './user.class';
-import firebase from 'firebase/compat/app'; // Firebase importieren, um mit Timestamps zu arbeiten
 
 export class Channel {
   id: string;
@@ -17,7 +16,6 @@ export class Channel {
   thread: string;
   messageToMe: boolean;
   ownerUser: User[] = [];
-  createdAt: firebase.firestore.Timestamp | null; // Neues createdAt-Feld hinzufügen
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
@@ -34,12 +32,10 @@ export class Channel {
     this.thread= obj?.thread || '';
     this.messageToMe = obj?.messageToMe;
     this.ownerUser = obj?.ownerUser || [];
-    this.createdAt = obj?.createdAt || null; // Initialisierung von createdAt
   }
 
   public toJSON() {
     return {
-      createdAt: this.createdAt, // createdAt in das JSON-Objekt aufnehmen
       id: this.id,
       name: this.name,
       description: this.description,
