@@ -146,8 +146,10 @@ export class MainServiceService {
         };
         this.allChannels.push(new Channel(channelData));
       });
+  
     });
   }
+  
 
   /**
    * Asynchronously adds or updates a document within a collection in Firestore.

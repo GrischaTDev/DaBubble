@@ -9,6 +9,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChatService } from '../../../service/chat.service';
 import { User } from '../../../../assets/models/user.class';
 import { ChannelService } from '../../../service/channel.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
 
 @Component({
   selector: 'app-add-channel',
@@ -26,6 +27,8 @@ export class AddChannelComponent implements OnInit {
   dataChannel: Channel = new Channel();
   isDesktop: boolean = false;
   isThreadOpen: boolean = false;
+  createdChannel: any;
+  activeChannelId: string | null = null;
   @Output() contentChange = new EventEmitter<string>();
 
 
@@ -36,7 +39,8 @@ export class AddChannelComponent implements OnInit {
     public mainService: MainServiceService,
     public ChatService: ChatService,
     public channelService: ChannelService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public directMessageService: DirectMessageService
   ) {
     this.channelService.pushUserToEditList();
   }
@@ -97,11 +101,21 @@ export class AddChannelComponent implements OnInit {
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.messageToMe = false;
     this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
-    this.mainService.addNewDocOnFirebase(
-      'channels',
-      this.dataChannel
-    );
+    this.mainService.addNewDocOnFirebase('channels',this.dataChannel);
     this.chatService.mobileChatIsOpen = true;
+
+    this.createdChannel = this.mainService.allChannels;
+    this.openChannel(this.createdChannel[1]);
+  }
+
+
+  openChannel(channel: any) {
+    this.directMessageService.desktopChatOpen = true;
+    this.directMessageService.directChatOpen = false;
+    this.activeChannelId = channel.id;
+    console.log('Channel Daten', channel);
+
+    this.chatService.dataChannel = channel;
   }
 
   /**
