@@ -33,10 +33,6 @@ import { ChannelService } from '../../../service/channel.service';
   styleUrl: './desktop-chat.component.scss',
 })
 export class DesktopChatComponent implements OnInit {
-
-
-  items$;
-  items;
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
@@ -55,16 +51,6 @@ export class DesktopChatComponent implements OnInit {
     public loginService: LoginService,
     
   ) {
-    this.route.params.subscribe((params: any) => {
-      this.parmsId = params.id;
-      chatService.idOfChannel = params.id;
-    });
-    if (this.parmsId) {
-      this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
-        this.chatService.dataChannel = channel;
-      });
-    }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
@@ -85,6 +71,33 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
+  }
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
+
+  /**
+   * Lifecycle hook that is called after every check of the component's view.
+   * Checks if the scrollHeight of the container has increased since the last check,
+   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
+   * and updates the last known scrollHeight.
+   */
+  ngAfterViewChecked() {
+    if (
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+    ) {
+      this.scrollToBottom();
+      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+    }
+  }
+
+  /**
+   * Scrolls the content of the scrollable container to the bottom.
+   * This is typically used to ensure the user sees the most recent messages or content added to the container.
+   */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
   }
 
   /**
