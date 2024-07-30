@@ -9,6 +9,7 @@ import { User } from '../../../../assets/models/user.class';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { LoginService } from '../../../service/login.service';
+import { MainServiceService } from '../../../service/main-service.service';
 
 @Component({
   selector: 'app-login-card',
@@ -24,13 +25,12 @@ import { LoginService } from '../../../service/login.service';
 })
 export class LoginCardComponent implements OnInit {
 
-  constructor(private firestore: Firestore, private router: Router, private loginService: LoginService) { }
+  constructor(private firestore: Firestore, private router: Router, private loginService: LoginService, private mainService: MainServiceService) { }
 
-  ngOnInit(): void {
-
+  async ngOnInit() {
     const auth = getAuth();
-
     this.loginService.logoutUser(auth);
+    await this.mainService.subChannelsList()
   }
   email: string = '';
   password: string = '';
@@ -44,7 +44,7 @@ export class LoginCardComponent implements OnInit {
       this.login(); // Ihre Anmeldelogik aufrufen
     }
   }
-  
+
 
   async login() {
     const auth = getAuth();
@@ -59,8 +59,11 @@ export class LoginCardComponent implements OnInit {
           }, { merge: true });
 
           localStorage.setItem('user', JSON.stringify(user));
-
-          this.router.navigate(['main']);
+          if(this.mainService.allChannels.length === 0){
+            this.router.navigate(['/main', 'no-channel']); 
+          } else {
+            this.router.navigate(['/main', this.mainService.allChannels[0].id]);
+          }
         }
       })
       .catch((error: any) => {
@@ -94,8 +97,11 @@ export class LoginCardComponent implements OnInit {
           }, { merge: true });
 
           localStorage.setItem('user', JSON.stringify(user));
-
-          this.router.navigate(['main']);
+          if(this.mainService.allChannels.length === 0){
+            this.router.navigate(['/main', 'no-channel']); 
+          } else {
+            this.router.navigate(['/main', this.mainService.allChannels[0].id]);
+          }
         }
       })
   }
@@ -128,9 +134,11 @@ export class LoginCardComponent implements OnInit {
             localStorage.setItem('user', JSON.stringify(user));
 
           }
-
-          this.router.navigate(['main']);
-
+          if(this.mainService.allChannels.length === 0){
+            this.router.navigate(['/main', 'no-channel']); 
+          } else {
+            this.router.navigate(['/main', this.mainService.allChannels[0].id]);
+          }
         }
       })
   }

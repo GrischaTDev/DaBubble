@@ -10,6 +10,10 @@ import { NewMessageComponent } from '../../new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
+import { setTimeout } from 'timers/promises';
+import { Subscription } from 'rxjs';
+import { doc, docData, Firestore } from '@angular/fire/firestore';
+import { Channel } from '../../../../assets/models/channel.class';
 
 
 
@@ -23,14 +27,15 @@ import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.componen
 export class DesktopChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
+  constructor( private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   currentUser: any;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
   selectedChannel: any;
-
+  private subscription: Subscription = new Subscription();
+  private itemsSubscription?: Subscription;
   activeChannelId: string | null = null;
 
 
@@ -39,20 +44,19 @@ export class DesktopChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
-
-    setTimeout(() => {
-      this.selectedChannel = this.mainService.allChannels;
-      this.openChannel(this.selectedChannel[0]);
-    }, 1500);
   }
 
 
   openChannel(channel: any) {
+    this.router.navigate(['/main', channel.id]);
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `channels/${channel.id}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.chatService.dataChannel = channel as Channel;
+    });
     this.directMessageService.desktopChatOpen = true;
     this.directMessageService.directChatOpen = false;
     this.activeChannelId = channel.id;
-    console.log('Channel Daten', channel);
-    this.chatService.dataChannel = channel;
   }
 
   openDirectChat(user: any) {

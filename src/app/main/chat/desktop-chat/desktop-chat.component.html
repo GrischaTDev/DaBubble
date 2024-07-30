@@ -53,13 +53,17 @@
       >
         <div
           class="desktop-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessage('✅', singleMessageIndex)"
+          (click)="
+            this.emojiService.addReactionToMessage('✅', singleMessageIndex)
+          "
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
           class="desktop-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessage('🙌', singleMessageIndex)"
+          (click)="
+            this.emojiService.addReactionToMessage('🙌', singleMessageIndex)
+          "
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
         </div>

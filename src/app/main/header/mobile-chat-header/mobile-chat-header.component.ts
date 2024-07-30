@@ -59,7 +59,7 @@ export class MobileChatHeaderComponent implements OnInit {
   }
 
   closeMobileChat() {
-    this.router.navigate(['/main']);
+    this.router.navigate(['/main', this.chatService.dataChannel.id]);
     this.chatService.mobileChatIsOpen = false;
   } 
 }

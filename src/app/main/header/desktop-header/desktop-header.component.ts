@@ -8,11 +8,13 @@ import { LoginService } from '../../../service/login.service';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
-import { collection, doc, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
+import { collection, doc, docData, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';
 import { SearchFieldService } from '../../../search-field.service';
+import { Subscription } from 'rxjs';
+import { Channel } from '../../../../assets/models/channel.class';
 
 
 @Component({
@@ -23,7 +25,8 @@ import { SearchFieldService } from '../../../search-field.service';
   styleUrl: './desktop-header.component.scss'
 })
 export class DesktopHeaderComponent implements OnInit {
-
+  private subscription: Subscription = new Subscription();
+  private itemsSubscription?: Subscription;
   currentUser: any;
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
@@ -63,9 +66,12 @@ export class DesktopHeaderComponent implements OnInit {
   openChannel(channel: any) {
     this.directMessageService.desktopChatOpen = true;
     this.directMessageService.directChatOpen = false;
-    
-    this.chatService.dataChannel = channel;
-
+    this.router.navigate(['/main', channel.id ]);
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `channels/${channel.id}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.chatService.dataChannel = channel as Channel;
+    });
     this.searchValue = '';
   }
 

@@ -10,6 +10,7 @@ import { ChatService } from '../../../service/chat.service';
 import { User } from '../../../../assets/models/user.class';
 import { ChannelService } from '../../../service/channel.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-channel',
@@ -32,6 +33,7 @@ export class AddChannelComponent implements OnInit {
   @Output() contentChange = new EventEmitter<string>();
 
 
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private chatService: ChatService,
@@ -40,7 +42,8 @@ export class AddChannelComponent implements OnInit {
     public ChatService: ChatService,
     public channelService: ChannelService,
     private cdr: ChangeDetectorRef,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
+    private router: Router,
   ) {
     this.channelService.pushUserToEditList();
   }
@@ -94,14 +97,14 @@ export class AddChannelComponent implements OnInit {
    * This function sets the channel's name and description based on class properties before creating a new Channel instance
    * and adding it to Firebase.
    */
-  addChannel() {
+ async addChannel() {
     this.closeDialog();
     this.dataChannel.channelUsers =  this.channelService.addetUser;
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.messageToMe = false;
     this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
-    this.mainService.addNewDocOnFirebase('channels',this.dataChannel);
+   await this.mainService.addNewDocOnFirebase('channels',this.dataChannel);
     this.chatService.mobileChatIsOpen = true;
 
     this.createdChannel = this.mainService.allChannels;
@@ -110,12 +113,10 @@ export class AddChannelComponent implements OnInit {
 
 
   openChannel(channel: any) {
+    this.router.navigate(['/main', this.mainService.docId ]);
     this.directMessageService.desktopChatOpen = true;
     this.directMessageService.directChatOpen = false;
-    this.activeChannelId = channel.id;
-    console.log('Channel Daten', channel);
-
-    this.chatService.dataChannel = channel;
+    this.activeChannelId = this.mainService.docId;
   }
 
   /**

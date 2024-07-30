@@ -84,6 +84,7 @@ export class MobileChatComponent implements OnInit {
     });
     this.checkScreenSize(window.innerWidth);
   }
+  
 
   /**
   * Handles window resize events by checking if the screen size exceeds a specific width.
@@ -100,7 +101,7 @@ export class MobileChatComponent implements OnInit {
   */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main']);
+      this.router.navigate(['/main', this.chatService.dataChannel.id]);
       this.chatService.mobileChatIsOpen = true;
     }
   }
@@ -129,7 +130,7 @@ export class MobileChatComponent implements OnInit {
    */
     scrollToBottom(): void {
       this.scrollContainer.nativeElement.scrollTop =
-        this.scrollContainer.nativeElement.scrollHeight;
+      this.scrollContainer.nativeElement.scrollHeight;
     }
 
 
