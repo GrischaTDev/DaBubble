@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
-import { NewMessageComponent } from '../../new-message/new-message.component';
+import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
@@ -30,7 +30,6 @@ export class DesktopChannelsComponent implements OnInit {
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
   selectedChannel: any;
-
   activeChannelId: string | null = null;
 
 
@@ -48,18 +47,27 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
+    this.chatService.newMessageOpen = false;
     this.activeChannelId = channel.id;
     console.log('Channel Daten', channel);
     this.chatService.dataChannel = channel;
   }
 
   openDirectChat(user: any) {
-    this.directMessageService.desktopChatOpen = false;
-    this.directMessageService.directChatOpen = true;
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
+    this.chatService.newMessageOpen = false;
     console.log('Direct Chat User', user);
     this.chatService.clickedUser = user;
+  }
+
+
+  openNewMessage() {
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = false;
+    this.chatService.newMessageOpen = true;
   }
 
 
@@ -70,11 +78,6 @@ export class DesktopChannelsComponent implements OnInit {
 
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);
-  }
-
-
-  openDialogNewMessage() {
-    this.dialog.open(NewMessageComponent);
   }
 
 

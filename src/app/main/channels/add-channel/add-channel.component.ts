@@ -110,8 +110,8 @@ export class AddChannelComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
     this.activeChannelId = channel.id;
     console.log('Channel Daten', channel);
 

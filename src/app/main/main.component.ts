@@ -18,6 +18,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-direct-chat.component';
 import { DirectMessageService } from '../service/direct-message.service';
 import { ChatService } from '../service/chat.service';
+import { NewMessageComponent } from './new-message/mobile-new-message/new-message.component';
+import { DesktopNewMessageComponent } from './new-message/desktop-new-message/desktop-new-message.component';
+
 
 @Component({
   selector: 'app-main',
@@ -40,7 +43,9 @@ import { ChatService } from '../service/chat.service';
     DirectChatComponent,
     MobileChatHeaderComponent,
     MatIconModule,
-    DesktopDirectChatComponent
+    DesktopDirectChatComponent,
+    NewMessageComponent,
+    DesktopNewMessageComponent
   ]
 })
 export class MainComponent implements OnInit {
