@@ -21,6 +21,7 @@ header {
     .input-and-result-container {
         display: flex;
         flex-direction: column;
+        width: 100%;
     }
 
     .result-container {
@@ -56,7 +57,6 @@ header {
     }
 
     .input-container {
-        width: 989px;
         position: relative;
         display: flex;
         justify-content: flex-end;

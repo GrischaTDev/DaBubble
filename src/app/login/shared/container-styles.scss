@@ -45,6 +45,9 @@
 .desktop-login-card-container {
     display: flex;
     justify-content: center;
+    height: calc(100% - 180px);
+    box-sizing: border-box;
+    align-items: center;
 }
 
 .impress-policy {

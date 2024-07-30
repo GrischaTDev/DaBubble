@@ -198,7 +198,7 @@
 
 @media(min-width: 756px) {
     .card {
-        width: 570px;
+        width: 500px;
         padding: 45px 32px;
 
         .google-btn {
@@ -216,5 +216,9 @@
 
     h1 {
         font-size: 46px;
+    }
+
+    .google-btn {
+        margin: 20px 0;
     }
 }
