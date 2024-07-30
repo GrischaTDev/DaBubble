@@ -7,28 +7,66 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { LoginService } from '../../../service/login.service';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
+import { collection, doc, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
+import { FormsModule } from '@angular/forms';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { ChatService } from '../../../service/chat.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 
 @Component({
   selector: 'app-desktop-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule, UserProfileComponent],
+  imports: [CommonModule, MatIconModule, UserProfileComponent, FormsModule],
   templateUrl: './desktop-header.component.html',
   styleUrl: './desktop-header.component.scss'
 })
 export class DesktopHeaderComponent implements OnInit {
+
   currentUser: any;
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router ) {}
+  searchValue: string = '';
+
+
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore, private directMessageService: DirectMessageService, private chatService: ChatService, public searchField: SearchFieldService) {}
 
 
   ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
+      this.mainService.loggedInUser = new User(user);
     });
+  }
+
+  /**
+   * 
+   * Opens a direct chat for the user that is clicked on.
+   * @param user - User that is clicked on.
+   */
+  openDirectChat(user: any) {
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
+    this.chatService.clickedUser = user;
+
+    this.searchValue = '';
+  }
+
+  /**
+   * 
+   * Opens a channel is clicked on.
+   * @param channel - Channel that is clicked on
+   */
+  openChannel(channel: any) {
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
+    
+    this.chatService.dataChannel = channel;
+
+    this.searchValue = '';
   }
 
 

@@ -5,13 +5,13 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
-
+import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +25,7 @@ export class ChatService {
     | MatDialogRef<DialogMentionUsersComponent, any>
     | MatDialogRef<DialogUserChatComponent, any>
     | MatDialogRef<DialogAddUserComponent, any>
+    | MatDialogRef<DialogEditChannelComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
@@ -44,6 +45,10 @@ export class ChatService {
   text: string = '';
   editText: string = '';
   loggedInUser: User = new User();
+  mobileChatIsOpen: boolean = false;
+  directChatOpen: boolean = false;
+  desktopChatOpen: boolean = true;;
+  newMessageOpen: boolean = false;;
 
   constructor(public mainService: MainServiceService, private router: Router) { }
 
@@ -162,7 +167,7 @@ export class ChatService {
    * @param {string} channelId - The ID of the channel where the document should be added.
    */
   sendMessage(docName: string, channelId: string) {
-    this.mainService.addDoc(docName, channelId, new Channel(this.dataChannel));
+    this.mainService.addDoc(docName, this.dataChannel.id, new Channel(this.dataChannel));
   }
 
   /**
@@ -172,12 +177,7 @@ export class ChatService {
    */
   setDate(timeFromServer: number): string {
     const date = new Date(timeFromServer);
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    };
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', };
     const localeDate = date.toLocaleDateString('de-DE', options);
     const today = new Date();
     const todayLocaleDate = today.toLocaleDateString('de-DE', options);
@@ -195,11 +195,7 @@ export class ChatService {
    */
   setTime(timeFromServer: number): string {
     const date = new Date(timeFromServer);
-    const formattedTime = date.toLocaleTimeString('de-DE', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+    const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit',minute: '2-digit',hour12: false,});
     return formattedTime;
   }
 
@@ -229,23 +225,6 @@ export class ChatService {
     }
   }
 
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
-
-  /**
-   * Lifecycle hook that is called after every check of the component's view.
-   * Checks if the scrollHeight of the container has increased since the last check,
-   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
-   * and updates the last known scrollHeight.
-   */
-  ngAfterViewChecked() {
-    if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
-    ) {
-      this.scrollToBottom();
-      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
-    }
-  }
 
   /**
  * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
@@ -256,11 +235,7 @@ export class ChatService {
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
       event.stopPropagation();
-      if (this.activeMessageIndex === index) {
-        this.closeIconContainer();
-      } else {
-        this.activeMessageIndex = index;
-      }
+      this.activeMessageIndex = index;
     }
   }
 
@@ -312,9 +287,9 @@ export class ChatService {
  * @param {string} newText - The new text to replace the existing message content.
  * @param {number} singleMessageIndex - The index of the message in the channel to be updated.
  */
- async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex:number) {
+  async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-    await this.sendMessage('channels', parmsId);
+    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
     this.closeWithoutSaving();
   }
 
@@ -339,14 +314,5 @@ export class ChatService {
  */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
-  }
-
-  /**
-   * Scrolls the content of the scrollable container to the bottom.
-   * This is typically used to ensure the user sees the most recent messages or content added to the container.
-   */
-  scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
   }
 }

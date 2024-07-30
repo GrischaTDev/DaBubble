@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
         sequence([
           query('h1', [
             style({ display: 'none', transform: 'translateX(-100%)' }),
-            animate('1.5s cubic-bezier(0.64, -0.84, 0.28, 1.3)', style({ display: 'block', transform: 'translateX(0)' }))
+            animate('500ms ease-in', style({ display: 'block', transform: 'translateX(0)' }))
           ], { optional: true })
         ])
       ]),

@@ -15,6 +15,7 @@ export class Channel {
   mentionUser: string;
   thread: string;
   messageToMe: boolean;
+  ownerUser: User[] = [];
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
@@ -30,6 +31,7 @@ export class Channel {
     this.mentionUser= obj?.mentionUser || [];
     this.thread= obj?.thread || '';
     this.messageToMe = obj?.messageToMe;
+    this.ownerUser = obj?.ownerUser || [];
   }
 
   public toJSON() {
@@ -55,7 +57,13 @@ export class Channel {
         thread: message.thread
       })),
       avatarChannel: this.avatarChannel,
-      messageToMe: this.messageToMe
+      messageToMe: this.messageToMe,
+      ownerUser: this.ownerUser.map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+      })),
     };
   }
 }

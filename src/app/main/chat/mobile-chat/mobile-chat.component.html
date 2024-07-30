@@ -4,7 +4,7 @@
     <div class="mobile-chat-header-headline">
       <p>#</p>
       <p>{{ chatService.dataChannel.name }}</p>
-      <mat-icon>keyboard_arrow_down</mat-icon>
+      <mat-icon (click)="channelService.openEditDialog()">keyboard_arrow_down</mat-icon>
     </div>
     <div>
       <div
@@ -51,13 +51,13 @@
       >
         <div
           class="mobile-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessage('✅')"
+          (click)="this.emojiService.addReactionToMessage('✅', singleMessageIndex)"
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessage('🙌')"
+          (click)="this.emojiService.addReactionToMessage('🙌', singleMessageIndex)"
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
         </div>
@@ -331,7 +331,7 @@
             <mat-icon
               (click)="
                 chatService.sendMessageFromChannel(
-                  this.parmsId,
+                  this.chatService.dataChannel.id,
                   this.chatService.text
                 )
               "

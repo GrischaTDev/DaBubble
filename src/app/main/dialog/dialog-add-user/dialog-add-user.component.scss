@@ -22,6 +22,7 @@
   max-height: calc(100vh - 350px);
   width: 304px;
   gap: 8px;
+  z-index: 1200;
   h2 {
     font-size: 24px;
     font-size: 700;
@@ -32,7 +33,6 @@
   position: absolute;
   top: 24px;
   right: 12px;
-
   cursor: pointer;
   width: 24px;
   height: 24px;
@@ -191,6 +191,17 @@
   margin-top: 15px;
   margin-bottom: 15px;
   max-height: calc(100vh - 500px);
+}
+
+.dialog-add-users-not-found-container {
+  overflow-y: scroll;
+  max-height: calc(100vh - 500px);
+  > div {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 18px;
+    font-weight: 500;
+  }
 }
 
 .dialog-add-users-content {

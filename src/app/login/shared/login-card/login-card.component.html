@@ -1,5 +1,5 @@
     <div class="card">
-        <form class="form-container">
+        <form class="form-container" (ngSubmit)="login()" >
             <h1>Anmelden</h1>
             <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
             <div class="input-fields">
@@ -28,14 +28,14 @@
                 <div class="line"></div>
             </div>
     
-            <button (click)="loginWithGoogle()" class="google-btn"> 
+            <button type="button" (click)="loginWithGoogle()" class="google-btn"> 
                 <img src="./../../../assets/icons/google-logo.png" alt=""> 
                 Anmelden mit Google
             </button>
     
             <div class="btn-container">
-                <button (click)="login()" class="primary-btn">Anmelden</button>
-                <button class="secondary-btn" (click)="loginAnonymus()">Gäste-Login</button>
+                <button type="submit" class="primary-btn">Anmelden</button>
+                <button type="button" class="secondary-btn" (click)="loginAnonymus()">Gäste-Login</button>
             </div>
     
         </form>

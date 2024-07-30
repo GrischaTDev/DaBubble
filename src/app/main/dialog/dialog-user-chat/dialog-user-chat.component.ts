@@ -7,6 +7,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { MainServiceService } from '../../../service/main-service.service';
 import { UserProfileService } from '../../../service/user-profile.service';
 import { ChatService } from '../../../service/chat.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
 
 @Component({
   selector: 'app-dialog-user-chat',
@@ -26,7 +27,8 @@ export class DialogUserChatComponent {
     public dialogRef: MatDialogRef<UserProfileComponent>,
     public mainService: MainServiceService,
     public chatService: ChatService,
-    public userProfileService: UserProfileService
+    public userProfileService: UserProfileService,
+    public directMessageService: DirectMessageService
   ) {}
 
   /**

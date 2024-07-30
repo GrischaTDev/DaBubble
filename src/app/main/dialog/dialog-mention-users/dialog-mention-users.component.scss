@@ -3,7 +3,7 @@
 .dialog-mention-users-container {
   position: fixed;
   right: 50px;
-  bottom: 210px;
+  bottom: 194px;
   display: inline-block;
   background-color: $background-white;
   border: 1px solid $border-gray;
@@ -92,16 +92,34 @@
   }
 }
 
-@media (max-width: 1279px) {
+@media (max-width: 1857px) {
   .dialog-mention-users-container {
-    right: 18px;
+    bottom: 178px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .dialog-mention-users-container {
+    bottom: 194px;
+  }
+}
+
+@media (max-width: 1320px) {
+  .dialog-mention-users-container {
+    bottom: 178px;
+  }
+}
+
+@media (max-width: 960px) {
+  .dialog-mention-users-container {
     bottom: 164px;
+    right: 16px;
   }
 }
 
 @media (max-width: 400px) {
   .dialog-mention-users-container {
-    right: calc((100vw - 343px) / 2);
+    right: calc((100vw - 320px) / 2);
     bottom: 164px;
   }
 }

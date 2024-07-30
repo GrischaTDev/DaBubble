@@ -11,7 +11,7 @@ export class Message {
   user0fTheEmoji: string[] = [];
   userIdEmoji: string[] = [];
   user: string[] = [];
-  emojiReaction: { emoji: string; user: string[] }[] = [];
+  emojiReaction: { emoji: string; user: string[]; userName: string[]; userAvatar: string[]}[] = [];
 
   constructor(obj?: any) {
     this.userId = obj?.userId || '';
