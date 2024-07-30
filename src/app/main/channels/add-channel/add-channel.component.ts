@@ -113,10 +113,12 @@ export class AddChannelComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.router.navigate(['/main', this.mainService.docId ]);
-    this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;
-    this.activeChannelId = this.mainService.docId;
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
+    this.activeChannelId = channel.id;
+    console.log('Channel Daten', channel);
+
+    this.chatService.dataChannel = channel;
   }
 
   /**

@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
-import { NewMessageComponent } from '../../new-message/new-message.component';
+import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { SearchFieldService } from '../../../search-field.service';
@@ -63,8 +63,8 @@ export class MobileChannelsComponent  implements OnInit {
   }
 
   openDirectChat(user: any) {
-    this.directMessageService.desktopChatOpen = false;
-    this.directMessageService.directChatOpen = true;
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
     this.chatService.clickedUser = user;
     this.searchValue = '';
   }
@@ -75,8 +75,8 @@ export class MobileChannelsComponent  implements OnInit {
    * @param channel - Channel that is clicked on
    */
   openChannel(channel: any) {
-    this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;  
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;  
     this.chatService.dataChannel = channel;
     this.searchValue = '';
     this.chatService.mobileChatIsOpen = true;

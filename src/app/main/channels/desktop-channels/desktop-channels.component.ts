@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddChannelComponent } from '../add-channel/add-channel.component';
 import { Router } from '@angular/router';
 import { ChatService } from '../../../service/chat.service';
-import { NewMessageComponent } from '../../new-message/new-message.component';
+import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
@@ -48,22 +48,24 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.router.navigate(['/main', channel.id]);
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `channels/${channel.id}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.chatService.dataChannel = channel as Channel;
-    });
     this.directMessageService.desktopChatOpen = true;
     this.directMessageService.directChatOpen = false;
     this.activeChannelId = channel.id;
   }
 
   openDirectChat(user: any) {
-    this.directMessageService.desktopChatOpen = false;
-    this.directMessageService.directChatOpen = true;
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
+    this.chatService.newMessageOpen = false;
     console.log('Direct Chat User', user);
     this.chatService.clickedUser = user;
+  }
+
+
+  openNewMessage() {
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = false;
+    this.chatService.newMessageOpen = true;
   }
 
 
@@ -74,11 +76,6 @@ export class DesktopChannelsComponent implements OnInit {
 
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);
-  }
-
-
-  openDialogNewMessage() {
-    this.dialog.open(NewMessageComponent);
   }
 
 

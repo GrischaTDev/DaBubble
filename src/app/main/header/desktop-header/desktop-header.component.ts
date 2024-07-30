@@ -51,8 +51,8 @@ export class DesktopHeaderComponent implements OnInit {
    * @param user - User that is clicked on.
    */
   openDirectChat(user: any) {
-    this.directMessageService.desktopChatOpen = false;
-    this.directMessageService.directChatOpen = true;
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
     this.chatService.clickedUser = user;
 
     this.searchValue = '';
@@ -64,8 +64,8 @@ export class DesktopHeaderComponent implements OnInit {
    * @param channel - Channel that is clicked on
    */
   openChannel(channel: any) {
-    this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
     this.router.navigate(['/main', channel.id ]);
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `channels/${channel.id}`);
