@@ -26,7 +26,8 @@ import { Channel } from '../../../../assets/models/channel.class';
 })
 export class DesktopChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
-
+  private subscription: Subscription = new Subscription();
+  private itemsSubscription?: Subscription;
   constructor( private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
@@ -34,8 +35,6 @@ export class DesktopChannelsComponent implements OnInit {
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
   selectedChannel: any;
-  private subscription: Subscription = new Subscription();
-  private itemsSubscription?: Subscription;
   activeChannelId: string | null = null;
 
 
@@ -48,8 +47,14 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.directMessageService.desktopChatOpen = true;
-    this.directMessageService.directChatOpen = false;
+    this.router.navigate(['/main', channel.id]);
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `channels/${channel.id}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.chatService.dataChannel = channel as Channel;
+    });
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
     this.activeChannelId = channel.id;
   }
 
