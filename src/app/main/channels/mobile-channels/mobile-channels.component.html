@@ -19,7 +19,16 @@
                     {{ channel['name'] }}
                 </div>
             </div>
-            <div *ngIf="searchField.filterChannel.length === 0 && searchField.filterUser.length === 0" >
+            <div *ngIf="searchField.filterMessage.length > 0">
+                <p>Nachrichten:</p>
+                <div class="user-list-container" *ngFor="let message of searchField.filterMessage"
+                    (click)="openChannel(message['channelData'])">
+                    [{{ message['channelName'] }}]
+                    {{ message['message'] }}
+                </div>
+            </div>
+
+            <div *ngIf="searchField.filterChannel.length === 0 && searchField.filterUser.length === 0 && searchField.filterMessage.length === 0" >
                 <p>Keine Ergebnisse gefunden.</p>
             </div>
         </div>
