@@ -164,7 +164,7 @@ export class ChatService {
    * @param {string} channelId - The ID of the channel where the document should be added.
    */
   sendMessage(docName: string, channelId: string) {
-    this.mainService.addDoc(docName, channelId, new Channel(this.dataChannel));
+    this.mainService.addDoc(docName, this.dataChannel.id, new Channel(this.dataChannel));
   }
 
   /**
@@ -174,12 +174,7 @@ export class ChatService {
    */
   setDate(timeFromServer: number): string {
     const date = new Date(timeFromServer);
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    };
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', };
     const localeDate = date.toLocaleDateString('de-DE', options);
     const today = new Date();
     const todayLocaleDate = today.toLocaleDateString('de-DE', options);
@@ -197,11 +192,7 @@ export class ChatService {
    */
   setTime(timeFromServer: number): string {
     const date = new Date(timeFromServer);
-    const formattedTime = date.toLocaleTimeString('de-DE', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
+    const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit',minute: '2-digit',hour12: false,});
     return formattedTime;
   }
 
@@ -231,23 +222,6 @@ export class ChatService {
     }
   }
 
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
-
-  /**
-   * Lifecycle hook that is called after every check of the component's view.
-   * Checks if the scrollHeight of the container has increased since the last check,
-   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
-   * and updates the last known scrollHeight.
-   */
-  ngAfterViewChecked() {
-    if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
-    ) {
-      this.scrollToBottom();
-      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
-    }
-  }
 
   /**
  * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
@@ -258,11 +232,7 @@ export class ChatService {
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
       event.stopPropagation();
-      if (this.activeMessageIndex === index) {
-        this.closeIconContainer();
-      } else {
-        this.activeMessageIndex = index;
-      }
+      this.activeMessageIndex = index;
     }
   }
 
@@ -316,7 +286,7 @@ export class ChatService {
  */
   async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-    await this.sendMessage('channels', parmsId);
+    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
     this.closeWithoutSaving();
   }
 
@@ -341,14 +311,5 @@ export class ChatService {
  */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
-  }
-
-  /**
-   * Scrolls the content of the scrollable container to the bottom.
-   * This is typically used to ensure the user sees the most recent messages or content added to the container.
-   */
-  scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
   }
 }

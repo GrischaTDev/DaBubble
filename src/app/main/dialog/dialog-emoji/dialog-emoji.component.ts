@@ -31,7 +31,7 @@ export class DialogEmojiComponent {
     public mainService: MainServiceService,
     public chatService: ChatService,
     public emojiService: EmojiService
-  ) {}
+  ) { }
   inputContent: any;
 
   /**
@@ -43,8 +43,7 @@ export class DialogEmojiComponent {
       this.inputContent = ' ' + event.emoji.native;
       this.mainService.changeInputContent(this.inputContent);
     } else {
-      this.emojiService.addReactionToMessage(event.emoji.native);
-      this.mainService.changeReactionContent(event.emoji.native);
+      this.emojiService.addReactionToMessage(event.emoji.native, this.chatService.indexOfChannelMessage);
     }
     this.chatService.closeDialog();
   }

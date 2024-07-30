@@ -1,4 +1,4 @@
-import { Component, inject, HostListener, OnInit } from '@angular/core';
+import { Component, inject, HostListener, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -104,6 +104,34 @@ export class MobileChatComponent implements OnInit {
       this.chatService.mobileChatIsOpen = true;
     }
   }
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
+
+  /**
+   * Lifecycle hook that is called after every check of the component's view.
+   * Checks if the scrollHeight of the container has increased since the last check,
+   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
+   * and updates the last known scrollHeight.
+   */
+  ngAfterViewChecked() {
+    if (
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+    ) {
+      this.scrollToBottom();
+      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+    }
+  }
+
+    /**
+   * Scrolls the content of the scrollable container to the bottom.
+   * This is typically used to ensure the user sees the most recent messages or content added to the container.
+   */
+    scrollToBottom(): void {
+      this.scrollContainer.nativeElement.scrollTop =
+        this.scrollContainer.nativeElement.scrollHeight;
+    }
+
 
   /**
    * A lifecycle hook that is called when the component is destroyed.

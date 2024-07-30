@@ -37,6 +37,15 @@ export class LoginCardComponent implements OnInit {
   wrongPassword: string | undefined;
   wrongEmail: string | undefined;
 
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Standardverhalten verhindern (Formularübermittlung)
+      this.login(); // Ihre Anmeldelogik aufrufen
+    }
+  }
+  
+
   async login() {
     const auth = getAuth();
     await signInWithEmailAndPassword(auth, this.email, this.password)

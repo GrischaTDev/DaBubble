@@ -52,7 +52,6 @@ export class DesktopChannelsComponent implements OnInit {
     this.directMessageService.directChatOpen = false;
     this.activeChannelId = channel.id;
     console.log('Channel Daten', channel);
-
     this.chatService.dataChannel = channel;
   }
 

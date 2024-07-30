@@ -3,25 +3,20 @@
 
     <div class="input-and-result-container">
         <div class="input-container">
-            <input [(ngModel)]="searchValue" (ngModelChange)="searchField.filterData(searchValue)" type="search"
-                placeholder="Code learning durchsuchen">
-            <mat-icon>search</mat-icon>
+            <input [(ngModel)]="searchValue" (ngModelChange)="searchField.filterData(searchValue)" type="search" placeholder="Code learning durchsuchen">
+            <mat-icon *ngIf="!searchValue">search</mat-icon>
         </div>
         <div *ngIf="searchValue" class="result-container">
             <div *ngIf="searchField.filterUser.length > 0">
                 <p>Benutzer:</p>
-                <div class="user-list-container" *ngFor="let user of searchField.filterUser"
-                    (click)="openDirectChat(user)">
-                    <img src="{{ user['avatar'] }}" alt="">
-                    {{ user['name'] }}
+                <div class="user-list-container" *ngFor="let user of searchField.filterUser" (click)="openDirectChat(user)">
+                    <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
                 </div>
             </div>
             <div *ngIf="searchField.filterChannel.length > 0">
                 <p>Channel:</p>
-                <div class="user-list-container" *ngFor="let channel of searchField.filterChannel"
-                    (click)="openChannel(channel)">
-                    <span>#</span>
-                    {{ channel['name'] }}
+                <div class="user-list-container" *ngFor="let channel of searchField.filterChannel" (click)="openChannel(channel)">
+                    <span>#</span>{{ channel['name'] }}
                 </div>
             </div>
             <div *ngIf="searchField.filterMessage.length > 0">

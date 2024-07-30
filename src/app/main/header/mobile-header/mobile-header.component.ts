@@ -7,6 +7,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
 
 @Component({
   selector: 'app-mobile-header',
@@ -28,6 +29,7 @@ export class MobileHeaderComponent implements OnInit {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
+      this.mainService.loggedInUser = new User(user);
     });
   }
 

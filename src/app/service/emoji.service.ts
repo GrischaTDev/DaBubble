@@ -22,12 +22,14 @@ export class EmojiService {
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
    * @param {string} emoji - The emoji character to add as a reaction.
    */
-  addReactionToMessage(emoji: string) {
+  addReactionToMessage(emoji: string, index: number) {
+    this.chatService.indexOfChannelMessage = index;
     let data =
       this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction;
     if (data.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, data);
       this.selectionTheAddedEmoji(emoji);
+
     } else {
       this.pushEmojiToArray(emoji);
       this.resetReactionVariables();
@@ -62,7 +64,7 @@ export class EmojiService {
     this.additionalReaction = true;
     this.chatService.indexOfChannelMessage = singleMessageIndex;
     this.emojiIndex = emojiIndex;
-    this.addReactionToMessage(emoji);
+    this.addReactionToMessage(emoji, this.chatService.indexOfChannelMessage);
   }
 
   /**
@@ -91,15 +93,16 @@ export class EmojiService {
    * @param {string} emoji - The emoji to be added or checked within the array.
    */
   selectionTheAddedEmoji(emoji: string) {
-    let usersFromEmoji =
-      this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex].user;
-    if (!this.userIsAvailable && !this.emojiIsAvailable) {
+
+    let arrayEmoji =
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex];
+      if (!this.userIsAvailable && !this.emojiIsAvailable) {
       this.pushEmojiToArray(emoji);
     } else if (!this.userIsAvailable && this.emojiIsAvailable) {
-      this.pushUserToArray(usersFromEmoji);
+      this.pushUserToArray(arrayEmoji);
     } else if (this.userIsAvailable && this.emojiIsAvailable) {
       if (!this.mainService.emojiReactionMessage) {
-        this.removeUserFromEmoji(usersFromEmoji);
+        this.removeUserFromEmoji(arrayEmoji);
       }
     } else {
       this.pushEmojiToArray(emoji);
@@ -108,16 +111,32 @@ export class EmojiService {
   }
 
   /**
-   * Adds a new emoji to the array of emoji reactions for the current message in the channel.
-   * Initializes a new reaction entry with the emoji and adds the logged-in user as the first reactor.
-   * Updates the channel's document data with the new reaction list and resets availability flags.
-   * @param {string} emoji - The emoji to be added to the reaction array.
-   */
+  * Adds a new emoji reaction to the current message channel.
+  * This method first resets the existing emoji data arrays, sets the new emoji, 
+  * and then records the reacting user's ID, name, and avatar. It finally pushes 
+  * the updated emoji data to the appropriate message channel's emoji reactions.
+  *
+  * @param {string} emoji - The emoji character or string to be added to the message.
+  */
   pushEmojiToArray(emoji: string) {
+    this.resetEmojiArray();
     this.newEmoji.emoji = emoji;
-    this.newEmoji.user = [];
     this.newEmoji.user.push(this.mainService.loggedInUser.id);
+    this.newEmoji.userName.push(this.mainService.loggedInUser.name);
+    this.newEmoji.userAvatar.push(this.mainService.loggedInUser.avatar);
     this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
+  }
+
+  /**
+  * Resets the emoji arrays for a user.
+  * Clears all existing emoji data by emptying the arrays that hold user emojis,
+  * user names, and user avatars. This method is typically used when initializing
+  * or reinitializing user data in the emoji handling system.
+  */
+  resetEmojiArray() {
+    this.newEmoji.user = [];
+    this.newEmoji.userName = [];
+    this.newEmoji.userAvatar = [];
   }
 
   /**
@@ -125,21 +144,32 @@ export class EmojiService {
    * Updates the document data in Firestore for the channel with the updated reactions.
    * @param {string} emoji - The emoji associated with the reaction to which the user ID is added.
    */
-  pushUserToArray(usersFromEmoji: string[]) {
-    usersFromEmoji.push(this.mainService.loggedInUser.id);
+  pushUserToArray(arrayEmoji: any) {
+    arrayEmoji.user.push(this.mainService.loggedInUser.id);
+    arrayEmoji.userName.push(this.mainService.loggedInUser.name);
+    arrayEmoji.userAvatar.push(this.mainService.loggedInUser.avatar);
   }
 
-  removeUserFromEmoji(usersFromEmoji: string[]) {
-    if (usersFromEmoji.length !== 0) {
-      for (let index = 0; index < usersFromEmoji.length; index++) {
-        const user = usersFromEmoji[index];
-        if (user === this.mainService.loggedInUser.id) {
-          this.emojiIndex = index;
-          usersFromEmoji.splice(index, 1);
+  /**
+  * Removes the logged-in user from the specified emoji object.
+  * It updates the emoji object by removing user ID, userName, and userAvatar from their respective arrays.
+  * If there are no users left in the emoji object, it calls `removeEmijie`.
+  *
+  * @param {Object} arrayEmoji - The emoji object containing arrays of user IDs, user names, and user avatars.
+  */
+  removeUserFromEmoji(arrayEmoji: any) {
+    for (let index = 0; index < arrayEmoji.user.length; index++) {
+      const user = arrayEmoji.user[index];
+      if (user === this.mainService.loggedInUser.id) {
+        this.emojiIndex = index;
+        arrayEmoji.user.splice(index, 1);
+        arrayEmoji.userName.splice(index, 1);
+        arrayEmoji.userAvatar.splice(index, 1);
+        if (arrayEmoji.user !== 0) {
+        } else {
+          this.removeEmijie();
         }
       }
-    } else {
-      this.removeEmijie();
     }
   }
 
@@ -162,7 +192,6 @@ export class EmojiService {
     this.emojiIsAvailable = false;
     this.userIsAvailable = false;
     this.mainService.emojiReactionMessage = false;
-    this.mainService.setDocData('channels', this.chatService.idOfChannel, this.chatService.dataChannel
-    );
+    this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
   }
 }

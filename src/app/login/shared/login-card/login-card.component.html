@@ -1,5 +1,5 @@
     <div class="card">
-        <form class="form-container">
+        <form class="form-container" (keydown)="handleKeyDown($event)">
             <h1>Anmelden</h1>
             <p>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</p>
             <div class="input-fields">
@@ -34,7 +34,7 @@
             </button>
     
             <div class="btn-container">
-                <button (click)="login()" class="primary-btn">Anmelden</button>
+                <button type="submit" (click)="login()" class="primary-btn">Anmelden</button>
                 <button class="secondary-btn" (click)="loginAnonymus()">Gäste-Login</button>
             </div>
     
