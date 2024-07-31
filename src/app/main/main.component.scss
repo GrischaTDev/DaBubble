@@ -17,12 +17,13 @@ body {
 
 app-desktop-channels {
   width: 366px;
+  margin-right: 25px;
 }
 
 
-app-desktop-chat, app-desktop-direct-chat, app-new-message {
+app-desktop-chat, app-desktop-direct-chat, app-desktop-new-message {
   flex-grow: 1;
-  margin-left: 25px;
+  
 }
 
 app-desktop-thread {

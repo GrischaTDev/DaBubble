@@ -55,6 +55,7 @@ export class DesktopChannelsComponent implements OnInit {
     });
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
+    this.chatService.newMessageOpen = false;
     this.activeChannelId = channel.id;
   }
 
