@@ -19,6 +19,9 @@ export class UserProfileService {
 
   currentUser: any;
 
+  isEmailSend: boolean = false;
+  isEmailError: boolean = false;
+
   constructor(public mainService: MainServiceService, private firestore: Firestore, private loginService: LoginService) {}
 
 
@@ -37,7 +40,7 @@ export class UserProfileService {
       name: name,
     }, { merge: true });
 
-    if(email) {
+    if(email !== this.currentUser.email) {
       this.updateEmailToAuth(email);
     }
   }
@@ -50,9 +53,9 @@ export class UserProfileService {
     if(user) {
 
       await verifyBeforeUpdateEmail(user, newEmail).then(() => {
-        console.log("Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine neue E-Mail-Adresse und bestätige sie.");
+        this.isEmailSend = true;
       }).catch((error) => {
-        console.error("Fehler beim Senden der Verifizierungs-E-Mail:", error);
+        this.isEmailError = true;
       });
 
     }

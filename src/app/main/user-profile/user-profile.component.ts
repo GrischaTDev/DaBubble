@@ -76,6 +76,11 @@ export class UserProfileComponent {
     let email =  this.updateUserEmail;
     await this.userProfileService.updateUserProfile(name, email);
     this.loggedInUser = this.mainService.loggedInUser;
-    this.editProfileOpen = false;
+
+    setTimeout(() => {
+      this.editProfileOpen = false;
+      this.userProfileService.isEmailError = false;
+      this.userProfileService.isEmailSend = false;
+    }, 3000);
   }
 }
