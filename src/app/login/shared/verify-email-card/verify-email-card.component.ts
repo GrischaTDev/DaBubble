@@ -21,7 +21,7 @@ export class VerifyEmailCardComponent {
   oobCode: string | undefined;
   newEmail: string = '';
 
-  constructor(private loginService: LoginService, private router: Router, private firestore: Firestore ) {}
+  constructor(private loginService: LoginService, private router: Router, private firestore: Firestore) { }
 
   async verifyEmail(event: any) {
 
@@ -30,6 +30,8 @@ export class VerifyEmailCardComponent {
     const auth = getAuth();
     const user = auth.currentUser;
 
+    console.log('Eingegebene E-Mail Adresse:', this.newEmail)
+
     try {
 
       if (this.newEmail) {
@@ -37,11 +39,14 @@ export class VerifyEmailCardComponent {
         this.loginService.setResetPasswordOverlay(true);
 
         if (user) {
-          await updateEmail(user, this.newEmail);
 
           await setDoc(doc(this.firestore, 'users', user.uid), {
-          email: this.newEmail
-        }, { merge: true });
+            email: this.newEmail
+          }, { merge: true });
+          console.log('Daten wurden auf firebase hochgeladen..')
+
+          await updateEmail(user, this.newEmail);
+          console.log(user);
 
           setTimeout(() => {
             this.loginService.setResetPasswordOverlay(false);
@@ -54,8 +59,17 @@ export class VerifyEmailCardComponent {
 
     } catch (error: any) {
 
-      if(error.code === 'auth/user-token-expired') {
-        this.router.navigate(['login']);
+      if(user) {
+
+        await setDoc(doc(this.firestore, 'users', user.uid), {
+          email: this.newEmail
+        }, { merge: true });
+        console.log('Daten wurden auf firebase hochgeladen..')
+  
+        if (error.code === 'auth/user-token-expired') {
+          this.router.navigate(['login']);
+        }
+
       }
 
     }

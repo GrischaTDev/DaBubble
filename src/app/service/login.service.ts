@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { doc, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 
@@ -26,7 +27,7 @@ export class LoginService {
   private loggedInUserSubject = new BehaviorSubject<User | null>(null);
   loggedInUser$: Observable<User | null> = this.loggedInUserSubject.asObservable();
 
-  constructor(private firestore: Firestore, private router: Router) {
+  constructor(private firestore: Firestore, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
 
     this.checkLocalStorage();
   }
@@ -48,11 +49,13 @@ export class LoginService {
   }
 
   private checkLocalStorage() {
-    const user = localStorage.getItem('user');
-    if (user) {
-      this.loggedInUserSubject.next(JSON.parse(user));
-    } else {
-      console.log('No User in localStorage.')
+    if(isPlatformBrowser(this.platformId)) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.loggedInUserSubject.next(JSON.parse(user));
+      } else {
+        console.log('No User in localStorage.')
+      }
     }
   }
 
@@ -106,6 +109,14 @@ export class LoginService {
         })
 
     }
+  }
+
+  handleActionCode(actionCode: string, oobCode: string) {
+    if (actionCode === 'resetPassword') {
+      this.router.navigate(['/new-password'], { queryParams: { oobCode } });
+    } else if (actionCode === 'verifyAndChangeEmail') {
+      this.router.navigate(['/verify-email'], { queryParams: { oobCode } });
+    } 
   }
 
   isLoggedIn(): boolean {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { LoginComponent } from "./login/login/login.component";
+import { LoginService } from './service/login.service';
 
 @Component({
     selector: 'app-root',
@@ -11,4 +12,17 @@ import { LoginComponent } from "./login/login/login.component";
 })
 export class AppComponent {
   title = 'da-bubble';
+
+  constructor(private loginService: LoginService, private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const actionCode = params['mode'];
+      const oobCode = params['oobCode'];
+      if (actionCode && oobCode) {
+        this.loginService.handleActionCode(actionCode, oobCode);
+      }
+    });
+  }
+
 }
