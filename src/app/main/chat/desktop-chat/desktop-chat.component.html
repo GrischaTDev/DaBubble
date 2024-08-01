@@ -1,13 +1,35 @@
 <div class="desktop-chat-container" (click)="chatService.closeDialog()">
   <div class="desktop-chat-header-container">
-    <div class="desktop-chat-header-headline">
+    <div class="desktop-chat-header-headline" (click)="channelService.openEditDialog()">
       <p>#</p>
       <p>{{ chatService.dataChannel.name }}</p>
-      <mat-icon (click)="channelService.openEditDialog()"
+      <mat-icon 
         >keyboard_arrow_down</mat-icon
       >
     </div>
     <div>
+      <div
+      class="desktop-chat-header-members-container"
+      (click)="
+          this.chatService.doNotClose($event); chatService.openDialogAddUser()
+        "
+      >
+      <div>
+       <img class="desktop-chat-header-members-img" src="{{ this.chatService.dataChannel.ownerUser[0].avatar }}" alt="singleUserHeaderImg">
+      </div>
+      <div
+      *ngFor="
+        let singleUserHeader of chatService.dataChannel.channelUsers;
+        let singleUserIndexHeader = index
+      "
+      >
+      <img class="desktop-chat-header-members-img" src="{{ singleUserHeader.avatar }}" alt="singleUserHeaderImg">
+      
+      </div>
+      <span class="desktop-chat-header-members-number">
+        {{ chatService.dataChannel.channelUsers.length + 1 }}
+      </span>
+    </div>
       <div
         class="desktop-chat-header-icon"
         (click)="

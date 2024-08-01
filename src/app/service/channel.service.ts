@@ -48,7 +48,7 @@ export class ChannelService {
         const user = this.addetUser[index];
         this.chatService.dataChannel.channelUsers.push(new User(user));
       }
-      this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+      this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
       this.closePeopleSearch();
       this.editChannelAddUserIsOpen = false;
     }
@@ -147,7 +147,7 @@ export class ChannelService {
   async saveChannelName() {
     if (!this.isChannelNameEmpty) {
       this.chatService.dataChannel.name = this.textareaChannelName;
-      await this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+      await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
     }
     this.editChannelNameIsOpen = false;
   }
@@ -160,7 +160,7 @@ export class ChannelService {
     console.log('this.isEmpty', this.isEmpty)
     if (!this.isChannelDescriptionEmpty) {
       this.chatService.dataChannel.description = this.textareaChannelDescription;
-      await this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+      await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
     }
     this.editChannelDescriptionIsOpen = false;
   }
@@ -181,7 +181,7 @@ async leaveChannel() {
           this.chatService.dataChannel.channelUsers.splice(index, 1);
         }
       }
-      await this.mainService.addDoc('channels', this.chatService.idOfChannel, new Channel(this.chatService.dataChannel));
+      await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
       this.closeEditChannelDialog();
       this.router.navigate(['/main']);
     }

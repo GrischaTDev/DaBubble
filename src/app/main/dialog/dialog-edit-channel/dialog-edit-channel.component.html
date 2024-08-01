@@ -33,18 +33,20 @@
         >
           <span>Channel-Name</span>
           <div
-            class="edit-channel-icon"
+            class="edit-channel-icon-mobile edit-channel-icon-desktop"
             *ngIf="!channelService.editChannelNameIsOpen"
             (click)="channelService.editChannelName()"
           >
-            <mat-icon>edit</mat-icon>
+            <p class="d-none-texte">Bearbeiten</p>
+            <mat-icon class="d-none-icon">edit</mat-icon>
           </div>
           <div
             class="edit-channel-icon"
             *ngIf="channelService.editChannelNameIsOpen"
             (click)="channelService.saveChannelName()"
           >
-            <mat-icon>check_circle</mat-icon>
+            <p class="d-none-texte">Speichern</p>
+            <mat-icon class="d-none-icon">check_circle</mat-icon>
           </div>
         </div>
         <div
@@ -83,18 +85,20 @@
         >
           <span>Beschreibung</span>
           <div
-            class="edit-channel-icon"
+            class="edit-channel-icon-mobile edit-channel-icon-desktop"
             *ngIf="!channelService.editChannelDescriptionIsOpen"
             (click)="channelService.editChannelDescription()"
           >
-            <mat-icon>edit</mat-icon>
+            <p class="d-none-texte">Bearbeiten</p>
+            <mat-icon class="d-none-icon">edit</mat-icon>
           </div>
           <div
             class="edit-channel-icon"
             *ngIf="channelService.editChannelDescriptionIsOpen"
             (click)="channelService.saveChannelDescription()"
           >
-            <mat-icon>check_circle</mat-icon>
+            <p class="d-none-texte">Speichern</p>
+            <mat-icon class="d-none-icon">check_circle</mat-icon>
           </div>
         </div>
         <div
@@ -176,6 +180,10 @@
         <span
           (click)="channelService.leaveChannel()"
           class="edit-channel-add-users-button"
+          [ngClass]="{
+            'edit-channel-channel-leave-button':
+              this.channelService.editChannelDescriptionIsOpen
+          }"
           >Channel verlassen</span
         >
       </div>

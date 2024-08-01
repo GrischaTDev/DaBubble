@@ -1,5 +1,5 @@
 @import "./../../../../styles.scss";
-@import '@ctrl/ngx-emoji-mart/picker';
+@import "@ctrl/ngx-emoji-mart/picker";
 
 @font-face {
   font-family: "TwemojiMozilla";
@@ -39,12 +39,26 @@
   justify-content: center;
   gap: 8px;
   margin-left: 16px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  height: 24px;
+  margin-top: 14px;
+  cursor: pointer;
   p {
     font-size: 20px;
     font-weight: 700;
   }
-  mat-icon{
-    cursor: pointer;
+  &:hover {
+    background-color: $background-lightblue;
+    color: $background-purple;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
   }
 }
 
@@ -65,6 +79,37 @@
   }
 }
 
+.desktop-chat-header-members-container {
+  margin-right: 24px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  cursor: pointer;
+  &:hover {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background-color: $background-lightblue;
+    color: $background-purple;
+  }
+}
+
+.desktop-chat-header-members-number {
+  margin-left: 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.desktop-chat-header-members-img {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  border: 2px solid $background-white;
+  margin-right: -12px;
+}
+
 .desktop-chat-content {
   width: 100%;
   max-height: calc(100vh - 285px);
@@ -73,7 +118,6 @@
   margin-left: 25px;
   margin-right: 25px;
   margin-bottom: 25px;
-
 }
 
 /* -----------DESKTOP-------------- */
@@ -136,7 +180,7 @@
   margin-left: calc(100% - 224px);
   width: 200px;
 }
- 
+
 .desktop-chat-edit-message-container-right {
   margin-left: 24px;
   width: 255px;
@@ -208,7 +252,6 @@
   padding-left: 16px;
   z-index: 1;
 }
-
 
 .desktop-chat-message-container-from-me {
   padding-top: 12px;
@@ -352,7 +395,7 @@
 }
 
 .desktop-chat-input-field-container {
-  width:calc(100% - 50px);
+  width: calc(100% - 50px);
   min-height: 145px;
   padding-top: 4px;
   padding-bottom: 4px;
