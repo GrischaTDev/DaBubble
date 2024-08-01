@@ -12,6 +12,8 @@ import { UserProfileComponent } from './main/user-profile/user-profile.component
 import { MobileThreadComponent } from './main/thread/mobile-thread/mobile-thread.component';
 import { DesktopThreadComponent } from './main/thread/desktop-thread/desktop-thread.component';
 import { authGuard } from './auth.guard';
+import { ImprintComponent } from './imprint/imprint.component';
+import { PolicyComponent } from './policy/policy.component';
 
 
 export const routes: Routes = [
@@ -27,4 +29,6 @@ export const routes: Routes = [
     { path: 'user-profile', component: UserProfileComponent, resolve: {auth: authGuard} },
     { path: 'chat/:id', component: MobileChatComponent, resolve: {auth: authGuard} },
     { path: 'direct-chat/:userId', component: DirectChatComponent, resolve: {auth: authGuard} },
+    { path: 'imprint', component: ImprintComponent },
+    { path: 'policy', component: PolicyComponent }
 ];
