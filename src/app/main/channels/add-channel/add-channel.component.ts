@@ -65,6 +65,7 @@ export class AddChannelComponent implements OnInit {
   }
 
   closeDialog() {
+    this.channelService.addetUser = [];
     this.dialogRef.close();
     setTimeout(() => {
       this.isAddUserMenuOpen = false;
@@ -97,18 +98,25 @@ export class AddChannelComponent implements OnInit {
    * This function sets the channel's name and description based on class properties before creating a new Channel instance
    * and adding it to Firebase.
    */
- async addChannel() {
+  async addChannel() {
     this.closeDialog();
-    this.dataChannel.channelUsers =  this.channelService.addetUser;
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.date = Date.now();
+    this.pushUserToNewChannel();
     this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
-   await this.mainService.addNewDocOnFirebase('channels',this.dataChannel);
+    await this.mainService.addNewDocOnFirebase('channels', this.dataChannel);
     this.chatService.mobileChatIsOpen = true;
-
     this.createdChannel = this.mainService.allChannels;
     this.openChannel(this.createdChannel[1]);
+  }
+
+  pushUserToNewChannel() {
+    if (!this.addUserInput) {
+      this.dataChannel.channelUsers = this.mainService.allUsers;
+    } else {
+      this.dataChannel.channelUsers = this.channelService.addetUser;
+    }
   }
 
 

@@ -54,21 +54,21 @@
             <input [(ngModel)]="channelService.content" placeholder="Name eingeben" [innerHTML]="channelService.content" name="textarea" (input)="updateContent()" class="add-channel-push-addet-user-textarea">
 
             <div *ngIf="!this.channelService.isEmpty" class="add-channel-add-users-content-container" [style.margin-top]="this.channelService.filterContentMarginTop + 'px !important'">
-              <div class="add-channel-add-users-not-found-container" *ngIf="channelService.usersNotYetAdded.length === 0">
-                <div>
-                  <p>kein Benutzer gefunden</p>
-                </div>
-              </div>
-              <div class="add-channel-add-users-scroll-container" *ngIf="channelService.usersNotYetAdded.length !== 0">
-                <div class="add-channel-add-users-content" *ngFor="let usersNotYetAdded of channelService.usersNotYetAdded; let indexusersNotYetAdded = index">
-                  <div (click)="pushAddetUser(usersNotYetAdded, indexusersNotYetAdded, $event)" *ngIf="channelService.content">
-                    <img [src]="usersNotYetAdded.avatar" />
-                    <p>{{ usersNotYetAdded.name }}</p>
+                <div class="add-channel-add-users-scroll-container">
+                <div class="add-channel-add-users-content" *ngFor="let usersAll of mainService.allUsers; let indexusersNotYetAdded = index">
+                  <div (click)="pushAddetUser(usersAll, indexusersNotYetAdded, $event)"
+                  [ngClass]="{
+                    'd-none':
+                    mainService.loggedInUser.id === usersAll.id,
+                  }" 
+                  >
+
+                    <img [src]="usersAll.avatar" />
+                    <p>{{ usersAll.name }}</p>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 

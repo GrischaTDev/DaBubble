@@ -30,7 +30,7 @@ export class LoginCardComponent implements OnInit {
   ngOnInit() {
     const auth = getAuth();
     this.loginService.logoutUser(auth);
-    this.mainService.subChannelsList()
+    this.mainService.subChannelsList();
   }
   email: string = '';
   password: string = '';
