@@ -201,10 +201,10 @@ export class DirectMessageService {
       await this.loadDirectChatContent(this.mainService.docId);
     }
     setTimeout(() => {
+      this.navigateDirectMessage(this.directMessageId);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
-      this.navigateDirectMessage(this.directMessageId);
     }, 500);
   }
 
@@ -242,7 +242,9 @@ export class DirectMessageService {
    * @param {string} id - The ID of the direct message to navigate to.
    */
   navigateDirectMessage(id: string) {
-    this.router.navigate(['/direct-chat', id]);
+    setTimeout(() => {
+      this.router.navigate(['/direct-chat', id]);
+    }, 500);
   }
 
   /**

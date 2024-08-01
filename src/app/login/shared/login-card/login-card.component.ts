@@ -27,10 +27,10 @@ export class LoginCardComponent implements OnInit {
 
   constructor(private firestore: Firestore, private router: Router, private loginService: LoginService, private mainService: MainServiceService) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     const auth = getAuth();
     this.loginService.logoutUser(auth);
-    await this.mainService.subChannelsList()
+    this.mainService.subChannelsList()
   }
   email: string = '';
   password: string = '';

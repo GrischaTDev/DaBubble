@@ -27,12 +27,14 @@ import { ChatService } from './chat.service';
 export class MainServiceService {
   unsubUserList;
   unsubChannelsList;
+
   changeContent(inputContent: any) {
     throw new Error('Method not implemented.');
   }
   constructor(private router: Router) {
     this.unsubUserList = this.subUserList();
     this.unsubChannelsList = this.subChannelsList();
+   
   }
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceEmoji = new BehaviorSubject<any>([]);
@@ -114,6 +116,7 @@ export class MainServiceService {
       }
     });
   }
+
 
   /**
    * Initializes component by setting up a snapshot listener on the 'users' collection from Firestore.

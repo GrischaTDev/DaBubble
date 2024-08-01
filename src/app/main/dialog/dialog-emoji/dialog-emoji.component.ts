@@ -10,6 +10,8 @@ import {
 } from '@angular/material/dialog';
 import { ChatService } from '../../../service/chat.service';
 import { EmojiService } from '../../../service/emoji.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dialog-emoji',
@@ -20,7 +22,8 @@ import { EmojiService } from '../../../service/emoji.service';
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
-
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './dialog-emoji.component.html',
   styleUrl: './dialog-emoji.component.scss',

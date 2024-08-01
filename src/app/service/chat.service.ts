@@ -53,14 +53,16 @@ export class ChatService {
   newMessageOpen: boolean = false;
   private subscription: Subscription = new Subscription();
   private itemsSubscription?: Subscription;
+  isThreadOpen: boolean = false;
 
-  constructor(public mainService: MainServiceService, private router: Router) { }
+  constructor(public mainService: MainServiceService, private router: Router) {
+   }
 
   loadFirstChannel() {
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `channels/${this.mainService.allChannels[0].id}`);
     this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.dataChannel = channel as Channel;
+      this.dataChannel = new Channel(channel) ;
     });
   }
 
@@ -326,5 +328,14 @@ export class ChatService {
  */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
+  }
+
+  openThread(threadId:string) {
+    if (this.isThreadOpen) {
+      this.isThreadOpen = false;
+    } else {
+      this.isThreadOpen = true;
+    }
+    
   }
 }

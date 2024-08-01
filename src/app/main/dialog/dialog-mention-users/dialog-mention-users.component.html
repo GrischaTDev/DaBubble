@@ -1,4 +1,11 @@
-<div class="dialog-mention-users-container">
+<div 
+[ngClass]="{
+  'dialog-mention-users-container':
+    !this.chatService.isThreadOpen ,
+  'dialog-mention-users-container-thread-open':
+    this.chatService.isThreadOpen,
+}"
+>
   <h2>Mitglieder</h2>
   <div 
     class="dialog-mention-users-content"

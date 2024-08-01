@@ -9,7 +9,7 @@
         <app-desktop-chat *ngIf="chatService.desktopChatOpen"></app-desktop-chat>
         <app-desktop-direct-chat *ngIf="chatService.directChatOpen"></app-desktop-direct-chat>
         <app-desktop-new-message *ngIf="chatService.newMessageOpen"></app-desktop-new-message>
-        <app-desktop-thread *ngIf="isThreadOpen"></app-desktop-thread>
+        <app-desktop-thread *ngIf="chatService.isThreadOpen"></app-desktop-thread>
     </div>
 </div>
 
