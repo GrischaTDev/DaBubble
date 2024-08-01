@@ -43,8 +43,9 @@ export class DirectMessageService {
  * @async
  * @param {string} userId - The ID of the user whose profile is to be opened.
  */
-  openProfil(userId: string) {
+  async openProfil(userId: string) {
     this.chatService.clickedUser.id = userId;
+    await this.loadUserChatContent(userId)
     this.chatService.dialogInstance = this.dialog.open(DialogUserChatComponent);
   }
 
@@ -272,6 +273,19 @@ export class DirectMessageService {
     const docRef = doc(this.firestore, `direct-message/${chatId}`);
     this.itemsSubscription = docData(docRef).subscribe(channel => {
       this.dataDirectMessage = channel as Channel;
+    });
+  }
+
+  /**
+ * Loads the content of a user for a given user ID from Firestore. If the document exists, it initializes the data for direct messaging.
+ * @async
+ * @param {string} userId - The ID of the user whose direct message content is to be loaded.
+ */
+  async loadUserChatContent(chatId: string) {
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `users/${chatId}`);
+    this.itemsSubscription = docData(docRef).subscribe(user => {
+      this.chatService.clickedUser = user as User;
     });
   }
 

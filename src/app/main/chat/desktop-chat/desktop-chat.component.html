@@ -20,6 +20,7 @@
   </div>
   <div #scrollContainer class="desktop-chat-content">
     <div
+      (mouseover)="chatService.toggleIconContainer(singleMessageIndex, $event)"
       (mouseleave)="chatService.closeIconContainer()"
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
@@ -29,12 +30,10 @@
     >
       <div
         class="desktop-chat-message-date-container"
-        (mouseenter)="chatService.onMouseLeave()"
         [ngClass]="{
-          'desktop-chat-message-container-from-others-hover':
-          chatService.hoveredMessageIndex === singleMessageIndex,
-     }"
-      >
+          'desktop-chat-message-date-container-hover':
+            chatService.activeMessageIndex === singleMessageIndex}"
+        (mouseenter)="chatService.onMouseLeave()">
         <div class="desktop-chat-message-line"></div>
         <span class="desktop-chat-message-date">{{
           chatService.setDate(singleMessage.date)
@@ -176,9 +175,6 @@
             }"
           >
             <span
-              (mouseover)="
-                chatService.toggleIconContainer(singleMessageIndex, $event)
-              "
               *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
             >
               {{ singleMessage.message }}
