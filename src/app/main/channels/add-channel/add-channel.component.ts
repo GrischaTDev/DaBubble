@@ -104,7 +104,7 @@ export class AddChannelComponent implements OnInit {
   async addChannel() {
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
-    this.dataChannel.date = Date.now();
+    this.dataChannel.openingDate = Date.now();
     this.pushUserToNewChannel();
     this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
     await this.mainService.addNewDocOnFirebase('channels', this.dataChannel);
@@ -205,7 +205,6 @@ export class AddChannelComponent implements OnInit {
     }
     const editableDiv = document.querySelector('[contenteditable="true"]');
     if (editableDiv) editableDiv.innerHTML = '';
-    this.calculateHeight();
   }
 
 

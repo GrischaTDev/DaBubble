@@ -3,6 +3,7 @@ import { User } from './user.class';
 
 export class Channel {
   id: string;
+  openingDate: number;
   name: string;
   description: string;
   channelUsers: User[] = [];
@@ -15,10 +16,11 @@ export class Channel {
   mentionUser: string;
   thread: string;
   ownerUser: User[] = [];
-  date: number;
+
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
+    this.openingDate= obj?.openingDate || '';
     this.name = obj?.name || '';
     this.description = obj?.description || '';
     this.channelUsers = obj?.channelUsers || [];
@@ -31,12 +33,12 @@ export class Channel {
     this.mentionUser= obj?.mentionUser || [];
     this.thread= obj?.thread || '';
     this.ownerUser = obj?.ownerUser || [];
-    this.date = obj ? obj.data : '';
   }
 
   public toJSON() {
     return {
       id: this.id,
+      openingDate: this.openingDate,
       name: this.name,
       description: this.description,
       channelUsers: this.channelUsers.map((user) => ({
@@ -63,7 +65,6 @@ export class Channel {
         email: user.email,
         avatar: user.avatar,
       })),
-      date: this.date,
     };
   }
 }

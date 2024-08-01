@@ -75,7 +75,7 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.chatService.dataChannel = this.mainService.allChannels[0];
+    this.chatService.loadFirstChannel();
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

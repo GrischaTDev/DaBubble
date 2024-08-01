@@ -62,7 +62,7 @@ export class ChatService {
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `channels/${this.mainService.allChannels[0].id}`);
     this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.dataChannel = new Channel(channel) ;
+      this.dataChannel = channel as Channel ;
     });
   }
 
