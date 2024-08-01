@@ -4,11 +4,12 @@ import {
   addDoc,
   collection,
   doc,
+  docData,
   onSnapshot,
   setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { Message } from '../../assets/models/message.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
 import { ChatService } from './chat.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +47,7 @@ export class MainServiceService {
   testUser: User = new User();
   emojiReactionMessage = false;
   docId: string = '';
-
+  
   /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
@@ -75,8 +77,8 @@ export class MainServiceService {
     try {
       const docRef = await addDoc(collection(this.firestore, docName), data.toJSON());
       this.docId = docRef.id;
-      if (docName === 'channels') {
-        this.setChannelIdOnFirebase(docRef.id)
+      if (docName === 'channels' || docName === 'direct-message') {
+        this.setChannelIdOnFirebase(docRef.id, docName)
       }
     } catch (error) {
       console.error('Error adding user:', error);
@@ -84,8 +86,8 @@ export class MainServiceService {
     }
   }
 
- setChannelIdOnFirebase(docRef: string) {
-  setDoc(doc(this.firestore, 'channels', docRef), {
+ setChannelIdOnFirebase(docRef: string, docName: string) {
+  setDoc(doc(this.firestore, docName, docRef), {
     id: docRef}, { merge: true });
   }
 
@@ -146,10 +148,10 @@ export class MainServiceService {
         };
         this.allChannels.push(new Channel(channelData));
       });
-  
     });
   }
   
+ 
 
   /**
    * Asynchronously adds or updates a document within a collection in Firestore.

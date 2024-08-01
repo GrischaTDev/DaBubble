@@ -59,11 +59,7 @@ export class LoginCardComponent implements OnInit {
           }, { merge: true });
 
           localStorage.setItem('user', JSON.stringify(user));
-          if(this.mainService.allChannels.length === 0){
-            this.router.navigate(['/main', 'no-channel']); 
-          } else {
-            this.router.navigate(['/main', this.mainService.allChannels[0].id]);
-          }
+          this.router.navigate(['/main']);
         }
       })
       .catch((error: any) => {
@@ -97,11 +93,7 @@ export class LoginCardComponent implements OnInit {
           }, { merge: true });
 
           localStorage.setItem('user', JSON.stringify(user));
-          if(this.mainService.allChannels.length === 0){
-            this.router.navigate(['/main', 'no-channel']); 
-          } else {
-            this.router.navigate(['/main', this.mainService.allChannels[0].id]);
-          }
+          this.router.navigate(['/main']);
         }
       })
   }
@@ -134,11 +126,7 @@ export class LoginCardComponent implements OnInit {
             localStorage.setItem('user', JSON.stringify(user));
 
           }
-          if(this.mainService.allChannels.length === 0){
-            this.router.navigate(['/main', 'no-channel']); 
-          } else {
-            this.router.navigate(['/main', this.mainService.allChannels[0].id]);
-          }
+          this.router.navigate(['/main']);
         }
       })
   }

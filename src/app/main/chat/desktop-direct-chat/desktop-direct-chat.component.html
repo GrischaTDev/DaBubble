@@ -1,4 +1,3 @@
-
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
   <div class="user-container" (click)="openUserProfile(chatService.clickedUser)">
     <div>
@@ -109,9 +108,6 @@
           <div
             (mouseenter)="directMessageService.onMouseLeave()"
             class="mobile-chat-edit-icon-container"
-            (click)="
-              this.directMessageService.openDirectMessage(singleMessage.userId)
-            "
           >
             <mat-icon>comment</mat-icon>
           </div>

@@ -14,6 +14,7 @@ import { setTimeout } from 'timers/promises';
 import { Subscription } from 'rxjs';
 import { doc, docData, Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
+import { User } from '../../../../assets/models/user.class';
 
 
 
@@ -28,7 +29,7 @@ export class DesktopChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
   private subscription: Subscription = new Subscription();
   private itemsSubscription?: Subscription;
-  constructor( private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
+  constructor(private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   currentUser: any;
@@ -47,24 +48,25 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.router.navigate(['/main', channel.id]);
+    this.router.navigate(['/main']);
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `channels/${channel.id}`);
     this.itemsSubscription = docData(docRef).subscribe(channel => {
       this.chatService.dataChannel = channel as Channel;
     });
+    this.chatService.mobileChatIsOpen = true;
+    this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = false;
     this.activeChannelId = channel.id;
   }
 
-  openDirectChat(user: any) {
-    this.chatService.desktopChatOpen = false;
-    this.chatService.directChatOpen = true;
-    this.chatService.newMessageOpen = false;
-    console.log('Direct Chat User', user);
+  async openDirectChat(user: User) {
+    this.chatService.clickedUser.id = user.id;
     this.chatService.clickedUser = user;
+    await this.directMessageService.directMessageIsAvailable();
+    this.directMessageService.directMessageDocId = this.mainService.docId;
   }
 
 

@@ -5,13 +5,14 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { Firestore } from '@angular/fire/firestore';
+import { doc, docData, Firestore } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -46,11 +47,22 @@ export class ChatService {
   editText: string = '';
   loggedInUser: User = new User();
   mobileChatIsOpen: boolean = false;
+  mobileDirectChatIsOpen: boolean = false;
   directChatOpen: boolean = false;
-  desktopChatOpen: boolean = true;;
-  newMessageOpen: boolean = false;;
+  desktopChatOpen: boolean = true;
+  newMessageOpen: boolean = false;
+  private subscription: Subscription = new Subscription();
+  private itemsSubscription?: Subscription;
 
   constructor(public mainService: MainServiceService, private router: Router) { }
+
+  loadFirstChannel() {
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `channels/${this.mainService.allChannels[0].id}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.dataChannel = channel as Channel;
+    });
+  }
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.

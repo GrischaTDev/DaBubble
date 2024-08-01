@@ -102,7 +102,6 @@ export class AddChannelComponent implements OnInit {
     this.dataChannel.channelUsers =  this.channelService.addetUser;
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
-    this.dataChannel.messageToMe = false;
     this.dataChannel.ownerUser.push(new User(this.mainService.loggedInUser));
    await this.mainService.addNewDocOnFirebase('channels',this.dataChannel);
     this.chatService.mobileChatIsOpen = true;

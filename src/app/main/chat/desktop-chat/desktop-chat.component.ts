@@ -39,8 +39,6 @@ export class DesktopChatComponent implements OnInit {
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-  items$;
-  items;
 
 
   constructor(
@@ -64,12 +62,6 @@ export class DesktopChatComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    if (this.parmsId) {
-      this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
-        this.chatService.dataChannel = channel;
-      });
-    }
     this.chatService.loggedInUser = this.mainService.loggedInUser;
   }
 
@@ -83,6 +75,7 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
+    this.chatService.loadFirstChannel();
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

@@ -17,4 +17,5 @@
     <app-mobile-header></app-mobile-header>
     <app-mobile-channels *ngIf="!chatService.mobileChatIsOpen"></app-mobile-channels>
     <app-mobile-chat *ngIf="chatService.mobileChatIsOpen"></app-mobile-chat>
+    <app-direct-chat *ngIf="chatService.mobileDirectChatIsOpen"></app-direct-chat>
 </div>

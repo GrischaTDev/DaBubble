@@ -38,7 +38,7 @@
           this.chatService.clickedUser.id === this.mainService.loggedInUser.id
       }"
     >
-      <div class="send-direct-message-button" (click)="directMessageService.openDirectMessage(this.chatService.clickedUser.id); closeDialog()">
+      <div class="send-direct-message-button" (click)="directMessageService.openDirectMessage(this.chatService.clickedUser); closeDialog()">
         <mat-icon>mode_comment</mat-icon>
         <span>Nachricht</span>
       </div>

@@ -80,5 +80,6 @@ export class MobileChannelsComponent  implements OnInit {
     this.chatService.dataChannel = channel;
     this.searchValue = '';
     this.chatService.mobileChatIsOpen = true;
+    this.chatService.mobileDirectChatIsOpen = false;
   }
 }

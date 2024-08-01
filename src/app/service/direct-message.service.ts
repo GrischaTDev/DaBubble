@@ -1,13 +1,14 @@
 import { ElementRef, HostListener, inject, Injectable, ViewChild } from '@angular/core';
 import { Channel } from '../../assets/models/channel.class';
 import { ChatService } from './chat.service';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { doc, docData, Firestore, getDoc, onSnapshot } from '@angular/fire/firestore';
 import { User } from '../../assets/models/user.class';
 import { MainServiceService } from './main-service.service';
 import { Router } from '@angular/router';
 import { Message } from '../../assets/models/message.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,8 @@ export class DirectMessageService {
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
   indexUserDirectmessage: number = 0;
+  private subscription: Subscription = new Subscription();
+  private itemsSubscription?: Subscription;
 
 
 
@@ -40,9 +43,8 @@ export class DirectMessageService {
  * @async
  * @param {string} userId - The ID of the user whose profile is to be opened.
  */
-  async openProfil(userId: string) {
+  openProfil(userId: string) {
     this.chatService.clickedUser.id = userId;
-    await this.loadDirectChatUser(userId);
     this.chatService.dialogInstance = this.dialog.open(DialogUserChatComponent);
   }
 
@@ -150,38 +152,17 @@ export class DirectMessageService {
   }
 
   /**
-* Loads the direct chat user's data from Firestore.
-* @async
-* @param {string} userId - The ID of the user to load.
-*/
-  async loadDirectChatUser(userId: string) {
-    try {
-      const userDocRef = doc(this.firestore, 'users', userId);
-      const userDocSnap = await getDoc(userDocRef);
-      if (userDocSnap.exists()) {
-        this.chatService.clickedUser = new User(userDocSnap.data());
-        this.chatService.clickedUser.id = userId;
-      }
-    } catch (error) {
-      console.error('Fehler beim Laden der Benutzerdaten:', error);
-    }
-  }
-
-  /**
   * Opens a direct message with a specific user by loading user data, checking message availability,
   * pushing the direct message document to Firebase, and navigating to the message.
   * @async
   * @param {string} userId - The ID of the user with whom to open a direct message.
   */
-  async openDirectMessage(userId: string) {
-    this.chatService.clickedUser.id = userId;
-    await this.loadDirectChatUser(userId);
+  async openDirectMessage(user: User) {
+    this.chatService.mobileChatIsOpen = false;
+    this.chatService.mobileDirectChatIsOpen = true;
+    this.chatService.clickedUser = user;
     await this.directMessageIsAvailable();
-    await this.pushDirectMessageDocToFirebase();
     this.directMessageDocId = this.mainService.docId;
-    await this.loadDirectChatContent(this.directMessageId);
-    await this.loadDirectChatUser(userId);
-    this.navigateDirectMessage(this.directMessageId);
   }
 
   /**
@@ -192,34 +173,38 @@ export class DirectMessageService {
   async directMessageIsAvailable() {
     this.directMessageIdIsAvailable = false;
     this.directMessageId = '';
-    let clickedUserMessages = await this.chatService.clickedUser.message;
-    let loggedInUserMessages = await this.mainService.loggedInUser.message;
+    let clickedUserMessages = this.chatService.clickedUser.message;
+    let loggedInUserMessages = this.mainService.loggedInUser.message;
     if (Array.isArray(clickedUserMessages) && Array.isArray(loggedInUserMessages)) {
-        let commonMessages = clickedUserMessages.filter(msg => loggedInUserMessages.includes(msg));
-        if (commonMessages.length > 0) {
-            this.directMessageId = commonMessages[0].toString();
-            this.directMessageIdIsAvailable = true;
-        }
+      let commonMessages = clickedUserMessages.filter(msg => loggedInUserMessages.includes(msg));
+      if (commonMessages.length !== 0) {
+        this.directMessageDocId = commonMessages[0].toString();
+        this.directMessageIdIsAvailable = true;
+        await this.loadDirectChatContent(this.directMessageDocId);
+      }
     }
-}
+    await this.pushDirectMessageDocToFirebase();
+  }
 
- /**
- * Pushes a new direct message document to Firebase if a direct message ID is not already available.
- * It checks if the logged-in user is the same as the clicked user, and sets the `messageToMe`
- * property accordingly. The document is added to Firebase under 'direct-message' collection,
- * and the direct message ID is pushed to the user.
- */
+  /**
+  * Pushes a new direct message document to Firebase if a direct message ID is not already available.
+  * It checks if the logged-in user is the same as the clicked user, and sets the `messageToMe`
+  * property accordingly. The document is added to Firebase under 'direct-message' collection,
+  * and the direct message ID is pushed to the user.
+  */
   async pushDirectMessageDocToFirebase() {
     if (!this.directMessageIdIsAvailable) {
       this.newDataDirectMessage.channelUsers = [];
-      if (this.mainService.loggedInUser.id === this.chatService.clickedUser.id) {
-        this.newDataDirectMessage.messageToMe = true;
-      } else {
-        this.newDataDirectMessage.messageToMe = false;
-      }
       await this.mainService.addNewDocOnFirebase('direct-message', this.newDataDirectMessage);
-      this.pushDirectMessageIdToUser();
+      await this.pushDirectMessageIdToUser();
+      await this.loadDirectChatContent(this.mainService.docId);
     }
+    setTimeout(() => {
+      this.chatService.desktopChatOpen = false;
+      this.chatService.directChatOpen = true;
+      this.chatService.newMessageOpen = false;
+      this.navigateDirectMessage(this.directMessageId);
+    }, 500);
   }
 
   /**
@@ -230,6 +215,7 @@ export class DirectMessageService {
     this.mainService.loggedInUser.message.push(this.mainService.docId);
     this.chatService.clickedUser.message.push(this.mainService.docId);
     this.directMessageId = this.mainService.docId;
+    this.newDataDirectMessage.id = this.mainService.docId;
     this.newDataDirectMessage.channelUsers.push(new User(this.mainService.loggedInUser));
     this.newDataDirectMessage.channelUsers.push(new User(this.chatService.clickedUser));
     this.pushNewDirectmessageContenToFb();
@@ -247,6 +233,7 @@ export class DirectMessageService {
     );
     await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.newDataDirectMessage)
     );
+
   }
 
   /**
@@ -264,7 +251,6 @@ export class DirectMessageService {
    * @param {string} textContent - The text content of the message to be sent.
    */
   async sendMessageFromDirectMessage(channelId: string, textContent: string) {
-    await this.loadDirectChatContent(this.directMessageId);
     this.chatService.messageChannel.message = textContent;
     this.chatService.messageChannel.date = Date.now();
     this.chatService.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -272,7 +258,7 @@ export class DirectMessageService {
     this.chatService.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.chatService.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
-    await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.dataDirectMessage));
+    await this.mainService.addDoc('direct-message', this.dataDirectMessage.id, new Channel(this.dataDirectMessage));
     this.chatService.text = '';
   }
 
@@ -281,17 +267,12 @@ export class DirectMessageService {
    * @async
    * @param {string} userId - The ID of the user whose direct message content is to be loaded.
    */
-  async loadDirectChatContent(userId: string) {
-    try {
-      const userDocRef = doc(this.firestore, 'direct-message', userId);
-      const userDocSnap = await getDoc(userDocRef);
-      if (userDocSnap.exists()) {
-        this.dataDirectMessage = new Channel(userDocSnap.data());
-        this.dataDirectMessage.id = userId;
-      }
-    } catch (error) {
-      console.error('Error loading channel data:', error);
-    }
+  async loadDirectChatContent(chatId: string) {
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `direct-message/${chatId}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.dataDirectMessage = channel as Channel;
+    });
   }
 
   otherUser(singleUserId: string): boolean {

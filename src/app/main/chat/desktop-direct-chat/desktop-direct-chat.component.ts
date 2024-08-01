@@ -43,15 +43,10 @@ import { from, Observable, of } from 'rxjs';
 export class DesktopDirectChatComponent implements OnInit {
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  subscription;
   loggedInUser: User = new User();
 
   constructor(
     private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService,) {
-    this.directMessageService.loadDirectChatContent(this.directMessageService.directMessageId);
-    this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      this.chatService.text += content;
-    });
   }
 
   /**
@@ -59,32 +54,9 @@ export class DesktopDirectChatComponent implements OnInit {
    * It delegates the handling of user ID from the route to another function.
    */
   ngOnInit() {
-    this.route.paramMap.pipe(
-      switchMap(params => this.handleDirectChat(params))
-    ).subscribe();
+   
   }
 
-  /**
-   * Handles loading of direct chat content based on the user ID.
-   * @param {ParamMap} params - The Angular route snapshot paramMap.
-   * @returns {Observable<any>} An observable that emits chat content or null.
-   */
-  handleDirectChat(params: ParamMap): Observable<any> {
-    const userId = params.get('userId');
-    if (userId) {
-      return from(this.directMessageService.loadDirectChatContent(userId)).pipe(
-        tap(() => {
-          this.directMessageService.validationOfTheOtherUser();
-          this.directMessageService.checkUserStatus();
-        }),
-        catchError(error => {
-          console.error(error);
-          return of(null);
-        })
-      );
-    }
-    return of(null);
-  }
 
   /**
 * Opens a user profile in a modal dialog using Angular Material's Dialog component.
@@ -95,14 +67,6 @@ export class DesktopDirectChatComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = directUser;
     this.dialog.open(UserProfileComponent, dialogConfig);
-  }
-
-  /**
- * A lifecycle hook that is called when the component is destroyed.
- * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
- */
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
 }

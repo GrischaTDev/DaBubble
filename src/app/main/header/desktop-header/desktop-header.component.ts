@@ -66,7 +66,7 @@ export class DesktopHeaderComponent implements OnInit {
   openChannel(channel: any) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
-    this.router.navigate(['/main', channel.id ]);
+    this.router.navigate(['/main']);
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `channels/${channel.id}`);
     this.itemsSubscription = docData(docRef).subscribe(channel => {
