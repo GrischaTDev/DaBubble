@@ -234,14 +234,14 @@
   position: absolute;
   left: 0;
   max-width: 320px;
-  max-height: calc(100vh - 450px);
+  max-height: 300px;
   background-color: $background-white;
   border-radius: 25px;
   border: 0.5px solid $border-gray;
+  overflow-y: scroll;
 }
 
 .add-channel-add-users-scroll-container {
-  overflow-y: scroll;
   margin-top: 15px;
   margin-bottom: 15px;
   max-height: calc(100vh - 500px);

@@ -30,6 +30,7 @@ export class AddChannelComponent implements OnInit {
   isThreadOpen: boolean = false;
   createdChannel: any;
   activeChannelId: string | null = null;
+  selectetUser: boolean = false;
   @Output() contentChange = new EventEmitter<string>();
 
 
@@ -87,10 +88,12 @@ export class AddChannelComponent implements OnInit {
 
   addUserInputfield() {
     this.addUserInput = !this.addUserInput;
+    this.selectetUser = true;
   }
 
   addUserInputfieldOff() {
     this.addUserInput = false;
+    this.selectetUser = false;
   }
 
   /**
@@ -99,7 +102,6 @@ export class AddChannelComponent implements OnInit {
    * and adding it to Firebase.
    */
   async addChannel() {
-    this.closeDialog();
     this.dataChannel.name = this.newChannelName;
     this.dataChannel.description = this.newChannelDescription;
     this.dataChannel.date = Date.now();
@@ -109,12 +111,14 @@ export class AddChannelComponent implements OnInit {
     this.chatService.mobileChatIsOpen = true;
     this.createdChannel = this.mainService.allChannels;
     this.openChannel(this.createdChannel[1]);
+    this.closeDialog();
   }
 
   pushUserToNewChannel() {
-    if (!this.addUserInput) {
+    if (!this.selectetUser) {
       this.dataChannel.channelUsers = this.mainService.allUsers;
     } else {
+      console.log('------',this.channelService.addetUser )
       this.dataChannel.channelUsers = this.channelService.addetUser;
     }
   }
