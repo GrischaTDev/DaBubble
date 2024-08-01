@@ -15,6 +15,7 @@ export class Channel {
   mentionUser: string;
   thread: string;
   ownerUser: User[] = [];
+  date: number;
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
@@ -30,6 +31,7 @@ export class Channel {
     this.mentionUser= obj?.mentionUser || [];
     this.thread= obj?.thread || '';
     this.ownerUser = obj?.ownerUser || [];
+    this.date = obj ? obj.data : '';
   }
 
   public toJSON() {
@@ -61,6 +63,7 @@ export class Channel {
         email: user.email,
         avatar: user.avatar,
       })),
+      date: this.date,
     };
   }
 }
