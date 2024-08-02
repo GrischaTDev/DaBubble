@@ -36,8 +36,10 @@ export class ChatService {
   dataChannel: Channel = new Channel();
   dataThread: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
+  contentMessageOfThread: Message = new Message();
   messageChannel: Message = new Message();
   messageThread: Message = new Message();
+  allMessangeFromThread: Message[] = [];
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   clickedUser: User = new User();
@@ -103,8 +105,6 @@ export class ChatService {
    * Manages the state of the chat dialog. If the chat dialog is not open or if the emoji dialog is open,
    * it closes any currently open dialogs and then opens the chat dialog. If the chat dialog is already open,
    * it simply closes it.
-   *
-   * This ensures that only one type of dialog (emoji or chat) can be open at a time.
    */
   openDialogMentionUser() {
     if (!this.dialogMentionUserOpen || this.dialogEmojiOpen) {
@@ -129,8 +129,6 @@ export class ChatService {
   /**
    * Handles the emoji button click event.
    * Prevents the event from propagating to parent elements.
-   *
-   * @param {MouseEvent} event - The mouse event triggered by clicking the emoji button.
    */
   onButtonClick(event: MouseEvent): void {
     event.stopPropagation(); // Stoppt die Übertragung des Events zum Elternelement
@@ -145,7 +143,6 @@ export class ChatService {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;
-
     }
   }
 
@@ -161,11 +158,9 @@ export class ChatService {
   /**
    * Asynchronously sends a message from a specific channel, updating the channel data and triggering
    * a sendMessage process.
-   * @param {string} channelId - The ID of the channel from which to send the message.
-   * @param {string} textContent - The text content of the message.
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
-    this.generateThreadDoc();
+    await this.generateThreadDoc();
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
     this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -174,7 +169,7 @@ export class ChatService {
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.messageChannel.image = this.imageMessage;
     this.dataChannel.messageChannel.push(this.messageChannel);
-    this.sendMessage('channels', channelId);
+    this.sendMessage();
     this.text = '';
   }
 
@@ -182,26 +177,21 @@ export class ChatService {
  * Asynchronously generates a new document for a thread in Firebase.
  * It sets the newly created document's ID in the main service and updates it in the Firestore database.
  * 
- * @async
- * @function generateThreadDoc
- * @returns {Promise<void>} A promise that resolves when the document is successfully created and updated.
  */
   async generateThreadDoc() {
     await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
-    this.dataChannel.thread = this.mainService.docId
-    this.newThreadOnFb.id = this.mainService.docId
-    setDoc(doc(this.firestore, 'threads', this.mainService.docId), {
-      id: this.mainService.docId
-    }, { merge: true });
+    this.messageChannel.thread = this.mainService.docId;
+    this.dataThread.id = this.mainService.docId;
   }
 
   /**
    * Initiates the process to add a new document for a message within a specified channel.
-   * @param {string} docName - The name of the document to be added.
-   * @param {string} channelId - The ID of the channel where the document should be added.
    */
-  sendMessage(docName: string, channelId: string) {
-    this.mainService.addDoc(docName, this.dataChannel.id, new Channel(this.dataChannel));
+ async sendMessage() {
+   await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+   await this.loadThreadData(this.dataThread.id);
+   this.dataThread.messageChannel.push(this.messageChannel);
+   await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
   }
 
   /**
@@ -216,9 +206,6 @@ export class ChatService {
   /**
  * Handles file selection events and reads the first selected file as a data URL.
  * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
- * 
- * @function onFileSelected
- * @param {Event} event - The event triggered by file selection in an input element.
  */
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -293,8 +280,6 @@ export class ChatService {
   /**
  * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
  * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
- * @param {number} index - The index to check against the active message index.
- * @param {MouseEvent} event - The mouse event to possibly stop propagation on.
  */
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
@@ -314,9 +299,6 @@ export class ChatService {
  * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
  * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
  * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
- * @param {number} index - The index of the message to potentially edit.
- * @param {MouseEvent} event - The mouse event, propagation of which is always stopped.
- * @param {string} messageContent - The content of the message to edit if the editor is opened.
  */
   toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
     event.stopPropagation();
@@ -347,12 +329,12 @@ export class ChatService {
 
   /**
  * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
- * @param {string} parmsId - The parameter ID associated with the channel to notify of the update.
- * @param {string} newText - The new text to replace the existing message content.
- * @param {number} singleMessageIndex - The index of the message in the channel to be updated.
  */
   async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
+    if(this.dataChannel.messageChannel[singleMessageIndex].thread ===  this.contentMessageOfThread.thread) {
+      this.contentMessageOfThread = this.dataChannel.messageChannel[singleMessageIndex];
+    }
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
     this.closeWithoutSaving();
   }
@@ -384,18 +366,10 @@ export class ChatService {
  * Opens a specific thread by its ID. Unsubscribes from any existing subscription,
  * creates a new subscription to the document data of the thread, and toggles the thread's open state.
  * It updates `dataThread` with the thread data and adjusts `isThreadOpen` to reflect the current state.
- *
- * @async
- * @function openThread
- * @param {string} threadId - The ID of the thread to open.
- * @returns {Promise<void>} A promise that resolves when the thread is successfully opened.
  */
-  async openThread(threadId: string) {
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `threads/${threadId}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.dataThread = channel as Channel;
-    });
+  async openThread(threadMessage: Message) {
+    this.contentMessageOfThread = threadMessage;
+    this.loadThreadData(threadMessage.thread)
     if (this.isThreadOpen) {
       this.isThreadOpen = false;
     } else {
@@ -404,38 +378,15 @@ export class ChatService {
   }
 
   /**
- * Closes the currently open thread by setting `isThreadOpen` to false.
- * @function closeThread
+ * Loads data for a specified thread by its ID. Unsubscribes from any previous data subscriptions,
+ * and sets up a new subscription to the specified thread document in Firestore.
+ * Updates `dataThread` with the received channel data.
  */
-  closeThread() {
-    this.isThreadOpen = false;
-  }
-
-  /**
- * Asynchronously sends a message from a specific channel, updating the channel data and triggering
- * a sendMessage process.
- * @param {string} channelId - The ID of the channel from which to send the message.
- * @param {string} textContent - The text content of the message.
- */
-  async sendMessageFromThread(channelId: string, textContent: string) {
-    this.messageThread.message = textContent;
-    this.messageThread.date = Date.now();
-    this.messageThread.userId = this.mainService.loggedInUser.id;
-    this.messageThread.userName = this.mainService.loggedInUser.name;
-    this.messageThread.userEmail = this.mainService.loggedInUser.email;
-    this.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageThread.image = this.imageMessage;
-    this.dataThread.messageChannel.push(this.messageThread);
-    this.sendMessageToThread('threads', channelId);
-    this.text = '';
-  }
-
-  /**
-* Initiates the process to add a new document for a message within a specified channel.
-* @param {string} docName - The name of the document to be added.
-* @param {string} channelId - The ID of the channel where the document should be added.
-*/
-  sendMessageToThread(docName: string, channelId: string) {
-    this.mainService.addDoc(docName, this.dataThread.id, new Channel(this.dataThread));
+async loadThreadData(threadId: string) {
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `threads/${threadId}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.dataThread = channel as Channel;
+    }); 
   }
 }

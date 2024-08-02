@@ -15,6 +15,7 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
+import { ThreadService } from '../../../service/thread.service';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class DesktopThreadComponent {
     public directMessageService: DirectMessageService,
     public channelService: ChannelService,
     public loginService: LoginService,
+    public threadService: ThreadService
   ) {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {

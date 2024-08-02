@@ -13,13 +13,14 @@
         <div
           class="dektop-thread-header-icon"
           (click)="
-            this.chatService.doNotClose($event); chatService.closeThread()
+            this.chatService.doNotClose($event); threadService.closeThread()
           "
         >
           <mat-icon>close</mat-icon>
         </div>
       </div>
     </div>
+
     <div #scrollContainerThread class="dektop-thread-content">
       <div
         (mouseover)="
@@ -303,7 +304,7 @@
             <div>
               <mat-icon
                 (click)="
-                  chatService.sendMessageFromThread(
+                  threadService.sendMessageFromThread(
                     this.chatService.dataChannel.id,
                     this.chatService.text
                   )
