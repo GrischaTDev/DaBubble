@@ -5,7 +5,7 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { doc, docData, Firestore } from '@angular/fire/firestore';
+import { collection, doc, docData, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
@@ -56,14 +56,11 @@ export class ChatService {
   isThreadOpen: boolean = false;
 
   constructor(public mainService: MainServiceService, private router: Router) {
-   }
+  }
 
   loadFirstChannel() {
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `channels/${this.mainService.allChannels[0].id}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.dataChannel = channel as Channel ;
-    });
+    const firstChannel = this.mainService.allChannels[0];
+    this.dataChannel = firstChannel as Channel;
   }
 
   /**
@@ -209,7 +206,7 @@ export class ChatService {
    */
   setTime(timeFromServer: number): string {
     const date = new Date(timeFromServer);
-    const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit',minute: '2-digit',hour12: false,});
+    const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', hour12: false, });
     return formattedTime;
   }
 
@@ -330,12 +327,16 @@ export class ChatService {
     this.hoveredMessageIndex = null;
   }
 
-  openThread(threadId:string) {
+  openThread(threadId: string) {
     if (this.isThreadOpen) {
       this.isThreadOpen = false;
     } else {
       this.isThreadOpen = true;
     }
-    
+
   }
 }
+function index(value: Channel, index: number, array: Channel[]): value is Channel {
+  throw new Error('Function not implemented.');
+}
+
