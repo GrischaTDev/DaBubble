@@ -13,7 +13,7 @@
         <div
           class="dektop-thread-header-icon"
           (click)="
-            this.chatService.doNotClose($event); threadService.closeThread()
+            this.chatService.doNotClose($event); chatService.closeThread()
           "
         >
           <mat-icon>close</mat-icon>
@@ -303,7 +303,7 @@
             <div>
               <mat-icon
                 (click)="
-                  chatService.sendMessageFromChannel(
+                  chatService.sendMessageFromThread(
                     this.chatService.dataChannel.id,
                     this.chatService.text
                   )

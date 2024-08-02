@@ -12,7 +12,8 @@ import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import { Subscription } from 'rxjs';
+import { generate, Subscription } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,8 @@ export class ChatService {
   dialogAddUserOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
+  dataThread: Channel = new Channel();
+  newThreadOnFb: Channel = new Channel();
   messageChannel: Message = new Message();
   messageThread: Message = new Message();
   idOfChannel: string = '';
@@ -51,12 +54,12 @@ export class ChatService {
   directChatOpen: boolean = false;
   desktopChatOpen: boolean = true;
   newMessageOpen: boolean = false;
+  isThreadOpen: boolean = false;
   private subscription: Subscription = new Subscription();
   private itemsSubscription?: Subscription;
-  isThreadOpen: boolean = false;
   imageMessage: string | ArrayBuffer | null = '';
 
-  constructor(public mainService: MainServiceService, private router: Router) {
+  constructor(public mainService: MainServiceService, private router: Router,) {
   }
 
   loadFirstChannel() {
@@ -162,6 +165,7 @@ export class ChatService {
    * @param {string} textContent - The text content of the message.
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
+    this.generateThreadDoc();
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
     this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -175,6 +179,23 @@ export class ChatService {
   }
 
   /**
+ * Asynchronously generates a new document for a thread in Firebase.
+ * It sets the newly created document's ID in the main service and updates it in the Firestore database.
+ * 
+ * @async
+ * @function generateThreadDoc
+ * @returns {Promise<void>} A promise that resolves when the document is successfully created and updated.
+ */
+  async generateThreadDoc() {
+    await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
+    this.dataChannel.thread = this.mainService.docId
+    this.newThreadOnFb.id = this.mainService.docId
+    setDoc(doc(this.firestore, 'threads', this.mainService.docId), {
+      id: this.mainService.docId
+    }, { merge: true });
+  }
+
+  /**
    * Initiates the process to add a new document for a message within a specified channel.
    * @param {string} docName - The name of the document to be added.
    * @param {string} channelId - The ID of the channel where the document should be added.
@@ -183,10 +204,22 @@ export class ChatService {
     this.mainService.addDoc(docName, this.dataChannel.id, new Channel(this.dataChannel));
   }
 
+  /**
+ * Clears the content of the image message.
+ * 
+ * @function deleteMessage
+ */
   deleteMessage() {
     this.imageMessage = '';
   }
 
+  /**
+ * Handles file selection events and reads the first selected file as a data URL.
+ * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+ * 
+ * @function onFileSelected
+ * @param {Event} event - The event triggered by file selection in an input element.
+ */
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -347,16 +380,62 @@ export class ChatService {
     this.hoveredMessageIndex = null;
   }
 
-  openThread(threadId: string) {
+  /**
+ * Opens a specific thread by its ID. Unsubscribes from any existing subscription,
+ * creates a new subscription to the document data of the thread, and toggles the thread's open state.
+ * It updates `dataThread` with the thread data and adjusts `isThreadOpen` to reflect the current state.
+ *
+ * @async
+ * @function openThread
+ * @param {string} threadId - The ID of the thread to open.
+ * @returns {Promise<void>} A promise that resolves when the thread is successfully opened.
+ */
+  async openThread(threadId: string) {
+    this.itemsSubscription?.unsubscribe();
+    const docRef = doc(this.firestore, `threads/${threadId}`);
+    this.itemsSubscription = docData(docRef).subscribe(channel => {
+      this.dataThread = channel as Channel;
+    });
     if (this.isThreadOpen) {
       this.isThreadOpen = false;
     } else {
       this.isThreadOpen = true;
     }
+  }
 
+  /**
+ * Closes the currently open thread by setting `isThreadOpen` to false.
+ * @function closeThread
+ */
+  closeThread() {
+    this.isThreadOpen = false;
+  }
+
+  /**
+ * Asynchronously sends a message from a specific channel, updating the channel data and triggering
+ * a sendMessage process.
+ * @param {string} channelId - The ID of the channel from which to send the message.
+ * @param {string} textContent - The text content of the message.
+ */
+  async sendMessageFromThread(channelId: string, textContent: string) {
+    this.messageThread.message = textContent;
+    this.messageThread.date = Date.now();
+    this.messageThread.userId = this.mainService.loggedInUser.id;
+    this.messageThread.userName = this.mainService.loggedInUser.name;
+    this.messageThread.userEmail = this.mainService.loggedInUser.email;
+    this.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
+    this.messageThread.image = this.imageMessage;
+    this.dataThread.messageChannel.push(this.messageThread);
+    this.sendMessageToThread('threads', channelId);
+    this.text = '';
+  }
+
+  /**
+* Initiates the process to add a new document for a message within a specified channel.
+* @param {string} docName - The name of the document to be added.
+* @param {string} channelId - The ID of the channel where the document should be added.
+*/
+  sendMessageToThread(docName: string, channelId: string) {
+    this.mainService.addDoc(docName, this.dataThread.id, new Channel(this.dataThread));
   }
 }
-
-
-
-

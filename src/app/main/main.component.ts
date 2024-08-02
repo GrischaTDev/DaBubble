@@ -21,7 +21,6 @@ import { ChatService } from '../service/chat.service';
 import { NewMessageComponent } from './new-message/mobile-new-message/new-message.component';
 import { DesktopNewMessageComponent } from './new-message/desktop-new-message/desktop-new-message.component';
 
-
 @Component({
   selector: 'app-main',
   standalone: true,
