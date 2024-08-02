@@ -336,7 +336,7 @@ export class ChatService {
 
   }
 }
-function index(value: Channel, index: number, array: Channel[]): value is Channel {
-  throw new Error('Function not implemented.');
-}
+
+
+
 
