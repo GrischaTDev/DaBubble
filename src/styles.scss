@@ -167,3 +167,21 @@ textarea:focus {
 ::-webkit-scrollbar-thumb {
   height: 50px; /* Höhe des Thumbs anpassen */
 }
+
+.add-image-container {
+  position: relative;
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+  margin-top: 4px;
+
+  img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .delete-img {
+    cursor: pointer;
+  }
+}
