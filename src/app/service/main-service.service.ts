@@ -8,6 +8,8 @@ import {
   onSnapshot,
   setDoc,
   updateDoc,
+  query,
+  orderBy
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { User } from '../../assets/models/user.class';
@@ -19,6 +21,7 @@ import { Message } from '../../assets/models/message.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
 import { ChatService } from './chat.service';
+import { log } from 'node:console';
 
 
 @Injectable({
@@ -142,16 +145,22 @@ export class MainServiceService {
    * Each `User` instance is created from the document's data, including a unique ID.
    */
   subChannelsList() {
-    return onSnapshot(collection(this.firestore, 'channels'), (list) => {
-      this.allChannels = [];
-      list.forEach((element) => {
-        let channelData = {
-          ...element.data(),
-          id: element.id,
-        };
-        this.allChannels.push(new Channel(channelData));
-      });
-    });
+    return onSnapshot(
+      query(
+        collection(this.firestore, 'channels'),
+        orderBy('openingDate', 'asc') // Sortieren nach 'openingDate' absteigend
+      ),
+      (list) => {
+        this.allChannels = [];
+        list.forEach((element) => {
+          let channelData = {
+            ...element.data(),
+            id: element.id,
+          };
+          this.allChannels.push(new Channel(channelData));
+        });
+      }
+    );
   }
   
  
