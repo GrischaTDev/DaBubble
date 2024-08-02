@@ -201,6 +201,11 @@
               *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
             >
               {{ singleMessage.message }}
+
+              <div *ngIf="singleMessage.image">
+                {{ singleMessage.image }}
+              </div>
+
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
               <textarea
@@ -309,6 +314,12 @@
   </div>
   <div class="desktop-chat-input-container" id="meinTextarea">
     <form class="desktop-chat-input-field-container br-20">
+      <div class="add-image-container" *ngIf="chatService.imageMessage" >
+        <img src="{{ chatService.imageMessage }}" alt="">
+        <div class="delete-img" (click)="chatService.deleteMessage()" >
+          <mat-icon>close</mat-icon>
+        </div>
+     </div>
       <textarea
         [(ngModel)]="chatService.text"
         name="textarea"
@@ -320,8 +331,9 @@
       <div class="desktop-chat-input-field-icon-container">
         <div class="desktop-chat-input-icon-container">
           <div class="desktop-chat-border-right">
-            <div class="desktop-chat-input-icon">
+            <div class="desktop-chat-input-icon" >
               <mat-icon>add</mat-icon>
+              <input id="file-upload" type="file" (change)="chatService.onFileSelected($event)">
             </div>
           </div>
           <div class="desktop-chat-input-icon">

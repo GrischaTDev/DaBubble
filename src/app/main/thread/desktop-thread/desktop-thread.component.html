@@ -11,23 +11,16 @@
       </div>
       <div>
         <div
-          class="dektop-thread-header-members-container"
-          (click)="
-            this.chatService.doNotClose($event); chatService.openDialogAddUser()
-          "
-        >
-        </div>
-        <div
           class="dektop-thread-header-icon"
           (click)="
-            this.chatService.doNotClose($event); chatService.openDialogAddUser()
+            this.chatService.doNotClose($event); threadService.closeThread()
           "
         >
-          <mat-icon>person_add</mat-icon>
+          <mat-icon>close</mat-icon>
         </div>
       </div>
     </div>
-    <div #scrollContainer class="dektop-thread-content">
+    <div #scrollContainerThread class="dektop-thread-content">
       <div
         (mouseover)="
           chatService.toggleIconContainer(singleMessageIndex, $event)
@@ -38,16 +31,12 @@
           let singleMessageIndex = index
         "
         (click)="chatService.onMouseLeave()"
+        class="dektop-thread-message-single-message"
+        [ngClass]="{
+          'dektop-thread-message-single-message-hover':
+            chatService.activeMessageIndex === singleMessageIndex
+        }"
       >
-        <div
-          class="dektop-thread-message-date-container"
-          [ngClass]="{
-            'dektop-thread-message-date-container-hover':
-              chatService.activeMessageIndex === singleMessageIndex
-          }"
-          (mouseenter)="chatService.onMouseLeave()"
-        >
-        </div>
         <div
           class="dektop-thread-edit-message-container"
           *ngIf="chatService.activeMessageIndex === singleMessageIndex"

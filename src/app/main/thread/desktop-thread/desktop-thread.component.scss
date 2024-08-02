@@ -1,5 +1,5 @@
 @import "./../../../../styles.scss";
-@import '@ctrl/ngx-emoji-mart/picker';
+@import "@ctrl/ngx-emoji-mart/picker";
 
 @font-face {
   font-family: "TwemojiMozilla";
@@ -12,7 +12,7 @@
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
   border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;  
+  border-bottom-right-radius: 30px;
 }
 
 /* -----------DESKTOP-------------- */
@@ -69,11 +69,12 @@
   width: 40px;
   border-radius: 100%;
   margin-right: 16px;
-  background-color: $background-lightblue;
   cursor: pointer;
   mat-icon {
     &:hover {
-      color: $background-purple;
+      background-color: $background-lightblue;
+      border-radius: 100%;
+      padding: 4px;
     }
   }
 }
@@ -127,33 +128,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 24px;
-  margin-bottom: 24px;
   margin-left: 16px;
   margin-right: 16px;
 }
 
-.dektop-thread-message-date-container-hover {
-  margin-bottom: 16px;
+.dektop-thread-message-single-message {
+  margin-top: 8px;
 }
 
-.dektop-thread-message-date {
-  font-size: 18px;
-  font-weight: 400;
-  white-space: nowrap;
-  color: $color-black;
-  border: 1px solid $border-ligth-purple;
-  border-radius: 30px;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.dektop-thread-message-line {
-  height: 1px;
-  width: 100%;
-  background-color: $border-ligth-purple;
+.dektop-thread-message-single-message-hover {
+  margin-top: 0;
 }
 
 .dektop-thread-edit-message-container {
@@ -527,5 +511,3 @@
     }
   }
 }
-
-

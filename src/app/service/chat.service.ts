@@ -54,6 +54,7 @@ export class ChatService {
   private subscription: Subscription = new Subscription();
   private itemsSubscription?: Subscription;
   isThreadOpen: boolean = false;
+  imageMessage: string | ArrayBuffer | null = '';
 
   constructor(public mainService: MainServiceService, private router: Router) {
   }
@@ -167,6 +168,7 @@ export class ChatService {
     this.messageChannel.userName = this.mainService.loggedInUser.name;
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+    this.messageChannel.image = this.imageMessage;
     this.dataChannel.messageChannel.push(this.messageChannel);
     this.sendMessage('channels', channelId);
     this.text = '';
@@ -179,6 +181,24 @@ export class ChatService {
    */
   sendMessage(docName: string, channelId: string) {
     this.mainService.addDoc(docName, this.dataChannel.id, new Channel(this.dataChannel));
+  }
+
+  deleteMessage() {
+    this.imageMessage = '';
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          this.imageMessage = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   /**
@@ -336,7 +356,7 @@ export class ChatService {
 
   }
 }
-function index(value: Channel, index: number, array: Channel[]): value is Channel {
-  throw new Error('Function not implemented.');
-}
+
+
+
 

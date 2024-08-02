@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { getAuth } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { MainServiceService } from '../../../service/main-service.service';
@@ -15,6 +15,7 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-desktop-thread',
@@ -28,58 +29,84 @@ import { EmojiService } from '../../../service/emoji.service';
   styleUrl: './desktop-thread.component.scss'
 })
 export class DesktopThreadComponent {
+  parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  loggedInUser: User = new User();
-  parmsId: string = '';
+  subscription;
+  dialogOpen = false;
+  firestore: Firestore = inject(Firestore);
+
 
   constructor(
-    private router: Router, private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService, public channelService: ChannelService) {
-  
+    private route: ActivatedRoute,
+    public chatService: ChatService,
+    public emojiService: EmojiService,
+    public mainService: MainServiceService,
+    public directMessageService: DirectMessageService,
+    public channelService: ChannelService,
+    public loginService: LoginService,
+    public threadService: ThreadService
+  ) {
+    this.subscription = mainService.currentContentEmoji.subscribe((content) => {
+      if (!this.chatService.editOpen) {
+        this.chatService.text += content;
+      } else {
+        this.chatService.editText += content;
+      }
+    });
+        this.route.params.subscribe((params: any) => {
+      this.parmsId = params.id;
+      chatService.idOfChannel = params.id;
+    });
+    this.chatService.loggedInUser = this.mainService.loggedInUser;
   }
 
-   /**
-  * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
-  * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
-  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
-  */
-   ngOnInit() {
+  /**
+ * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+ * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+ * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+ */
+  ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.checkScreenSize(window.innerWidth);
+    this.chatService.loadFirstChannel();
   }
 
-   /**
-  * Handles window resize events by checking if the screen size exceeds a specific width.
-  * This method is triggered whenever the window is resized.
-  */
-   @HostListener('window:resize')
-   onResize() {
-     this.checkScreenSize(window.innerWidth);
-   }
- 
-   /**
-   * Redirects to the main page if the screen width exceeds 960 pixels.
-   * @param {number} width - The current width of the screen.
-   */
-   private checkScreenSize(width: number) {
-     if (width > 960) {
-       this.router.navigate(['/main']);
-       this.chatService.mobileChatIsOpen = true;
-     } 
-   }
+  @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
 
   /**
-* Opens a user profile in a modal dialog using Angular Material's Dialog component.
-* The function configures the dialog to display details about a specified user.
-* @param {User} directUser - The user whose profile is to be displayed in the dialog.
-*/
-  openUserProfile(directUser: User) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = directUser;
-    this.dialog.open(UserProfileComponent, dialogConfig);
+   * Lifecycle hook that is called after every check of the component's view.
+   * Checks if the scrollHeight of the container has increased since the last check,
+   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
+   * and updates the last known scrollHeight.
+   */
+  ngAfterViewChecked() {
+    if (
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+    ) {
+      this.scrollToBottom();
+      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+    }
+  }
+
+  /**
+   * Scrolls the content of the scrollable container to the bottom.
+   * This is typically used to ensure the user sees the most recent messages or content added to the container.
+   */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
+  }
+
+  /**
+   * A lifecycle hook that is called when the component is destroyed.
+   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+   */
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
 
