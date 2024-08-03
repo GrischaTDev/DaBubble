@@ -91,7 +91,7 @@
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
-            this.emojiService.addReactionToMessage('✅', singleMessageIndex)
+            this.emojiService.addReactionToMessage('✅', singleMessageIndex, 'direct-message')
           "
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
@@ -99,7 +99,7 @@
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
-            this.emojiService.addReactionToMessage('🙌', singleMessageIndex)
+            this.emojiService.addReactionToMessage('🙌', singleMessageIndex, 'direct-message')
           "
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
@@ -300,6 +300,7 @@
                 this.emojiService.addAdditionalReactionToMessage(
                   emojie.emoji,
                   singleMessageIndex,
+                  'direct-message',
                   emojiIndex
                 )
               "

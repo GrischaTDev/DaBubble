@@ -12,6 +12,7 @@ import { ChatService } from '../../../service/chat.service';
 import { EmojiService } from '../../../service/emoji.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { channel } from 'node:diagnostics_channel';
 
 @Component({
   selector: 'app-dialog-emoji',
@@ -46,7 +47,7 @@ export class DialogEmojiComponent {
       this.inputContent = ' ' + event.emoji.native;
       this.mainService.changeInputContent(this.inputContent);
     } else {
-      this.emojiService.addReactionToMessage(event.emoji.native, this.chatService.indexOfChannelMessage);
+      this.emojiService.addReactionToMessage(event.emoji.native, this.chatService.indexOfChannelMessage, 'channel');
     }
     this.chatService.closeDialog();
   }

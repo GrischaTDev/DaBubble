@@ -83,7 +83,7 @@
         >
           <div
             class="mobile-chat-edit-icon-container"
-            (click)="this.emojiService.addReactionToMessage('✅', singleMessageIndex)"
+            (click)="this.emojiService.addReactionToMessage('✅', singleMessageIndex, 'direct-message')"
           >
             <img
               src="./../../../../assets/icons/good-mark.svg"
@@ -92,7 +92,7 @@
           </div>
           <div
             class="mobile-chat-edit-icon-container"
-            (click)="this.emojiService.addReactionToMessage('🙌', singleMessageIndex)"
+            (click)="this.emojiService.addReactionToMessage('🙌', singleMessageIndex, 'direct-message')"
           >
             <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
           </div>
@@ -220,6 +220,7 @@
                   this.emojiService.addAdditionalReactionToMessage(
                     emojie.emoji,
                     singleMessageIndex,
+                    'direct-message',
                     emojiIndex
                   )
                 "

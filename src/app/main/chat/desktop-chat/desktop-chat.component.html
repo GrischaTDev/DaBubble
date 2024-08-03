@@ -75,7 +75,7 @@
         <div
           class="desktop-chat-edit-icon-container"
           (click)="
-            this.emojiService.addReactionToMessage('✅', singleMessageIndex)
+            this.emojiService.addReactionToMessage('✅', singleMessageIndex, 'channels')
           "
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
@@ -83,7 +83,7 @@
         <div
           class="desktop-chat-edit-icon-container"
           (click)="
-            this.emojiService.addReactionToMessage('🙌', singleMessageIndex)
+            this.emojiService.addReactionToMessage('🙌', singleMessageIndex, 'channels')
           "
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
@@ -285,6 +285,7 @@
                 this.emojiService.addAdditionalReactionToMessage(
                   emojie.emoji,
                   singleMessageIndex,
+                  'channels',
                   emojiIndex
                 )
               "

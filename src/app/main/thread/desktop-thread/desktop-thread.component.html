@@ -24,9 +24,9 @@
     <div #scrollContainerThread class="dektop-thread-content">
       <div
         (mouseover)="
-          chatService.toggleIconContainer(singleThreadMessageIndex, $event)
+          threadService.toggleIconContainerThread(singleThreadMessageIndex, $event)
         "
-        (mouseleave)="chatService.closeIconContainer()"
+        (mouseleave)="threadService.closeIconContainerThread()"
         *ngFor="
           let singleThreadMessage of chatService.dataThread.messageChannel;
           let singleThreadMessageIndex = index
@@ -35,12 +35,12 @@
         class="dektop-thread-message-single-message"
         [ngClass]="{
           'dektop-thread-message-single-message-hover':
-            chatService.activeMessageIndex === singleThreadMessageIndex
+          threadService.activeThreadMessageIndex === singleThreadMessageIndex
         }"
       >
         <div
           class="dektop-thread-edit-message-container"
-          *ngIf="chatService.activeMessageIndex === singleThreadMessageIndex"
+          *ngIf="threadService.activeThreadMessageIndex === singleThreadMessageIndex"
           [ngClass]="{
           'dektop-thread-edit-message-container-right':
             chatService.ifMessageFromMe(singleThreadMessage.userId),
@@ -80,7 +80,7 @@
         >
           <span
             (click)="
-              chatService.toggleEditMessageContainer(
+              threadService.toggleEditMessageContainerThread(
                 singleThreadMessageIndex,
                 $event,
                 singleThreadMessage.message
@@ -100,7 +100,7 @@
           'dektop-thread-message-container-from-others':
             !chatService.ifMessageFromMe(singleThreadMessage.userId),
             'dektop-thread-message-container-clicked':
-             chatService.activeMessageIndex === singleThreadMessageIndex,
+            threadService.activeThreadMessageIndex === singleThreadMessageIndex,
         }"
         >
           <div
@@ -136,7 +136,7 @@
             </div>
             <div
               (mouseover)="
-                chatService.toggleIconContainer(singleThreadMessageIndex, $event)
+                threadService.toggleIconContainerThread(singleThreadMessageIndex, $event)
               "
               class="dektop-thread-message-text-container"
               [ngClass]="{
@@ -147,7 +147,7 @@
                 singleThreadMessage.userId
               ),
               'dektop-thread-message-clicked':
-              chatService.activeMessageIndex === singleThreadMessageIndex,
+              threadService.activeThreadMessageIndex === singleThreadMessageIndex,
             }"
             >
               <span
@@ -188,7 +188,7 @@
                     <div>
                       <div>
                         <div class="dektop-thread-edit-message-save-container">
-                          <p (click)="chatService.closeWithoutSaving()">
+                          <p (click)="threadService.closeWithoutSavingThread()">
                             Abbrechen
                           </p>
                           <p
@@ -233,6 +233,7 @@
                   this.emojiService.addAdditionalReactionToMessage(
                     emojieThread.emoji,
                     singleThreadMessageIndex,
+                    'threads',
                     emojiIndex
                   )
                 "

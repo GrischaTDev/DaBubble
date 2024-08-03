@@ -16,14 +16,16 @@ export class EmojiService {
   newEmoji: Emoji = new Emoji();
   additionalReaction = false;
   emojiIndex: number = 0;
+  docNameFromEmoji: string = '';
 
   /**
    * Adds a reaction to a message in the current channel, updating the emoji reactions based on the user interactions.
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
    * @param {string} emoji - The emoji character to add as a reaction.
    */
-  addReactionToMessage(emoji: string, index: number) {
+  addReactionToMessage(emoji: string, index: number, docNameEmoji: string) {
     this.chatService.indexOfChannelMessage = index;
+    this.docNameFromEmoji = docNameEmoji;
     let data =
       this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction;
     if (data.length !== 0) {
@@ -59,12 +61,14 @@ export class EmojiService {
   addAdditionalReactionToMessage(
     emoji: string,
     singleMessageIndex: number,
+    docNameEmoji: string,
     emojiIndex: number
   ) {
+    this.docNameFromEmoji = docNameEmoji;
     this.additionalReaction = true;
     this.chatService.indexOfChannelMessage = singleMessageIndex;
     this.emojiIndex = emojiIndex;
-    this.addReactionToMessage(emoji, this.chatService.indexOfChannelMessage);
+    this.addReactionToMessage(emoji, this.chatService.indexOfChannelMessage, this.docNameFromEmoji);
   }
 
   /**
@@ -93,7 +97,6 @@ export class EmojiService {
    * @param {string} emoji - The emoji to be added or checked within the array.
    */
   selectionTheAddedEmoji(emoji: string) {
-
     let arrayEmoji =
       this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex];
       if (!this.userIsAvailable && !this.emojiIsAvailable) {
@@ -124,7 +127,11 @@ export class EmojiService {
     this.newEmoji.user.push(this.mainService.loggedInUser.id);
     this.newEmoji.userName.push(this.mainService.loggedInUser.name);
     this.newEmoji.userAvatar.push(this.mainService.loggedInUser.avatar);
-    this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
+    if (this.docNameFromEmoji === 'channels' || this.docNameFromEmoji === 'direct-message') {
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
+    } else if (this.docNameFromEmoji === 'threads') {
+      this.chatService.dataThread.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
+    } 
   }
 
   /**
