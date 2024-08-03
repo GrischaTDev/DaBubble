@@ -50,11 +50,11 @@ export class DesktopHeaderComponent implements OnInit {
    * Opens a direct chat for the user that is clicked on.
    * @param user - User that is clicked on.
    */
-  openDirectChat(user: any) {
+async  openDirectChat(user: any) {
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
     this.chatService.clickedUser = user;
-
+    await this.directMessageService.directMessageIsAvailable();
     this.searchValue = '';
   }
 
@@ -66,12 +66,10 @@ export class DesktopHeaderComponent implements OnInit {
   openChannel(channel: any) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
-    this.router.navigate(['/main']);
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `channels/${channel.id}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.chatService.dataChannel = channel as Channel;
-    });
+    this.router.navigate(['/main', channel.id]);
+    this.mainService.watchSingleDoc(channel.id, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
+    }); 
     this.searchValue = '';
   }
 

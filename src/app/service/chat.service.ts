@@ -5,14 +5,14 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { collection, doc, docData, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
+import { collection, doc, docData, Firestore, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import { generate, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 
 @Injectable({
@@ -21,7 +21,6 @@ import { generate, Subscription } from 'rxjs';
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  firestore: Firestore = inject(Firestore);
   dialogInstance:
     | MatDialogRef<DialogEmojiComponent, any>
     | MatDialogRef<DialogMentionUsersComponent, any>
@@ -61,12 +60,7 @@ export class ChatService {
   private itemsSubscription?: Subscription;
   imageMessage: string | ArrayBuffer | null = '';
 
-  constructor(public mainService: MainServiceService, private router: Router,) {
-  }
-
-  loadFirstChannel() {
-    const firstChannel = this.mainService.allChannels[0];
-    this.dataChannel = firstChannel as Channel;
+  constructor(public mainService: MainServiceService, private router: Router) {
   }
 
   /**
@@ -161,20 +155,20 @@ export class ChatService {
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
     if (textContent || this.imageMessage) {
-    await this.generateThreadDoc();
-    this.messageChannel.message = textContent;
-    this.messageChannel.date = Date.now();
-    this.messageChannel.userId = this.mainService.loggedInUser.id;
-    this.messageChannel.userName = this.mainService.loggedInUser.name;
-    this.messageChannel.userEmail = this.mainService.loggedInUser.email;
-    this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
-    this.dataChannel.messageChannel.push(this.messageChannel);
-    this.sendMessage();
-    this.resetMessageContent();
+      await this.generateThreadDoc();
+      this.messageChannel.message = textContent;
+      this.messageChannel.date = Date.now();
+      this.messageChannel.userId = this.mainService.loggedInUser.id;
+      this.messageChannel.userName = this.mainService.loggedInUser.name;
+      this.messageChannel.userEmail = this.mainService.loggedInUser.email;
+      this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+      this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
+      this.dataChannel.messageChannel.push(this.messageChannel);
+      this.sendMessage();
+      this.resetMessageContent();
     }
-  } 
-  
+  }
+
   resetMessageContent() {
     this.text = '';
     this.imageMessage = '';
@@ -194,11 +188,10 @@ export class ChatService {
   /**
    * Initiates the process to add a new document for a message within a specified channel.
    */
- async sendMessage() {
-   await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
-   await this.loadThreadData(this.dataThread.id);
-   this.dataThread.messageChannel.push(this.messageChannel);
-   await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+  async sendMessage() {
+    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+    this.dataThread.messageChannel.push(this.messageChannel);
+    await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
   }
 
   /**
@@ -339,7 +332,7 @@ export class ChatService {
  */
   async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
     this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-    if(this.dataChannel.messageChannel[singleMessageIndex].thread ===  this.contentMessageOfThread.thread) {
+    if (this.dataChannel.messageChannel[singleMessageIndex].thread === this.contentMessageOfThread.thread) {
       this.contentMessageOfThread = this.dataChannel.messageChannel[singleMessageIndex];
     }
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
@@ -376,7 +369,6 @@ export class ChatService {
  */
   async openThread(threadMessage: Message) {
     this.contentMessageOfThread = threadMessage;
-    this.loadThreadData(threadMessage.thread)
     if (this.isThreadOpen) {
       this.isThreadOpen = false;
     } else {
@@ -384,16 +376,4 @@ export class ChatService {
     }
   }
 
-  /**
- * Loads data for a specified thread by its ID. Unsubscribes from any previous data subscriptions,
- * and sets up a new subscription to the specified thread document in Firestore.
- * Updates `dataThread` with the received channel data.
- */
-async loadThreadData(threadId: string) {
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `threads/${threadId}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.dataThread = channel as Channel;
-    }); 
-  }
 }

@@ -34,7 +34,7 @@ export class ThreadService {
       this.chatService.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
       this.chatService.messageChannel.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
       this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
-      this.sendMessageToThread('threads', channelId);
+      this.sendMessageToThread();
       this.chatService.resetMessageContent();
       }
     }
@@ -44,7 +44,7 @@ export class ThreadService {
   * @param {string} docName - The name of the document to be added.
   * @param {string} channelId - The ID of the channel where the document should be added.
   */
-    sendMessageToThread(docName: string, channelId: string) {
-      this.mainService.addDoc(docName, this.chatService.dataThread.id, new Channel(this.chatService.dataThread));
+    sendMessageToThread() {
+      this.mainService.addDoc('threads', this.chatService.dataThread.id, new Channel(this.chatService.dataThread));
     }
 }

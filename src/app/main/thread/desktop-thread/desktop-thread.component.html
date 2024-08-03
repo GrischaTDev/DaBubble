@@ -24,35 +24,35 @@
     <div #scrollContainerThread class="dektop-thread-content">
       <div
         (mouseover)="
-          chatService.toggleIconContainer(singleMessageIndex, $event)
+          chatService.toggleIconContainer(singleThreadMessageIndex, $event)
         "
         (mouseleave)="chatService.closeIconContainer()"
         *ngFor="
-          let singleMessage of chatService.dataChannel.messageChannel;
-          let singleMessageIndex = index
+          let singleThreadMessage of chatService.dataThread.messageChannel;
+          let singleThreadMessageIndex = index
         "
         (click)="chatService.onMouseLeave()"
         class="dektop-thread-message-single-message"
         [ngClass]="{
           'dektop-thread-message-single-message-hover':
-            chatService.activeMessageIndex === singleMessageIndex
+            chatService.activeMessageIndex === singleThreadMessageIndex
         }"
       >
         <div
           class="dektop-thread-edit-message-container"
-          *ngIf="chatService.activeMessageIndex === singleMessageIndex"
+          *ngIf="chatService.activeMessageIndex === singleThreadMessageIndex"
           [ngClass]="{
           'dektop-thread-edit-message-container-right':
-            chatService.ifMessageFromMe(singleMessage.userId),
+            chatService.ifMessageFromMe(singleThreadMessage.userId),
           'dektop-thread-edit-message-container-left':
-            !chatService.ifMessageFromMe(singleMessage.userId),
+            !chatService.ifMessageFromMe(singleThreadMessage.userId),
         }"
         >
           <div
             class="dektop-thread-edit-icon-container"
             (click)="
               chatService.onButtonClick($event);
-              chatService.openDialogEmojiReactionMessage(singleMessageIndex)
+              chatService.openDialogEmojiReactionMessage(singleThreadMessageIndex)
             "
           >
             <mat-icon>add_reaction</mat-icon>
@@ -61,11 +61,11 @@
             class="dektop-thread-edit-icon-container"
             (click)="
               this.chatService.doNotClose($event);
-              chatService.onMouseEnter(singleMessageIndex)
+              chatService.onMouseEnter(singleThreadMessageIndex)
             "
             [ngClass]="{
               'dektop-thread-edit-icon-left': !chatService.ifMessageFromMe(
-                singleMessage.userId
+                singleThreadMessage.userId
               )
             }"
           >
@@ -73,17 +73,17 @@
           </div>
         </div>
         <div
-          (mouseenter)="chatService.onMouseEnter(singleMessageIndex)"
+          (mouseenter)="chatService.onMouseEnter(singleThreadMessageIndex)"
           (mouseleave)="chatService.onMouseLeave()"
           class="dektop-thread-edit-button-container"
-          *ngIf="chatService.hoveredMessageIndex === singleMessageIndex"
+          *ngIf="chatService.hoveredMessageIndex === singleThreadMessageIndex"
         >
           <span
             (click)="
               chatService.toggleEditMessageContainer(
-                singleMessageIndex,
+                singleThreadMessageIndex,
                 $event,
-                singleMessage.message
+                singleThreadMessage.message
               )
             "
             class="dektop-thread-edit-button"
@@ -95,67 +95,67 @@
           (mouseenter)="chatService.onMouseLeave()"
           [ngClass]="{
           'dektop-thread-message-container-from-me': chatService.ifMessageFromMe(
-            singleMessage.userId
+            singleThreadMessage.userId
           ),
           'dektop-thread-message-container-from-others':
-            !chatService.ifMessageFromMe(singleMessage.userId),
+            !chatService.ifMessageFromMe(singleThreadMessage.userId),
             'dektop-thread-message-container-clicked':
-             chatService.activeMessageIndex === singleMessageIndex,
+             chatService.activeMessageIndex === singleThreadMessageIndex,
         }"
         >
           <div
             (click)="
               this.chatService.doNotClose($event);
-              directMessageService.openProfil(singleMessage.userId)
+              directMessageService.openProfil(singleThreadMessage.userId)
             "
             (mouseenter)="chatService.onMouseLeave()"
             class="dektop-thread-message-avatar-container"
           >
-            <img src="{{ singleMessage.userAvatar }}" alt="" />
+            <img src="{{ singleThreadMessage.userAvatar }}" alt="" />
           </div>
           <div class="dektop-thread-message-content">
             <div
               [ngClass]="{
                 'dektop-thread-message-name-date-container-me':
-                  chatService.ifMessageFromMe(singleMessage.userId),
+                  chatService.ifMessageFromMe(singleThreadMessage.userId),
                 'dektop-thread-message-name-date-container-from-others':
-                  !chatService.ifMessageFromMe(singleMessage.userId)
+                  !chatService.ifMessageFromMe(singleThreadMessage.userId)
               }"
             >
               <span
-                (click)="directMessageService.openProfil(singleMessage.userId)"
+                (click)="directMessageService.openProfil(singleThreadMessage.userId)"
                 class="dektop-thread-message-name"
               >
-                {{ singleMessage.userName }}
+                {{ singleThreadMessage.userName }}
               </span>
               <div>
                 <span class="dektop-thread-message-time">
-                  {{ chatService.setTime(singleMessage.date) }} Uhr
+                  {{ chatService.setTime(singleThreadMessage.date) }} Uhr
                 </span>
               </div>
             </div>
             <div
               (mouseover)="
-                chatService.toggleIconContainer(singleMessageIndex, $event)
+                chatService.toggleIconContainer(singleThreadMessageIndex, $event)
               "
               class="dektop-thread-message-text-container"
               [ngClass]="{
               'dektop-thread-message-from-me': chatService.ifMessageFromMe(
-                singleMessage.userId
+                singleThreadMessage.userId
               ),
               'dektop-thread-message-from-others': !chatService.ifMessageFromMe(
-                singleMessage.userId
+                singleThreadMessage.userId
               ),
               'dektop-thread-message-clicked':
-              chatService.activeMessageIndex === singleMessageIndex,
+              chatService.activeMessageIndex === singleThreadMessageIndex,
             }"
             >
               <span
-                *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
+                *ngIf="chatService.editMessageInputIndex !== singleThreadMessageIndex"
               >
-                {{ singleMessage.message }}
+                {{ singleThreadMessage.message }}
               </span>
-              <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
+              <div *ngIf="chatService.editMessageIndex === singleThreadMessageIndex">
                 <textarea
                   [(ngModel)]="chatService.editText"
                   name="newTextarea"
@@ -196,7 +196,7 @@
                               chatService.editMessageFromChannel(
                                 this.parmsId,
                                 this.chatService.editText,
-                                singleMessageIndex
+                                singleThreadMessageIndex
                               )
                             "
                           >
@@ -213,16 +213,16 @@
             <div
               [ngClass]="{
                 'dektop-thread-message-reaction-right-container':
-                  chatService.ifMessageFromMe(singleMessage.userId),
+                  chatService.ifMessageFromMe(singleThreadMessage.userId),
                 'dektop-thread-message-reaction-left-container':
-                  !chatService.ifMessageFromMe(singleMessage.userId)
+                  !chatService.ifMessageFromMe(singleThreadMessage.userId)
               }"
             >
               <div
                 class="dektop-thread-message-reaction-content"
                 *ngFor="
                   let emojie of chatService.dataChannel.messageChannel[
-                    singleMessageIndex
+                    singleThreadMessageIndex
                   ].emojiReaction;
                   let emojiIndex = index
                 "
@@ -232,7 +232,7 @@
                 (click)="
                   this.emojiService.addAdditionalReactionToMessage(
                     emojie.emoji,
-                    singleMessageIndex,
+                    singleThreadMessageIndex,
                     emojiIndex
                   )
                 "
@@ -243,12 +243,12 @@
               <div class="dektop-thread-message-reaction-icon">
                 <mat-icon
                   *ngIf="
-                    chatService.editMessageInputIndex !== singleMessageIndex
+                    chatService.editMessageInputIndex !== singleThreadMessageIndex
                   "
                   (click)="
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
-                      singleMessageIndex
+                      singleThreadMessageIndex
                     )
                   "
                   >add_reaction</mat-icon
@@ -305,7 +305,7 @@
               <mat-icon
                 (click)="
                   threadService.sendMessageFromThread(
-                    this.chatService.dataChannel.id,
+                    this.chatService.dataThread.id,
                     this.chatService.text
                   )
                 "

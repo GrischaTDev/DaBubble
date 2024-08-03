@@ -16,6 +16,7 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -33,8 +34,6 @@ import { ChannelService } from '../../../service/channel.service';
   styleUrl: './mobile-chat.component.scss',
 })
 export class MobileChatComponent implements OnInit {
-  items$;
-  items;
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
@@ -56,12 +55,6 @@ export class MobileChatComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    if (this.parmsId) {
-      this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
-        this.chatService.dataChannel = channel;
-      });
-    }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
@@ -78,6 +71,11 @@ export class MobileChatComponent implements OnInit {
   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
   */
   ngOnInit() {
+    if (this.parmsId) {
+      this.mainService.watchSingleDoc(this.parmsId, 'channels').subscribe(dataChannel => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      }); 
+    }
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
@@ -101,7 +99,7 @@ export class MobileChatComponent implements OnInit {
   */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main']);
+      this.router.navigate(['/main', this.chatService.dataChannel.id]);
     }
   }
 

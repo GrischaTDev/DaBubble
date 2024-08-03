@@ -16,6 +16,7 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -62,7 +63,7 @@ export class DesktopChatComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.chatService.loggedInUser = this.mainService.loggedInUser;
+    this.chatService.loggedInUser = this.mainService.loggedInUser;  
   }
 
   /**
@@ -75,7 +76,9 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.chatService.loadFirstChannel();
+    this.mainService.watchSingleDoc(this.parmsId, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
+    }); 
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

@@ -16,6 +16,7 @@ import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 
 @Component({
@@ -68,11 +69,13 @@ export class DesktopThreadComponent {
  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
  */
   ngOnInit() {
-    this.loginService.currentLoggedUser()
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.chatService.loadFirstChannel();
+    this.mainService.watchSingleDoc(this.chatService.contentMessageOfThread.thread, 'threads').subscribe(dataThreadChannel => {
+      this.chatService.dataThread = new Channel(dataThreadChannel);
+    });
   }
 
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;

@@ -196,7 +196,7 @@ export class DirectMessageService {
   async pushDirectMessageDocToFirebase() {
     if (!this.directMessageIdIsAvailable) {
       this.newDataDirectMessage.channelUsers = [];
-      await this.mainService.addNewDocOnFirebase('direct-message', this.newDataDirectMessage);
+      await this.mainService.addNewDocOnFirebase('direct-message', new Channel(this.newDataDirectMessage));
       await this.pushDirectMessageIdToUser();
       await this.loadDirectChatContent(this.mainService.docId);
     }
@@ -212,7 +212,7 @@ export class DirectMessageService {
    * Updates the message arrays for both the logged-in and clicked users with a new direct message ID.
    * Also updates the new direct message content in Firebase by adding both users to the message's channel users list.
    */
-  pushDirectMessageIdToUser() {
+ async pushDirectMessageIdToUser() {
     this.mainService.loggedInUser.message.push(this.mainService.docId);
     this.chatService.clickedUser.message.push(this.mainService.docId);
     this.directMessageId = this.mainService.docId;
@@ -271,10 +271,8 @@ export class DirectMessageService {
    * @param {string} userId - The ID of the user whose direct message content is to be loaded.
    */
   async loadDirectChatContent(chatId: string) {
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `direct-message/${chatId}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.dataDirectMessage = channel as Channel;
+    this.mainService.watchSingleDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
+      this.dataDirectMessage = dataDirectMessage as Channel;
     });
   }
 

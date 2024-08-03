@@ -4,14 +4,13 @@ import {
   addDoc,
   collection,
   doc,
-  docData,
   onSnapshot,
   setDoc,
   updateDoc,
   query,
   orderBy
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
@@ -20,8 +19,7 @@ import { Emoji } from '../../assets/models/emoji.class';
 import { Message } from '../../assets/models/message.class';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { EmojiCollection } from '../../assets/models/emojiCollection.class';
-import { ChatService } from './chat.service';
-import { log } from 'node:console';
+
 
 
 @Injectable({
@@ -52,6 +50,7 @@ export class MainServiceService {
   testUser: User = new User();
   emojiReactionMessage = false;
   docId: string = '';
+  private dataThreadSubject = new Subject<any>();
   
   /**
    * Updates the content source with the new content.
@@ -210,6 +209,23 @@ export class MainServiceService {
   getDataRef(id: string, docName: string) {
     return doc(collection(this.firestore, docName), id);
   }
+
+  /**
+ * Observes a single document within a Firestore collection and emits its data via an Observable.
+ * @param {string} docId - The ID of the document to observe.
+ * @param {string} collectionName - The name of the collection containing the document.
+ * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
+ */
+watchSingleDoc(docId: string, collectionName:string): Observable<any> {
+  onSnapshot(doc(this.firestore, collectionName, docId), (element) => {    
+    let docData = {
+      ...element.data(),
+    };
+    this.dataThreadSubject.next(docData);
+  });
+  return this.dataThreadSubject.asObservable();
+}
+
 
   /**
    * Unsubscribes from user list to prevent memory leaks.

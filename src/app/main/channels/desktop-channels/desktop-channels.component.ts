@@ -48,11 +48,9 @@ export class DesktopChannelsComponent implements OnInit {
 
 
   openChannel(channel: any) {
-    this.router.navigate(['/main']);
-    this.itemsSubscription?.unsubscribe();
-    const docRef = doc(this.firestore, `channels/${channel.id}`);
-    this.itemsSubscription = docData(docRef).subscribe(channel => {
-      this.chatService.dataChannel = channel as Channel;
+    this.router.navigate(['/main', channel.id]);
+    this.mainService.watchSingleDoc(channel.id, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
     });
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;

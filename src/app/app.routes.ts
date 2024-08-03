@@ -24,7 +24,7 @@ export const routes: Routes = [
     { path: 'new-password', component: NewPaswordComponent },
     { path: 'verify-email', component: VerifyEmailComponent },
     { path: 'create-avatar', component: AvatarComponent },
-    { path: 'main', component: MainComponent, resolve: {auth: authGuard} },
+    { path: 'main/:id', component: MainComponent, resolve: {auth: authGuard} },
     { path: 'thread', component: MobileThreadComponent },
     { path: 'user-profile', component: UserProfileComponent, resolve: {auth: authGuard} },
     { path: 'chat/:id', component: MobileChatComponent, resolve: {auth: authGuard} },

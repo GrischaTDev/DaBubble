@@ -82,7 +82,7 @@ export class DirectChatComponent{
    */
    private checkScreenSize(width: number) {
      if (width > 960) {
-       this.router.navigate(['/main']);
+       this.router.navigate(['/main', this.chatService.dataChannel.id]);
        this.chatService.mobileChatIsOpen = true;
      } 
    }

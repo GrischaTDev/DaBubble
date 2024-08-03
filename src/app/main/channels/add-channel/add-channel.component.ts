@@ -118,18 +118,19 @@ export class AddChannelComponent implements OnInit {
     if (!this.selectetUser) {
       this.dataChannel.channelUsers = this.mainService.allUsers;
     } else {
-      console.log('------',this.channelService.addetUser )
       this.dataChannel.channelUsers = this.channelService.addetUser;
     }
   }
 
 
-  openChannel(channel: any) {
+  openChannel(channel: Channel) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.activeChannelId = channel.id;
-    console.log('Channel Daten', channel);
-
+    this.router.navigate(['/main', this.mainService.docId]);
+    this.mainService.watchSingleDoc(this.mainService.docId, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
+    });
     this.chatService.dataChannel = channel;
   }
 
