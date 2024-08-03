@@ -25,6 +25,7 @@ export class ThreadService {
    * @param {string} textContent - The text content of the message.
    */
     async sendMessageFromThread(channelId: string, textContent: string) {
+      if (textContent || this.chatService.imageMessage) {
       this.chatService.messageThread.message = textContent;
       this.chatService.messageThread.date = Date.now();
       this.chatService.messageThread.userId = this.mainService.loggedInUser.id;
@@ -34,7 +35,8 @@ export class ThreadService {
       this.chatService.messageChannel.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
       this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
       this.sendMessageToThread('threads', channelId);
-      this.chatService.text = '';
+      this.chatService.resetMessageContent();
+      }
     }
   
     /**

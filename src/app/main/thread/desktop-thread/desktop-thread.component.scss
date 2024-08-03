@@ -113,7 +113,7 @@
 .dektop-thread-content {
   width: 100%;
   max-height: calc(100vh - 395px);
-  height: 100%;
+  height: calc(100vh - 395px);
   overflow: auto;
   margin-bottom: 24px;
 }
@@ -372,8 +372,8 @@
 .dektop-thread-input-container {
   min-height: 145px;
   width: 100%;
-  margin-top: -12px;
-  padding-bottom: 13px;
+  margin-top: -23px;
+  padding-bottom: 26px;
 }
 
 .dektop-thread-input-field-container {
