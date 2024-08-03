@@ -5,7 +5,7 @@ export class Message {
   userAvatar: string;
   date: number;
   message: string;
-  image: string | ArrayBuffer | null;
+  imageToMessage: ArrayBuffer;
   mentionUser: string[] = [];
   thread: string = '';
   users0fTheEmoji: string[] = [];
@@ -21,7 +21,7 @@ export class Message {
     this.userAvatar = obj?.userAvatar || '';
     this.date = obj ? obj.data : '';
     this.message = obj ? obj.email : '';
-    this.image = obj ? obj.image : '';
+    this.imageToMessage = obj ? obj.imageToMessage : '';
     this.user = obj?.user || [];
     this.emojiReaction = obj ? obj.emojiReaction : [];
   }
@@ -35,7 +35,7 @@ export class Message {
       nameUser: this.userName,
       date: this.date,
       message: this.message,
-      image: this.image,
+      imageToMessage: this.imageToMessage,
       users0fTheEmoji: this.user0fTheEmoji,
       mentionUser: this.mentionUser,
       thread: this.thread,

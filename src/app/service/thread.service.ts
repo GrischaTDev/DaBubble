@@ -31,7 +31,7 @@ export class ThreadService {
       this.chatService.messageThread.userName = this.mainService.loggedInUser.name;
       this.chatService.messageThread.userEmail = this.mainService.loggedInUser.email;
       this.chatService.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
-      this.chatService.messageThread.image = this.chatService.imageMessage;
+      this.chatService.messageChannel.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
       this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
       this.sendMessageToThread('threads', channelId);
       this.chatService.text = '';

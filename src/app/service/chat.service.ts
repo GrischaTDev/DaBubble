@@ -167,13 +167,14 @@ export class ChatService {
     this.messageChannel.userName = this.mainService.loggedInUser.name;
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageChannel.image = this.imageMessage;
+    this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
+    console.log('this.messageChannel', this.messageChannel);
     this.dataChannel.messageChannel.push(this.messageChannel);
     console.log('Folgende Nachrichtenstruktur wird gespeichert:', this.dataChannel.messageChannel);
     this.sendMessage();
     this.text = '';
     this.imageMessage = '';
-  }
+  }  
 
   /**
  * Asynchronously generates a new document for a thread in Firebase.

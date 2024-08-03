@@ -55,6 +55,7 @@ export class Channel {
         date: message.date,
         message: message.message,
         emojiReaction: message.emojiReaction,
+        imageToMessage: message.imageToMessage,
         mentionUser: message.mentionUser,
         thread: message.thread
       })),
