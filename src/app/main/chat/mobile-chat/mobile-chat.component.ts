@@ -72,7 +72,7 @@ export class MobileChatComponent implements OnInit {
   */
   ngOnInit() {
     if (this.parmsId) {
-      this.mainService.watchSingleDoc(this.parmsId, 'channels').subscribe(dataChannel => {
+      this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       }); 
     }

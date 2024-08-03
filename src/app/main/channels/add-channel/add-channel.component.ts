@@ -128,7 +128,7 @@ export class AddChannelComponent implements OnInit {
     this.chatService.directChatOpen = false;
     this.activeChannelId = channel.id;
     this.router.navigate(['/main', this.mainService.docId]);
-    this.mainService.watchSingleDoc(this.mainService.docId, 'channels').subscribe(dataChannel => {
+    this.mainService.watchSingleChannelDoc(this.mainService.docId, 'channels').subscribe(dataChannel => {
       this.chatService.dataChannel = dataChannel as Channel;
     });
     this.chatService.dataChannel = channel;

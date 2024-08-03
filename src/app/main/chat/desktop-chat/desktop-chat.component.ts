@@ -76,7 +76,7 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService.watchSingleDoc(this.parmsId, 'channels').subscribe(dataChannel => {
+    this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
       this.chatService.dataChannel = dataChannel as Channel;
     }); 
   }

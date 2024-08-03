@@ -189,6 +189,7 @@ export class ChatService {
    * Initiates the process to add a new document for a message within a specified channel.
    */
   async sendMessage() {
+    console.log('Hallo')
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
     this.dataThread.messageChannel.push(this.messageChannel);
     await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
@@ -362,18 +363,13 @@ export class ChatService {
     this.hoveredMessageIndex = null;
   }
 
-  /**
- * Opens a specific thread by its ID. Unsubscribes from any existing subscription,
- * creates a new subscription to the document data of the thread, and toggles the thread's open state.
- * It updates `dataThread` with the thread data and adjusts `isThreadOpen` to reflect the current state.
- */
+  
   async openThread(threadMessage: Message) {
+    this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe(dataThreadChannel => {
+      this.dataThread = new Channel(dataThreadChannel);
+    });
     this.contentMessageOfThread = threadMessage;
-    if (this.isThreadOpen) {
-      this.isThreadOpen = false;
-    } else {
-      this.isThreadOpen = true;
-    }
+    this.isThreadOpen = true;
   }
-
 }
+

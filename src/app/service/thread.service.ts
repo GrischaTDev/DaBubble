@@ -7,6 +7,7 @@ import { Channel } from '../../assets/models/channel.class';
   providedIn: 'root'
 })
 export class ThreadService {
+  textThread: string = '';
 
   constructor(public chatService: ChatService, public mainService: MainServiceService) { }
 
@@ -41,8 +42,6 @@ export class ThreadService {
   
     /**
   * Initiates the process to add a new document for a message within a specified channel.
-  * @param {string} docName - The name of the document to be added.
-  * @param {string} channelId - The ID of the channel where the document should be added.
   */
     sendMessageToThread() {
       this.mainService.addDoc('threads', this.chatService.dataThread.id, new Channel(this.chatService.dataThread));

@@ -73,9 +73,6 @@ export class DesktopThreadComponent {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService.watchSingleDoc(this.chatService.contentMessageOfThread.thread, 'threads').subscribe(dataThreadChannel => {
-      this.chatService.dataThread = new Channel(dataThreadChannel);
-    });
   }
 
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;

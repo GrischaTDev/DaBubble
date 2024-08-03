@@ -271,7 +271,7 @@ export class DirectMessageService {
    * @param {string} userId - The ID of the user whose direct message content is to be loaded.
    */
   async loadDirectChatContent(chatId: string) {
-    this.mainService.watchSingleDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
+    this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
       this.dataDirectMessage = dataDirectMessage as Channel;
     });
   }

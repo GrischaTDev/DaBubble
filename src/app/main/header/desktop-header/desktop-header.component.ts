@@ -67,7 +67,7 @@ async  openDirectChat(user: any) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.router.navigate(['/main', channel.id]);
-    this.mainService.watchSingleDoc(channel.id, 'channels').subscribe(dataChannel => {
+    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe(dataChannel => {
       this.chatService.dataChannel = dataChannel as Channel;
     }); 
     this.searchValue = '';

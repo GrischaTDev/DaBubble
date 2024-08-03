@@ -221,24 +221,24 @@
               <div
                 class="dektop-thread-message-reaction-content"
                 *ngFor="
-                  let emojie of chatService.dataChannel.messageChannel[
+                  let emojieThread of chatService.dataThread.messageChannel[
                     singleThreadMessageIndex
                   ].emojiReaction;
                   let emojiIndex = index
                 "
                 [ngClass]="{
-                  'd-none': emojie.user.length === 0
+                  'd-none': emojieThread.user.length === 0
                 }"
                 (click)="
                   this.emojiService.addAdditionalReactionToMessage(
-                    emojie.emoji,
+                    emojieThread.emoji,
                     singleThreadMessageIndex,
                     emojiIndex
                   )
                 "
               >
-                {{ emojie.emoji }}
-                {{ emojie.user.length }}
+                {{ emojieThread.emoji }}
+                {{ emojieThread.user.length }}
               </div>
               <div class="dektop-thread-message-reaction-icon">
                 <mat-icon
@@ -267,7 +267,7 @@
     <div class="dektop-thread-input-container" id="meinTextarea">
       <form class="dektop-thread-input-field-container br-20">
         <textarea
-          [(ngModel)]="chatService.text"
+          [(ngModel)]="threadService.textThread"
           name="textarea"
           (input)="chatService.adjustHeight($event.target)"
           style="min-height: 50px; width: 100%"
@@ -306,7 +306,7 @@
                 (click)="
                   threadService.sendMessageFromThread(
                     this.chatService.dataThread.id,
-                    this.chatService.text
+                    this.threadService.textThread
                   )
                 "
                 class="dektop-thread-send-icon"
