@@ -159,7 +159,7 @@ export class ChatService {
    * Asynchronously sends a message from a specific channel, updating the channel data and triggering
    * a sendMessage process.
    */
-  async sendMessageFromChannel(channelId: string, textContent: string, image: any) {
+  async sendMessageFromChannel(channelId: string, textContent: string) {
     await this.generateThreadDoc();
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
@@ -167,10 +167,12 @@ export class ChatService {
     this.messageChannel.userName = this.mainService.loggedInUser.name;
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageChannel.image = image;
+    this.messageChannel.image = this.imageMessage;
     this.dataChannel.messageChannel.push(this.messageChannel);
+    console.log('Folgende Nachrichtenstruktur wird gespeichert:', this.dataChannel.messageChannel);
     this.sendMessage();
     this.text = '';
+    this.imageMessage = '';
   }
 
   /**
@@ -188,7 +190,7 @@ export class ChatService {
    * Initiates the process to add a new document for a message within a specified channel.
    */
  async sendMessage() {
-   await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+   await this.mainService.addDoc('channels', this.dataChannel.id, this.dataChannel as Channel);
    await this.loadThreadData(this.dataThread.id);
    this.dataThread.messageChannel.push(this.messageChannel);
    await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));

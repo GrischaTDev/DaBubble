@@ -202,8 +202,8 @@
             >
               {{ singleMessage.message }}
 
-              <div *ngIf="singleMessage.image !== ''">
-                 <img {{ singleMessage.image }} src="" alt="message width image">
+              <div *ngIf="singleMessage.image">
+                 <img src="{{ singleMessage.image }}" alt="message width image">
               </div>
 
             </span>
@@ -360,8 +360,7 @@
               (click)="
                 chatService.sendMessageFromChannel(
                   this.chatService.dataChannel.id,
-                  this.chatService.text,
-                  this.chatService.imageMessage
+                  this.chatService.text
                 )
               "
               class="desktop-chat-send-icon"
