@@ -159,7 +159,7 @@ export class ChatService {
    * Asynchronously sends a message from a specific channel, updating the channel data and triggering
    * a sendMessage process.
    */
-  async sendMessageFromChannel(channelId: string, textContent: string) {
+  async sendMessageFromChannel(channelId: string, textContent: string, image: any) {
     await this.generateThreadDoc();
     this.messageChannel.message = textContent;
     this.messageChannel.date = Date.now();
@@ -167,7 +167,7 @@ export class ChatService {
     this.messageChannel.userName = this.mainService.loggedInUser.name;
     this.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageChannel.image = this.imageMessage;
+    this.messageChannel.image = image;
     this.dataChannel.messageChannel.push(this.messageChannel);
     this.sendMessage();
     this.text = '';
