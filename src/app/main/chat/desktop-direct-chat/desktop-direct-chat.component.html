@@ -195,6 +195,10 @@
             >
               <span>
                 {{ singleMessage.message }}
+
+                <div class="image-to-message-container" *ngIf="singleMessage.imageToMessage">
+                  <img (click)="chatService.openImageMessageDialog(singleMessage.imageToMessage)" src="{{ singleMessage.imageToMessage }}" alt="message width image">
+               </div>
               </span>
             </div>
 
@@ -254,6 +258,12 @@
   </div>
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
+      <div class="add-image-container" *ngIf="chatService.imageMessage" >
+        <img src="{{ chatService.imageMessage }}" alt="">
+        <div class="delete-img" (click)="chatService.deleteMessage()" >
+          <mat-icon>close</mat-icon>
+        </div>
+     </div>
       <textarea
         [(ngModel)]="chatService.text"
         name="textarea"
@@ -267,6 +277,7 @@
           <div class="mobile-chat-border-right">
             <div class="mobile-chat-input-icon">
               <mat-icon>add</mat-icon>
+              <input id="file-upload" type="file" (change)="chatService.onFileSelected($event)">
             </div>
           </div>
           <div class="mobile-chat-input-icon">
