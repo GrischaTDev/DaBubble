@@ -17,6 +17,7 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -50,7 +51,7 @@ export class DesktopChatComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public channelService: ChannelService,
     public loginService: LoginService,
-    
+    public threadService: ThreadService
   ) {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {

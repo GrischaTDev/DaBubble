@@ -57,8 +57,10 @@ export class Channel {
         emojiReaction: message.emojiReaction,
         imageToMessage: message.imageToMessage,
         mentionUser: message.mentionUser,
-        thread: message.thread
-      })),
+        thread: message.thread,
+        numberOfMessage: message.numberOfMessage,
+        dateOfLastThreadMessage: message.dateOfLastThreadMessage,
+       })),
       avatarChannel: this.avatarChannel,
       ownerUser: this.ownerUser.map((user) => ({
         id: user.id,

@@ -13,7 +13,9 @@ export class Message {
   userIdEmoji: string[] = [];
   user: string[] = [];
   emojiReaction: { emoji: string; user: string[]; userName: string[]; userAvatar: string[]}[] = [];
-
+  numberOfMessage: number;
+  dateOfLastThreadMessage: number;
+ 
   constructor(obj?: any) {
     this.userId = obj?.userId || '';
     this.userName = obj?.userName || '';
@@ -24,6 +26,8 @@ export class Message {
     this.imageToMessage = obj ? obj.imageToMessage : '';
     this.user = obj?.user || [];
     this.emojiReaction = obj ? obj.emojiReaction : [];
+    this.numberOfMessage = obj ? obj.numberOfMessage : '';
+    this.dateOfLastThreadMessage = obj ? obj.dateOfLastThreadMessage : '';
   }
 
   public toJSON() {
@@ -39,6 +43,8 @@ export class Message {
       users0fTheEmoji: this.user0fTheEmoji,
       mentionUser: this.mentionUser,
       thread: this.thread,
+      numberOfMessage: this.numberOfMessage,
+      dateOfLastThreadMessage: this.dateOfLastThreadMessage,
       emojiReaction: this.emojiReaction,
     };
   }

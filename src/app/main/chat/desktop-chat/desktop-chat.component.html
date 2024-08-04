@@ -273,7 +273,19 @@
               'desktop-chat-message-reaction-left-container':
                 !chatService.ifMessageFromMe(singleMessage.userId)
             }"
-          >
+          > 
+            <div class="desktop-chat-message-thread-link-container" *ngIf="singleMessage.numberOfMessage > 0">
+              <div>
+                <p>{{singleMessage.numberOfMessage}}</p>
+                <p *ngIf="singleMessage.numberOfMessage === 1">Antwort</p>
+                <p *ngIf="singleMessage.numberOfMessage > 1">Antworten</p>
+              </div>
+              <div>
+                <p>Letzte Antwort</p>
+                <p> {{threadService.setDateThreadInfo(singleMessage.dateOfLastThreadMessage)}}</p>
+              </div>
+             
+            </div>
             <div
               class="desktop-chat-message-reaction-content"
               *ngFor="

@@ -13,6 +13,7 @@ export class ThreadService {
   editOpenThread: boolean = false;
   editMessageIndexThread: number | null = null;
   editMessageInputIndexThread: number | null = null;
+  displayDate: string = '';
 
   constructor(public chatService: ChatService, public mainService: MainServiceService) { }
 
@@ -90,7 +91,9 @@ export class ThreadService {
       this.chatService.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
       this.chatService.messageChannel.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
       this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
-      this.sendMessageToThread();
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].date = Date.now();
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].numberOfMessage++;
+      await this.sendMessageToThread();
       this.resetMessageContentThread();
     }
   }
@@ -119,8 +122,9 @@ export class ThreadService {
   /**
   * Initiates the process to add a new document for a message within a specified channel.
   */
-  sendMessageToThread() {
-    this.mainService.addDoc('threads', this.chatService.dataThread.id, new Channel(this.chatService.dataThread));
+  async sendMessageToThread() {
+    await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
+    await this.mainService.addDoc('threads', this.chatService.dataThread.id, new Channel(this.chatService.dataThread));
   }
 
   /**
@@ -135,4 +139,53 @@ export class ThreadService {
       this.chatService.ownerThreadMessage = false;
     }
   }
+
+  /**
+  * Setzt die Anzeige des Datums basierend auf dem Datum der letzten Nachricht in einem Thread.
+  * Wenn das Datum der letzten Nachricht der aktuelle Tag ist, wird eine spezielle Formatierung für "heute" verwendet.
+  * Andernfalls wird eine Standard-Datumsformatierung verwendet.
+  *
+  * @param {number} dateOfLastThreadMessage - Das Datum der letzten Nachricht im Thread als Zeitstempel.
+  * @returns {string} Die formatierte Datumsanzeige.
+  */
+  setDateThreadInfo(dateOfLastThreadMessage: number) {
+    const currentDate = new Date();
+    const messageDate = new Date(dateOfLastThreadMessage);
+    if (currentDate.getDate() === messageDate.getDate() && currentDate.getMonth() === messageDate.getMonth() && currentDate.getFullYear() === messageDate.getFullYear()) {
+      this.generateDateToday(messageDate);
+    } else {
+      this.generateDateNotToday(messageDate);
+    }
+    return this.displayDate;
+  }
+
+  /**
+  * Generiert eine formatierte Uhrzeit für das gegebene Datum, die speziell für den aktuellen Tag (heute) verwendet wird.
+  * Die Uhrzeit wird im "HH:MM" Format basierend auf der deutschen Lokalisierung ausgegeben.
+  *
+  * @param {Date} messageDate - Das Datum der Nachricht, für die die Uhrzeit formatiert werden soll.
+  */
+  generateDateToday(messageDate: Date) {
+    this.displayDate = messageDate.toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  /**
+  * Generiert eine vollständige Datums- und Uhrzeitanzeige für das gegebene Datum, das nicht der aktuelle Tag ist.
+  * Das Datum wird im Format "TT.MM.JJJJ, HH:MM" basierend auf der deutschen Lokalisierung ausgegeben.
+  *
+  * @param {Date} messageDate - Das Datum der Nachricht, das formatiert werden soll.
+  */
+  generateDateNotToday(messageDate: Date) {
+    this.displayDate = messageDate.toLocaleString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 }
+

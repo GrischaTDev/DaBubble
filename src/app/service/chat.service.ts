@@ -168,6 +168,8 @@ export class ChatService {
       this.messageChannel.userEmail = this.mainService.loggedInUser.email;
       this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
       this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
+      this.messageChannel.dateOfLastThreadMessage = Date.now();
+      this.messageChannel.numberOfMessage = 0;
       this.dataChannel.messageChannel.push(this.messageChannel);
       this.sendMessage();
       this.resetMessageContent();
