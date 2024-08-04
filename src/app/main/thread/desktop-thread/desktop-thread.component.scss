@@ -230,7 +230,7 @@
   padding-top: 12px;
   display: flex;
   justify-content: flex-start;
-  padding-left: 16px;
+  padding-left: 32px;
   z-index: 1;
 }
 
@@ -239,8 +239,8 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: row-reverse;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 32px;
+  padding-right: 32px;
   z-index: 1;
 }
 
@@ -360,6 +360,33 @@
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
   margin-left: 90px;
+}
+
+.dektop-thread-separating-line-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 20px;
+  width: calc(100% - 64px);
+  gap: 12px;
+  margin-left: 32px;
+  margin-right: 32px;
+}
+
+.dektop-thread-separating-line-content {
+  display: flex;
+  gap: 8px;
+  >p {
+    color: $border-ligth-purple;
+    font-size: 18px;
+    font-weight: 400;
+  }
+}
+
+.dektop-thread-separating-line {
+  background-color: $border-ligth-purple;
+  width: 200%;
+  height: 1px;
 }
 
 .dektop-thread-message-clicked {
