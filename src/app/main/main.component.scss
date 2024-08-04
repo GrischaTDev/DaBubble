@@ -21,9 +21,11 @@ app-desktop-channels {
 }
 
 
-app-desktop-chat, app-desktop-direct-chat, app-desktop-new-message {
+app-desktop-chat,
+app-desktop-direct-chat,
+app-desktop-new-message {
   flex-grow: 1;
-  
+
 }
 
 app-desktop-thread {
@@ -38,7 +40,7 @@ app-desktop-thread {
   gap: 10px;
   height: 30px;
   background-color: white;
-  transform-origin: top left; 
+  transform-origin: top left;
   transform: rotate(270deg) translateX(-100%);
   bottom: 30%;
   left: 0;
@@ -49,7 +51,8 @@ app-desktop-thread {
   z-index: 999;
   cursor: pointer;
 
-  &:hover span, &:hover mat-icon {
+  &:hover span,
+  &:hover mat-icon {
     color: $background-blue;
   }
 
