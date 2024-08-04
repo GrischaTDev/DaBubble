@@ -279,7 +279,9 @@
                     singleThreadMessageIndex
                   "
                   (click)="
-                  threadService.ifMessageOwnerMessageFromThread(singleThreadMessageIndex);
+                    threadService.ifMessageOwnerMessageFromThread(
+                      singleThreadMessageIndex
+                    );
                     emojiService.forWhichDocIsTheEmoji('thread');
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
@@ -290,12 +292,55 @@
                 >
               </div>
             </div>
-            <div>
-              <div>
-                <span></span>
-              </div>
-            </div>
           </div>
+        </div>
+        <div
+          class="dektop-thread-separating-line-container"
+          *ngIf="singleThreadMessageIndex === 0"
+        >
+          <div class="dektop-thread-separating-line-content">
+            <p
+              *ngIf="
+                this.chatService.dataChannel.messageChannel[
+                  this.chatService.indexOfThreadMessageForEditChatMessage
+                ].numberOfMessage === 0
+              "
+            >
+              keine
+            </p>
+            <p
+              *ngIf="
+                this.chatService.dataChannel.messageChannel[
+                  this.chatService.indexOfThreadMessageForEditChatMessage
+                ].numberOfMessage > 0
+              "
+            >
+              {{
+                this.chatService.dataChannel.messageChannel[
+                  this.chatService.indexOfThreadMessageForEditChatMessage
+                ].numberOfMessage
+              }}
+            </p>
+            <p
+              *ngIf="
+                this.chatService.dataChannel.messageChannel[
+                  this.chatService.indexOfThreadMessageForEditChatMessage
+                ].numberOfMessage === 1
+              "
+            >
+              Antwort
+            </p>
+            <p
+              *ngIf="
+                this.chatService.dataChannel.messageChannel[
+                  this.chatService.indexOfThreadMessageForEditChatMessage
+                ].numberOfMessage !== 1
+              "
+            >
+              Antworten
+            </p>
+          </div>
+          <div class="dektop-thread-separating-line"></div>
         </div>
       </div>
     </div>

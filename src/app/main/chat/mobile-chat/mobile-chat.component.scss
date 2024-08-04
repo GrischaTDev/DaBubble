@@ -223,6 +223,14 @@
   margin-right: 18px;
 }
 
+.image-to-message-container {
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .mobile-chat-message-name-date-container-from-others {
   display: flex;
   align-items: flex-end;
@@ -371,11 +379,23 @@
 }
 
 .mobile-chat-input-icon-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   gap: 5px;
+}
+
+#file-upload {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
 }
 
 .mobile-chat-input-icon {
@@ -384,6 +404,10 @@
   border-radius: 100%;
   &:hover {
     background-color: $background-lightblue;
+  }
+  &:first-child {
+    position: relative;
+    z-index: 1;
   }
   mat-icon {
     display: flex;
@@ -411,6 +435,55 @@
   cursor: pointer;
   &:hover {
     color: $background-purple;
+  }
+}
+
+.mobile-chat-message-thread-link-container {
+  display: flex;
+  gap: 18px;
+  height: 24px;
+  &:hover {
+    .mobile-chat-message-thread-link-number-content {
+      > p {
+        font-weight: 600;
+        color: $icon-blue;
+      }
+    }
+    .mobile-chat-message-thread-link-date-content {
+      > p {
+        color: $color-black;
+      }
+    }
+  }
+}
+
+.mobile-chat-message-thread-link-number-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  > p {
+    display: flex;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    font-size: 18px;
+    font-weight: 400;
+    color: $icon-purple-hover;
+  }
+}
+
+.mobile-chat-message-thread-link-date-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1px;
+  > p {
+    display: flex;
+    white-space: nowrap; 
+    overflow-wrap: normal;
+    font-size: 14px;
+    font-weight: 400;
+    color: $icon-gray;
   }
 }
 

@@ -312,6 +312,15 @@
   margin-right: 18px;
 }
 
+.image-to-message-container {
+
+  img {
+    width: 100%;
+    height: 100%;
+    
+  }
+}
+
 .mobile-chat-message-name-date-container-from-others {
   display: flex;
   align-items: flex-end;
@@ -419,12 +428,27 @@
   gap: 5px;
 }
 
+#file-upload {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+
 .mobile-chat-input-icon {
   height: 40px;
   width: 40px;
   border-radius: 100%;
   &:hover {
     background-color: $background-lightblue;
+  }
+  &:first-child {
+    position: relative;
+    z-index: 1;
   }
   mat-icon {
     display: flex;
