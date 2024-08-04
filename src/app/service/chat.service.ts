@@ -179,7 +179,8 @@ export class ChatService {
  * It sets the newly created document's ID in the main service and updates it in the Firestore database.
  * 
  */
-  async generateThreadDoc() {
+  async generateThreadDoc() {;
+    this.dataThread.messageChannel.splice(0, 1)
     await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
     this.messageChannel.thread = this.mainService.docId;
     this.dataThread.id = this.mainService.docId;
@@ -189,10 +190,10 @@ export class ChatService {
    * Initiates the process to add a new document for a message within a specified channel.
    */
   async sendMessage() {
-    console.log('Hallo')
-    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+    console.log(',,,,,,,,,,,,,,,', this.dataThread.messageChannel)
     this.dataThread.messageChannel.push(this.messageChannel);
     await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
   }
 
   /**
@@ -366,7 +367,7 @@ export class ChatService {
   
   async openThread(threadMessage: Message) {
     this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe(dataThreadChannel => {
-      this.dataThread = new Channel(dataThreadChannel);
+      this.dataThread = dataThreadChannel as Channel;
     });
     this.contentMessageOfThread = threadMessage;
     this.isThreadOpen = true;

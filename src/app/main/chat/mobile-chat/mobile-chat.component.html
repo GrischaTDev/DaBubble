@@ -51,21 +51,22 @@
       >
         <div
           class="mobile-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessageChannel('✅', singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('channels')"
+          (click)="emojiService.forWhichDocIsTheEmoji('channels'); emojiService.addReactionToMessageChannel('✅', singleMessageIndex);"
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessageChannel('🙌', singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('channels')"
+          (click)="emojiService.forWhichDocIsTheEmoji('channels'); emojiService.addReactionToMessageChannel('🙌', singleMessageIndex);"
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
+            emojiService.forWhichDocIsTheEmoji('channels');
             chatService.onButtonClick($event);
-            chatService.openDialogEmojiReactionMessage(singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('channels')
+            chatService.openDialogEmojiReactionMessage(singleMessageIndex); 
           "
         >
           <mat-icon>add_reaction</mat-icon>
@@ -197,9 +198,9 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
+                        emojiService.forWhichDocIsTheEmoji('channels');
                           chatService.onButtonClick($event);
-                          chatService.openDialogEmoji();
-                          this.emojiService.forWhichDocIsTheEmoji('channels')
+                          chatService.openDialogEmoji();                    
                         "
                         >sentiment_satisfied</mat-icon
                       >
@@ -259,11 +260,12 @@
                 'd-none': emojie.user.length === 0
               }"
               (click)="
-                this.emojiService.addAdditionalReactionToMessage(
+              emojiService.forWhichDocIsTheEmoji('channels');
+              emojiService.addAdditionalReactionToMessage(
                   emojie.emoji,
                   singleMessageIndex,
                   emojiIndex
-                ); this.emojiService.forWhichDocIsTheEmoji('channels')
+                ); 
               "
             >
               {{ emojie.emoji }}
@@ -273,8 +275,9 @@
               <mat-icon
                 *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
+                emojiService.forWhichDocIsTheEmoji('channels');
                   chatService.onButtonClick($event);
-                  chatService.openDialogEmojiReactionMessage(singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('channels')
+                  chatService.openDialogEmojiReactionMessage(singleMessageIndex); 
                 "
                 >add_reaction</mat-icon
               >
@@ -309,7 +312,8 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmoji(); this.emojiService.forWhichDocIsTheEmoji('channels')
+              emojiService.forWhichDocIsTheEmoji('channels');
+                chatService.onButtonClick($event); chatService.openDialogEmoji(); 
               "
               >sentiment_satisfied</mat-icon
             >

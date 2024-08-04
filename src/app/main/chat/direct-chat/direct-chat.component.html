@@ -59,7 +59,8 @@
   >
     <div
       *ngFor="
-        let singleMessage of directMessageService.dataDirectMessage.messageChannel;
+        let singleMessage of directMessageService.dataDirectMessage
+          .messageChannel;
         let singleMessageIndex = index
       "
       [ngClass]="{
@@ -91,7 +92,8 @@
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
-            this.emojiService.addReactionToMessageChannel('✅', singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('direct-message')
+            emojiService.forWhichDocIsTheEmoji('direct-message');
+            emojiService.addReactionToMessageChannel('✅', singleMessageIndex)
           "
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
@@ -99,7 +101,8 @@
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
-            this.emojiService.addReactionToMessageChannel('🙌', singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('direct-message')
+            emojiService.forWhichDocIsTheEmoji('direct-message');
+            emojiService.addReactionToMessageChannel('🙌', singleMessageIndex)
           "
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
@@ -107,8 +110,9 @@
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
+            emojiService.forWhichDocIsTheEmoji('direct-message');
             chatService.onButtonClick($event);
-            chatService.openDialogEmojiReactionMessage(singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('direct-message')
+            chatService.openDialogEmojiReactionMessage(singleMessageIndex)
           "
         >
           <mat-icon>add_reaction</mat-icon>
@@ -297,11 +301,12 @@
                 'd-none': emojie.user.length === 0
               }"
               (click)="
-                this.emojiService.addAdditionalReactionToMessage(
+                emojiService.forWhichDocIsTheEmoji('direct-message');
+                emojiService.addAdditionalReactionToMessage(
                   emojie.emoji,
                   singleMessageIndex,
                   emojiIndex
-                ); this.emojiService.forWhichDocIsTheEmoji('direct-message')
+                )
               "
             >
               {{ emojie.emoji }}

@@ -24,7 +24,10 @@
     <div #scrollContainerThread class="dektop-thread-content">
       <div
         (mouseover)="
-          threadService.toggleIconContainerThread(singleThreadMessageIndex, $event)
+          threadService.toggleIconContainerThread(
+            singleThreadMessageIndex,
+            $event
+          )
         "
         (mouseleave)="threadService.closeIconContainerThread()"
         *ngFor="
@@ -35,12 +38,14 @@
         class="dektop-thread-message-single-message"
         [ngClass]="{
           'dektop-thread-message-single-message-hover':
-          threadService.activeThreadMessageIndex === singleThreadMessageIndex
+            threadService.activeThreadMessageIndex === singleThreadMessageIndex
         }"
       >
         <div
           class="dektop-thread-edit-message-container"
-          *ngIf="threadService.activeThreadMessageIndex === singleThreadMessageIndex"
+          *ngIf="
+            threadService.activeThreadMessageIndex === singleThreadMessageIndex
+          "
           [ngClass]="{
           'dektop-thread-edit-message-container-right':
             chatService.ifMessageFromMe(singleThreadMessage.userId),
@@ -51,9 +56,11 @@
           <div
             class="dektop-thread-edit-icon-container"
             (click)="
+              emojiService.forWhichDocIsTheEmoji('thread');
               chatService.onButtonClick($event);
-              chatService.openDialogEmojiReactionMessage(singleThreadMessageIndex);
-              this.emojiService.forWhichDocIsTheEmoji('thread')
+              chatService.openDialogEmojiReactionMessage(
+                singleThreadMessageIndex
+              )
             "
           >
             <mat-icon>add_reaction</mat-icon>
@@ -124,7 +131,9 @@
               }"
             >
               <span
-                (click)="directMessageService.openProfil(singleThreadMessage.userId)"
+                (click)="
+                  directMessageService.openProfil(singleThreadMessage.userId)
+                "
                 class="dektop-thread-message-name"
               >
                 {{ singleThreadMessage.userName }}
@@ -137,7 +146,10 @@
             </div>
             <div
               (mouseover)="
-                threadService.toggleIconContainerThread(singleThreadMessageIndex, $event)
+                threadService.toggleIconContainerThread(
+                  singleThreadMessageIndex,
+                  $event
+                )
               "
               class="dektop-thread-message-text-container"
               [ngClass]="{
@@ -152,11 +164,17 @@
             }"
             >
               <span
-                *ngIf="chatService.editMessageInputIndex !== singleThreadMessageIndex"
+                *ngIf="
+                  chatService.editMessageInputIndex !== singleThreadMessageIndex
+                "
               >
                 {{ singleThreadMessage.message }}
               </span>
-              <div *ngIf="chatService.editMessageIndex === singleThreadMessageIndex">
+              <div
+                *ngIf="
+                  chatService.editMessageIndex === singleThreadMessageIndex
+                "
+              >
                 <textarea
                   [(ngModel)]="chatService.editText"
                   name="newTextarea"
@@ -170,9 +188,9 @@
                       <div class="dektop-thread-input-icon">
                         <mat-icon
                           (click)="
+                            emojiService.forWhichDocIsTheEmoji('thread');
                             chatService.onButtonClick($event);
-                            chatService.openDialogEmoji();
-                            this.emojiService.forWhichDocIsTheEmoji('thread')
+                            chatService.openDialogEmoji()
                           "
                           >sentiment_satisfied</mat-icon
                         >
@@ -232,11 +250,12 @@
                   'd-none': emojieThread.user.length === 0
                 }"
                 (click)="
-                  this.emojiService.addAdditionalReactionToMessage(
+                  emojiService.forWhichDocIsTheEmoji('thread');
+                  emojiService.addAdditionalReactionToMessage(
                     emojieThread.emoji,
                     singleThreadMessageIndex,
                     emojiIndex
-                  ); this.emojiService.forWhichDocIsTheEmoji('thread')
+                  )
                 "
               >
                 {{ emojieThread.emoji }}
@@ -245,13 +264,15 @@
               <div class="dektop-thread-message-reaction-icon">
                 <mat-icon
                   *ngIf="
-                    chatService.editMessageInputIndex !== singleThreadMessageIndex
+                    chatService.editMessageInputIndex !==
+                    singleThreadMessageIndex
                   "
                   (click)="
+                    emojiService.forWhichDocIsTheEmoji('thread');
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
                       singleThreadMessageIndex
-                    ); this.emojiService.forWhichDocIsTheEmoji('thread')
+                    )
                   "
                   >add_reaction</mat-icon
                 >
@@ -286,9 +307,9 @@
             <div class="dektop-thread-input-icon">
               <mat-icon
                 (click)="
+                  emojiService.forWhichDocIsTheEmoji('thread');
                   chatService.onButtonClick($event);
-                  chatService.openDialogEmoji();
-                  this.emojiService.forWhichDocIsTheEmoji('thread')
+                  chatService.openDialogEmoji()
                 "
                 >sentiment_satisfied</mat-icon
               >

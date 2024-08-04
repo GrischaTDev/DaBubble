@@ -27,8 +27,9 @@ export class EmojiService {
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
    * @param {string} emoji - The emoji character to add as a reaction.
    */
-  addReactionToMessageChannel(emoji: string, index: number) {
-    let dataEmoji = this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction;
+  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
+    this.chatService.indexOfChannelMessage = indexSingleMessage;
+    let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction; 
     if (dataEmoji.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, dataEmoji);
       this.selectionTheAddedEmojiChannel(emoji);
@@ -43,8 +44,9 @@ export class EmojiService {
  * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
  * @param {string} emoji - The emoji character to add as a reaction.
  */
-  addReactionToMessageThread(emoji: string, index: number) {
-    let dataEmoji = this.chatService.dataThread.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction;
+  addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
+    this.chatService.indexOfChannelMessage = indexSingleMessage;
+    let dataEmoji = this.chatService.dataThread.messageChannel[indexSingleMessage].emojiReaction;
     if (dataEmoji.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, dataEmoji);
       this.selectionTheAddedEmojiThread(emoji);
@@ -211,7 +213,6 @@ export class EmojiService {
         arrayEmoji.userName.splice(index, 1);
         arrayEmoji.userAvatar.splice(index, 1);
         if (arrayEmoji.user !== 0) {
-        } else {
           this.removeEmojie();
         }
       }
@@ -258,7 +259,6 @@ export class EmojiService {
   * @param {string} docName - The name of the document type.
   */
   forWhichDocIsTheEmoji(docName: string) {
-    console.log('ffffffffffffffffffff', docName)
     if (docName === 'channels') {
       this.emojiToChannel = true;
     } else if (docName === 'direct-message') {
