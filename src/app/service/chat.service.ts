@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
 import { firstValueFrom, Subscription } from 'rxjs';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
 
 
 @Injectable({
@@ -27,10 +28,12 @@ export class ChatService {
     | MatDialogRef<DialogUserChatComponent, any>
     | MatDialogRef<DialogAddUserComponent, any>
     | MatDialogRef<DialogEditChannelComponent, any>
+    | MatDialogRef<DialogImageMessageComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   dialogAddUserOpen = false;
+  dialogImageMessageOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   dataThread: Channel = new Channel();
@@ -123,6 +126,12 @@ export class ChatService {
     } else {
       this.closeDialog();
     }
+  }
+
+  openImageMessageDialog(image: ArrayBuffer) {
+    const dialogRef = this.dialog.open(DialogImageMessageComponent, {
+      data: { image: image }
+    });
   }
 
   /**

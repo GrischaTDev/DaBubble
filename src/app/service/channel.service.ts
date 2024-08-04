@@ -6,6 +6,7 @@ import { Channel } from '../../assets/models/channel.class';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
 
 @Injectable({
   providedIn: 'root'
