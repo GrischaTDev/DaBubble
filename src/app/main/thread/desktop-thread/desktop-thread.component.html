@@ -52,7 +52,8 @@
             class="dektop-thread-edit-icon-container"
             (click)="
               chatService.onButtonClick($event);
-              chatService.openDialogEmojiReactionMessage(singleThreadMessageIndex)
+              chatService.openDialogEmojiReactionMessage(singleThreadMessageIndex);
+              this.emojiService.forWhichDocIsTheEmoji('thread')
             "
           >
             <mat-icon>add_reaction</mat-icon>
@@ -170,7 +171,8 @@
                         <mat-icon
                           (click)="
                             chatService.onButtonClick($event);
-                            chatService.openDialogEmoji()
+                            chatService.openDialogEmoji();
+                            this.emojiService.forWhichDocIsTheEmoji('thread')
                           "
                           >sentiment_satisfied</mat-icon
                         >
@@ -233,9 +235,8 @@
                   this.emojiService.addAdditionalReactionToMessage(
                     emojieThread.emoji,
                     singleThreadMessageIndex,
-                    'threads',
                     emojiIndex
-                  )
+                  ); this.emojiService.forWhichDocIsTheEmoji('thread')
                 "
               >
                 {{ emojieThread.emoji }}
@@ -250,7 +251,7 @@
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
                       singleThreadMessageIndex
-                    )
+                    ); this.emojiService.forWhichDocIsTheEmoji('thread')
                   "
                   >add_reaction</mat-icon
                 >
@@ -286,7 +287,8 @@
               <mat-icon
                 (click)="
                   chatService.onButtonClick($event);
-                  chatService.openDialogEmoji()
+                  chatService.openDialogEmoji();
+                  this.emojiService.forWhichDocIsTheEmoji('thread')
                 "
                 >sentiment_satisfied</mat-icon
               >

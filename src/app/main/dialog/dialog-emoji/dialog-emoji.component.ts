@@ -47,7 +47,12 @@ export class DialogEmojiComponent {
       this.inputContent = ' ' + event.emoji.native;
       this.mainService.changeInputContent(this.inputContent);
     } else {
-      this.emojiService.addReactionToMessage(event.emoji.native, this.chatService.indexOfChannelMessage, 'channel');
+      if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
+        this.emojiService.addReactionToMessageChannel(event.emoji.native, this.chatService.indexOfChannelMessage);
+      } else if (this.emojiService.emojieToThread) {
+        this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfChannelMessage);
+      }
+
     }
     this.chatService.closeDialog();
   }

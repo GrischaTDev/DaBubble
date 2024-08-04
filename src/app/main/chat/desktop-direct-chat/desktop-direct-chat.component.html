@@ -83,7 +83,7 @@
         >
           <div
             class="mobile-chat-edit-icon-container"
-            (click)="this.emojiService.addReactionToMessage('✅', singleMessageIndex, 'direct-message')"
+            (click)="this.emojiService.addReactionToMessageChannel('✅', singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('direct-message')"
           >
             <img
               src="./../../../../assets/icons/good-mark.svg"
@@ -92,7 +92,7 @@
           </div>
           <div
             class="mobile-chat-edit-icon-container"
-            (click)="this.emojiService.addReactionToMessage('🙌', singleMessageIndex, 'direct-message')"
+            (click)="this.emojiService.addReactionToMessageChannel('🙌', singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('direct-message')"
           >
             <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
           </div>
@@ -100,7 +100,7 @@
             class="mobile-chat-edit-icon-container"
             (click)="
               chatService.onButtonClick($event);
-              chatService.openDialogEmojiReactionMessage(singleMessageIndex)
+              chatService.openDialogEmojiReactionMessage(singleMessageIndex); this.emojiService.forWhichDocIsTheEmoji('direct-message')
             "
           >
             <mat-icon>add_reaction</mat-icon>
@@ -219,10 +219,9 @@
                 (click)="
                   this.emojiService.addAdditionalReactionToMessage(
                     emojie.emoji,
-                    singleMessageIndex,
-                    'direct-message',
+                    singleMessageIndex,                  
                     emojiIndex
-                  )
+                  ); this.emojiService.forWhichDocIsTheEmoji('direct-message')
                 "
               >
                 {{ emojie.emoji }}
@@ -234,7 +233,7 @@
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
                       singleMessageIndex
-                    )
+                    ); this.emojiService.forWhichDocIsTheEmoji('direct-message')
                   "
                   >add_reaction</mat-icon
                 >
@@ -270,7 +269,7 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmoji()
+                chatService.onButtonClick($event); chatService.openDialogEmoji(); this.emojiService.forWhichDocIsTheEmoji('direct-message')
               "
               >sentiment_satisfied</mat-icon
             >
