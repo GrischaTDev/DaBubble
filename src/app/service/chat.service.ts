@@ -12,7 +12,7 @@ import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 
 @Injectable({
@@ -59,6 +59,8 @@ export class ChatService {
   private subscription: Subscription = new Subscription();
   private itemsSubscription?: Subscription;
   imageMessage: string | ArrayBuffer | null = '';
+  indexOfThreadMessageForEditChatMessage: number = 0;
+  ownerThreadMessage: boolean = false;
 
   constructor(public mainService: MainServiceService, private router: Router) {
   }
@@ -110,6 +112,9 @@ export class ChatService {
     }
   }
 
+  /**
+ * Toggles the user addition dialog. Opens the dialog if it's not already open and closes it if it is.
+ */
   openDialogAddUser() {
     if (!this.dialogAddUserOpen) {
       this.closeDialog();
@@ -169,46 +174,49 @@ export class ChatService {
     }
   }
 
+  /**
+  * Resets message content by clearing text and image message properties.
+  */
   resetMessageContent() {
     this.text = '';
     this.imageMessage = '';
   }
 
   /**
- * Asynchronously generates a new document for a thread in Firebase.
- * It sets the newly created document's ID in the main service and updates it in the Firestore database.
- * 
- */
-  async generateThreadDoc() {;
-    this.dataThread.messageChannel.splice(0, 1)
+  * Asynchronously generates a new document for a thread in Firebase.
+  * It sets the newly created document's ID in the main service and updates it in the Firestore database.
+  * 
+  */
+  async generateThreadDoc() {
+    this.newThreadOnFb.messageChannel.splice(0, 1)
+    this.newThreadOnFb.id = '';
     await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
     this.messageChannel.thread = this.mainService.docId;
-    this.dataThread.id = this.mainService.docId;
+    this.newThreadOnFb.id = this.mainService.docId;
   }
 
   /**
    * Initiates the process to add a new document for a message within a specified channel.
    */
   async sendMessage() {
-    console.log(',,,,,,,,,,,,,,,', this.dataThread.messageChannel)
-    this.dataThread.messageChannel.push(this.messageChannel);
-    await this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+    this.newThreadOnFb.messageChannel.push(this.messageChannel);
+    await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb));
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
   }
 
   /**
- * Clears the content of the image message.
- * 
- * @function deleteMessage
- */
+  * Clears the content of the image message.
+  * 
+  * @function deleteMessage
+  */
   deleteMessage() {
     this.imageMessage = '';
   }
 
   /**
- * Handles file selection events and reads the first selected file as a data URL.
- * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
- */
+  * Handles file selection events and reads the first selected file as a data URL.
+  * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+  */
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -278,11 +286,10 @@ export class ChatService {
     }
   }
 
-
   /**
- * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
- * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
- */
+  * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
+  * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
+  */
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
       event.stopPropagation();
@@ -291,17 +298,17 @@ export class ChatService {
   }
 
   /**
- * Closes the icon container by setting the active message index to null.
- */
+  * Closes the icon container by setting the active message index to null.
+  */
   closeIconContainer() {
     this.activeMessageIndex = null;
   }
 
   /**
- * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
- * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
- * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
- */
+  * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
+  * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
+  * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
+  */
   toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
     event.stopPropagation();
     if (this.editMessageIndex === index) {
@@ -317,9 +324,9 @@ export class ChatService {
   }
 
   /**
- * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
- * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
- */
+  * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
+  * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
+  */
   closeWithoutSaving() {
     this.editMessageIndex = null;
     this.editMessageInputIndex = null;
@@ -330,46 +337,68 @@ export class ChatService {
   }
 
   /**
- * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
- */
+  * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
+  */
   async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
-    this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-    if (this.dataChannel.messageChannel[singleMessageIndex].thread === this.contentMessageOfThread.thread) {
-      this.contentMessageOfThread = this.dataChannel.messageChannel[singleMessageIndex];
-    }
-    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
-    this.closeWithoutSaving();
+    this.loadContenThreadForEditMessage(singleMessageIndex)
+      .then(() => {
+        this.dataChannel.messageChannel[singleMessageIndex].message = newText;
+        this.dataThread.messageChannel[0].message = newText;
+        this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+        this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+        this.closeWithoutSaving();
+      })
   }
 
   /**
- * Handles click events on the document by resetting the active message index. This method ensures that any active message interactions are closed when clicking outside of a specific UI component.
- */
+  * Asynchronously loads a content thread for editing a message based on its index.
+  * @param {number} singleMessageIndex - The index of the message within the message channel.
+  * @returns {Promise<void>} A promise that resolves when the thread content is loaded.
+  */
+  async loadContenThreadForEditMessage(singleMessageIndex: number): Promise<void> {
+    const dataThreadChannel = await firstValueFrom(
+      this.mainService.watchSingleThreadDoc(
+        this.dataChannel.messageChannel[singleMessageIndex].thread,
+        'threads'
+      )
+    );
+    this.dataThread = dataThreadChannel as Channel;
+  }
+
+  /**
+  * Handles click events on the document by resetting the active message index. This method ensures that any active message interactions are closed when clicking outside of a specific UI component.
+  */
   @HostListener('document:click', ['$event'])
   onDocumentClick(): void {
     this.activeMessageIndex = null;
   }
 
   /**
- * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
- * @param {number} index - The index of the message that the mouse has entered.
- */
+  * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
+  * @param {number} index - The index of the message that the mouse has entered.
+  */
   onMouseEnter(index: number): void {
     this.hoveredMessageIndex = index;
   }
 
   /**
- * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
- */
+  * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
+  */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
   }
 
-  
-  async openThread(threadMessage: Message) {
+  /**
+   * Opens a thread for a given message and initializes relevant properties.
+   * @param {Message} threadMessage - The message object associated with the thread to be opened.
+   * @param {number} indexSingleMessage - The index of the message in the message list.
+   */
+  async openThread(threadMessage: Message, indexSingleMessage: number) {
     this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe(dataThreadChannel => {
       this.dataThread = dataThreadChannel as Channel;
     });
     this.contentMessageOfThread = threadMessage;
+    this.indexOfThreadMessageForEditChatMessage = indexSingleMessage;
     this.isThreadOpen = true;
   }
 }

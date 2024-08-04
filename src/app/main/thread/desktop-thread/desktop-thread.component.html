@@ -56,6 +56,9 @@
           <div
             class="dektop-thread-edit-icon-container"
             (click)="
+              threadService.ifMessageOwnerMessageFromThread(
+                singleThreadMessageIndex
+              );
               emojiService.forWhichDocIsTheEmoji('thread');
               chatService.onButtonClick($event);
               chatService.openDialogEmojiReactionMessage(
@@ -165,18 +168,20 @@
             >
               <span
                 *ngIf="
-                  chatService.editMessageInputIndex !== singleThreadMessageIndex
+                  threadService.editMessageInputIndexThread !==
+                  singleThreadMessageIndex
                 "
               >
                 {{ singleThreadMessage.message }}
               </span>
               <div
                 *ngIf="
-                  chatService.editMessageIndex === singleThreadMessageIndex
+                  threadService.editMessageIndexThread ===
+                  singleThreadMessageIndex
                 "
               >
                 <textarea
-                  [(ngModel)]="chatService.editText"
+                  [(ngModel)]="threadService.editTextThread"
                   name="newTextarea"
                   (input)="chatService.adjustHeight($event.target)"
                   style="min-height: 50px; width: 100%"
@@ -188,6 +193,9 @@
                       <div class="dektop-thread-input-icon">
                         <mat-icon
                           (click)="
+                            threadService.ifMessageOwnerMessageFromThread(
+                              singleThreadMessageIndex
+                            );
                             emojiService.forWhichDocIsTheEmoji('thread');
                             chatService.onButtonClick($event);
                             chatService.openDialogEmoji()
@@ -213,9 +221,9 @@
                           </p>
                           <p
                             (click)="
-                              chatService.editMessageFromChannel(
+                              threadService.editMessageFromThread(
                                 this.parmsId,
-                                this.chatService.editText,
+                                this.threadService.editTextThread,
                                 singleThreadMessageIndex
                               )
                             "
@@ -250,6 +258,9 @@
                   'd-none': emojieThread.user.length === 0
                 }"
                 (click)="
+                  threadService.ifMessageOwnerMessageFromThread(
+                    singleThreadMessageIndex
+                  );
                   emojiService.forWhichDocIsTheEmoji('thread');
                   emojiService.addAdditionalReactionToMessage(
                     emojieThread.emoji,
@@ -268,6 +279,7 @@
                     singleThreadMessageIndex
                   "
                   (click)="
+                  threadService.ifMessageOwnerMessageFromThread(singleThreadMessageIndex);
                     emojiService.forWhichDocIsTheEmoji('thread');
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
