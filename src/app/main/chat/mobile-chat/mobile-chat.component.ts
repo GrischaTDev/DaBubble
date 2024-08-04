@@ -17,6 +17,7 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -49,7 +50,8 @@ export class MobileChatComponent implements OnInit {
     public mainService: MainServiceService,
     public directMessageService: DirectMessageService,
     public loginService: LoginService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public threadService: ThreadService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;

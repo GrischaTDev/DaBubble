@@ -174,7 +174,7 @@ export class ThreadService {
 
   /**
   * Generiert eine vollständige Datums- und Uhrzeitanzeige für das gegebene Datum, das nicht der aktuelle Tag ist.
-  * Das Datum wird im Format "TT.MM.JJJJ, HH:MM" basierend auf der deutschen Lokalisierung ausgegeben.
+  * Das Datum wird im Format "TT.MM.JJJJ" basierend auf der deutschen Lokalisierung ausgegeben.
   *
   * @param {Date} messageDate - Das Datum der Nachricht, das formatiert werden soll.
   */
@@ -183,8 +183,6 @@ export class ThreadService {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
     });
   }
 }

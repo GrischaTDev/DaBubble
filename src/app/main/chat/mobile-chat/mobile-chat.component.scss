@@ -414,6 +414,55 @@
   }
 }
 
+.mobile-chat-message-thread-link-container {
+  display: flex;
+  gap: 18px;
+  height: 24px;
+  &:hover {
+    .mobile-chat-message-thread-link-number-content {
+      > p {
+        font-weight: 600;
+        color: $icon-blue;
+      }
+    }
+    .mobile-chat-message-thread-link-date-content {
+      > p {
+        color: $color-black;
+      }
+    }
+  }
+}
+
+.mobile-chat-message-thread-link-number-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  > p {
+    display: flex;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    font-size: 18px;
+    font-weight: 400;
+    color: $icon-purple-hover;
+  }
+}
+
+.mobile-chat-message-thread-link-date-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1px;
+  > p {
+    display: flex;
+    white-space: nowrap; 
+    overflow-wrap: normal;
+    font-size: 14px;
+    font-weight: 400;
+    color: $icon-gray;
+  }
+}
+
 .mobile-chat-message-reaction-right-container {
   display: flex;
   justify-content: flex-end;
