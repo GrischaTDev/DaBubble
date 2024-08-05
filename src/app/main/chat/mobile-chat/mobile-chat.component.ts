@@ -8,7 +8,7 @@ import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Firestore, docData } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
