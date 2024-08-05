@@ -23,6 +23,7 @@ export class DirectMessageService {
   public dialog = inject(MatDialog);
   dialogOpen = false;
   messageToChannel: Message = new Message();
+  imageMessage: string | ArrayBuffer | null = '';
   directUser: User = new User();
   loggedInUserUpdate: User = new User();
   directUserStatus: string = './assets/img/offline-icon.svg';
@@ -248,6 +249,33 @@ export class DirectMessageService {
   }
 
   /**
+  * Clears the content of the image message.
+  * 
+  * @function deleteMessage
+  */
+  deleteMessage() {
+    this.imageMessage = '';
+  }
+
+  /**
+  * Handles file selection events and reads the first selected file as a data URL.
+  * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+  */
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          this.imageMessage = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /**
    * Sends a message within a direct message channel. It first loads the direct chat content, sets the new message details, and pushes the updated channel data to Firebase.
    * @async
    * @param {string} channelId - The ID of the direct message channel.
@@ -260,6 +288,7 @@ export class DirectMessageService {
     this.chatService.messageChannel.userName = this.mainService.loggedInUser.name;
     this.chatService.messageChannel.userEmail = this.mainService.loggedInUser.email;
     this.chatService.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+    this.chatService.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
     await this.mainService.addDoc('direct-message', this.dataDirectMessage.id, new Channel(this.dataDirectMessage));
     this.chatService.text = '';

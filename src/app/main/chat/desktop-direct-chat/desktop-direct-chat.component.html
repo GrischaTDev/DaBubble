@@ -6,14 +6,9 @@
     </div>
     <span class="user-name">{{ chatService.clickedUser.name }}</span>
   </div>
-  <div class="mobile-chat-content">
+  <div class="mobile-chat-content" >
     <div
-      class="direct-chat-info"
-      [ngClass]="{
-        'd-none':
-          directMessageService.dataDirectMessage.messageChannel.length !== 0
-      }"
-    >
+      class="direct-chat-info" *ngIf="directMessageService.dataDirectMessage.messageChannel.length === 0" >
       <div
         class="user-img"
         (click)="openUserProfile(chatService.clickedUser)"
@@ -259,7 +254,7 @@
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
       <div class="add-image-container" *ngIf="chatService.imageMessage" >
-        <img src="{{ chatService.imageMessage }}" alt="">
+        <img src="{{ directMessageService.imageMessage }}" alt="">
         <div class="delete-img" (click)="chatService.deleteMessage()" >
           <mat-icon>close</mat-icon>
         </div>
@@ -277,7 +272,7 @@
           <div class="mobile-chat-border-right">
             <div class="mobile-chat-input-icon">
               <mat-icon>add</mat-icon>
-              <input id="file-upload" type="file" (change)="chatService.onFileSelected($event)">
+              <input id="file-upload" type="file" (change)="directMessageService.onFileSelected($event)">
             </div>
           </div>
           <div class="mobile-chat-input-icon">
