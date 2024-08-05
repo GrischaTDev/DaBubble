@@ -3,17 +3,16 @@
     <div class="dektop-thread-header-container">
       <div
         class="dektop-thread-header-headline"
-        (click)="channelService.openEditDialog()"
       >
-        <p>Thread</p>
-        <p>#</p>
-        <p>{{ chatService.dataChannel.name }}</p>
+        <p class="dektop-thread-header-headline-thread-text">Thread</p>
+        <p class="dektop-thread-header-headline-channel-text">#</p>
+        <p class="dektop-thread-header-headline-channel-text">{{ chatService.dataChannel.name }}</p>
       </div>
       <div>
         <div
           class="dektop-thread-header-icon"
           (click)="
-            this.chatService.doNotClose($event); threadService.closeThread()
+            this.threadService.doNotCloseThread($event); threadService.closeThread()
           "
         >
           <mat-icon>close</mat-icon>
@@ -34,7 +33,7 @@
           let singleThreadMessage of chatService.dataThread.messageChannel;
           let singleThreadMessageIndex = index
         "
-        (click)="chatService.onMouseLeave()"
+        (click)="threadService.onMouseLeaveThread()"
         class="dektop-thread-message-single-message"
         [ngClass]="{
           'dektop-thread-message-single-message-hover':
@@ -71,8 +70,8 @@
           <div
             class="dektop-thread-edit-icon-container"
             (click)="
-              this.chatService.doNotClose($event);
-              chatService.onMouseEnter(singleThreadMessageIndex)
+              this.threadService.doNotCloseThread($event);
+              threadService.onMouseEnterThread(singleThreadMessageIndex)
             "
             [ngClass]="{
               'dektop-thread-edit-icon-left': !chatService.ifMessageFromMe(
@@ -84,10 +83,10 @@
           </div>
         </div>
         <div
-          (mouseenter)="chatService.onMouseEnter(singleThreadMessageIndex)"
-          (mouseleave)="chatService.onMouseLeave()"
+          (mouseenter)="threadService.onMouseEnterThread(singleThreadMessageIndex)"
+          (mouseleave)="threadService.onMouseLeaveThread()"
           class="dektop-thread-edit-button-container"
-          *ngIf="chatService.hoveredMessageIndex === singleThreadMessageIndex"
+          *ngIf="threadService.hoveredMessageIndexThread === singleThreadMessageIndex"
         >
           <span
             (click)="
@@ -103,7 +102,7 @@
         </div>
 
         <div
-          (mouseenter)="chatService.onMouseLeave()"
+          (mouseenter)="threadService.onMouseLeaveThread()"
           [ngClass]="{
           'dektop-thread-message-container-from-me': chatService.ifMessageFromMe(
             singleThreadMessage.userId
@@ -116,10 +115,10 @@
         >
           <div
             (click)="
-              this.chatService.doNotClose($event);
+              this.threadService.doNotCloseThread($event);
               directMessageService.openProfil(singleThreadMessage.userId)
             "
-            (mouseenter)="chatService.onMouseLeave()"
+            (mouseenter)="threadService.onMouseLeaveThread()"
             class="dektop-thread-message-avatar-container"
           >
             <img src="{{ singleThreadMessage.userAvatar }}" alt="" />
@@ -184,7 +183,8 @@
                   [(ngModel)]="threadService.editTextThread"
                   name="newTextarea"
                   (input)="chatService.adjustHeight($event.target)"
-                  style="min-height: 50px; width: 100%"
+                  (focus)="chatService.adjustHeight($event.target)"
+                  style="min-height: 100px; width: 100%"
                   class="dektop-thread-message-edit-textarea"
                 ></textarea>
                 <div class="dektop-thread-input-field-icon-container">

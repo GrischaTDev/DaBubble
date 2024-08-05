@@ -14,6 +14,7 @@ export class ThreadService {
   editMessageIndexThread: number | null = null;
   editMessageInputIndexThread: number | null = null;
   displayDate: string = '';
+  hoveredMessageIndexThread: number | null = null;
 
   constructor(public chatService: ChatService, public mainService: MainServiceService) { }
 
@@ -184,6 +185,30 @@ export class ThreadService {
       month: '2-digit',
       year: 'numeric',
     });
+  }
+
+    /**
+  * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
+  * @param {number} index - The index of the message that the mouse has entered.
+  */
+    onMouseEnterThread(index: number): void {
+      this.hoveredMessageIndexThread = index;
+    }
+  
+    /**
+    * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
+    */
+    onMouseLeaveThread(): void {
+      this.hoveredMessageIndexThread = null;
+    }
+
+      /**
+   * Prevents an event from bubbling up the event chain.
+   * Typically used to stop a parent handler from being notified of an event.
+   * @param {Event} event - The event to stop propagation for.
+   */
+  doNotCloseThread(event: Event) {
+    event.stopPropagation();
   }
 }
 
