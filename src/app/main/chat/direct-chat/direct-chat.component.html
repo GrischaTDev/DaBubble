@@ -5,14 +5,14 @@
     (click)="openUserProfile(chatService.clickedUser)"
   >
     <div>
-      <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" />
+      <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User Avatar"/>
       <img
         class="user-status"
         [src]="
           chatService.clickedUser.online
             ? './assets/img/online-icon.svg'
             : './assets/img/offline-icon.svg'
-        "
+        " alt="User Status"
       />
     </div>
     <span class="user-name">{{ chatService.clickedUser.name }}</span>
@@ -23,7 +23,7 @@
       *ngIf="directMessageService.dataDirectMessage?.messageChannel?.length === 0"
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
-        <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" />
+        <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}"  alt="User Avatar"/>
         <span class="user-name">{{ chatService.clickedUser.name }}</span>
       </div>
       <span
@@ -227,7 +227,7 @@
               {{ singleMessage.message }}
 
               <div class="image-to-message-container" *ngIf="singleMessage.imageToMessage">
-                <img (click)="chatService.openImageMessageDialog(singleMessage.imageToMessage)" src="{{ singleMessage.imageToMessage }}" alt="message width image">
+                <img (click)="chatService.openImageMessageDialog(singleMessage.imageToMessage)" src="{{ singleMessage.imageToMessage }}" alt="message width">
              </div>
              
             </span>
