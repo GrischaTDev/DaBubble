@@ -25,6 +25,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { LoginService } from '../../../service/login.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { from, Observable, of } from 'rxjs';
+import { Channel } from 'diagnostics_channel';
 
 @Component({
   selector: 'app-desktop-direct-chat',
@@ -44,9 +45,16 @@ export class DesktopDirectChatComponent implements OnInit {
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   loggedInUser: User = new User();
+  parmsId: any;
 
   constructor(
     private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService,) {
+
+      this.route.params.subscribe((params: any) => {
+        this.parmsId = params.id;
+        chatService.idOfChannel = params.id;
+      });
+
   }
 
   /**
@@ -54,7 +62,7 @@ export class DesktopDirectChatComponent implements OnInit {
    * It delegates the handling of user ID from the route to another function.
    */
   ngOnInit() {
-   
+ 
   }
 
 

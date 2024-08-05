@@ -27,6 +27,7 @@ import { LoginService } from '../../../service/login.service';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { from, Observable, of } from 'rxjs';
 import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-direct-chat',
@@ -51,7 +52,12 @@ export class DirectChatComponent{
 
   constructor(
     private router: Router, private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService, public channelService: ChannelService) {
-  
+
+      if (!this.directMessageService.dataDirectMessage) {
+        this.directMessageService.dataDirectMessage = {} as Channel;
+      } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
+        this.directMessageService.dataDirectMessage.messageChannel = [];
+      }
   }
 
    /**
