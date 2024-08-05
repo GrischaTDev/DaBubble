@@ -86,6 +86,7 @@
         <div
           (mouseenter)="chatService.onMouseLeave()"
           class="mobile-chat-edit-icon-container"
+          (click)="this.navigateToThread(singleMessage.thread)"
         >
           <mat-icon>comment</mat-icon>
         </div>
@@ -267,7 +268,7 @@
               <div
                 class="mobile-chat-message-thread-link-number-content"
                 (click)="
-                  chatService.openThread(singleMessage, singleMessageIndex)
+                this.navigateToThread(singleMessage.thread)
                 "
               >
                 <p>{{ singleMessage.numberOfMessage }}</p>

@@ -76,7 +76,7 @@ export class MobileChatComponent implements OnInit {
     if (this.parmsId) {
       this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
-      }); 
+      });
     }
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -84,7 +84,7 @@ export class MobileChatComponent implements OnInit {
     });
     this.checkScreenSize(window.innerWidth);
   }
-  
+
 
   /**
   * Handles window resize events by checking if the screen size exceeds a specific width.
@@ -123,15 +123,28 @@ export class MobileChatComponent implements OnInit {
     }
   }
 
-    /**
-   * Scrolls the content of the scrollable container to the bottom.
-   * This is typically used to ensure the user sees the most recent messages or content added to the container.
-   */
-    scrollToBottom(): void {
-      this.scrollContainer.nativeElement.scrollTop =
+  /**
+ * Scrolls the content of the scrollable container to the bottom.
+ * This is typically used to ensure the user sees the most recent messages or content added to the container.
+ */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
-    }
+  }
 
+  /**
+ * Navigates to a specified thread by ID.
+ * This method subscribes to a single thread document from a service, updates the chat service's data thread, 
+ * and then navigates to the thread page using the router.
+ *
+ * @param {string} threadId - The unique identifier of the thread to navigate to.
+ */
+  navigateToThread(threadId: string) {
+    this.mainService.watchSingleThreadDoc(threadId, 'threads').subscribe(dataThreadChannel => {
+      this.chatService.dataThread = dataThreadChannel as Channel;
+    });
+    this.router.navigate(['/thread', threadId]);
+  }
 
   /**
    * A lifecycle hook that is called when the component is destroyed.

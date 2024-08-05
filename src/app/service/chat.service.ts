@@ -211,6 +211,8 @@ export class ChatService {
    */
   async sendMessage() {
     this.newThreadOnFb.messageChannel.push(this.messageChannel);
+    this.newThreadOnFb.idOfChannelOnThred = this.dataChannel.id;
+    this.newThreadOnFb.name = this.dataChannel.name;
     await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb));
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
   }

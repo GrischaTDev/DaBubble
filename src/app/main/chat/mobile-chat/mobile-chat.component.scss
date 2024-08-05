@@ -440,8 +440,8 @@
 
 .mobile-chat-message-thread-link-container {
   display: flex;
-  gap: 18px;
-  height: 24px;
+  gap: 10px;
+  height: 18px;
   &:hover {
     .mobile-chat-message-thread-link-number-content {
       > p {
@@ -460,13 +460,13 @@
 .mobile-chat-message-thread-link-number-content {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   > p {
     display: flex;
     white-space: nowrap;
     overflow-wrap: normal;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
     color: $icon-purple-hover;
   }
@@ -492,7 +492,7 @@
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 8px;
-  gap: 10px;
+  gap: 8px;
   width: 200px;
   flex-wrap: wrap;
 }

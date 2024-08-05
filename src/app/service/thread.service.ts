@@ -77,12 +77,14 @@ export class ThreadService {
   }
 
   /**
-  * Asynchronously sends a message from a specific channel, updating the channel data and triggering
-  * a sendMessage process.
-  * @param {string} channelId - The ID of the channel from which to send the message.
+  * Sends a message from a specified thread channel, updating message details and initiating data preparation.
+  * This function sets message properties including text content, date, and user details (ID, name, email, avatar),
+  * and associates an image with the message if available.
+  * It only executes if there is text content or an associated image message.
+  * @param {string} channelId - The ID of the channel from which the message is sent.
   * @param {string} textContent - The text content of the message.
   */
-  async sendMessageFromThread(channelId: string, textContent: string) {
+  sendMessageFromThread(channelId: string, textContent: string) {
     if (textContent || this.chatService.imageMessage) {
       this.chatService.messageThread.message = textContent;
       this.chatService.messageThread.date = Date.now();
@@ -91,12 +93,24 @@ export class ThreadService {
       this.chatService.messageThread.userEmail = this.mainService.loggedInUser.email;
       this.chatService.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
       this.chatService.messageChannel.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
-      this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
-      this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].date = Date.now();
-      this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].numberOfMessage++;
-      await this.sendMessageToThread();
-      this.resetMessageContentThread();
+      this.setDataPreparatoryThreadOwnerMessage();
     }
+  }
+
+  /**
+  * Asynchronously updates the owner message in a data preparation thread, increments message counters,
+  * sends a message to the thread, and resets the message content.
+  * It pushes the current message thread into the data thread's message channel,
+  * updates the date of the message being edited to the current date,
+  * increments the message count for both the edited message and the first message in the data thread.
+  */
+  async setDataPreparatoryThreadOwnerMessage() {
+    this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
+    this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].date = Date.now();
+    this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].numberOfMessage++;
+    this.chatService.dataThread.messageChannel[0].numberOfMessage++;
+    await this.sendMessageToThread();
+    this.resetMessageContentThread();
   }
 
   /**
@@ -187,26 +201,26 @@ export class ThreadService {
     });
   }
 
-    /**
-  * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
-  * @param {number} index - The index of the message that the mouse has entered.
-  */
-    onMouseEnterThread(index: number): void {
-      this.hoveredMessageIndexThread = index;
-    }
-  
-    /**
-    * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
-    */
-    onMouseLeaveThread(): void {
-      this.hoveredMessageIndexThread = null;
-    }
+  /**
+* Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
+* @param {number} index - The index of the message that the mouse has entered.
+*/
+  onMouseEnterThread(index: number): void {
+    this.hoveredMessageIndexThread = index;
+  }
 
-      /**
-   * Prevents an event from bubbling up the event chain.
-   * Typically used to stop a parent handler from being notified of an event.
-   * @param {Event} event - The event to stop propagation for.
-   */
+  /**
+  * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
+  */
+  onMouseLeaveThread(): void {
+    this.hoveredMessageIndexThread = null;
+  }
+
+  /**
+* Prevents an event from bubbling up the event chain.
+* Typically used to stop a parent handler from being notified of an event.
+* @param {Event} event - The event to stop propagation for.
+*/
   doNotCloseThread(event: Event) {
     event.stopPropagation();
   }
