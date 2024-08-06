@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { Message } from '../../assets/models/message.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -233,7 +233,7 @@ export class DirectMessageService {
       'users', this.mainService.loggedInUser.id, new User(this.mainService.loggedInUser));
     await this.mainService.addDoc('users', this.chatService.clickedUser.id, new User(this.chatService.clickedUser)
     );
-    await this.mainService.addDoc('direct-message', this.directMessageId, new Channel(this.newDataDirectMessage)
+    await this.mainService.addDoc('direct-message', this.dataDirectMessage.id, new Channel(this.newDataDirectMessage)
     );
 
   }
@@ -292,6 +292,7 @@ export class DirectMessageService {
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
     await this.mainService.addDoc('direct-message', this.dataDirectMessage.id, new Channel(this.dataDirectMessage));
     this.chatService.text = '';
+    this.imageMessage = '';
   }
 
   /**

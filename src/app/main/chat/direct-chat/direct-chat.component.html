@@ -340,9 +340,9 @@
   </div>
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
-      <div class="add-image-container" *ngIf="chatService.imageMessage" >
+      <div class="add-image-container" *ngIf="directMessageService.imageMessage" >
         <img src="{{ directMessageService.imageMessage }}" alt="">
-        <div class="delete-img" (click)="chatService.deleteMessage()" >
+        <div class="delete-img" (click)="directMessageService.deleteMessage()" >
           <mat-icon>close</mat-icon>
         </div>
      </div>
@@ -358,7 +358,7 @@
         <div class="mobile-chat-input-icon-container">
           <div class="mobile-chat-border-right">
             <mat-icon>add</mat-icon>
-              <input id="file-upload" type="file" (change)="directMessageService.onFileSelected($event)">
+            <input id="file-upload" type="file" (change)="directMessageService.onFileSelected($event)">
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon
