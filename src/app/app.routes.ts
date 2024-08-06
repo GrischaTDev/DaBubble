@@ -25,7 +25,7 @@ export const routes: Routes = [
     { path: 'verify-email', component: VerifyEmailComponent },
     { path: 'create-avatar', component: AvatarComponent },
     { path: 'main/:id', component: MainComponent, resolve: {auth: authGuard} },
-    { path: 'thread/:id', component: MobileThreadComponent },
+    { path: 'thread/:id1/:id2', component: MobileThreadComponent },
     { path: 'user-profile', component: UserProfileComponent, resolve: {auth: authGuard} },
     { path: 'chat/:id', component: MobileChatComponent, resolve: {auth: authGuard} },
     { path: 'direct-chat/:userId', component: DirectChatComponent, resolve: {auth: authGuard} },
