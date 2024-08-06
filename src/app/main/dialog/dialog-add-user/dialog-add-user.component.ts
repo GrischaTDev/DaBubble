@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -16,15 +24,17 @@ import { ChannelService } from '../../../service/channel.service';
 @Component({
   selector: 'app-dialog-add-user',
   standalone: true,
-  imports: [MatDialogActions,
+  imports: [
+    MatDialogActions,
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
     CommonModule,
     MatIconModule,
-    FormsModule],
+    FormsModule,
+  ],
   templateUrl: './dialog-add-user.component.html',
-  styleUrl: './dialog-add-user.component.scss'
+  styleUrl: './dialog-add-user.component.scss',
 })
 export class DialogAddUserComponent {
   @Output() contentChange = new EventEmitter<string>();
@@ -61,9 +71,9 @@ export class DialogAddUserComponent {
   }
 
   /**
-  * Updates the content based on user input, filters user-related content, and emits an event if the content is not empty.
-  * @param {Event} [event] - Optional event parameter that can be used to pass event data.
-  */
+   * Updates the content based on user input, filters user-related content, and emits an event if the content is not empty.
+   * @param {Event} [event] - Optional event parameter that can be used to pass event data.
+   */
   updateContent(event?: Event): void {
     this.updateIsEmpty(this.channelService.content);
     this.channelService.filterUserContent(this.channelService.content);
@@ -76,8 +86,9 @@ export class DialogAddUserComponent {
    * Updates the `isEmpty` state of the content based on its presence or if it matches the placeholder.
    * @param {string} [content] - Optional content string to check against the placeholder for emptiness.
    */
-  updateIsEmpty(content?: string, ) {
-    this.channelService.isEmpty = !content || content === this.channelService.placeholder;
+  updateIsEmpty(content?: string) {
+    this.channelService.isEmpty =
+      !content || content === this.channelService.placeholder;
   }
 
   /**
@@ -105,12 +116,12 @@ export class DialogAddUserComponent {
   }
 
   /**
-  * Adds a selected user to the added users list, removes them from the edit list, and clears the content.
-  * It also updates the component state and UI, such as checking if the content is empty and adjusting the contenteditable element's height.
-  * @param {User} userFilter - The user object to add to the added users list.
-  * @param {number} indexFilterUser - The index of the user in the edit user list to remove.
-  * @param {Event} event - The event object, typically from a user interaction.
-  */
+   * Adds a selected user to the added users list, removes them from the edit list, and clears the content.
+   * It also updates the component state and UI, such as checking if the content is empty and adjusting the contenteditable element's height.
+   * @param {User} userFilter - The user object to add to the added users list.
+   * @param {number} indexFilterUser - The index of the user in the edit user list to remove.
+   * @param {Event} event - The event object, typically from a user interaction.
+   */
   pushAddetUser(userFilter: User, indexFilterUser: number, event: Event) {
     this.channelService.editUserList.splice(indexFilterUser, 1);
     this.channelService.addetUser.push(userFilter);
@@ -127,12 +138,14 @@ export class DialogAddUserComponent {
   }
 
   /**
-  * Increases the height of the textarea by a set increment and triggers change detection to update the view.
-  * This method is typically used to adjust the layout dynamically based on content or interaction changes.
-  */
+   * Increases the height of the textarea by a set increment and triggers change detection to update the view.
+   * This method is typically used to adjust the layout dynamically based on content or interaction changes.
+   */
   calculateHeight() {
-    this.channelService.textareaHeight = this.channelService.textareaHeight + 37;
-    this.channelService.filterContentMarginTop = this.channelService.filterContentMarginTop + 37;
+    this.channelService.textareaHeight =
+      this.channelService.textareaHeight + 37;
+    this.channelService.filterContentMarginTop =
+      this.channelService.filterContentMarginTop + 37;
     this.cdr.detectChanges();
   }
 
@@ -145,7 +158,8 @@ export class DialogAddUserComponent {
   removeAddUser(deletUser: User, indexAddUser: number) {
     this.channelService.editUserList.push(deletUser);
     this.channelService.addetUser.splice(indexAddUser, 1);
-    this.channelService.textareaHeight = this.channelService.textareaHeight - 37;
+    this.channelService.textareaHeight =
+      this.channelService.textareaHeight - 37;
     this.cdr.detectChanges();
   }
 }
