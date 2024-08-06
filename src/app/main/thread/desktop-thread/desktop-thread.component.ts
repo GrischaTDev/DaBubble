@@ -49,9 +49,9 @@ export class DesktopThreadComponent {
     public loginService: LoginService,
     public threadService: ThreadService
   ) {
-    this.subscription = mainService.currentContentEmoji.subscribe((content) => {
+    this.subscription = mainService.currentContentEmojiThread.subscribe((content) => {
       if (!this.chatService.editOpen) {
-        this.chatService.text += content;
+        this.threadService.textThread += content;
       } else {
         this.chatService.editText += content;
       }

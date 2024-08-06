@@ -28,7 +28,6 @@ export class DesktopChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
   private subscription: Subscription = new Subscription();
   private itemsSubscription?: Subscription;
-  constructor(private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
   channelListOpen: boolean = true;
   userListOpen: boolean = true;
   currentUser: any;
@@ -37,6 +36,7 @@ export class DesktopChannelsComponent implements OnInit {
   selectedChannel: any;
   activeChannelId: string | null = null;
 
+  constructor(private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
 
   ngOnInit() {
     this.loginService.currentLoggedUser()
@@ -44,7 +44,6 @@ export class DesktopChannelsComponent implements OnInit {
       this.currentUser = user;
     });
   }
-
 
   openChannel(channel: any) {
     this.router.navigate(['/main', channel.id]);

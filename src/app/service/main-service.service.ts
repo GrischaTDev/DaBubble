@@ -38,9 +38,12 @@ export class MainServiceService {
 
   }
   private contentSource = new BehaviorSubject<any>([]);
+  private contentSourceThread = new BehaviorSubject<any>([]);
   private contentSourceEmoji = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
+  currentContentEmojiThread = this.contentSourceThread.asObservable();
   mentionUser = this.contentSource.asObservable();
+  mentionUserThread = this.contentSourceThread.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -61,6 +64,14 @@ export class MainServiceService {
   changeInputContent(content: any) {
     this.contentSource.next(content);
   }
+
+    /**
+   * Updates the content source with the new content.
+   * @param {any} content - The new content to set.
+   */
+    changeInputContentThread(content: any) {
+      this.contentSourceThread.next(content);
+    }
 
   /**
    * Updates the emoji content source with the new content.
