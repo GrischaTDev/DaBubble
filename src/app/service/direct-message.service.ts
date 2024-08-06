@@ -217,6 +217,7 @@ export class DirectMessageService {
     this.mainService.loggedInUser.message.push(this.mainService.docId);
     this.chatService.clickedUser.message.push(this.mainService.docId);
     this.directMessageId = this.mainService.docId;
+    console.log('-----------', this.mainService.docId)
     this.newDataDirectMessage.id = this.mainService.docId;
     this.newDataDirectMessage.channelUsers.push(new User(this.mainService.loggedInUser));
     this.newDataDirectMessage.channelUsers.push(new User(this.chatService.clickedUser));
