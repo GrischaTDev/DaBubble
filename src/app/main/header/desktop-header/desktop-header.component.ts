@@ -8,37 +8,42 @@ import { LoginService } from '../../../service/login.service';
 import { getAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
-import { Firestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';
 import { SearchFieldService } from '../../../search-field.service';
-import { Subscription } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
-
 
 @Component({
   selector: 'app-desktop-header',
   standalone: true,
   imports: [CommonModule, MatIconModule, UserProfileComponent, FormsModule],
   templateUrl: './desktop-header.component.html',
-  styleUrl: './desktop-header.component.scss'
+  styleUrl: './desktop-header.component.scss',
 })
 export class DesktopHeaderComponent implements OnInit {
-  private subscription: Subscription = new Subscription();
-  private itemsSubscription?: Subscription;
   currentUser: any;
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
 
   searchValue: string = '';
 
+  constructor(
+    public mainService: MainServiceService,
+    private loginService: LoginService,
+    private router: Router,
+    private directMessageService: DirectMessageService,
+    private chatService: ChatService,
+    public searchField: SearchFieldService
+  ) {}
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, private firestore: Firestore, private directMessageService: DirectMessageService, private chatService: ChatService, public searchField: SearchFieldService) {}
-
-
+  /**
+   * Initializes the component.
+   * Retrieves the current logged user and subscribes to changes in the logged in user.
+   * Updates the currentUser property and sets the loggedInUser property in the main service.
+   */
   ngOnInit() {
-    this.loginService.currentLoggedUser()
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
@@ -46,11 +51,11 @@ export class DesktopHeaderComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * Opens a direct chat for the user that is clicked on.
    * @param user - User that is clicked on.
    */
-async  openDirectChat(user: any) {
+  async openDirectChat(user: any) {
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
     this.chatService.clickedUser = user;
@@ -59,7 +64,7 @@ async  openDirectChat(user: any) {
   }
 
   /**
-   * 
+   *
    * Opens a channel is clicked on.
    * @param channel - Channel that is clicked on
    */
@@ -67,28 +72,40 @@ async  openDirectChat(user: any) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.router.navigate(['/main', channel.id]);
-    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe(dataChannel => {
-      this.chatService.dataChannel = dataChannel as Channel;
-    }); 
+    this.mainService
+      .watchSingleChannelDoc(channel.id, 'channels')
+      .subscribe((dataChannel) => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
     this.searchValue = '';
   }
 
-
+  /**
+   * Prevents the event from propagating further.
+   *
+   * @param event - The event object.
+   */
   doNotClose(event: Event) {
     event.stopPropagation();
   }
 
-
+  /**
+   * Toggles the user menu.
+   */
   openUserMenu() {
     this.userMenu = !this.userMenu;
   }
 
-
+  /**
+   * Opens the user profile dialog.
+   */
   openUserProfile() {
     this.dialog.open(UserProfileComponent);
   }
 
-
+  /**
+   * Logs out the user.
+   */
   logout() {
     const auth = getAuth();
     this.loginService.logoutUser(auth);

@@ -1,9 +1,4 @@
-import {
-  Component,
-  HostListener,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -16,7 +11,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
@@ -24,8 +19,6 @@ import { EmojiService } from '../../../service/emoji.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { LoginService } from '../../../service/login.service';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { from, Observable, of } from 'rxjs';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 
@@ -43,61 +36,66 @@ import { Channel } from '../../../../assets/models/channel.class';
   templateUrl: './direct-chat.component.html',
   styleUrl: './direct-chat.component.scss',
 })
-
-export class DirectChatComponent{
+export class DirectChatComponent {
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   loggedInUser: User = new User();
   parmsId: string = '';
 
   constructor(
-    private router: Router, private route: ActivatedRoute, public chatService: ChatService, public mainService: MainServiceService, public emojiService: EmojiService, public directMessageService: DirectMessageService, private loginService: LoginService, public channelService: ChannelService) {
-
-      if (!this.directMessageService.dataDirectMessage) {
-        this.directMessageService.dataDirectMessage = {} as Channel;
-      } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
-        this.directMessageService.dataDirectMessage.messageChannel = [];
-      }
+    private router: Router,
+    public chatService: ChatService,
+    public mainService: MainServiceService,
+    public emojiService: EmojiService,
+    public directMessageService: DirectMessageService,
+    private loginService: LoginService,
+    public channelService: ChannelService
+  ) {
+    if (!this.directMessageService.dataDirectMessage) {
+      this.directMessageService.dataDirectMessage = {} as Channel;
+    } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
+      this.directMessageService.dataDirectMessage.messageChannel = [];
+    }
   }
 
-   /**
-  * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
-  * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
-  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
-  */
-   ngOnInit() {
-    this.loginService.currentLoggedUser()
+  /**
+   * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+   */
+  ngOnInit() {
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);
   }
 
-   /**
-  * Handles window resize events by checking if the screen size exceeds a specific width.
-  * This method is triggered whenever the window is resized.
-  */
-   @HostListener('window:resize')
-   onResize() {
-     this.checkScreenSize(window.innerWidth);
-   }
- 
-   /**
+  /**
+   * Handles window resize events by checking if the screen size exceeds a specific width.
+   * This method is triggered whenever the window is resized.
+   */
+  @HostListener('window:resize')
+  onResize() {
+    this.checkScreenSize(window.innerWidth);
+  }
+
+  /**
    * Redirects to the main page if the screen width exceeds 960 pixels.
    * @param {number} width - The current width of the screen.
    */
-   private checkScreenSize(width: number) {
-     if (width > 960) {
-       this.router.navigate(['/main', this.chatService.dataChannel.id]);
-       this.chatService.mobileChatIsOpen = true;
-     } 
-   }
+  private checkScreenSize(width: number) {
+    if (width > 960) {
+      this.router.navigate(['/main', this.chatService.dataChannel.id]);
+      this.chatService.mobileChatIsOpen = true;
+    }
+  }
 
   /**
-* Opens a user profile in a modal dialog using Angular Material's Dialog component.
-* The function configures the dialog to display details about a specified user.
-* @param {User} directUser - The user whose profile is to be displayed in the dialog.
-*/
+   * Opens a user profile in a modal dialog using Angular Material's Dialog component.
+   * The function configures the dialog to display details about a specified user.
+   * @param {User} directUser - The user whose profile is to be displayed in the dialog.
+   */
   openUserProfile(directUser: User) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = directUser;

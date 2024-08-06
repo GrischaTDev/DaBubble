@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild, HostListener } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  ViewChild,
+  HostListener,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -25,10 +31,10 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
     CommonModule,
     PickerComponent,
     MobileHeaderComponent,
-    MobileChatHeaderComponent
+    MobileChatHeaderComponent,
   ],
   templateUrl: './desktop-new-message.component.html',
-  styleUrl: './desktop-new-message.component.scss'
+  styleUrl: './desktop-new-message.component.scss',
 })
 export class DesktopNewMessageComponent {
   items$;
@@ -70,9 +76,14 @@ export class DesktopNewMessageComponent {
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
 
-
+  /**
+   * Toggles the icon container based on the provided index and event.
+   *
+   * @param index - The index of the icon container.
+   * @param event - The mouse event that triggered the toggle.
+   */
   toggleIconContainer(index: number, event: MouseEvent): void {
-    event.stopPropagation(); 
+    event.stopPropagation();
     if (this.activeMessageIndex === index) {
       this.activeMessageIndex = null;
     } else {
@@ -81,14 +92,25 @@ export class DesktopNewMessageComponent {
   }
 
   @HostListener('document:click', ['$event'])
+  /**
+   * Handles the document click event.
+   */
   onDocumentClick(): void {
     this.activeMessageIndex = null;
   }
 
+  /**
+   * Handles the mouse enter event for a message.
+   *
+   * @param index - The index of the message being hovered.
+   */
   onMouseEnter(index: number): void {
     this.hoveredMessageIndex = index;
   }
 
+  /**
+   * Event handler for when the mouse leaves the component.
+   */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
   }

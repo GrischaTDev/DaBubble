@@ -25,6 +25,11 @@ export class MobileHeaderComponent implements OnInit {
   constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router) {}
 
 
+  /**
+   * Initializes the component.
+   * Retrieves the current logged-in user and subscribes to changes in the logged-in user.
+   * Updates the component's currentUser property and the mainService's loggedInUser property.
+   */
   ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -34,21 +39,35 @@ export class MobileHeaderComponent implements OnInit {
   }
 
 
+  /**
+   * Prevents the event from propagating further.
+   * 
+   * @param event - The event object.
+   */
   doNotClose(event: Event) {
     event.stopPropagation();
   }
 
 
+  /**
+   * Toggles the user menu.
+   */
   openUserMenu() {
     this.userMenu = !this.userMenu;
   }
 
 
+  /**
+   * Opens the user profile dialog.
+   */
   openUserProfile() {
     this.dialog.open(UserProfileComponent);
   }
 
 
+  /**
+   * Logs out the user.
+   */
   logout() {
     const auth = getAuth();
     this.loginService.logoutUser(auth);

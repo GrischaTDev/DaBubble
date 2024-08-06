@@ -1,22 +1,19 @@
-import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
-import { getAuth } from '@angular/fire/auth';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MainServiceService } from '../../../service/main-service.service';
 import { LoginService } from '../../../service/login.service';
 import { ChatService } from '../../../service/chat.service';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
 import { User } from '../../../../assets/models/user.class';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { ActivatedRoute } from '@angular/router';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
-import { Channel } from '../../../../assets/models/channel.class';
 
 
 @Component({
