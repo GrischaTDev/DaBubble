@@ -5,10 +5,10 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { MatDialog } from '@angular/material/dialog';
 import { MainServiceService } from '../../../service/main-service.service';
 import { LoginService } from '../../../service/login.service';
-import { getAuth, signOut } from '@angular/fire/auth';
+import { getAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
-import { collection, doc, docData, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';

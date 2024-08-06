@@ -43,8 +43,8 @@
     <div *ngIf="currentUser" class="user-container" (click)="openUserMenu()">
         <span class="name">{{ currentUser.name }}</span>
         <div class="user-img">
-            <img class="user-avatar" src="{{ currentUser.avatar }}">
-            <img class="user-status" src="./assets/img/online-icon-desktop.svg">
+            <img class="user-avatar" src="{{ currentUser.avatar }}" alt="User Avatar">
+            <img class="user-status" src="./assets/img/online-icon-desktop.svg" alt="Online Status">
         </div>
         <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
