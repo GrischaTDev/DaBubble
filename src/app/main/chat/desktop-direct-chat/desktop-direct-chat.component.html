@@ -1,33 +1,34 @@
 <div class="mobile-chat-container" (click)="chatService.closeDialog()">
-  <div class="user-container" (click)="openUserProfile(chatService.clickedUser)">
+  <div
+    class="user-container"
+    (click)="openUserProfile(chatService.clickedUser)"
+  >
     <div>
-      <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}"/>
-      <img class="user-status" [src]="chatService.clickedUser.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'"/>
+      <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User avatar"/>
+      <img
+        alt="online-icon"
+        class="user-status"
+        [src]="
+          chatService.clickedUser.online
+            ? './assets/img/online-icon.svg'
+            : './assets/img/offline-icon.svg'
+        "
+      />
     </div>
     <span class="user-name">{{ chatService.clickedUser.name }}</span>
   </div>
-  <div class="mobile-chat-content" >
+  <div class="mobile-chat-content">
     <div
-      class="direct-chat-info" *ngIf="directMessageService.dataDirectMessage?.messageChannel?.length === 0" >
-      <div
-        class="user-img"
-        (click)="openUserProfile(chatService.clickedUser)"
-      >
-        <img
-          class="user-avatar"
-          src="{{ chatService.clickedUser.avatar }}"
-        />
-        <span
-          class="user-name"
-          >{{ chatService.clickedUser.name }}</span
-        >
+      class="direct-chat-info"
+      *ngIf="directMessageService.dataDirectMessage.messageChannel.length === 0"
+    >
+      <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
+        <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User Avatars"/>
+        <span class="user-name">{{ chatService.clickedUser.name }}</span>
       </div>
       <span
         class="description"
-        *ngIf="
-        chatService.clickedUser.id !==
-          this.mainService.loggedInUser.id
-        "
+        *ngIf="chatService.clickedUser.id !== this.mainService.loggedInUser.id"
       >
         Diese Unterhaltung findet nur zwischen
         <span
@@ -39,14 +40,11 @@
       </span>
       <span
         class="description"
-        *ngIf="
-        chatService.clickedUser.id ===
-          this.mainService.loggedInUser.id
-        "
+        *ngIf="chatService.clickedUser.id === this.mainService.loggedInUser.id"
       >
         Dieser Raum ist nur für dich da. Mache dir Notizen, liste deine To-dos
-        auf oder bewahre Links und Dateien griffbereit auf. <br> Du kannst hier auch
-        gerne Dinge mit dir selbst besprechen. <br />
+        auf oder bewahre Links und Dateien griffbereit auf. <br />
+        Du kannst hier auch gerne Dinge mit dir selbst besprechen. <br />
         <span
           class="user-name-description"
           (click)="openUserProfile(chatService.clickedUser)"
@@ -78,7 +76,10 @@
         >
           <div
             class="mobile-chat-edit-icon-container"
-            (click)="emojiService.forWhichDocIsTheEmoji('direct-message'); emojiService.addReactionToMessageChannel('✅', singleMessageIndex);"
+            (click)="
+              emojiService.forWhichDocIsTheEmoji('direct-message');
+              emojiService.addReactionToMessageChannel('✅', singleMessageIndex)
+            "
           >
             <img
               src="./../../../../assets/icons/good-mark.svg"
@@ -87,7 +88,10 @@
           </div>
           <div
             class="mobile-chat-edit-icon-container"
-            (click)="emojiService.forWhichDocIsTheEmoji('direct-message'); emojiService.addReactionToMessageChannel('🙌', singleMessageIndex);"
+            (click)="
+              emojiService.forWhichDocIsTheEmoji('direct-message');
+              emojiService.addReactionToMessageChannel('🙌', singleMessageIndex)
+            "
           >
             <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
           </div>
@@ -96,7 +100,7 @@
             (click)="
               emojiService.forWhichDocIsTheEmoji('direct-message');
               chatService.onButtonClick($event);
-              chatService.openDialogEmojiReactionMessage(singleMessageIndex);
+              chatService.openDialogEmojiReactionMessage(singleMessageIndex)
             "
           >
             <mat-icon>add_reaction</mat-icon>
@@ -191,9 +195,20 @@
               <span>
                 {{ singleMessage.message }}
 
-                <div class="image-to-message-container" *ngIf="singleMessage.imageToMessage">
-                  <img (click)="chatService.openImageMessageDialog(singleMessage.imageToMessage)" src="{{ singleMessage.imageToMessage }}" alt="message width image">
-               </div>
+                <div
+                  class="image-to-message-container"
+                  *ngIf="singleMessage.imageToMessage"
+                >
+                  <img
+                    (click)="
+                      chatService.openImageMessageDialog(
+                        singleMessage.imageToMessage
+                      )
+                    "
+                    src="{{ singleMessage.imageToMessage }}"
+                    alt="message width"
+                  />
+                </div>
               </span>
             </div>
 
@@ -217,12 +232,12 @@
                   'd-none': emojie.user.length === 0
                 }"
                 (click)="
-                    emojiService.forWhichDocIsTheEmoji('direct-message');
-                    emojiService.addAdditionalReactionToMessage(
+                  emojiService.forWhichDocIsTheEmoji('direct-message');
+                  emojiService.addAdditionalReactionToMessage(
                     emojie.emoji,
-                    singleMessageIndex,                  
+                    singleMessageIndex,
                     emojiIndex
-                  ); 
+                  )
                 "
               >
                 {{ emojie.emoji }}
@@ -235,7 +250,7 @@
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
                       singleMessageIndex
-                    ); 
+                    )
                   "
                   >add_reaction</mat-icon
                 >
@@ -258,7 +273,7 @@
         <div class="delete-img" (click)="directMessageService.deleteMessage()" >
           <mat-icon>close</mat-icon>
         </div>
-     </div>
+      </div>
       <textarea
         [(ngModel)]="chatService.text"
         name="textarea"
@@ -272,14 +287,19 @@
           <div class="mobile-chat-border-right">
             <div class="mobile-chat-input-icon">
               <mat-icon>add</mat-icon>
-              <input id="file-upload" type="file" (change)="directMessageService.onFileSelected($event)">
+              <input
+                id="file-upload"
+                type="file"
+                (change)="directMessageService.onFileSelected($event)"
+              />
             </div>
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-              emojiService.forWhichDocIsTheEmoji('direct-message');
-                chatService.onButtonClick($event); chatService.openDialogEmoji(); 
+                emojiService.forWhichDocIsTheEmoji('direct-message');
+                chatService.onButtonClick($event);
+                chatService.openDialogEmoji()
               "
               >sentiment_satisfied</mat-icon
             >

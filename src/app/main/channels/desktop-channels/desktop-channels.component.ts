@@ -15,14 +15,18 @@ import { Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
 
-
-
 @Component({
   selector: 'app-desktop-channels',
   standalone: true,
-  imports: [CommonModule, MatIconModule, AddChannelComponent, NewMessageComponent, DirectChatComponent],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    AddChannelComponent,
+    NewMessageComponent,
+    DirectChatComponent,
+  ],
   templateUrl: './desktop-channels.component.html',
-  styleUrl: './desktop-channels.component.scss'
+  styleUrl: './desktop-channels.component.scss',
 })
 export class DesktopChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
@@ -36,20 +40,36 @@ export class DesktopChannelsComponent implements OnInit {
   selectedChannel: any;
   activeChannelId: string | null = null;
 
-  constructor(private firestore: Firestore, public mainService: MainServiceService, private loginService: LoginService, private router: Router, public chatService: ChatService, public directMessageService: DirectMessageService) { }
+  constructor(
+    private firestore: Firestore,
+    public mainService: MainServiceService,
+    private loginService: LoginService,
+    private router: Router,
+    public chatService: ChatService,
+    public directMessageService: DirectMessageService
+  ) {}
 
+  /**
+   * Initializes the component and sets up necessary subscriptions.
+   */
   ngOnInit() {
-    this.loginService.currentLoggedUser()
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
   }
 
+  /**
+   * Opens a specific channel and sets the necessary properties and routes.
+   * @param {any} channel - The channel to open.
+   */
   openChannel(channel: any) {
     this.router.navigate(['/main', channel.id]);
-    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe(dataChannel => {
-      this.chatService.dataChannel = dataChannel as Channel;
-    });
+    this.mainService
+      .watchSingleChannelDoc(channel.id, 'channels')
+      .subscribe((dataChannel) => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.desktopChatOpen = true;
@@ -58,6 +78,10 @@ export class DesktopChannelsComponent implements OnInit {
     this.activeChannelId = channel.id;
   }
 
+  /**
+   * Opens a direct chat with a specific user.
+   * @param {User} user - The user to open a direct chat with.
+   */
   async openDirectChat(user: User) {
     this.chatService.clickedUser.id = user.id;
     this.chatService.clickedUser = user;
@@ -65,37 +89,51 @@ export class DesktopChannelsComponent implements OnInit {
     this.directMessageService.directMessageDocId = this.mainService.docId;
   }
 
-
+  /**
+   * Opens the new message interface.
+   */
   openNewMessage() {
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = true;
   }
 
-
+  /**
+   * Navigates to the direct chat with a specific user.
+   * @param {string} userId - The ID of the user to chat with.
+   */
   navigateToChat(userId: string) {
     this.router.navigate(['/direct-chat', userId]);
   }
 
-
+  /**
+   * Opens the dialog to add a new channel.
+   */
   openDialogAddChannel() {
     this.dialog.open(AddChannelComponent);
   }
 
-
+  /**
+   * Toggles the visibility of the channel list and updates the arrow icon.
+   */
   openChannels() {
     this.channelListOpen = !this.channelListOpen;
-    this.arrowIconChannels = this.arrowIconChannels === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
-  }
-
-  openUserList() {
-    this.userListOpen = !this.userListOpen;
-    this.arrowIconUser = this.arrowIconUser === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
+    this.arrowIconChannels =
+      this.arrowIconChannels === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
   }
 
   /**
-  * Sets the mobile chat status to open in the chat service.
-  */
+   * Toggles the visibility of the user list and updates the arrow icon.
+   */
+  openUserList() {
+    this.userListOpen = !this.userListOpen;
+    this.arrowIconUser =
+      this.arrowIconUser === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
+  }
+
+  /**
+   * Sets the mobile chat status to open in the chat service.
+   */
   setVariableOpenChat() {
     this.chatService.mobileChatIsOpen = true;
   }

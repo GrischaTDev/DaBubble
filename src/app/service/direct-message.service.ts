@@ -234,7 +234,7 @@ export class DirectMessageService {
       'users', this.mainService.loggedInUser.id, new User(this.mainService.loggedInUser));
     await this.mainService.addDoc('users', this.chatService.clickedUser.id, new User(this.chatService.clickedUser)
     );
-    await this.mainService.addDoc('direct-message', this.dataDirectMessage.id, new Channel(this.newDataDirectMessage)
+    await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.newDataDirectMessage)
     );
 
   }
@@ -291,7 +291,7 @@ export class DirectMessageService {
     this.chatService.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
     this.chatService.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
-    await this.mainService.addDoc('direct-message', this.dataDirectMessage.id, new Channel(this.dataDirectMessage));
+    await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.dataDirectMessage));
     this.chatService.text = '';
     this.imageMessage = '';
   }
