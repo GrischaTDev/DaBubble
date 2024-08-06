@@ -28,37 +28,29 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MobileThreadComponent implements OnInit {
 
-  parmsId: string = '';
+  parmsId1: string = '';
+  parmsId2: string = '';
 
   constructor(private route: ActivatedRoute, private router: Router, public mainService: MainServiceService, public chatService: ChatService, public threadService: ThreadService, public emojiService: EmojiService, public directMessageService: DirectMessageService) {
     this.route.params.subscribe((params: any) => {
-      this.parmsId = params.id;
-      chatService.idOfChannel = params.id;
+      this.parmsId1 = params['id1'];
+      this.parmsId2 = params['id2'];
     });
   }
 
   /**
-* Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
-* Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
-* This is typically used to ensure that the component has access to the latest user information when it is initialized.
+ * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+ * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+ * This is typically used to ensure that the component has access to the latest user information when it is initialized.
 */
   ngOnInit() {
-    if (this.parmsId) {
-      this.mainService.watchSingleChannelDoc(this.parmsId, 'threads').subscribe(dataChannel => {
-        if (dataChannel) {
-          this.chatService.dataThread = dataChannel as Channel;
-          if (this.chatService.dataThread && this.chatService.dataThread.idOfChannelOnThred) {
-            this.mainService.watchSingleChannelDoc(this.chatService.dataThread.idOfChannelOnThred, 'channels').subscribe(dataChannel => {
-              if (dataChannel) {
-                this.chatService.dataThread = dataChannel as Channel;
-              }
-            });
-          }
-        }
-      });
-    }
+    this.mainService.watchSingleChannelDoc(this.parmsId1, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
+    }); 
+    this.mainService.watchSingleDirectMessageDocThread(this.parmsId2, 'threads').subscribe(dataThread => {
+      this.chatService.dataThread = dataThread as Channel;
+    }); 
   }
-
 
   /**
  * Handles window resize events by checking if the screen size exceeds a specific width.
@@ -75,8 +67,8 @@ export class MobileThreadComponent implements OnInit {
   */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/threads', this.chatService.dataThread.id]);
-    }
+      this.router.navigate(['/main', this.chatService.dataChannel.id]);
+    } 
   }
 
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
@@ -114,7 +106,7 @@ export class MobileThreadComponent implements OnInit {
 *
 * @param {string} threadId - The unique identifier of the thread to navigate to.
 */
-  navigateToChat() {
-    this.router.navigate(['/chat', this.chatService.dataChannel.id]);
+ navigateToChat() {
+    this.router.navigate(['/chat', this.chatService.dataThread.idOfChannelOnThred]);
   }
 }

@@ -140,10 +140,7 @@ export class MobileChatComponent implements OnInit {
  * @param {string} threadId - The unique identifier of the thread to navigate to.
  */
   navigateToThread(threadId: string) {
-    this.mainService.watchSingleThreadDoc(threadId, 'threads').subscribe(dataThreadChannel => {
-      this.chatService.dataThread = dataThreadChannel as Channel;
-    });
-    this.router.navigate(['/thread', threadId]);
+    this.router.navigate(['/thread', this.chatService.dataChannel.id, threadId]);
   }
 
   /**

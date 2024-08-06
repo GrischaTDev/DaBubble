@@ -35,7 +35,7 @@ export class MainServiceService {
   constructor(private router: Router) {
     this.unsubUserList = this.subUserList();
     this.unsubChannelsList = this.subChannelsList();
-   
+
   }
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceEmoji = new BehaviorSubject<any>([]);
@@ -53,7 +53,7 @@ export class MainServiceService {
   private dataChannelSubject = new Subject<any>();
   private dataThreadSubject = new Subject<any>();
   private dataDirectMessageSubject = new Subject<any>();
-  
+
   /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
@@ -92,9 +92,10 @@ export class MainServiceService {
     }
   }
 
- setChannelIdOnFirebase(docRef: string, docName: string) {
-  setDoc(doc(this.firestore, docName, docRef), {
-    id: docRef}, { merge: true });
+  setChannelIdOnFirebase(docRef: string, docName: string) {
+    setDoc(doc(this.firestore, docName, docRef), {
+      id: docRef
+    }, { merge: true });
   }
 
   /**
@@ -163,8 +164,8 @@ export class MainServiceService {
       }
     );
   }
-  
- 
+
+
 
   /**
    * Asynchronously adds or updates a document within a collection in Firestore.
@@ -218,15 +219,15 @@ export class MainServiceService {
  * @param {string} collectionName - The name of the collection containing the document.
  * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
  */
-watchSingleChannelDoc(docId: string, collectionName:string): Observable<any> {
-  onSnapshot(doc(this.firestore, collectionName, docId), (element) => {    
-    let docData = {
-      ...element.data(),
-    };
-    this.dataChannelSubject.next(docData);
-  });
-  return this.dataChannelSubject.asObservable();
-}
+  watchSingleChannelDoc(docId: string, collectionName: string): Observable<any> {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+      let docData = {
+        ...element.data(),
+      };
+      this.dataChannelSubject.next(docData);
+    });
+    return this.dataChannelSubject.asObservable();
+  }
 
   /**
  * Observes a single document within a Firestore collection and emits its data via an Observable.
@@ -234,8 +235,8 @@ watchSingleChannelDoc(docId: string, collectionName:string): Observable<any> {
  * @param {string} collectionName - The name of the collection containing the document.
  * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
  */
-  watchSingleThreadDoc(docId: string, collectionName:string): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {    
+  watchSingleThreadDoc(docId: string, collectionName: string): Observable<any> {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
       let docData = {
         ...element.data(),
       };
@@ -244,21 +245,37 @@ watchSingleChannelDoc(docId: string, collectionName:string): Observable<any> {
     return this.dataThreadSubject.asObservable();
   }
 
-    /**
- * Observes a single document within a Firestore collection and emits its data via an Observable.
- * @param {string} docId - The ID of the document to observe.
- * @param {string} collectionName - The name of the collection containing the document.
- * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
- */
-watchSingleDirectMessageDoc(docId: string, collectionName:string): Observable<any> {
-  onSnapshot(doc(this.firestore, collectionName, docId), (element) => {    
-    let docData = {
-      ...element.data(),
-    };
-    this.dataDirectMessageSubject.next(docData);
-  });
-  return this.dataDirectMessageSubject.asObservable();
-}
+  /**
+  * Observes a single document within a Firestore collection and emits its data via an Observable.
+  * @param {string} docId - The ID of the document to observe.
+  * @param {string} collectionName - The name of the collection containing the document.
+  * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
+  */
+  watchSingleDirectMessageDoc(docId: string, collectionName: string): Observable<any> {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+      let docData = {
+        ...element.data(),
+      };
+      this.dataDirectMessageSubject.next(docData);
+    });
+    return this.dataDirectMessageSubject.asObservable();
+  }
+
+  /**
+  * Observes a single document within a Firestore collection and emits its data via an Observable.
+  * @param {string} docId - The ID of the document to observe.
+  * @param {string} collectionName - The name of the collection containing the document.
+  * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
+  */
+  watchSingleDirectMessageDocThread(docId: string, collectionName: string): Observable<any> {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+      let docData = {
+        ...element.data(),
+      };
+      this.dataDirectMessageSubject.next(docData);
+    });
+    return this.dataDirectMessageSubject.asObservable();
+  }
 
   /**
    * Unsubscribes from user list to prevent memory leaks.
