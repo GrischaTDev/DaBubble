@@ -1,4 +1,4 @@
-import { Component,Input, ElementRef, inject, ViewChild, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -8,7 +8,7 @@ import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Firestore, docData } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
