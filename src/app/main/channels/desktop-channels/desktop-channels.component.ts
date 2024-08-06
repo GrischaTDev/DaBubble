@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, Input } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MainServiceService } from '../../../service/main-service.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,9 +10,8 @@ import { NewMessageComponent } from '../../new-message/mobile-new-message/new-me
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
-import { setTimeout } from 'timers/promises';
 import { Subscription } from 'rxjs';
-import { doc, docData, Firestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
 

@@ -16,7 +16,7 @@
       *ngFor="let userOwner of chatService.dataChannel.ownerUser; let i = index"
     >
       <div>
-        <img [src]="userOwner.avatar" />
+        <img [src]="userOwner.avatar" alt="User Avatar"/>
         <p>{{ userOwner.name }}</p>
       </div>
     </div>
@@ -25,7 +25,7 @@
       *ngFor="let user of chatService.dataChannel.channelUsers; let i = index"
     >
       <div>
-        <img [src]="user.avatar" />
+        <img [src]="user.avatar" alt="User Avatar"/>
         <p>{{ user.name }}</p>
       </div>
     </div>
@@ -69,7 +69,7 @@
             let indexAddUser = index
           "
         >
-          <img [src]="userAddet.avatar" />
+          <img [src]="userAddet.avatar" alt="User Avatar"/>
           <p>{{ userAddet.name }}</p>
           <mat-icon
             class="dialog-add-users-close-icon"
