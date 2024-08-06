@@ -56,6 +56,9 @@ export class MainServiceService {
   private dataChannelSubject = new Subject<any>();
   private dataThreadSubject = new Subject<any>();
   private dataDirectMessageSubject = new Subject<any>();
+  contentToChannel = false;
+  contentToDirectMessage = false;
+  contentToThread = false;
 
   /**
    * Updates the content source with the new content.
@@ -65,13 +68,13 @@ export class MainServiceService {
     this.contentSource.next(content);
   }
 
-    /**
-   * Updates the content source with the new content.
-   * @param {any} content - The new content to set.
-   */
-    changeInputContentThread(content: any) {
-      this.contentSourceThread.next(content);
-    }
+  /**
+ * Updates the content source with the new content.
+ * @param {any} content - The new content to set.
+ */
+  changeInputContentThread(content: any) {
+    this.contentSourceThread.next(content);
+  }
 
   /**
    * Updates the emoji content source with the new content.
@@ -286,6 +289,20 @@ export class MainServiceService {
       this.dataDirectMessageSubject.next(docData);
     });
     return this.dataDirectMessageSubject.asObservable();
+  }
+
+  /**
+  * Determines and sets the target input content type based on the specified document name.
+  * @param {string} docName - The name of the document to determine the content type for (e.g., 'channels', 'direct-message', 'thread').
+  */
+  contentOfWhichInput(docName: string) {
+    if (docName === 'channels') {
+      this.contentToChannel = true;
+    } else if (docName === 'direct-message') {
+      this.contentToDirectMessage = true;
+    } else if (docName === 'thread') {
+      this.contentToThread = true;
+    }
   }
 
   /**

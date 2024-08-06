@@ -37,9 +37,20 @@ export class DialogMentionUsersComponent {
     this.chatService = chatService;
   }
 
+  /**
+  * Adds a user mention to the input content and updates the appropriate content area, then closes the dialog.
+  * @param {User} user - The user to be mentioned.
+  */
   addMentionUser(user: User) {
     this.inputContent = ' ' + '@' + user.name;
-    this.mainService.changeInputContent(this.inputContent);
+    if (this.mainService.contentToChannel || this.mainService.contentToDirectMessage) {
+      this.mainService.changeInputContent(this.inputContent);
+    } else if (this.mainService.contentToThread) {
+      this.mainService.changeInputContentThread(this.inputContent);
+    }
+    this.mainService.contentToChannel = false;
+    this.mainService.contentToDirectMessage = false;
+    this.mainService.contentToThread = false;
     this.chatService.closeDialog();
   }
 }
