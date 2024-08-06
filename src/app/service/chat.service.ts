@@ -151,6 +151,7 @@ export class ChatService {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;
+      this.dialogMentionUserOpen = false;
     }
   }
 

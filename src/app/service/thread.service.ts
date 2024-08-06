@@ -84,7 +84,7 @@ export class ThreadService {
   * @param {string} channelId - The ID of the channel from which the message is sent.
   * @param {string} textContent - The text content of the message.
   */
-async  sendMessageFromThread(channelId: string, textContent: string) {
+  sendMessageFromThread(channelId: string, textContent: string) {
     if (textContent || this.chatService.imageMessage) {
       this.chatService.messageThread.message = textContent;
       this.chatService.messageThread.date = Date.now();
@@ -93,11 +93,24 @@ async  sendMessageFromThread(channelId: string, textContent: string) {
       this.chatService.messageThread.userEmail = this.mainService.loggedInUser.email;
       this.chatService.messageThread.userAvatar = this.mainService.loggedInUser.avatar;
       this.chatService.messageChannel.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
-      this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
-      this.chatService.dataThread.messageChannel[0].numberOfMessage++;
-      await this.sendMessageToThread();
-      this.resetMessageContentThread();
+      this.setDataPreparatoryThreadOwnerMessage();
     }
+  }
+
+  /**
+  * Asynchronously updates the owner message in a data preparation thread, increments message counters,
+  * sends a message to the thread, and resets the message content.
+  * It pushes the current message thread into the data thread's message channel,
+  * updates the date of the message being edited to the current date,
+  * increments the message count for both the edited message and the first message in the data thread.
+  */
+  async setDataPreparatoryThreadOwnerMessage() {
+    this.chatService.dataThread.messageChannel.push(this.chatService.messageThread);
+    this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].date = Date.now();
+    this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].numberOfMessage++;
+    this.chatService.dataThread.messageChannel[0].numberOfMessage++;
+    await this.sendMessageToThread();
+    this.resetMessageContentThread();
   }
 
   /**

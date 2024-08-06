@@ -39,22 +39,41 @@ export class DialogEmojiComponent {
   inputContent: any;
 
   /**
-   * Adds an emoji to the input content and updates the main service with the new content.
-   * @param {any} event - The event object containing the emoji data.
-   */
+  * Adds an emoji as a reaction to a message or input, then closes the dialog.
+  * @param {any} event - The event containing the emoji information.
+  */
   addEmoji(event: any) {
     if (!this.mainService.emojiReactionMessage) {
-      this.inputContent = ' ' + event.emoji.native;
-      this.mainService.changeInputContent(this.inputContent);
+      this.setInputReaction(event)
     } else {
-      if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
-        this.emojiService.addReactionToMessageChannel(event.emoji.native, this.chatService.indexOfChannelMessage);
-      } else if (this.emojiService.emojieToThread) {
-        this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfChannelMessage);
-      }
-
+      this.setMessageReaction(event)
     }
     this.chatService.closeDialog();
+  }
+
+  /**
+  * Updates the input content with an emoji based on the event context.
+  * @param {any} event - The event containing the emoji information.
+  */
+  setInputReaction(event: any) {
+    this.inputContent = ' ' + event.emoji.native;
+    if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
+      this.mainService.changeInputContent(this.inputContent);
+    } else if (this.emojiService.emojieToThread) {
+      this.mainService.changeInputContentThread(this.inputContent);
+    }
+  }
+
+  /**
+  * Adds an emoji reaction to a message in a channel or thread.
+  * @param {any} event - The event containing the emoji information.
+  */
+  setMessageReaction(event: any) {
+    if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
+      this.emojiService.addReactionToMessageChannel(event.emoji.native, this.chatService.indexOfChannelMessage);
+    } else if (this.emojiService.emojieToThread) {
+      this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfChannelMessage);
+    }
   }
 
   /**

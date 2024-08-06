@@ -1,18 +1,19 @@
 <div class="dektop-thread-container">
   <div class="dektop-thread-container" (click)="chatService.closeDialog()">
     <div class="dektop-thread-header-container">
-      <div
-        class="dektop-thread-header-headline"
-      >
+      <div class="dektop-thread-header-headline">
         <p class="dektop-thread-header-headline-thread-text">Thread</p>
         <p class="dektop-thread-header-headline-channel-text">#</p>
-        <p class="dektop-thread-header-headline-channel-text">{{ chatService.dataChannel.name }}</p>
+        <p class="dektop-thread-header-headline-channel-text">
+          {{ chatService.dataChannel.name }}
+        </p>
       </div>
       <div>
         <div
           class="dektop-thread-header-icon"
           (click)="
-            this.threadService.doNotCloseThread($event); threadService.closeThread()
+            this.threadService.doNotCloseThread($event);
+            threadService.closeThread()
           "
         >
           <mat-icon>close</mat-icon>
@@ -82,10 +83,14 @@
           </div>
         </div>
         <div
-          (mouseenter)="threadService.onMouseEnterThread(singleThreadMessageIndex)"
+          (mouseenter)="
+            threadService.onMouseEnterThread(singleThreadMessageIndex)
+          "
           (mouseleave)="threadService.onMouseLeaveThread()"
           class="dektop-thread-edit-button-container"
-          *ngIf="threadService.hoveredMessageIndexThread === singleThreadMessageIndex"
+          *ngIf="
+            threadService.hoveredMessageIndexThread === singleThreadMessageIndex
+          "
         >
           <span
             (click)="
@@ -373,6 +378,7 @@
             <div class="dektop-thread-input-icon">
               <mat-icon
                 (click)="
+                  mainService.contentOfWhichInput('thread');
                   chatService.onButtonClick($event);
                   chatService.openDialogMentionUser()
                 "
