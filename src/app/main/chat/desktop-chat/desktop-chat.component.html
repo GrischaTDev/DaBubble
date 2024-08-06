@@ -402,8 +402,9 @@
           <div class="desktop-chat-input-icon">
             <mat-icon
               (click)="
+                mainService.contentOfWhichInput('channels');
                 chatService.onButtonClick($event);
-                chatService.openDialogMentionUser()
+                chatService.openDialogMentionUser();
               "
               >alternate_email</mat-icon
             >
