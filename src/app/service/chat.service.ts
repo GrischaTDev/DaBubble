@@ -64,6 +64,7 @@ export class ChatService {
   imageMessage: string | ArrayBuffer | null = '';
   indexOfThreadMessageForEditChatMessage: number = 0;
   ownerThreadMessage: boolean = false;
+  sendetMessage: boolean = false;
 
   constructor(public mainService: MainServiceService, private router: Router) {
   }
@@ -182,7 +183,6 @@ export class ChatService {
       this.messageChannel.numberOfMessage = 0;
       this.dataChannel.messageChannel.push(this.messageChannel);
       this.sendMessage();
-      this.resetMessageContent();
     }
   }
 
@@ -192,6 +192,9 @@ export class ChatService {
   resetMessageContent() {
     this.text = '';
     this.imageMessage = '';
+    setTimeout(() => {
+      this.sendetMessage = false;
+    }, 2000);   
   }
 
   /**
@@ -200,11 +203,13 @@ export class ChatService {
   * 
   */
   async generateThreadDoc() {
+    this.sendetMessage = true;
     this.newThreadOnFb.messageChannel.splice(0, 1)
     this.newThreadOnFb.id = '';
     await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
     this.messageChannel.thread = this.mainService.docId;
     this.newThreadOnFb.id = this.mainService.docId;
+    this.resetMessageContent();
   }
 
   /**

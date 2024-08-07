@@ -58,6 +58,9 @@ export class DesktopThreadComponent {
       chatService.idOfChannel = params.id;
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
   }
 
   /**
@@ -83,7 +86,7 @@ export class DesktopThreadComponent {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;

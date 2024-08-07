@@ -83,6 +83,9 @@ export class MobileChatComponent implements OnInit {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
   }
 
 
@@ -116,7 +119,7 @@ export class MobileChatComponent implements OnInit {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;

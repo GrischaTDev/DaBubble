@@ -50,6 +50,9 @@ export class MobileThreadComponent implements OnInit {
     this.mainService.watchSingleDirectMessageDocThread(this.parmsId2, 'threads').subscribe(dataThread => {
       this.chatService.dataThread = dataThread as Channel;
     }); 
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
   }
 
   /**
@@ -82,7 +85,7 @@ export class MobileThreadComponent implements OnInit {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
