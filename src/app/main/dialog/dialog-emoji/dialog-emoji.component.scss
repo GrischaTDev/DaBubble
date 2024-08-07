@@ -8,6 +8,14 @@
   background: rgba(241, 241, 241, 0.5);
 }
 
+.emoji-container-thread-open {
+  position: fixed; 
+  right: 29%;
+  bottom: 194px; 
+  display: inline-block; 
+  background: rgba(241, 241, 241, 0.5);
+}
+
 @media (max-width: 1856px) {
   .emoji-container {
     bottom: 176px; 

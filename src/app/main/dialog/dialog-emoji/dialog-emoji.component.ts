@@ -10,6 +10,9 @@ import {
 } from '@angular/material/dialog';
 import { ChatService } from '../../../service/chat.service';
 import { EmojiService } from '../../../service/emoji.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { channel } from 'node:diagnostics_channel';
 
 @Component({
   selector: 'app-dialog-emoji',
@@ -20,7 +23,8 @@ import { EmojiService } from '../../../service/emoji.service';
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
-
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './dialog-emoji.component.html',
   styleUrl: './dialog-emoji.component.scss',
@@ -35,17 +39,41 @@ export class DialogEmojiComponent {
   inputContent: any;
 
   /**
-   * Adds an emoji to the input content and updates the main service with the new content.
-   * @param {any} event - The event object containing the emoji data.
-   */
+  * Adds an emoji as a reaction to a message or input, then closes the dialog.
+  * @param {any} event - The event containing the emoji information.
+  */
   addEmoji(event: any) {
     if (!this.mainService.emojiReactionMessage) {
-      this.inputContent = ' ' + event.emoji.native;
-      this.mainService.changeInputContent(this.inputContent);
+      this.setInputReaction(event)
     } else {
-      this.emojiService.addReactionToMessage(event.emoji.native, this.chatService.indexOfChannelMessage);
+      this.setMessageReaction(event)
     }
     this.chatService.closeDialog();
+  }
+
+  /**
+  * Updates the input content with an emoji based on the event context.
+  * @param {any} event - The event containing the emoji information.
+  */
+  setInputReaction(event: any) {
+    this.inputContent = ' ' + event.emoji.native;
+    if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
+      this.mainService.changeInputContent(this.inputContent);
+    } else if (this.emojiService.emojieToThread) {
+      this.mainService.changeInputContentThread(this.inputContent);
+    }
+  }
+
+  /**
+  * Adds an emoji reaction to a message in a channel or thread.
+  * @param {any} event - The event containing the emoji information.
+  */
+  setMessageReaction(event: any) {
+    if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
+      this.emojiService.addReactionToMessageChannel(event.emoji.native, this.chatService.indexOfChannelMessage);
+    } else if (this.emojiService.emojieToThread) {
+      this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfChannelMessage);
+    }
   }
 
   /**

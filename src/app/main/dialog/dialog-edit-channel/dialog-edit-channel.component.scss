@@ -1,5 +1,15 @@
 @import "./../../../../styles.scss";
 
+.edit-channel-container-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0, 0.4);
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1200;
+}
+
 .edit-channel-container {
   position: fixed;
   left: 0;
@@ -9,7 +19,6 @@
   background-color: $background-white;
   color: $color-black;
   margin: 0;
-  z-index: 1000;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -49,18 +58,6 @@
   }
 }
 
-.edit-channel-icon {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  border-radius: 100%;
-  padding: 4px;
-  &:hover {
-    color: $icon-purple-hover;
-    background-color: $background-lightblue;
-  }
-}
-
 .edit-channel-icon-close {
   position: absolute;
   top: 24px;
@@ -89,6 +86,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  height: 20px;
   padding: 16px;
   > span {
     font-size: 18px;
@@ -551,3 +549,78 @@
     border: 1px solid $icon-blue;
   }
 }
+
+@media only screen and (max-width: 960px) {
+  .d-none-texte {
+    display: none;
+  }
+
+  .edit-channel-icon-mobile {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    padding: 4px;
+    &:hover {
+      color: $icon-purple-hover;
+      background-color: $background-lightblue;
+    }
+  }
+}
+
+
+@media only screen and (min-width: 960px) {
+  .edit-channel-container {
+    left: calc((100vw - 800px) / 2);
+    top: calc((100vh - 650px) / 2);
+    width: 800px;
+    height:630px;
+    background-color: $background-white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+
+  .edit-channel-remove-users-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 24px;
+  }
+
+  .edit-channel-members-container{
+    display: none;
+  }
+
+  .edit-channel-channel-leave-button {
+      margin-top: -38px;
+  }
+
+  .d-none-icon {
+    display: none;
+  }
+
+  .d-none-texte {
+    margin-top: 0;
+  }
+
+  .d-none-texte {
+    color: $icon-purple-hover;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover {
+      color: $background-blue;
+      scale: 1.05;
+    }
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .edit-channel-container {
+    left: calc((100vw - 600px) / 2);
+  }
+}
+

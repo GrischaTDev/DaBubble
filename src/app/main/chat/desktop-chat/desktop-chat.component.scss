@@ -1,5 +1,5 @@
 @import "./../../../../styles.scss";
-@import '@ctrl/ngx-emoji-mart/picker';
+@import "@ctrl/ngx-emoji-mart/picker";
 
 @font-face {
   font-family: "TwemojiMozilla";
@@ -39,10 +39,26 @@
   justify-content: center;
   gap: 8px;
   margin-left: 16px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  height: 24px;
+  margin-top: 14px;
   cursor: pointer;
   p {
     font-size: 20px;
     font-weight: 700;
+  }
+  &:hover {
+    background-color: $background-lightblue;
+    color: $background-purple;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
   }
 }
 
@@ -63,14 +79,80 @@
   }
 }
 
+.desktop-chat-header-members-container {
+  margin-right: 24px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  cursor: pointer;
+  &:hover {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background-color: $background-lightblue;
+    color: $background-purple;
+  }
+}
+
+.desktop-chat-header-members-number {
+  margin-left: 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.desktop-chat-header-members-img {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  border: 2px solid $background-white;
+  margin-right: -12px;
+}
+
+.desktop-chat-owner-content-container {
+  position: absolute;
+  bottom: 200px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.desktop-chat-owner-name-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 24px;
+  gap: 8px;
+  padding-bottom: 12px;
+  > p {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.desktop-chat-owner-description-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  > p {
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.desktop-chat-owner-description-name-text {
+  color: $icon-purple-hover;
+}
+
 .desktop-chat-content {
   width: 100%;
   max-height: calc(100vh - 285px);
   height: 100%;
   overflow: auto;
-  margin-left: 25px;
-  margin-right: 25px;
-  margin-bottom: 25px;
+  box-sizing: border-box;
 }
 
 /* -----------DESKTOP-------------- */
@@ -89,6 +171,10 @@
   margin-right: 16px;
 }
 
+.desktop-chat-message-date-container-hover {
+  margin-bottom: 16px;
+}
+
 .desktop-chat-message-date {
   font-size: 18px;
   font-weight: 400;
@@ -100,6 +186,13 @@
   padding-right: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.image-to-message-container {
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .desktop-chat-message-line {
@@ -129,7 +222,7 @@
   margin-left: calc(100% - 224px);
   width: 200px;
 }
- 
+
 .desktop-chat-edit-message-container-right {
   margin-left: 24px;
   width: 255px;
@@ -141,7 +234,6 @@
   align-items: center;
   position: sticky;
   gap: 5px;
-  width: 269px;
   height: 67px;
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -182,6 +274,7 @@
   border-radius: 100%;
   height: 40px;
   width: 40px;
+
   cursor: pointer;
   &:hover {
     color: $icon-purple-hover;
@@ -197,10 +290,9 @@
   padding-top: 12px;
   display: flex;
   justify-content: flex-start;
-  margin-left: 16px;
+  padding-left: 16px;
   z-index: 1;
 }
-
 
 .desktop-chat-message-container-from-me {
   padding-top: 12px;
@@ -210,10 +302,6 @@
   padding-left: 16px;
   padding-right: 16px;
   z-index: 1;
-}
-
-.desktop-chat-message-container-from-others-hover {
-  margin-bottom: 23px;
 }
 
 .desktop-chat-message-avatar-container {
@@ -276,6 +364,7 @@
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
   font-size: 17px;
+  width: 400px;
 }
 
 .desktop-chat-edit-message-icon-container {
@@ -342,13 +431,12 @@
 /*----------------------------------------------------- */
 
 .desktop-chat-input-container {
-  min-height: 145px;
   width: 100%;
   margin-bottom: 25px;
 }
 
 .desktop-chat-input-field-container {
-  width:calc(100% - 50px);
+  width: calc(100% - 50px);
   min-height: 145px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -371,7 +459,7 @@
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, "TwemojiMozilla", sans-serif;
   }
 }
 
@@ -385,11 +473,23 @@
 }
 
 .desktop-chat-input-icon-container {
-  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   gap: 5px;
+  position: relative;
+  display: flex;
+}
+
+#file-upload {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
 }
 
 .desktop-chat-input-icon {
@@ -399,6 +499,12 @@
   &:hover {
     background-color: $background-lightblue;
   }
+
+  &:first-child {
+    position: relative;
+    z-index: 1;
+  }
+
   mat-icon {
     display: flex;
     justify-content: center;
@@ -428,12 +534,60 @@
   }
 }
 
+.desktop-chat-message-thread-link-container {
+  display: flex;
+  gap: 18px;
+  height: 24px;
+  &:hover {
+    .desktop-chat-message-thread-link-number-content {
+      > p {
+        font-weight: 600;
+        color: $icon-blue;
+      }
+    }
+    .desktop-chat-message-thread-link-date-content {
+      > p {
+        color: $color-black;
+      }
+    }
+  }
+}
+
+.desktop-chat-message-thread-link-number-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  > p {
+    display: flex;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    font-size: 18px;
+    font-weight: 400;
+    color: $icon-purple-hover;
+  }
+}
+
+.desktop-chat-message-thread-link-date-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1px;
+  > p {
+    display: flex;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    font-size: 14px;
+    font-weight: 400;
+    color: $icon-gray;
+  }
+}
+
 .desktop-chat-message-reaction-right-container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 8px;
-  gap: 10px;
   width: 200px;
   flex-wrap: wrap;
 }
@@ -443,7 +597,6 @@
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 8px;
-  gap: 10px;
   width: 200px;
   flex-wrap: wrap;
 }
@@ -455,9 +608,10 @@
   padding-bottom: 5px;
   padding-left: 10px;
   padding-right: 10px;
+  background-color: white;
   cursor: pointer;
   &:hover {
-    border: 1px solid $background-lightblue;
+    border: 1px solid $background-purple;
   }
 }
 

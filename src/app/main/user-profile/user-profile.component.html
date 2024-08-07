@@ -59,6 +59,14 @@
             </div>
             <input [(ngModel)]="updateUserEmail" type="text" placeholder="{{ this.loggedInUser.email }}">
         </div>
+        <div class="send-email-container" >
+            <div class="verify-mail" *ngIf="userProfileService.isEmailSend" >
+                Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine neue E-Mail-Adresse und bestätige diese.
+            </div>
+            <div class="error-mail" *ngIf="userProfileService.isEmailError" >
+                Verifizierungs-E-Mail wurde nicht gesendet. Bitte melde dich erneut an.
+            </div>
+        </div>
         <div class="edit-btn">
             <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>
             <div class="primary-btn" (click)="updateCurrentUser()">Speichern</div>

@@ -1,4 +1,11 @@
-<div class="dialog-add-users-container">
+<div
+  [ngClass]="{
+  'dialog-add-users-container':
+    !this.chatService.isThreadOpen ,
+  'dialog-add-users-container-thread-open':
+    this.chatService.isThreadOpen,
+}"
+>
   <div *ngIf="!this.channelService.addUserClicked">
     <h2>Mitglieder</h2>
     <div class="close" (click)="channelService.closeDialogAddUser()">
@@ -9,7 +16,7 @@
       *ngFor="let userOwner of chatService.dataChannel.ownerUser; let i = index"
     >
       <div>
-        <img [src]="userOwner.avatar" />
+        <img [src]="userOwner.avatar" alt="User Avatar"/>
         <p>{{ userOwner.name }}</p>
       </div>
     </div>
@@ -18,7 +25,7 @@
       *ngFor="let user of chatService.dataChannel.channelUsers; let i = index"
     >
       <div>
-        <img [src]="user.avatar" />
+        <img [src]="user.avatar" alt="User Avatar"/>
         <p>{{ user.name }}</p>
       </div>
     </div>
@@ -31,7 +38,15 @@
   </div>
 
   <div *ngIf="this.channelService.addUserClicked">
-    <div class="dialog-add-users-container" (click)="channelService.clearInput()">
+    <div
+      [ngClass]="{
+      'dialog-add-users-container':
+        !this.chatService.isThreadOpen ,
+      'dialog-add-users-container-thread-open':
+        this.chatService.isThreadOpen,
+    }"
+      (click)="channelService.clearInput()"
+    >
       <h2>Leute hinzufügen</h2>
       <div class="close" (click)="channelService.closePeopleSearch()">
         <mat-icon>close</mat-icon>
@@ -43,13 +58,18 @@
         "
       >
         <div
-          class="push-addet-user-container"
+          [ngClass]="{
+            'push-addet-user-container':
+              !this.chatService.isThreadOpen ,
+            'push-addet-user-container-thread-open':
+              this.chatService.isThreadOpen,
+          }"
           *ngFor="
             let userAddet of channelService.addetUser;
             let indexAddUser = index
           "
         >
-          <img [src]="userAddet.avatar" />
+          <img [src]="userAddet.avatar" alt="User Avatar"/>
           <p>{{ userAddet.name }}</p>
           <mat-icon
             class="dialog-add-users-close-icon"
@@ -70,6 +90,12 @@
         <span
           (click)="channelService.pushNewUserToChannel()"
           class="dialog-add-users-button"
+          [ngClass]="{
+            'dialog-add-users-button-not-available':
+            channelService.addetUser.length === 0,
+              'dialog-add-users-button-available':
+              channelService.addetUser.length > 0,
+          }"
           >Hinzufügen</span
         >
       </div>
@@ -79,10 +105,15 @@
 
 <div
   *ngIf="!this.channelService.isEmpty"
-  class="dialog-add-users-content-container"
+  [ngClass]="{
+    'dialog-add-users-content-container':
+      !this.chatService.isThreadOpen ,
+    'dialog-add-users-content-container-thread-open':
+      this.chatService.isThreadOpen,
+  }"
   [style.margin-top]="
-  this.channelService.filterContentMarginTop + 'px !important'
-"
+    this.channelService.filterContentMarginTop + 'px !important'
+  "
 >
   <div
     class="dialog-add-users-not-found-container"

@@ -5,13 +5,16 @@ import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { Firestore } from '@angular/fire/firestore';
+import { collection, doc, docData, Firestore, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,21 +22,26 @@ import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/d
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  firestore: Firestore = inject(Firestore);
   dialogInstance:
     | MatDialogRef<DialogEmojiComponent, any>
     | MatDialogRef<DialogMentionUsersComponent, any>
     | MatDialogRef<DialogUserChatComponent, any>
     | MatDialogRef<DialogAddUserComponent, any>
     | MatDialogRef<DialogEditChannelComponent, any>
+    | MatDialogRef<DialogImageMessageComponent, any>
     | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   dialogAddUserOpen = false;
+  dialogImageMessageOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
+  dataThread: Channel = new Channel();
+  newThreadOnFb: Channel = new Channel();
+  contentMessageOfThread: Message = new Message();
   messageChannel: Message = new Message();
   messageThread: Message = new Message();
+  allMessangeFromThread: Message[] = [];
   idOfChannel: string = '';
   indexOfChannelMessage: number = 0;
   clickedUser: User = new User();
@@ -46,11 +54,20 @@ export class ChatService {
   editText: string = '';
   loggedInUser: User = new User();
   mobileChatIsOpen: boolean = false;
+  mobileDirectChatIsOpen: boolean = false;
   directChatOpen: boolean = false;
-  desktopChatOpen: boolean = true;;
-  newMessageOpen: boolean = false;;
+  desktopChatOpen: boolean = true;
+  newMessageOpen: boolean = false;
+  isThreadOpen: boolean = false;
+  private subscription: Subscription = new Subscription();
+  private itemsSubscription?: Subscription;
+  imageMessage: string | ArrayBuffer | null = '';
+  indexOfThreadMessageForEditChatMessage: number = 0;
+  ownerThreadMessage: boolean = false;
+  sendetMessage: boolean = false;
 
-  constructor(public mainService: MainServiceService, private router: Router) { }
+  constructor(public mainService: MainServiceService, private router: Router) {
+  }
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
@@ -88,8 +105,6 @@ export class ChatService {
    * Manages the state of the chat dialog. If the chat dialog is not open or if the emoji dialog is open,
    * it closes any currently open dialogs and then opens the chat dialog. If the chat dialog is already open,
    * it simply closes it.
-   *
-   * This ensures that only one type of dialog (emoji or chat) can be open at a time.
    */
   openDialogMentionUser() {
     if (!this.dialogMentionUserOpen || this.dialogEmojiOpen) {
@@ -101,6 +116,9 @@ export class ChatService {
     }
   }
 
+  /**
+ * Toggles the user addition dialog. Opens the dialog if it's not already open and closes it if it is.
+ */
   openDialogAddUser() {
     if (!this.dialogAddUserOpen) {
       this.closeDialog();
@@ -111,11 +129,15 @@ export class ChatService {
     }
   }
 
+  openImageMessageDialog(image: ArrayBuffer) {
+    const dialogRef = this.dialog.open(DialogImageMessageComponent, {
+      data: { image: image }
+    });
+  }
+
   /**
    * Handles the emoji button click event.
    * Prevents the event from propagating to parent elements.
-   *
-   * @param {MouseEvent} event - The mouse event triggered by clicking the emoji button.
    */
   onButtonClick(event: MouseEvent): void {
     event.stopPropagation(); // Stoppt die Übertragung des Events zum Elternelement
@@ -130,7 +152,7 @@ export class ChatService {
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;
-
+      this.dialogMentionUserOpen = false;
     }
   }
 
@@ -146,28 +168,86 @@ export class ChatService {
   /**
    * Asynchronously sends a message from a specific channel, updating the channel data and triggering
    * a sendMessage process.
-   * @param {string} channelId - The ID of the channel from which to send the message.
-   * @param {string} textContent - The text content of the message.
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
-    this.messageChannel.message = textContent;
-    this.messageChannel.date = Date.now();
-    this.messageChannel.userId = this.mainService.loggedInUser.id;
-    this.messageChannel.userName = this.mainService.loggedInUser.name;
-    this.messageChannel.userEmail = this.mainService.loggedInUser.email;
-    this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-    this.dataChannel.messageChannel.push(this.messageChannel);
-    this.sendMessage('channels', channelId);
+    if (textContent || this.imageMessage) {
+      await this.generateThreadDoc();
+      this.messageChannel.message = textContent;
+      this.messageChannel.date = Date.now();
+      this.messageChannel.userId = this.mainService.loggedInUser.id;
+      this.messageChannel.userName = this.mainService.loggedInUser.name;
+      this.messageChannel.userEmail = this.mainService.loggedInUser.email;
+      this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+      this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
+      this.messageChannel.dateOfLastThreadMessage = Date.now();
+      this.messageChannel.numberOfMessage = 0;
+      this.dataChannel.messageChannel.push(this.messageChannel);
+      this.sendMessage();
+    }
+  }
+
+  /**
+  * Resets message content by clearing text and image message properties.
+  */
+  resetMessageContent() {
     this.text = '';
+    this.imageMessage = '';
+    setTimeout(() => {
+      this.sendetMessage = false;
+    }, 2000);   
+  }
+
+  /**
+  * Asynchronously generates a new document for a thread in Firebase.
+  * It sets the newly created document's ID in the main service and updates it in the Firestore database.
+  * 
+  */
+  async generateThreadDoc() {
+    this.sendetMessage = true;
+    this.newThreadOnFb.messageChannel.splice(0, 1)
+    this.newThreadOnFb.id = '';
+    await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
+    this.messageChannel.thread = this.mainService.docId;
+    this.newThreadOnFb.id = this.mainService.docId;
+    this.resetMessageContent();
   }
 
   /**
    * Initiates the process to add a new document for a message within a specified channel.
-   * @param {string} docName - The name of the document to be added.
-   * @param {string} channelId - The ID of the channel where the document should be added.
    */
-  sendMessage(docName: string, channelId: string) {
-    this.mainService.addDoc(docName, this.dataChannel.id, new Channel(this.dataChannel));
+  async sendMessage() {
+    this.newThreadOnFb.messageChannel.push(this.messageChannel);
+    this.newThreadOnFb.idOfChannelOnThred = this.dataChannel.id;
+    this.newThreadOnFb.name = this.dataChannel.name;
+    await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb));
+    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+  }
+
+  /**
+  * Clears the content of the image message.
+  * 
+  * @function deleteMessage
+  */
+  deleteMessage() {
+    this.imageMessage = '';
+  }
+
+  /**
+  * Handles file selection events and reads the first selected file as a data URL.
+  * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+  */
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          this.imageMessage = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   /**
@@ -195,7 +275,7 @@ export class ChatService {
    */
   setTime(timeFromServer: number): string {
     const date = new Date(timeFromServer);
-    const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit',minute: '2-digit',hour12: false,});
+    const formattedTime = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', hour12: false, });
     return formattedTime;
   }
 
@@ -225,13 +305,10 @@ export class ChatService {
     }
   }
 
-
   /**
- * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
- * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
- * @param {number} index - The index to check against the active message index.
- * @param {MouseEvent} event - The mouse event to possibly stop propagation on.
- */
+  * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
+  * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
+  */
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
       event.stopPropagation();
@@ -240,20 +317,17 @@ export class ChatService {
   }
 
   /**
- * Closes the icon container by setting the active message index to null.
- */
+  * Closes the icon container by setting the active message index to null.
+  */
   closeIconContainer() {
     this.activeMessageIndex = null;
   }
 
   /**
- * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
- * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
- * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
- * @param {number} index - The index of the message to potentially edit.
- * @param {MouseEvent} event - The mouse event, propagation of which is always stopped.
- * @param {string} messageContent - The content of the message to edit if the editor is opened.
- */
+  * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
+  * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
+  * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
+  */
   toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
     event.stopPropagation();
     if (this.editMessageIndex === index) {
@@ -269,9 +343,9 @@ export class ChatService {
   }
 
   /**
- * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
- * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
- */
+  * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
+  * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
+  */
   closeWithoutSaving() {
     this.editMessageIndex = null;
     this.editMessageInputIndex = null;
@@ -282,37 +356,69 @@ export class ChatService {
   }
 
   /**
- * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
- * @param {string} parmsId - The parameter ID associated with the channel to notify of the update.
- * @param {string} newText - The new text to replace the existing message content.
- * @param {number} singleMessageIndex - The index of the message in the channel to be updated.
- */
+  * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
+  */
   async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number) {
-    this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
-    this.closeWithoutSaving();
+    this.loadContenThreadForEditMessage(singleMessageIndex)
+      .then(() => {
+        this.dataChannel.messageChannel[singleMessageIndex].message = newText;
+        this.dataThread.messageChannel[0].message = newText;
+        this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+        this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+        this.closeWithoutSaving();
+      })
   }
 
   /**
- * Handles click events on the document by resetting the active message index. This method ensures that any active message interactions are closed when clicking outside of a specific UI component.
- */
+  * Asynchronously loads a content thread for editing a message based on its index.
+  * @param {number} singleMessageIndex - The index of the message within the message channel.
+  * @returns {Promise<void>} A promise that resolves when the thread content is loaded.
+  */
+  async loadContenThreadForEditMessage(singleMessageIndex: number): Promise<void> {
+    const dataThreadChannel = await firstValueFrom(
+      this.mainService.watchSingleThreadDoc(
+        this.dataChannel.messageChannel[singleMessageIndex].thread,
+        'threads'
+      )
+    );
+    this.dataThread = dataThreadChannel as Channel;
+  }
+
+  /**
+  * Handles click events on the document by resetting the active message index. This method ensures that any active message interactions are closed when clicking outside of a specific UI component.
+  */
   @HostListener('document:click', ['$event'])
   onDocumentClick(): void {
     this.activeMessageIndex = null;
   }
 
   /**
- * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
- * @param {number} index - The index of the message that the mouse has entered.
- */
+  * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
+  * @param {number} index - The index of the message that the mouse has entered.
+  */
   onMouseEnter(index: number): void {
     this.hoveredMessageIndex = index;
   }
 
   /**
- * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
- */
+  * Resets the hovered message index when the mouse leaves a specific UI element. This function clears the hoveredMessageIndex to null, indicating no current message is being hovered over.
+  */
   onMouseLeave(): void {
     this.hoveredMessageIndex = null;
   }
+
+  /**
+   * Opens a thread for a given message and initializes relevant properties.
+   * @param {Message} threadMessage - The message object associated with the thread to be opened.
+   * @param {number} indexSingleMessage - The index of the message in the message list.
+   */
+  async openThread(threadMessage: Message, indexSingleMessage: number) {
+    this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe(dataThreadChannel => {
+      this.dataThread = dataThreadChannel as Channel;
+    });
+    this.contentMessageOfThread = threadMessage;
+    this.indexOfThreadMessageForEditChatMessage = indexSingleMessage;
+    this.isThreadOpen = true;
+  }
 }
+

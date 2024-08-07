@@ -22,7 +22,7 @@ export class AvatarComponent implements OnInit {
       Breakpoints.Handset,
       Breakpoints.Tablet
     ]).subscribe(result => {
-      this.isDesktop = !result.matches; // Wenn es KEIN Handset oder Tablet ist, ist es Desktop
+      this.isDesktop = !result.matches;
     });
   }
 }

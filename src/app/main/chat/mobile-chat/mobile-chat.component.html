@@ -4,7 +4,9 @@
     <div class="mobile-chat-header-headline">
       <p>#</p>
       <p>{{ chatService.dataChannel.name }}</p>
-      <mat-icon (click)="channelService.openEditDialog()">keyboard_arrow_down</mat-icon>
+      <mat-icon (click)="channelService.openEditDialog()"
+        >keyboard_arrow_down</mat-icon
+      >
     </div>
     <div>
       <div
@@ -17,7 +19,20 @@
       </div>
     </div>
   </div>
-  <div (click)="chatService.closeIconContainer()" #scrollContainer class="mobile-chat-content">
+  <div
+    (click)="chatService.closeIconContainer()"
+    #scrollContainer
+    class="mobile-chat-content"
+  >
+  <div class="mobile-chat-owner-content-container" *ngIf="chatService.dataChannel.messageChannel.length === 0">
+    <div class="mobile-chat-owner-name-container" >
+      <p>#</p>
+      <p>{{chatService.dataChannel.name}}</p>
+    </div>
+    <div class="mobile-chat-owner-description-container" >
+      <p>Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <span># {{chatService.dataChannel.name}}</span></p>
+    </div>
+   </div>
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
@@ -51,19 +66,26 @@
       >
         <div
           class="mobile-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessage('✅', singleMessageIndex)"
+          (click)="
+            emojiService.forWhichDocIsTheEmoji('channels');
+            emojiService.addReactionToMessageChannel('✅', singleMessageIndex)
+          "
         >
           <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
-          (click)="this.emojiService.addReactionToMessage('🙌', singleMessageIndex)"
+          (click)="
+            emojiService.forWhichDocIsTheEmoji('channels');
+            emojiService.addReactionToMessageChannel('🙌', singleMessageIndex)
+          "
         >
           <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
           (click)="
+            emojiService.forWhichDocIsTheEmoji('channels');
             chatService.onButtonClick($event);
             chatService.openDialogEmojiReactionMessage(singleMessageIndex)
           "
@@ -73,9 +95,7 @@
         <div
           (mouseenter)="chatService.onMouseLeave()"
           class="mobile-chat-edit-icon-container"
-          (click)="
-            this.directMessageService.openDirectMessage(singleMessage.userId)
-          "
+          (click)="this.navigateToThread(singleMessage.thread)"
         >
           <mat-icon>comment</mat-icon>
         </div>
@@ -128,9 +148,7 @@
           class="mobile-chat-message-avatar-container"
         >
           <img
-            (click)="
-              chatService.closeIconContainer()
-            "
+            (click)="chatService.closeIconContainer()"
             src="{{ singleMessage.userAvatar }}"
             alt=""
           />
@@ -140,9 +158,7 @@
           (click)="chatService.closeIconContainer()"
         >
           <div
-            (click)="
-              chatService.closeIconContainer()
-            "
+            (click)="chatService.closeIconContainer()"
             [ngClass]="{
               'mobile-chat-message-name-date-container-me':
                 chatService.ifMessageFromMe(singleMessage.userId),
@@ -185,6 +201,21 @@
               *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
             >
               {{ singleMessage.message }}
+
+              <div
+                class="image-to-message-container"
+                *ngIf="singleMessage.imageToMessage"
+              >
+                <img
+                  (click)="
+                    chatService.openImageMessageDialog(
+                      singleMessage.imageToMessage
+                    )
+                  "
+                  src="{{ singleMessage.imageToMessage }}"
+                  alt="message width image"
+                />
+              </div>
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
               <textarea
@@ -200,6 +231,7 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
+                          emojiService.forWhichDocIsTheEmoji('channels');
                           chatService.onButtonClick($event);
                           chatService.openDialogEmoji()
                         "
@@ -240,7 +272,6 @@
               </div>
             </div>
           </div>
-
           <div
             [ngClass]="{
               'mobile-chat-message-reaction-right-container':
@@ -249,6 +280,29 @@
                 !chatService.ifMessageFromMe(singleMessage.userId)
             }"
           >
+            <div
+              class="mobile-chat-message-thread-link-container"
+              *ngIf="singleMessage.numberOfMessage > 0"
+            >
+              <div
+                class="mobile-chat-message-thread-link-number-content"
+                (click)="this.navigateToThread(singleMessage.thread)"
+              >
+                <p>{{ singleMessage.numberOfMessage }}</p>
+                <p *ngIf="singleMessage.numberOfMessage === 1">Antwort</p>
+                <p *ngIf="singleMessage.numberOfMessage > 1">Antworten</p>
+              </div>
+              <div class="mobile-chat-message-thread-link-date-content">
+                <p>Letzte Antwort</p>
+                <p>
+                  {{
+                    threadService.setDateThreadInfo(
+                      singleMessage.dateOfLastThreadMessage
+                    )
+                  }}
+                </p>
+              </div>
+            </div>
             <div
               class="mobile-chat-message-reaction-content"
               *ngFor="
@@ -261,7 +315,8 @@
                 'd-none': emojie.user.length === 0
               }"
               (click)="
-                this.emojiService.addAdditionalReactionToMessage(
+                emojiService.forWhichDocIsTheEmoji('channels');
+                emojiService.addAdditionalReactionToMessage(
                   emojie.emoji,
                   singleMessageIndex,
                   emojiIndex
@@ -275,6 +330,7 @@
               <mat-icon
                 *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
+                  emojiService.forWhichDocIsTheEmoji('channels');
                   chatService.onButtonClick($event);
                   chatService.openDialogEmojiReactionMessage(singleMessageIndex)
                 "
@@ -293,6 +349,12 @@
   </div>
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
+      <div class="add-image-container" *ngIf="chatService.imageMessage">
+        <img src="{{ chatService.imageMessage }}" alt="" />
+        <div class="delete-img" (click)="chatService.deleteMessage()">
+          <mat-icon>close</mat-icon>
+        </div>
+      </div>
       <textarea
         [(ngModel)]="chatService.text"
         name="textarea"
@@ -306,12 +368,19 @@
           <div class="mobile-chat-border-right">
             <div class="mobile-chat-input-icon">
               <mat-icon>add</mat-icon>
+              <input
+                id="file-upload"
+                type="file"
+                (change)="chatService.onFileSelected($event)"
+              />
             </div>
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmoji()
+                emojiService.forWhichDocIsTheEmoji('channels');
+                chatService.onButtonClick($event);
+                chatService.openDialogEmoji()
               "
               >sentiment_satisfied</mat-icon
             >
@@ -319,6 +388,7 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
+                mainService.contentOfWhichInput('channels');
                 chatService.onButtonClick($event);
                 chatService.openDialogMentionUser()
               "

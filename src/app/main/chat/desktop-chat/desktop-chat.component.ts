@@ -1,4 +1,4 @@
-import { Component,Input, ElementRef, inject, ViewChild, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -8,7 +8,7 @@ import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Firestore, docData } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
@@ -16,6 +16,8 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -49,7 +51,7 @@ export class DesktopChatComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public channelService: ChannelService,
     public loginService: LoginService,
-    
+    public threadService: ThreadService
   ) {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {
@@ -58,7 +60,14 @@ export class DesktopChatComponent implements OnInit {
         this.chatService.editText += content;
       }
     });
-    this.chatService.loggedInUser = this.mainService.loggedInUser;
+        this.route.params.subscribe((params: any) => {
+      this.parmsId = params.id;
+      chatService.idOfChannel = params.id;
+    });
+    this.chatService.loggedInUser = this.mainService.loggedInUser;  
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
   }
 
   /**
@@ -71,6 +80,9 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
+    this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
+    }); 
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -84,7 +96,7 @@ export class DesktopChatComponent implements OnInit {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;

@@ -21,6 +21,16 @@ section {
     }
 }
 
+.open-new-msg-icon {
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $background-lightblue;
+    }
+}
+
 .input-container {
     position: relative;
     display: flex;
@@ -145,26 +155,6 @@ section {
     }
 
 
-    >.icon-and-name-add {
-        width: 100%;
-        padding-left: 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 20px;
-        font-weight: 700;
-
-        &:hover {
-            color: $background-blue;
-        }
-
-        >div {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-    }
-
     >.add-icon {
         display: flex;
         text-align: center;
@@ -180,7 +170,7 @@ section {
 
 .sub-channel {
     padding: 4px 20px;
-    
+
     &:hover {
         border-radius: 20px;
         background-color: $background-lightblue;
@@ -239,6 +229,7 @@ section {
         flex-direction: column;
         gap: 10px;
         padding: 18px;
+
         >.user {
             display: flex;
             align-items: center;
@@ -260,7 +251,7 @@ section {
                     height: 50px;
                     border-radius: 50px;
                 }
-    
+
                 >.user-status {
                     position: absolute;
                     right: 0;
@@ -285,4 +276,10 @@ section {
     justify-content: center;
     box-shadow: 0px 6px 10px 0px #00000033;
     cursor: pointer;
+}
+
+
+::-webkit-scrollbar-track {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

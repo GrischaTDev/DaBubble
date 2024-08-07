@@ -33,6 +33,13 @@ export class UserProfileComponent {
   ) {}
 
 
+  /**
+   * Initializes the component.
+   * - Retrieves the current logged user using the login service.
+   * - Subscribes to the loggedInUser$ observable to get the logged in user.
+   * - Sets the loggedInUser property to the retrieved user.
+   * - Calls the checkUserStatus method.
+   */
   ngOnInit() {
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -42,6 +49,9 @@ export class UserProfileComponent {
   }
 
 
+  /**
+   * Checks the status of the user and sets the appropriate status image paths.
+   */
   checkUserStatus() {
     if(this.loggedInUser.online) {
       this.loggedInUserStatus = './assets/img/aktive.svg';
@@ -56,26 +66,47 @@ export class UserProfileComponent {
   }
 
 
+  /**
+   * Closes the dialog.
+   */
   closeDialog() {
     this.dialogRef.close();
   }
 
 
+  /**
+   * Prevents the event from propagating further.
+   * 
+   * @param event - The event object.
+   */
   doNotClose(event: Event) {
     event.stopPropagation();
   }
 
 
+  /**
+   * Toggles the state of the editProfileOpen property.
+   */
   editUserProfile() {
     this.editProfileOpen = !this.editProfileOpen;
   }
 
 
+  /**
+   * Updates the current user's profile.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the user's profile is updated.
+   */
   async updateCurrentUser() {
     let name =  this.updateUserName;
     let email =  this.updateUserEmail;
     await this.userProfileService.updateUserProfile(name, email);
     this.loggedInUser = this.mainService.loggedInUser;
-    this.editProfileOpen = false;
+
+    setTimeout(() => {
+      this.editProfileOpen = false;
+      this.userProfileService.isEmailError = false;
+      this.userProfileService.isEmailSend = false;
+    }, 3000);
   }
 }

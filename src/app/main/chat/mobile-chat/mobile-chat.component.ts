@@ -8,7 +8,7 @@ import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Firestore, docData } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
@@ -16,6 +16,8 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -33,8 +35,6 @@ import { ChannelService } from '../../../service/channel.service';
   styleUrl: './mobile-chat.component.scss',
 })
 export class MobileChatComponent implements OnInit {
-  items$;
-  items;
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
@@ -50,18 +50,13 @@ export class MobileChatComponent implements OnInit {
     public mainService: MainServiceService,
     public directMessageService: DirectMessageService,
     public loginService: LoginService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public threadService: ThreadService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    if (this.parmsId) {
-      this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
-        this.chatService.dataChannel = channel;
-      });
-    }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
@@ -78,12 +73,21 @@ export class MobileChatComponent implements OnInit {
   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
   */
   ngOnInit() {
+    if (this.parmsId) {
+      this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
+    }
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
   }
+
 
   /**
   * Handles window resize events by checking if the screen size exceeds a specific width.
@@ -100,8 +104,7 @@ export class MobileChatComponent implements OnInit {
   */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main']);
-      this.chatService.mobileChatIsOpen = true;
+      this.router.navigate(['/main', this.chatService.dataChannel.id]);
     }
   }
 
@@ -116,22 +119,32 @@ export class MobileChatComponent implements OnInit {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
   }
 
-    /**
-   * Scrolls the content of the scrollable container to the bottom.
-   * This is typically used to ensure the user sees the most recent messages or content added to the container.
-   */
-    scrollToBottom(): void {
-      this.scrollContainer.nativeElement.scrollTop =
-        this.scrollContainer.nativeElement.scrollHeight;
-    }
+  /**
+ * Scrolls the content of the scrollable container to the bottom.
+ * This is typically used to ensure the user sees the most recent messages or content added to the container.
+ */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
+  }
 
+  /**
+ * Navigates to a specified thread by ID.
+ * This method subscribes to a single thread document from a service, updates the chat service's data thread, 
+ * and then navigates to the thread page using the router.
+ *
+ * @param {string} threadId - The unique identifier of the thread to navigate to.
+ */
+  navigateToThread(threadId: string) {
+    this.router.navigate(['/thread', this.chatService.dataChannel.id, threadId]);
+  }
 
   /**
    * A lifecycle hook that is called when the component is destroyed.
