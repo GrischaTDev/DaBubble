@@ -30,17 +30,17 @@ export class EmojiService {
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
    * @param {string} emoji - The emoji character to add as a reaction.
    */
-  addReactionToMessageChannel(emoji: string, indexSingleMessage: number): void {
+async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
+  this.chatService.indexOfChannelMessage = indexSingleMessage;
     this.pushEmojieToRelatedMessageOfTheThread()
       .then(() => {
-        this.chatService.indexOfChannelMessage = indexSingleMessage;
         let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
         if (dataEmoji.length !== 0) {
           this.preparedSearchUserAndEmoji(emoji, dataEmoji);
           this.selectionTheAddedEmojiChannel(emoji);
         } else {
           this.pushEmojiToArray(emoji);
-          this.resetReactionVariables();
+          this.saveEmojiContentToFb();
         }
       })
   }
@@ -58,7 +58,7 @@ export class EmojiService {
       this.selectionTheAddedEmojiThread(emoji);
     } else {
       this.pushEmojiToArray(emoji);
-      this.resetReactionVariables();
+      this.saveEmojiContentToFb();
     }
   }
 
@@ -135,7 +135,7 @@ export class EmojiService {
     } else {
       this.pushEmojiToArray(emoji);
     }
-    this.resetReactionVariables();
+    this.saveEmojiContentToFb();
   }
 
   /**
@@ -155,7 +155,7 @@ export class EmojiService {
     } else {
       this.pushEmojiToArray(emoji);
     }
-    this.resetReactionVariables();
+    this.saveEmojiContentToFb();
   }
 
   /**
@@ -264,7 +264,7 @@ export class EmojiService {
     if (this.emojiToChannel || this.emojiToDirectMessage) {
       this.removeEmojiFromChannelMessage();
       if (this.emojiToChannel) {
-        this.removeEmojiFromThreadMessage()
+        this.removeEmojiFromThreadMessageFromChannelMessage();
       }
     } else if (this.emojieToThread) {
       this.removeEmojiFromThreadMessage()
@@ -302,19 +302,13 @@ export class EmojiService {
     ].emojiReaction.splice(this.emojiIndex, 1);
   }
 
-  /**
-   * Resets the reaction-related variables to false. This is typically called to clear the state before
-   * processing a new reaction or at the end of an operation involving reactions.
-   */
-  async resetReactionVariables() {
-    this.emojiIsAvailable = false;
-    this.userIsAvailable = false;
-    this.mainService.emojiReactionMessage = false;
-    this.saveEmojiContentToFb();
-    this.emojiToChannel = false;
-    this.emojiToDirectMessage = false;
-    this.emojieToThread = false;
-  }
+    /**
+  * Removes an emoji reaction from a specific message in the channel's message channel based on the current index.
+  * This method is used for messages that are part of both a channel and a thread.
+  */
+    removeEmojiFromThreadMessageFromChannelMessage() {
+      this.chatService.dataThread.messageChannel[0].emojiReaction.splice(this.emojiIndex, 1);
+    }
 
   /**
   * Asynchronously saves emoji content updates to Firebase based on whether the emoji is added to a channel or a thread.
@@ -332,6 +326,20 @@ export class EmojiService {
         await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       }
     }
+    this.resetReactionVariables()
+  }
+
+  /**
+  * Resets the reaction-related variables to false. This is typically called to clear the state before
+  * processing a new reaction or at the end of an operation involving reactions.
+  */
+  async resetReactionVariables() {
+    this.emojiIsAvailable = false;
+    this.userIsAvailable = false;
+    this.mainService.emojiReactionMessage = false;
+    this.emojiToChannel = false;
+    this.emojiToDirectMessage = false;
+    this.emojieToThread = false;
   }
 
   /**
