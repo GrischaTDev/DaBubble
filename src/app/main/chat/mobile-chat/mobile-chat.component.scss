@@ -64,12 +64,13 @@
 }
 
 .mobile-chat-owner-content-container {
-  margin-left: 32px;
   position: absolute;
   bottom: 200px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+  padding: 18px;
+  box-sizing: border-box;
 }
 
 .mobile-chat-owner-name-container {
