@@ -63,6 +63,43 @@
   }
 }
 
+.mobile-chat-owner-content-container {
+  margin-left: 32px;
+  position: absolute;
+  bottom: 200px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.mobile-chat-owner-name-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 24px;
+  gap: 8px;
+  padding-bottom: 12px;
+  > p {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.mobile-chat-owner-description-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  > p {
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.mobile-chat-owner-description-name-text {
+  color: $icon-purple-hover;
+}
+
 .mobile-chat-content {
   width: 100%;
   max-height: calc(100vh - 280px);

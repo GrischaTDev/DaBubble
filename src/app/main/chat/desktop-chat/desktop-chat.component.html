@@ -1,5 +1,4 @@
-<div class
-="desktop-chat-container" (click)="chatService.closeDialog()">
+<div class="desktop-chat-container" (click)="chatService.closeDialog()">
   <div class="desktop-chat-header-container">
     <div
       class="desktop-chat-header-headline"
@@ -50,6 +49,20 @@
     </div>
   </div>
   <div #scrollContainer class="desktop-chat-content">
+    <div
+      class="desktop-chat-owner-content-container"
+      *ngIf="chatService.dataChannel.messageChannel.length === 0"
+    >
+      <div class="desktop-chat-owner-name-container">
+        <p># {{ chatService.dataChannel.name }}</p>
+      </div>
+      <span class="desktop-chat-owner-description-container">
+        Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels
+        <p class="desktop-chat-owner-description-name-text">
+          # {{ chatService.dataChannel.name }}
+        </p>
+      </span>
+    </div>
     <div
       (mouseover)="chatService.toggleIconContainer(singleMessageIndex, $event)"
       (mouseleave)="chatService.closeIconContainer()"
@@ -236,7 +249,8 @@
                 [(ngModel)]="chatService.editText"
                 name="newTextarea"
                 (input)="chatService.adjustHeight($event.target)"
-                style="min-height: 50px; width: 100%"
+                (contextmenu)="chatService.adjustHeight($event.target)"
+                style="min-height: 50px; width: 300px; padding: 8px"
                 class="desktop-chat-message-edit-textarea"
               ></textarea>
               <div class="desktop-chat-input-field-icon-container">
@@ -365,12 +379,10 @@
   </div>
   <div class="desktop-chat-input-container" id="meinTextarea">
     <form class="desktop-chat-input-field-container br-20">
-      <div class="add-image-container-width">
-        <div class="add-image-container" *ngIf="chatService.imageMessage">
-          <img src="{{ chatService.imageMessage }}" alt="" />
-          <div class="delete-img" (click)="chatService.deleteMessage()">
-            <mat-icon>close</mat-icon>
-          </div>
+      <div class="add-image-container" *ngIf="chatService.imageMessage">
+        <img src="{{ chatService.imageMessage }}" alt="" />
+        <div class="delete-img" (click)="chatService.deleteMessage()">
+          <mat-icon>close</mat-icon>
         </div>
       </div>
       <textarea
@@ -396,8 +408,9 @@
           <div class="desktop-chat-input-icon">
             <mat-icon
               (click)="
-              emojiService.forWhichDocIsTheEmoji('channels');
-                chatService.onButtonClick($event); chatService.openDialogEmoji()
+                emojiService.forWhichDocIsTheEmoji('channels');
+                chatService.onButtonClick($event);
+                chatService.openDialogEmoji()
               "
               >sentiment_satisfied</mat-icon
             >
@@ -407,7 +420,7 @@
               (click)="
                 mainService.contentOfWhichInput('channels');
                 chatService.onButtonClick($event);
-                chatService.openDialogMentionUser();
+                chatService.openDialogMentionUser()
               "
               >alternate_email</mat-icon
             >

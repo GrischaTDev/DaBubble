@@ -24,6 +24,16 @@
     #scrollContainer
     class="mobile-chat-content"
   >
+  <div class="mobile-chat-owner-content-container" *ngIf="chatService.dataChannel.messageChannel.length === 0">
+    <div class="mobile-chat-owner-name-container" >
+      <p>#</p>
+      <p>{{chatService.dataChannel.name}}</p>
+    </div>
+    <div class="mobile-chat-owner-description-container" >
+      <p>Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels</p>
+      <p class="-chat-owner-description-name-text"># {{chatService.dataChannel.name}}</p>
+    </div>
+   </div>
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel.messageChannel;
@@ -340,12 +350,10 @@
   </div>
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
-      <div class="add-image-container-width">
-        <div class="add-image-container" *ngIf="chatService.imageMessage">
-          <img src="{{ chatService.imageMessage }}" alt="" />
-          <div class="delete-img" (click)="chatService.deleteMessage()">
-            <mat-icon>close</mat-icon>
-          </div>
+      <div class="add-image-container" *ngIf="chatService.imageMessage">
+        <img src="{{ chatService.imageMessage }}" alt="" />
+        <div class="delete-img" (click)="chatService.deleteMessage()">
+          <mat-icon>close</mat-icon>
         </div>
       </div>
       <textarea
