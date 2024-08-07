@@ -20,7 +20,7 @@
   <div class="mobile-chat-content">
     <div
       class="direct-chat-info"
-      *ngIf="directMessageService.dataDirectMessage.messageChannel.length === 0"
+      *ngIf="directMessageService.dataDirectMessage?.messageChannel?.length === 0"
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
         <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User Avatars"/>

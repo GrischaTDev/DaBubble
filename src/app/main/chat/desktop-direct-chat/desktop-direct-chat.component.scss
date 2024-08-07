@@ -103,6 +103,7 @@
   max-height: calc(100vh - 285px);
   height: 100%;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 .image-to-message-container {
