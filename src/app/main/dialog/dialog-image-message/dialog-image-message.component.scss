@@ -1,3 +1,5 @@
+@import './../../../../styles.scss';
+
 .background-image {
     position: fixed;
     top: 0;
@@ -28,12 +30,24 @@
             width: 100%;
             height: auto;
             max-height: 100%;
+            object-fit: contain;
         }
         .close {
             position: absolute;
             top: 25px;
             right: 25px;
             cursor: pointer;
+        }
+
+        mat-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background-color: $background-lightblue;
+            color: #686868;
+            height: 40px;
+            width: 40px;
         }
     }
 }

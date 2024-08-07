@@ -168,21 +168,35 @@ textarea:focus {
   height: 50px; /* Höhe des Thumbs anpassen */
 }
 
+.add-image-container-width {
+  width: 90%;
+}
+
 .add-image-container {
   position: relative;
-  width: 90%;
-  display: flex;
-  justify-content: flex-start;
+  width: auto;
+  display: inline-block;
   margin-bottom: 16px;
   margin-top: 4px;
 
   img {
     width: 64px;
     height: 64px;
+    object-fit: cover;
+    border-radius: 10px;
   }
 
   .delete-img {
+    position: absolute;
+    top: -4px;
+    right: -4px;
     cursor: pointer;
+
+    mat-icon {
+      border-radius: 50%;
+      background-color: $background-lightblue;
+      color: #686868;
+    }
   }
 
 }
