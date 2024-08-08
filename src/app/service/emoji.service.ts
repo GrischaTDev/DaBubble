@@ -30,8 +30,8 @@ export class EmojiService {
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
    * @param {string} emoji - The emoji character to add as a reaction.
    */
-async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
-  this.chatService.indexOfChannelMessage = indexSingleMessage;
+  async addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
+    this.chatService.indexOfChannelMessage = indexSingleMessage;
     this.pushEmojieToRelatedMessageOfTheThread()
       .then(() => {
         let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
@@ -302,14 +302,13 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     ].emojiReaction.splice(this.emojiIndex, 1);
   }
 
-    /**
+  /**
   * Removes an emoji reaction from a specific message in the channel's message channel based on the current index.
   * This method is used for messages that are part of both a channel and a thread.
   */
-    removeEmojiFromThreadMessageFromChannelMessage() {
-      console.log('----',this.emojiServiceThread.messageChannel)
-      this.emojiServiceThread.messageChannel[0].emojiReaction.splice(this.emojiIndex, 1);
-    }
+  removeEmojiFromThreadMessageFromChannelMessage() {
+    this.emojiServiceThread.messageChannel[0].emojiReaction.splice(this.emojiIndex, 1);
+  }
 
   /**
   * Asynchronously saves emoji content updates to Firebase based on whether the emoji is added to a channel or a thread.
@@ -358,9 +357,12 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     }
   }
 
+  /**
+  * Resets all emoji settings to false, indicating that emojis are not enabled for any message types including channels, direct messages, or threads.
+  */
   resetForWhichDocIsTheEmoji() {
-      this.emojiToChannel = false;
-      this.emojiToDirectMessage = false;
-      this.emojieToThread = false;
+    this.emojiToChannel = false;
+    this.emojiToDirectMessage = false;
+    this.emojieToThread = false;
   }
 }
