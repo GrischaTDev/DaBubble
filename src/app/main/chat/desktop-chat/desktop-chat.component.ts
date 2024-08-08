@@ -41,7 +41,8 @@ export class DesktopChatComponent implements OnInit {
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-
+  emojiReactionIndexHover: number | null = null;
+  activeMessageIndexReacton: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,11 +61,11 @@ export class DesktopChatComponent implements OnInit {
         this.chatService.editText += content;
       }
     });
-        this.route.params.subscribe((params: any) => {
+    this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.chatService.loggedInUser = this.mainService.loggedInUser;  
+    this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
@@ -82,7 +83,7 @@ export class DesktopChatComponent implements OnInit {
     });
     this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
       this.chatService.dataChannel = dataChannel as Channel;
-    }); 
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -110,6 +111,17 @@ export class DesktopChatComponent implements OnInit {
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
+  }
+
+  toggleIconHoverContainerChat(singleMessageIndex: number, emojiUserIndex: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.activeMessageIndexReacton = singleMessageIndex;
+    this.emojiReactionIndexHover = emojiUserIndex;
+  }
+
+  toggleIconHoverContainerChatOut(event: MouseEvent) {
+    this.activeMessageIndexReacton = null;
+    this.emojiReactionIndexHover = null;
   }
 
   /**
