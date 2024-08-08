@@ -69,7 +69,10 @@
         </div>
         <div class="edit-btn">
             <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>
-            <div class="primary-btn" (click)="updateCurrentUser()">Speichern</div>
+            <button [ngClass]="{
+                'primary-btn': updateUserName || updateUserEmail,
+                'disabled-btn': !updateUserName && !updateUserEmail
+              }" (click)="updateCurrentUser()" [disabled]="!updateUserName">Speichern</button>
         </div>
     </div>
 </div>
