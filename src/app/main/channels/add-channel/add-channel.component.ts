@@ -38,6 +38,9 @@ export class AddChannelComponent implements OnInit {
   createdChannel: any;
   activeChannelId: string | null = null;
   selectetUser: boolean = false;
+  checkName: boolean = false;
+  searchChannelName: any;
+
   @Output() contentChange = new EventEmitter<string>();
 
   constructor(
@@ -68,6 +71,18 @@ export class AddChannelComponent implements OnInit {
     this.updateIsEmpty();
     if (this.channelService.isEmpty) {
       this.channelService.content = this.channelService.placeholder;
+    }
+  }
+
+  checkChannelNames() {
+    const lowerCaseNewChannelName = this.newChannelName.toLowerCase();
+    this.searchChannelName = this.mainService.allChannels.find(channelName => channelName.name.toLowerCase() === lowerCaseNewChannelName);
+  
+
+    if (this.newChannelName !== '' && !this.searchChannelName) {
+      this.checkName = true;
+    } else {
+      this.checkName = false;
     }
   }
 
