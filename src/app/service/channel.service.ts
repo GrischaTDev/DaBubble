@@ -39,10 +39,10 @@ export class ChannelService {
     public mainService: MainServiceService, private router: Router) { }
 
   /**
-* Adds each user from the added users list to the current channel and updates the channel's document in the database.
-* After adding users to the channel, it resets and closes the user search interface.
-* This method is typically used when new users are confirmed to be added to a channel.
-*/
+  * Adds each user from the added users list to the current channel and updates the channel's document in the database.
+  * After adding users to the channel, it resets and closes the user search interface.
+  * This method is typically used when new users are confirmed to be added to a channel.
+  */
   pushNewUserToChannel() {
     if (this.addetUser.length !== 0) {
       for (let index = 0; index < this.addetUser.length; index++) {
@@ -56,9 +56,9 @@ export class ChannelService {
   }
 
   /**
-* Resets the search state and clears the user addition UI. Sets the textarea height, clears the content,
-* empties the added user list, updates the user edit list, and marks the component as empty and inactive for adding users.
-*/
+  * Resets the search state and clears the user addition UI. Sets the textarea height, clears the content,
+  * empties the added user list, updates the user edit list, and marks the component as empty and inactive for adding users.
+  */
   closePeopleSearch() {
     this.resetArrays();
     this.textareaHeight = 37;
@@ -71,9 +71,9 @@ export class ChannelService {
   }
 
   /**
-* Populates the edit user list with users from the main user list, excluding the currently logged-in user.
-* This method is typically used to prepare a list of users that can be edited or managed in the UI.
-*/
+  * Populates the edit user list with users from the main user list, excluding the currently logged-in user.
+  * This method is typically used to prepare a list of users that can be edited or managed in the UI.
+  */
   pushUserToEditList() {
     this.editUserList.splice(0, this.editUserList.length);
     for (let index = 0; index < this.mainService.allUsers.length; index++) {
@@ -85,10 +85,10 @@ export class ChannelService {
   }
 
   /**
-* Filters users based on the provided content, updating the list of filtered users.
-* Users are filtered by checking if the user's name includes the provided content (case insensitive).
-* @param {string} content - The string content used to filter the user names.
-*/
+  * Filters users based on the provided content, updating the list of filtered users.
+  * Users are filtered by checking if the user's name includes the provided content (case insensitive).
+  * @param {string} content - The string content used to filter the user names.
+  */
   filterUserContent(content: string) {
     this.resetArrays();
     this.filteredUsers = this.editUserList.filter(user => {
@@ -100,6 +100,11 @@ export class ChannelService {
     this.removeExistingUsers();
   }
 
+  /**
+  * Filters and compiles a list of users who are not currently part of the channel. This method considers channel members,
+  * the owner, and newly added users to ensure no duplicates are included in the potential addition list. 
+  * Users not in these groups are added to a list for possible inclusion.
+  */
   removeExistingUsers() {
     const channelUserIds = this.chatService.dataChannel.channelUsers.map(user => user.id);
     const ownerId = this.chatService.dataChannel.ownerUser.map(user => user.id);
@@ -111,29 +116,41 @@ export class ChannelService {
     });
   }
 
+  /**
+  * Clears the input content and sets the state to indicate that the input is empty.
+  */
   clearInput() {
     this.content = '';
     this.isEmpty = true;
   }
 
+  /**
+  * Clears all elements from the `filteredUsers` and `usersNotYetAdded` arrays, effectively resetting them.
+  */
   resetArrays() {
     this.filteredUsers.splice(0, this.filteredUsers.length);
     this.usersNotYetAdded.splice(0, this.usersNotYetAdded.length);
   }
 
   /**
-* Closes the current dialog and updates the state to indicate that adding a user is no longer in progress.
-* This method is used to handle the closing of dialog interfaces within the application.
-*/
+  * Closes the current dialog and updates the state to indicate that adding a user is no longer in progress.
+  * This method is used to handle the closing of dialog interfaces within the application.
+  */
   closeDialogAddUser() {
     this.chatService.closeDialog();
     this.addUserClicked = false;
   }
 
+  /**
+  * Opens a dialog for editing channel details using a DialogEditChannelComponent instance.
+  */
   openEditDialog() {
     this.dialogInstance = this.dialog.open(DialogEditChannelComponent);
   }
 
+  /**
+  * Closes the currently open dialog instance if one exists and sets the state for editing the channel name to false.
+  */
   closeEditChannelDialog() {
     if (this.dialogInstance) {
       this.dialogInstance.close()
@@ -141,10 +158,17 @@ export class ChannelService {
     this.editChannelNameIsOpen = false;
   }
 
+  /**
+  * Opens the edit channel name interface by setting the corresponding state to true.
+  */
   editChannelName() {
     this.editChannelNameIsOpen = true;
   }
 
+  /**
+  * Asynchronously saves the updated channel name if it is not empty. The new name is taken from a textarea input,
+  * updated in the current dataChannel object, and then saved to the database. It also closes the channel name edit interface.
+  */
   async saveChannelName() {
     if (!this.isChannelNameEmpty) {
       this.chatService.dataChannel.name = this.textareaChannelName;
@@ -153,10 +177,17 @@ export class ChannelService {
     this.editChannelNameIsOpen = false;
   }
 
+  /**
+  * Opens the edit channel description interface by setting the corresponding state to true.
+  */
   editChannelDescription() {
     this.editChannelDescriptionIsOpen = true;
   }
 
+  /**
+  * Asynchronously saves the updated channel description if it is not empty. The new description is taken from a textarea input,
+  * updated in the current dataChannel object, and then saved to the database. It also closes the channel description edit interface.
+  */
   async saveChannelDescription() {
     console.log('this.isEmpty', this.isEmpty)
     if (!this.isChannelDescriptionEmpty) {
@@ -166,25 +197,47 @@ export class ChannelService {
     this.editChannelDescriptionIsOpen = false;
   }
 
+  /**
+  * Opens the edit channel add user interface by setting the corresponding state to true.
+  */
   editChannelAddUserOpen() {
     this.editChannelAddUserIsOpen = true;
   }
 
+  /**
+  * Closes the edit channel add user interface by setting the corresponding state to false.
+  */
   editChannelAddUserClose() {
     this.editChannelAddUserIsOpen = false;
   }
 
-async leaveChannel() {
-      const loggedInUserId = this.mainService.loggedInUser.id;
-      const channelUsers = this.chatService.dataChannel.channelUsers; 
-      for (let index = 0; index < channelUsers.length; index++) {
-        if (channelUsers[index].id === loggedInUserId) {
-          this.chatService.dataChannel.channelUsers.splice(index, 1);
-        }
+  /**
+  * Asynchronously removes the logged-in user from the current channel's user list, updates the channel document in the database,
+  * closes any channel edit dialog, navigates to the main page, and loads a new channel.
+  */
+  async leaveChannel() {
+    const loggedInUserId = this.mainService.loggedInUser.id;
+    const channelUsers = this.chatService.dataChannel.channelUsers;
+    for (let index = 0; index < channelUsers.length; index++) {
+      if (channelUsers[index].id === loggedInUserId) {
+        this.chatService.dataChannel.channelUsers.splice(index, 1);
       }
-      await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
-      this.closeEditChannelDialog();
-      this.router.navigate(['/main']);
     }
+    await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
+    this.closeEditChannelDialog();
+    this.router.navigate(['/main']);
+    this.loadNewChannel();
   }
+
+  /**
+  * Loads the first channel from the list of all channels and subscribes to its updates. Updates are handled by setting the received channel data to the chat service's data channel.
+  */
+  loadNewChannel() {
+    this.mainService.watchSingleChannelDoc(this.mainService.allChannels[0].id, 'channels').subscribe(dataChannel => {
+      this.chatService.dataChannel = dataChannel as Channel;
+    })
+  }
+}
+
+
 
