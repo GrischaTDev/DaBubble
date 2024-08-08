@@ -17,16 +17,20 @@
     <div class="input-container">
       <h3>Channel-Name</h3>
       <div class="channel-input">
-        <mat-icon>tag</mat-icon>
-        <input
+        <div>
+          <mat-icon>tag</mat-icon>
+          <input
           [(ngModel)]="newChannelName"
           class="inputfield"
           type="text"
           placeholder="z.B. Kooperationsprojekte"
+          (input)="checkChannelNames()"
         />
+        <span *ngIf="this.searchChannelName" class="error-msg">Channelname bereits vorhanden!</span>
+        </div>
       </div>
     </div>
-    <div class="input-container">
+    <div class="input-container2">
       <h3>Beschreibung <span>(optional)</span></h3>
       <textarea
         (input)="ChatService.adjustHeight($event.target)"
@@ -37,7 +41,14 @@
       ></textarea>
     </div>
     <div class="create-btn">
-      <button class="primary-btn" (click)="openAddUserMenu($event)">
+      <button
+        [ngClass]="{
+          'primary-btn': checkName,
+          'disabled-btn': !checkName
+        }"
+        (click)="openAddUserMenu($event)"
+        [disabled]="!checkName"
+      >
         Erstellen
       </button>
     </div>
@@ -87,7 +98,7 @@
               let indexAddUser = index
             "
           >
-            <img [src]="userAddet.avatar" alt="User Avatar"/>
+            <img [src]="userAddet.avatar" alt="User Avatar" />
             <p>{{ userAddet.name }}</p>
             <mat-icon
               class="add-channel-add-users-close-icon"
@@ -129,7 +140,7 @@
                     mainService.loggedInUser.id === usersAll.id,
                   }"
                   >
-                    <img [src]="usersAll.avatar" alt="User Avatar"/>
+                    <img [src]="usersAll.avatar" alt="User Avatar" />
                     <p>{{ usersAll.name }}</p>
                   </div>
                 </div>

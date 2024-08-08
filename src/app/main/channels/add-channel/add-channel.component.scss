@@ -1,188 +1,194 @@
 @import "./../../../../styles.scss";
 
 .close {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .add-channel-dialog {
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background-color: white;
-    margin: 0;
-    padding: 20px;
-    z-index: 300;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-color: white;
+  margin: 0;
+  padding: 20px;
+  z-index: 300;
 
-    >.headline {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+  > .headline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    >.create-btn {
-        text-align: right;
-        width: 100%;
-        margin-top: 40px;
-
-        >button {
-            color: white;
-            padding: 12px 25px;
-            gap: 10px;
-            border-radius: 25px;
-            border: unset;
-            background-color: $background-blue;
-        }
-    }
-
-    .input-container {
-        >h3 span {
-            color: $background-gray;
-            font-weight: 400;
-        }
-
-        >.channel-input {
-            position: relative;
-            display: flex;
-            align-items: center;
-
-            >input {
-                padding: 18px 20px 18px 50px;
-            }
-
-            >mat-icon {
-                position: absolute;
-                margin-left: 16px;
-                color: gray;
-                font-style: italic;
-            }
-        }
-    }
-}
-
-
-.add-user {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 400;
-
-    >.menu-container {
-        background-color: white;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 30px 26px;
-        border-radius: 30px 30px 0px 0px;
-        box-shadow: 0px -3px 10px 0px #00000033;
-
-
-        >.border-container {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            padding: 0 0 30px 0;
-
-            >.border {
-                height: 6px;
-                width: 62px;
-                background-color: $background-lightgray;
-                border-radius: 23px;
-            }
-        }
-
-        >.headline {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-
-            >div {
-                display: flex;
-            }
-        }
-
-        >div {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-    }
-}
-
-
-.create-btn {
+  > .create-btn {
     text-align: right;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 40px;
 
-    >button {
-        color: white;
-        padding: 12px 25px;
-        gap: 10px;
-        border-radius: 25px;
-        border: unset;
-        background-color: $background-blue;
+    > button {
+      color: white;
+      padding: 12px 25px;
+      gap: 10px;
+      border-radius: 25px;
+      border: unset;
+      background-color: $background-blue;
     }
+  }
+
+  .input-container2 {
+    margin-top: 30px;
+  }
+
+  .input-container {
+    > h3 span {
+      color: $background-gray;
+      font-weight: 400;
+    }
+
+    > .channel-input div {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      > input {
+        padding: 18px 20px 18px 50px;
+      }
+
+      > .error-msg {
+        color: red;
+        position: absolute;
+        left: 20px;
+        top: 65px;
+      }
+
+      > mat-icon {
+        position: absolute;
+        margin-left: 16px;
+        color: gray;
+        font-style: italic;
+      }
+    }
+  }
 }
 
+.add-user {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 400;
+
+  > .menu-container {
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 26px;
+    border-radius: 30px 30px 0px 0px;
+    box-shadow: 0px -3px 10px 0px #00000033;
+
+    > .border-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0 0 30px 0;
+
+      > .border {
+        height: 6px;
+        width: 62px;
+        background-color: $background-lightgray;
+        border-radius: 23px;
+      }
+    }
+
+    > .headline {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      > div {
+        display: flex;
+      }
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+}
+
+.create-btn {
+  text-align: right;
+  width: 100%;
+  margin-top: 10px;
+
+  > button {
+    color: white;
+    padding: 12px 25px;
+    gap: 10px;
+    border-radius: 25px;
+    border: unset;
+    background-color: $background-blue;
+  }
+}
 
 .radio-options {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-    >input {
-        height: 20px !important;
-        width: 20px !important;
-        cursor: pointer;
-    }
+  > input {
+    height: 20px !important;
+    width: 20px !important;
+    cursor: pointer;
+  }
 }
 
-
 @media only screen and (min-width: 840px) {
-    .add-channel-container {
-        position: fixed;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        background-color: #796e6e52;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-    }
-    .add-channel-dialog {
-        position: unset;
-        width: 700px;
-        height: 500px;
-        box-shadow: 0px 6px 10px 0px #00000033;
-        border-radius: 30px;
-    }
-    
-    .add-user {
-        position: fixed;
-        height: 100vh;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
+  .add-channel-container {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #796e6e52;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+  .add-channel-dialog {
+    position: unset;
+    width: 700px;
+    height: 500px;
+    box-shadow: 0px 6px 10px 0px #00000033;
+    border-radius: 30px;
+  }
 
-        >.menu-container {
-            width: 650px;
-            position: unset;
-            border-radius: 30px;
+  .add-user {
+    position: fixed;
+    height: 100vh;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 
-            >.border-container {
-                display: none;
-            }
-        }
+    > .menu-container {
+      width: 650px;
+      position: unset;
+      border-radius: 30px;
+
+      > .border-container {
+        display: none;
+      }
     }
+  }
 }
 
 /*-----------------------   ADD USER INPUT  -------------------------------------- */
@@ -216,10 +222,9 @@
   font-size: 18px;
   box-sizing: border-box;
   overflow-x: hidden;
-  overflow-y: auto;
   resize: none;
   word-wrap: break-word;
-  font-family: Arial, "TwemojiMozilla";
+  font-family: Arial, "TwemojiMozilla", sans-serif;
   height: 65px;
   overflow-y: hidden;
 }
@@ -227,8 +232,6 @@
 .add-channel-user {
   position: relative;
 }
-
-
 
 .add-channel-add-users-content-container {
   position: absolute;
@@ -301,6 +304,11 @@
 
 .d-none {
   display: none;
+}
+
+.disabled-btn {
+  background-color: $background-lightgray !important;
+  cursor: not-allowed;
 }
 
 @media (max-width: 1279px) {
