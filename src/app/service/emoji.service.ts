@@ -348,6 +348,7 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   * @param {string} docName - The name of the document type.
   */
   forWhichDocIsTheEmoji(docName: string) {
+    this.resetForWhichDocIsTheEmoji();
     if (docName === 'channels') {
       this.emojiToChannel = true;
     } else if (docName === 'direct-message') {
@@ -355,5 +356,11 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     } else if (docName === 'thread') {
       this.emojieToThread = true;
     }
+  }
+
+  resetForWhichDocIsTheEmoji() {
+      this.emojiToChannel = false;
+      this.emojiToDirectMessage = false;
+      this.emojieToThread = false;
   }
 }
