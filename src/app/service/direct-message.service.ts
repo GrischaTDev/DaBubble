@@ -292,6 +292,7 @@ export class DirectMessageService {
     this.chatService.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
     this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
     await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.dataDirectMessage));
+    console.log(this.directMessageDocId);
     this.chatService.text = '';
     this.imageMessage = '';
   }

@@ -191,7 +191,9 @@ export class ChatService {
   */
   resetMessageContent() {
     this.text = '';
-    this.imageMessage = '';
+    setTimeout(() => {
+      this.imageMessage = '';
+    }, 2000);
     setTimeout(() => {
       this.sendetMessage = false;
     }, 2000);   
@@ -221,6 +223,7 @@ export class ChatService {
     this.newThreadOnFb.name = this.dataChannel.name;
     await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb));
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+    console.log('Id_', this.dataChannel.id);
   }
 
   /**
