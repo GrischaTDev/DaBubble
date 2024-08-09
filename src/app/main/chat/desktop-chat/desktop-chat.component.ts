@@ -137,6 +137,7 @@ export class DesktopChatComponent implements OnInit {
   chooseUser(name: string) {
     const cleanName = name.replace(/\s+/g, '');
     this.chatService.text = '@' + cleanName;
+    this.searchField.isSearchActive = false;
   }
 }
 

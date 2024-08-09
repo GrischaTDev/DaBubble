@@ -6,9 +6,12 @@ import { collection, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '
 })
 export class SearchFieldService {
 
+  allUser: DocumentData[] = [];
   filterUser: DocumentData[] = [];
   filterChannel: DocumentData[] = [];
   filterMessage: DocumentData[] = [];
+
+  isSearchActive = false;
 
   constructor(private firestore: Firestore) { }
 
@@ -22,10 +25,10 @@ export class SearchFieldService {
     }
 
     filterDataChannelchat(searchValue: string) {
-      if(searchValue.startsWith('@')) {
+      if(searchValue.includes('@')) {
+        this.isSearchActive = true;
         const searchValueFilter = searchValue.slice(1);
         this.setUser(searchValueFilter);
-        console.log(searchValue);
       }
     }
   
@@ -41,6 +44,7 @@ export class SearchFieldService {
         userList.forEach(user => {
           const userData = user.data();
           if (userData && userData['name'] && searchValue) {
+            this.allUser.push(userData)
             const name = userData['name'].toLowerCase();
             const searchValueLower = searchValue.toLowerCase();
             if (name.includes(searchValueLower)) {

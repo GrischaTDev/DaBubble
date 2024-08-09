@@ -469,10 +469,10 @@
     </div>
   </div>
 
-  <div class="user-result-container" *ngIf="chatService.text">
+  <div id="user-result-container" class="user-result-container" *ngIf="chatService.text.includes('@') && searchField.isSearchActive">
 
-    <div *ngIf="searchField.filterUser.length > 0">
-        <div *ngFor="let user of searchField.filterUser">
+    <div class="user-content-container" *ngIf="searchField.filterUser.length > 0">
+        <div class="user-list-container" *ngFor="let user of searchField.filterUser">
             <div class="user-list" (click)="chooseUser(user['name'])" >
               <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
             </div>
