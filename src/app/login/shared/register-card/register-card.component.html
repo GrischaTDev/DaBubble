@@ -13,10 +13,11 @@
                     <mat-icon class="icon">person</mat-icon>
 
                     <input [ngModel]="isNameValid" [(ngModel)]="name" #isNameValid="ngModel" type="text"
-                        placeholder="Name und Nachname" [ngModelOptions]="{standalone: true}" name="name" required>
+                        placeholder="Name und Nachname" [ngModelOptions]="{standalone: true}" name="name" required
+                        pattern="[A-Za-zÀ-ÖØ-öø-ÿ]+(?: [A-Za-zÀ-ÖØ-öø-ÿ]+)+">
 
                 </div>
-                <p *ngIf="!isNameValid.valid && registerForm.submitted"> Bitte gib deinen Namen ein. </p>
+                <p *ngIf="!isNameValid.valid && isNameValid.touched"> Bitte gib deinen Namen ein. </p>
             </div>
             <div>
 
@@ -24,12 +25,12 @@
 
                     <mat-icon class="icon">email</mat-icon>
 
-                    <input [(ngModel)]="isMailValid" [(ngModel)]="email" #isMailValid="ngModel" class="email-input"
-                        type="email" placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}"
-                        name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                    <input [(ngModel)]="email" #isMailValid="ngModel" class="email-input" type="email"
+                        placeholder="beispielname@email.com" [ngModelOptions]="{standalone: true}" name="email" required
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
 
                 </div>
-                <p *ngIf="!isMailValid.valid && registerForm.submitted"> Bitte gib deine E-Mail-Adresse ein. </p>
+                <p *ngIf="!isMailValid.valid && isMailValid.touched"> Bitte gib deine E-Mail-Adresse ein. </p>
                 <p *ngIf="isEmailAvaiable"> {{ isEmailAvaiable }} </p>
             </div>
             <div>
