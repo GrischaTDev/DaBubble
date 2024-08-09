@@ -335,52 +335,110 @@
                 </p>
               </div>
             </div>
-            <div class="desktop-chat-message-reaction-hover-content-container"
+            <div
+              class="desktop-chat-message-reaction-hover-content-container"
               *ngFor="
                 let emojie of chatService.dataChannel.messageChannel[
                   singleMessageIndex
                 ].emojiReaction;
                 let emojiIndex = index
               "
-              (click)="
-                emojiService.forWhichDocIsTheEmoji('channels');
-                emojiService.addAdditionalReactionToMessage(
-                  emojie.emoji,
+              (mouseenter)="
+                this.toggleIconHoverContainerChat(
                   singleMessageIndex,
-                  emojiIndex
+                  emojiIndex,
+                  $event
                 )
               "
-              (mouseenter)="
-              this.toggleIconHoverContainerChat(singleMessageIndex, emojiIndex, $event)
-            "
-            (mouseleave)="
-            this.toggleIconHoverContainerChatOut($event)
-          "
+              (mouseleave)="this.toggleIconHoverContainerChatOut($event)"
             >
-              <div class="desktop-chat-message-reaction-hover-content" *ngIf="emojiIndex === emojiReactionIndexHover && singleMessageIndex === activeMessageIndexReacton">
-                {{ emojie.emoji }}
+              <div
+              [ngClass]="{
+                'desktop-chat-message-reaction-hover-content-right': chatService.ifMessageFromMe(
+                  singleMessage.userId
+                ),
+                'desktop-chat-message-reaction-hover-content-left': !chatService.ifMessageFromMe(
+                  singleMessage.userId
+                ),
+              }"
+                *ngIf="
+                  emojiIndex === emojiReactionIndexHover &&
+                  singleMessageIndex === activeMessageIndexReacton
+                "
+              >
+                <p class="desktop-chat-message-reaction-hover-emoji">
+                  {{ emojie.emoji }}
+                </p>
                 <span
                   *ngFor="
                     let emojieUser of emojie.userName;
                     let emojiUserIndex = index
                   "
                 >
-                <p *ngIf="emojie.userName.length === 1 && emojiUserIndex === 0">{{ emojieUser }}</p>
-                <p *ngIf="emojie.userName.length === 2 && emojiUserIndex === 0">{{ emojieUser }} und</p>
-                <p *ngIf="emojie.userName.length === 2 && emojiUserIndex === 1">{{ emojieUser }}</p>
-                <p *ngIf="emojie.userName.length === 3 && emojiUserIndex === 0">{{ emojieUser }},</p>
-                <p *ngIf="emojie.userName.length === 3 && emojiUserIndex === 1">{{ emojieUser }} und</p>
-                <p *ngIf="emojie.userName.length === 3 && emojiUserIndex === 2">{{ emojieUser }}</p>
-                <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 0">{{ emojieUser }},</p>
-                <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 1">{{ emojieUser }},</p>
-                <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 2">{{ emojieUser }} und</p>
-                <p *ngIf="emojie.userName.length === 4  && emojiUserIndex === 3"> {{emojie.userName.length - 3}} weitere Person</p>
-                <p *ngIf="emojie.userName.length > 4 && emojiUserIndex === 4"> {{emojie.userName.length - 3}} weitere Personen</p> 
-              </span>
-              <p *ngIf="emojie.userName.length === 1">hat reagiert</p>
-              <p *ngIf="emojie.userName.length > 1">haben reagiert</p>
+                  <p
+                    *ngIf="emojie.userName.length === 1 && emojiUserIndex === 0"
+                  >
+                    {{ emojieUser }}
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length === 2 && emojiUserIndex === 0"
+                  >
+                    {{ emojieUser }} und
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length === 2 && emojiUserIndex === 1"
+                  >
+                    {{ emojieUser }}
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length === 3 && emojiUserIndex === 0"
+                  >
+                    {{ emojieUser }},
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length === 3 && emojiUserIndex === 1"
+                  >
+                    {{ emojieUser }} und
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length === 3 && emojiUserIndex === 2"
+                  >
+                    {{ emojieUser }}
+                  </p>
+                  <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 0">
+                    {{ emojieUser }},
+                  </p>
+                  <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 1">
+                    {{ emojieUser }},
+                  </p>
+                  <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 2">
+                    {{ emojieUser }} und
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length === 4 && emojiUserIndex === 3"
+                    class="desktop-chat-message-reaction-hover-link"
+                  >
+                    {{ emojie.userName.length - 3 }} weitere Person
+                  </p>
+                  <p
+                    *ngIf="emojie.userName.length > 4 && emojiUserIndex === 4"
+                    class="desktop-chat-message-reaction-hover-link"
+                  >
+                    {{ emojie.userName.length - 3 }} weitere Personen
+                  </p>
+                </span>
+                <p *ngIf="emojie.userName.length === 1">hat reagiert</p>
+                <p *ngIf="emojie.userName.length > 1">haben reagiert</p>
               </div>
               <div
+                (click)="
+                  emojiService.forWhichDocIsTheEmoji('channels');
+                  emojiService.addAdditionalReactionToMessage(
+                    emojie.emoji,
+                    singleMessageIndex,
+                    emojiIndex
+                  )
+                "
                 class="desktop-chat-message-reaction-content"
                 [ngClass]="{
                   'd-none': emojie.user.length === 0

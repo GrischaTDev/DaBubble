@@ -620,7 +620,13 @@
   position: relative;
 }
 
-.desktop-chat-message-reaction-hover-content {
+.desktop-chat-message-reaction-hover-emoji {
+  font-size: 32px !important;
+  padding: 0;
+  margin: 0;
+}
+
+.desktop-chat-message-reaction-hover-content-right {
   background-color: $background-blue;
   padding: 12px;
   border-top-right-radius: 25px;
@@ -633,20 +639,81 @@
   gap: 2px;
   position: absolute;
   bottom: 0;
-  margin-bottom: 36px;
-  margin-left: -100px;
+  margin-bottom: 32px;
+  margin-left: -90px;
   > span {
     all: unset;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column; 
+    padding: 0;
+    margin: 0;
     > p {
       all: unset;
       color: $background-white;
       white-space: nowrap;
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0;
+      margin: 0;
     }
+  }
+  > p {
+    all: unset;
+    color: $background-white;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.desktop-chat-message-reaction-hover-content-left {
+  background-color: $background-blue;
+  padding: 12px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2px;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 32px;
+  margin-left: 30px;
+  > span {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+    padding: 0;
+    margin: 0;
+    > p {
+      all: unset;
+      color: $background-white;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0;
+      margin: 0;
+    }
+  }
+  > p {
+    all: unset;
+    color: $background-white;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.desktop-chat-message-reaction-hover-link {
+  cursor: pointer !important;
+  &:hover {
+   color: $border-ligth-purple !important;
   }
 }
 
