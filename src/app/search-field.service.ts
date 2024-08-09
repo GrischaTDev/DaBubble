@@ -73,7 +73,6 @@ export class SearchFieldService {
                 this.filterMessage.push( { channelData: channelData, channelName: channelData['name'] , message: message['message']} );
               }
             });
-            console.log(this.filterMessage);
           }
         });
       })
