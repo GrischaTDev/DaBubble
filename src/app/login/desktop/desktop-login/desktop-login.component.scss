@@ -3,6 +3,7 @@
 @import './../../shared/login-card/login-card.component.scss';
 
 .animation-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,6 +13,7 @@
     height: 100vh;
     gap: 30px;
     opacity: 1;
+    z-index: 99;
 
     .logo-container {
         flex: 0 0 auto;
@@ -39,10 +41,10 @@ section {
 }
 
 @keyframes slideIn {
-    0% {
+    from {
         opacity: 0;
     }
-    100% {
+    to {
         opacity: 1;
     }
 }
@@ -59,7 +61,9 @@ section {
         top: 75px;
         left: 75px;
         transform: translate(0, 0);
-        z-index: 2;
+        opacity: 0;
+        z-index: 1;
+        visibility: hidden;
     }
 
     .register-container {
@@ -72,4 +76,12 @@ section {
 .register-link-container {
     display: flex;
     justify-content: flex-end;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
 }
