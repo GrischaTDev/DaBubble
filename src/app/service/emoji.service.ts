@@ -248,7 +248,7 @@ export class EmojiService {
         arrayEmoji.user.splice(index, 1);
         arrayEmoji.userName.splice(index, 1);
         arrayEmoji.userAvatar.splice(index, 1);
-        if (arrayEmoji.user !== 0) {
+        if (arrayEmoji.user.length === 0) {       
           this.removeEmojie();
         }
       }
