@@ -34,6 +34,8 @@ export class DesktopThreadComponent {
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
+  emojiReactionIndexHoverThread: number | null = null;
+  activeMessageIndexReactonThread: number | null = null;
 
 
   constructor(
@@ -108,6 +110,17 @@ export class DesktopThreadComponent {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  toggleIconHoverContainerThread(singleMessageIndex: number, emojiUserIndex: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.activeMessageIndexReactonThread = singleMessageIndex;
+    this.emojiReactionIndexHoverThread = emojiUserIndex;
+  }
+
+  toggleIconHoverContainerThreadOut(event: MouseEvent) {
+    this.activeMessageIndexReactonThread = null;
+    this.emojiReactionIndexHoverThread = null;
   }
 }
 

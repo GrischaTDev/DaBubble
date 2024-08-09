@@ -510,6 +510,7 @@
   padding-bottom: 5px;
   padding-left: 10px;
   padding-right: 10px;
+  background-color: #fff;
   cursor: pointer;
   &:hover {
     border: 1px solid $background-lightblue;
@@ -517,6 +518,129 @@
 }
 
 .dektop-thread-message-reaction-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  &:hover {
+    background-color: $background-lightblue;
+  }
+  mat-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+    color: $icon-gray;
+    border-radius: 100%;
+    &:hover {
+      color: $background-purple;
+    }
+  }
+}
+
+.desktop-chat-message-reaction-hover-content-container {
+  position: relative;
+}
+
+.desktop-chat-message-reaction-hover-emoji {
+  font-size: 32px !important;
+  padding: 0;
+  margin: 0;
+}
+
+.desktop-chat-message-reaction-hover-content-right {
+  background-color: $background-blue;
+  padding: 12px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2px;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 32px;
+  margin-left: -90px;
+  > span {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+    padding: 0;
+    margin: 0;
+    > p {
+      all: unset;
+      color: $background-white;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0;
+      margin: 0;
+    }
+  }
+  > p {
+    all: unset;
+    color: $background-white;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.desktop-chat-message-reaction-hover-content-left {
+  background-color: $background-blue;
+  padding: 12px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2px;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 32px;
+  margin-left: 30px;
+  > span {
+    all: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; 
+    padding: 0;
+    margin: 0;
+    > p {
+      all: unset;
+      color: $background-white;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0;
+      margin: 0;
+    }
+  }
+  > p {
+    all: unset;
+    color: $background-white;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+.desktop-chat-message-reaction-hover-link {
+  cursor: pointer !important;
+  &:hover {
+   color: $border-ligth-purple !important;
+  }
+}
+
+.desktop-chat-message-reaction-icon {
   height: 40px;
   width: 40px;
   border-radius: 100%;
