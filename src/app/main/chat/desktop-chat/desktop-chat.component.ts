@@ -18,6 +18,7 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -52,7 +53,8 @@ export class DesktopChatComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public channelService: ChannelService,
     public loginService: LoginService,
-    public threadService: ThreadService
+    public threadService: ThreadService,
+    public searchField: SearchFieldService
   ) {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {
@@ -130,6 +132,11 @@ export class DesktopChatComponent implements OnInit {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  chooseUser(name: string) {
+    const cleanName = name.replace(/\s+/g, '');
+    this.chatService.text = '@' + cleanName;
   }
 }
 

@@ -20,6 +20,14 @@ export class SearchFieldService {
       this.setUser(searchValue);
       this.setChannel(searchValue);
     }
+
+    filterDataChannelchat(searchValue: string) {
+      if(searchValue.startsWith('@')) {
+        const searchValueFilter = searchValue.slice(1);
+        this.setUser(searchValueFilter);
+        console.log(searchValue);
+      }
+    }
   
     /**
      * 

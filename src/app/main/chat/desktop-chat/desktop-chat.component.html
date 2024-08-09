@@ -468,6 +468,19 @@
       </div>
     </div>
   </div>
+
+  <div class="user-result-container" *ngIf="chatService.text">
+
+    <div *ngIf="searchField.filterUser.length > 0">
+        <div *ngFor="let user of searchField.filterUser">
+            <div class="user-list" (click)="chooseUser(user['name'])" >
+              <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
+            </div>
+        </div>
+    </div>
+
+  </div>
+
   <div class="desktop-chat-input-container" id="meinTextarea">
     <form class="desktop-chat-input-field-container br-20">
       <div class="add-image-container-width">
@@ -484,6 +497,7 @@
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
         [placeholder]="'Antworten...'"
+        (ngModelChange)="searchField.filterDataChannelchat(chatService.text)"
       ></textarea>
 
       <div class="desktop-chat-input-field-icon-container">
