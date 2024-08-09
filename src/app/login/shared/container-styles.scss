@@ -7,12 +7,9 @@
     justify-content: center;
     gap: 30px;
     font-size: 17px;
-    min-height: 100vh;
-    height: 100vh;
-    padding-top: 16px;
-    padding-bottom: 16px;
     position: relative;
     z-index: 1;
+    width: 100%;
 
     .logo-container {
         display: flex;
@@ -28,6 +25,7 @@
     .mobile-register-container {
         display: flex;
         align-items: center;
+        justify-content: center;
     }
 
 }
