@@ -58,7 +58,7 @@
               threadService.ifMessageOwnerMessageFromThread(
                 singleThreadMessageIndex
               );
-              emojiService.forWhichDocIsTheEmoji('threads');
+              emojiService.forWhichDocIsTheEmoji('thread');
               chatService.onButtonClick($event);
               chatService.openDialogEmojiReactionMessage(
                 singleThreadMessageIndex
@@ -200,7 +200,7 @@
                             threadService.ifMessageOwnerMessageFromThread(
                               singleThreadMessageIndex
                             );
-                            emojiService.forWhichDocIsTheEmoji('threads');
+                            emojiService.forWhichDocIsTheEmoji('thread');
                             chatService.onButtonClick($event);
                             chatService.openDialogEmoji()
                           "
@@ -349,7 +349,7 @@
             </div>
             <div
               (click)="
-                emojiService.forWhichDocIsTheEmoji('threads');
+                emojiService.forWhichDocIsTheEmoji('thread');
                 emojiService.addAdditionalReactionToMessage(
                   emojieThread.emoji,
                   singleThreadMessageIndex,
@@ -376,7 +376,7 @@
                     threadService.ifMessageOwnerMessageFromThread(
                       singleThreadMessageIndex
                     );
-                    emojiService.forWhichDocIsTheEmoji('threads');
+                    emojiService.forWhichDocIsTheEmoji('thread');
                     chatService.onButtonClick($event);
                     chatService.openDialogEmojiReactionMessage(
                       singleThreadMessageIndex

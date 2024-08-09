@@ -206,12 +206,7 @@ export class EmojiService {
           'threads'
         )
       );
-      if (!this.chatService.isThreadOpen) {
-        this.emojiServiceThread = dataThreadChannel as Channel;
-      }
-      else {
-        this.emojiServiceThread = this.chatService.dataThread;
-      }
+      this.emojiServiceThread = dataThreadChannel as Channel;
     }
   }
 
@@ -253,6 +248,10 @@ export class EmojiService {
         arrayEmoji.user.splice(index, 1);
         arrayEmoji.userName.splice(index, 1);
         arrayEmoji.userAvatar.splice(index, 1);
+        console.log('---------')
+        if (arrayEmoji.user === 0) {    
+          this.removeEmojie();
+        }
       }
     }
   }
