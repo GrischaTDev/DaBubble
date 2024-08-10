@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { collection, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
+import { ChatService } from './service/chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,9 @@ export class SearchFieldService {
   filterMessage: DocumentData[] = [];
 
   isSearchActive = false;
+  at: any;
 
-  constructor(private firestore: Firestore) { }
+  constructor(private firestore: Firestore, private chatService: ChatService) { }
 
     /**
    * 
@@ -25,10 +27,12 @@ export class SearchFieldService {
     }
 
     filterDataChannelchat(searchValue: string) {
-      if(searchValue.includes('@')) {
-        this.isSearchActive = true;
-        const searchValueFilter = searchValue.slice(1);
+      this.at = searchValue.lastIndexOf('@')
+      if(this.at !== -1) {
+        const searchValueFilter = searchValue.slice(this.at + 1);
         this.setUser(searchValueFilter);
+      } else {
+        this.filterUser = [];
       }
     }
   
@@ -88,6 +92,14 @@ export class SearchFieldService {
           }
         });
       })
+    }
+
+    chooseUser(name: string) {
+      const atIndex = this.chatService.text.lastIndexOf('@');
+      if (atIndex !== -1) {
+        this.chatService.text = this.chatService.text.slice(0, atIndex + 1) + name + ' ';
+        this.filterUser = [];
+      }
     }
 
 
