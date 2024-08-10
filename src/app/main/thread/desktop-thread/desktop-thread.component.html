@@ -279,8 +279,8 @@
               ),
             }"
               *ngIf="
-                emojiIndexThread === emojiReactionIndexHoverThread &&
-                singleThreadMessageIndex === activeMessageIndexReactonThread
+                emojiIndexThread === chatService.emojiReactionIndexHoverThread &&
+                singleThreadMessageIndex === chatService.activeMessageIndexReactonThread
               "
             >
               <p class="desktop-chat-message-reaction-hover-emoji">

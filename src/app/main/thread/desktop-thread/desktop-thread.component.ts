@@ -35,8 +35,7 @@ export class DesktopThreadComponent implements OnInit  {
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-  emojiReactionIndexHoverThread: number | null = null;
-  activeMessageIndexReactonThread: number | null = null;
+
 
 
   constructor(
@@ -118,13 +117,13 @@ export class DesktopThreadComponent implements OnInit  {
 
   toggleIconHoverContainerThread(singleMessageIndex: number, emojiUserIndex: number, event: MouseEvent) {
     event.stopPropagation();
-    this.activeMessageIndexReactonThread = singleMessageIndex;
-    this.emojiReactionIndexHoverThread = emojiUserIndex;
+    this.chatService.activeMessageIndexReactonThread = singleMessageIndex;
+    this.chatService.emojiReactionIndexHoverThread = emojiUserIndex;
   }
 
   toggleIconHoverContainerThreadOut(event: MouseEvent) {
-    this.activeMessageIndexReactonThread = null;
-    this.emojiReactionIndexHoverThread = null;
+    this.chatService.activeMessageIndexReactonThread = null;
+    this.chatService.emojiReactionIndexHoverThread = null;
   }
 }
 

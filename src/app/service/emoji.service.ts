@@ -392,6 +392,8 @@ export class EmojiService {
     this.emojiToChannel = false;
     this.emojiToDirectMessage = false;
     this.emojieToThread = false;
+    this.chatService.activeMessageIndexReactonThread = null;
+    this.chatService.emojiReactionIndexHoverThread = null;
   }
 
   /**

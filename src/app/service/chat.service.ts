@@ -1,20 +1,18 @@
-import { ElementRef, HostListener, Injectable, ViewChild, inject } from '@angular/core';
+import { HostListener, Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { collection, doc, docData, Firestore, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
-
 
 @Injectable({
   providedIn: 'root',
@@ -59,13 +57,13 @@ export class ChatService {
   desktopChatOpen: boolean = true;
   newMessageOpen: boolean = false;
   isThreadOpen: boolean = false;
-  private subscription: Subscription = new Subscription();
-  private itemsSubscription?: Subscription;
   imageMessage: string | ArrayBuffer | null = '';
   indexOfThreadMessageForEditChatMessage: number = 0;
   ownerThreadMessage: boolean = false;
   sendetMessage: boolean = false;
   indexOfThreadMessage: number = 0;
+  emojiReactionIndexHoverThread: number | null = null;
+  activeMessageIndexReactonThread: number | null = null;
 
   constructor(public mainService: MainServiceService, private router: Router) {
   }

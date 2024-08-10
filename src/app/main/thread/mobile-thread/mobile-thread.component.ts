@@ -27,7 +27,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './mobile-thread.component.scss'
 })
 export class MobileThreadComponent implements OnInit {
-
   parmsId1: string = '';
   parmsId2: string = '';
 
