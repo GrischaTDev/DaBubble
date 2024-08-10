@@ -72,7 +72,7 @@ export class DialogEmojiComponent {
     if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
       this.emojiService.addReactionToMessageChannel(event.emoji.native, this.chatService.indexOfChannelMessage);
     } else if (this.emojiService.emojieToThread) {
-      this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfChannelMessage);
+      this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfThreadMessage);
     }
   }
 

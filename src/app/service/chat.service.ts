@@ -65,6 +65,7 @@ export class ChatService {
   indexOfThreadMessageForEditChatMessage: number = 0;
   ownerThreadMessage: boolean = false;
   sendetMessage: boolean = false;
+  indexOfThreadMessage: number = 0;
 
   constructor(public mainService: MainServiceService, private router: Router) {
   }
@@ -298,7 +299,11 @@ export class ChatService {
    */
   openDialogEmojiReactionMessage(index: number) {
     this.mainService.emojiReactionMessage = true;
-    this.indexOfChannelMessage = index;
+    if(!this.mainService.contentToThread) {
+      this.indexOfChannelMessage = index;
+    } else {
+      this.indexOfThreadMessage = index;
+    }
     if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
       this.closeDialog();
       this.dialogInstance = this.dialog.open(DialogEmojiComponent);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MainServiceService } from '../../../service/main-service.service';
 import { LoginService } from '../../../service/login.service';
@@ -14,6 +14,7 @@ import { ChannelService } from '../../../service/channel.service';
 import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { ThreadService } from '../../../service/thread.service';
   templateUrl: './desktop-thread.component.html',
   styleUrl: './desktop-thread.component.scss'
 })
-export class DesktopThreadComponent {
+export class DesktopThreadComponent implements OnInit  {
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
@@ -71,6 +72,9 @@ export class DesktopThreadComponent {
  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
  */
   ngOnInit() {
+    this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].thread, 'threads').subscribe(dataThreadChannel => {
+      this.chatService.dataThread = dataThreadChannel as Channel;
+    });
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
