@@ -52,7 +52,8 @@ export class EmojiService {
   */
   addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
     this.chatService.indexOfChannelMessage = indexSingleMessage;
-    let dataEmoji = this.emojiServiceThread.messageChannel[indexSingleMessage].emojiReaction;
+    let dataEmoji = this.chatService.dataThread.messageChannel[indexSingleMessage].emojiReaction;
+    this.emojiServiceThread = this.chatService.dataThread;
     if (dataEmoji.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, dataEmoji);
       this.selectionTheAddedEmojiThread(emoji);
@@ -176,7 +177,7 @@ export class EmojiService {
       }
     } else if (this.emojieToThread) {
       this.emojiServiceThread.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
-      if (this.chatService.ownerThreadMessage) {
+      if (this.chatService.indexOfChannelMessage === 0) {
         this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].emojiReaction.push(this.newEmoji.toJSON());
       }
     }
@@ -206,7 +207,12 @@ export class EmojiService {
           'threads'
         )
       );
-      this.emojiServiceThread = dataThreadChannel as Channel;
+      if(!this.chatService.isThreadOpen) {
+        this.emojiServiceThread = dataThreadChannel as Channel;
+        console.log('????????-------------------????????????')
+      } else {
+        this.emojiServiceThread = this.chatService.dataThread;
+      }
     }
   }
 
@@ -247,9 +253,8 @@ export class EmojiService {
         this.emojiIndex = index;
         arrayEmoji.user.splice(index, 1);
         arrayEmoji.userName.splice(index, 1);
-        arrayEmoji.userAvatar.splice(index, 1);
-        console.log('---------')
-        if (arrayEmoji.user === 0) {    
+        arrayEmoji.userAvatar.splice(index, 1);    
+        if (arrayEmoji.user.length === 0) {   
           this.removeEmojie();
         }
       }
@@ -262,6 +267,7 @@ export class EmojiService {
    * identifies the message by index, and removes the emoji based on its index.
    */
   removeEmojie() {
+    console.log('11111111111111')
     if (this.emojiToChannel || this.emojiToDirectMessage) {
       this.removeEmojiFromChannelMessage();
       if (this.emojiToChannel) {
@@ -269,7 +275,9 @@ export class EmojiService {
       }
     } else if (this.emojieToThread) {
       this.removeEmojiFromThreadMessage()
-      if (this.chatService.ownerThreadMessage) {
+      console.log('------345--------')
+      if (this.chatService.indexOfChannelMessage === 0) {
+        console.log('------678--------')
         this.removeEmojiFromThreadMessageAndChannelMessage();
       }
     }
@@ -323,7 +331,7 @@ export class EmojiService {
       }
     } else if (this.emojieToThread) {
       await this.mainService.setDocData('threads', this.emojiServiceThread.id, this.emojiServiceThread);
-      if (this.chatService.ownerThreadMessage) {
+      if (this.chatService.indexOfChannelMessage === 0) {
         await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       }
     }
