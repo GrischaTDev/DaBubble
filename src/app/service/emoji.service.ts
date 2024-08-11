@@ -82,11 +82,14 @@ export class EmojiService {
   * @param {string} emoji - The emoji to be added as a reaction.
   * @param {number} indexSingleMessage - The index of the specific message within the message channel to which the emoji is added.
   */
-  addReactionToMessageChannelSetData(emoji: string, indexSingleMessage: number) {
+  async addReactionToMessageChannelSetData(emoji: string, indexSingleMessage: number) {
     let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
     if (dataEmoji.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, dataEmoji);
-      this.selectionTheAddedEmojiChannel(emoji);
+      await this.selectionTheAddedEmojiChannel(emoji, indexSingleMessage);
+      if (this.emojiToChannel) {
+        await this.selectionTheAddedEmojiThread(emoji, 0)
+      }
     } else {
       this.pushEmojiToArray(emoji);
       this.saveEmojiContentToFb();
@@ -99,15 +102,18 @@ export class EmojiService {
   * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
   * @param {string} emoji - The emoji character to add as a reaction.
   */
-  addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
+  async addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
     this.chatService.indexOfThreadMessage = indexSingleMessage;
     let dataEmoji = this.chatService.dataThread.messageChannel[indexSingleMessage].emojiReaction;
     this.emojiServiceThread = this.chatService.dataThread;
     if (dataEmoji.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, dataEmoji);
-      this.selectionTheAddedEmojiThread(emoji);
+      await this.selectionTheAddedEmojiThread(emoji, indexSingleMessage);
+      if (indexSingleMessage === 0) {
+        await this.selectionTheAddedEmojiChannel(emoji, this.chatService.indexOfThreadMessageForEditChatMessage);
+      }
     } else {
-      this.pushEmojiToArray(emoji);
+      this.pushEmojiToArrayThread(emoji);
       this.saveEmojiContentToFb();
     }
   }
@@ -188,8 +194,8 @@ export class EmojiService {
    * Checks if the emoji is already available in the array of reactions; if not, it adds the emoji to the array.
    * @param {string} emoji - The emoji to be added or checked within the array.
    */
-  async selectionTheAddedEmojiChannel(emoji: string) {
-    let arrayEmoji = this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex];
+  async selectionTheAddedEmojiChannel(emoji: string, indexOfData: number) {
+    let arrayEmoji = this.chatService.dataChannel.messageChannel[indexOfData].emojiReaction[this.emojiIndex];
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
       this.pushEmojiToArray(emoji);
     } else if (!this.userIsAvailable && this.emojiIsAvailable) {
@@ -208,10 +214,10 @@ export class EmojiService {
   * Checks if the emoji is already available in the array of reactions; if not, it adds the emoji to the array.
   * @param {string} emoji - The emoji to be added or checked within the array.
   */
-  async selectionTheAddedEmojiThread(emoji: string) {
-    let arrayEmoji = this.emojiServiceThread.messageChannel[this.chatService.indexOfThreadMessage].emojiReaction[this.emojiIndex];
+  async selectionTheAddedEmojiThread(emoji: string, indexDocNumber: number) {
+    let arrayEmoji = this.emojiServiceThread.messageChannel[indexDocNumber].emojiReaction[this.emojiIndex];
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
-      this.pushEmojiToArray(emoji);
+      this.pushEmojiToArrayThread(emoji);
     } else if (!this.userIsAvailable && this.emojiIsAvailable) {
       this.pushUserToArray(arrayEmoji);
     } else if (this.userIsAvailable && this.emojiIsAvailable) {
@@ -219,7 +225,7 @@ export class EmojiService {
         this.removeUserFromEmoji(arrayEmoji);
       }
     } else {
-      this.pushEmojiToArray(emoji);
+      this.pushEmojiToArrayThread(emoji);
     }
     this.saveEmojiContentToFb();
   }
@@ -240,7 +246,21 @@ export class EmojiService {
       if (this.emojiToChannel) {
         this.emojiServiceThread.messageChannel[0].emojiReaction.push(this.newEmoji.toJSON());
       }
-    } else if (this.emojieToThread) {
+    }
+  }
+
+  /**
+  * Adds a new emoji reaction to the current message channel.
+  * This method first resets the existing emoji data arrays, sets the new emoji, 
+  * and then records the reacting user's ID, name, and avatar. It finally pushes 
+  * the updated emoji data to the appropriate message channel's emoji reactions.
+  *
+  * @param {string} emoji - The emoji character or string to be added to the message.
+  */
+  pushEmojiToArrayThread(emoji: string) {
+    this.resetEmojiArray();
+    this.setDataEmoji(emoji);
+    if (this.emojieToThread) {
       this.emojiServiceThread.messageChannel[this.chatService.indexOfThreadMessage].emojiReaction.push(this.newEmoji.toJSON());
       if (this.chatService.indexOfThreadMessage === 0) {
         this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].emojiReaction.push(this.newEmoji.toJSON());
@@ -290,16 +310,19 @@ export class EmojiService {
   * @param {Object} arrayEmoji - The emoji object containing arrays of user IDs, user names, and user avatars.
   */
   removeUserFromEmoji(arrayEmoji: any) {
-    for (let index = 0; index < arrayEmoji.user.length; index++) {
-      const user = arrayEmoji.user[index];
-      if (user === this.mainService.loggedInUser.id) {
-        if (arrayEmoji.user.length === 1) {
-          this.removeEmojie();
-        } else {
-          this.emojiIndex = index;
-          arrayEmoji.user.splice(index, 1);
-          arrayEmoji.userName.splice(index, 1);
-          arrayEmoji.userAvatar.splice(index, 1);
+    if (arrayEmoji) {
+      for (let index = 0; index < arrayEmoji.user.length; index++) {
+        const user = arrayEmoji.user[index];
+        if (user === this.mainService.loggedInUser.id) {
+          if (arrayEmoji.user.length !== 0) {
+            if (arrayEmoji.user.length === 1) {
+              this.removeEmojie();
+            } else {
+              arrayEmoji.user.splice(index, 1);
+              arrayEmoji.userName.splice(index, 1);
+              arrayEmoji.userAvatar.splice(index, 1);
+            }
+          }
         }
       }
     }

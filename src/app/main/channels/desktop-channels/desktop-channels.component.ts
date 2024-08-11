@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-desktop-channels',
@@ -46,7 +47,8 @@ export class DesktopChannelsComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     public chatService: ChatService,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
+    public threadService: ThreadService
   ) {}
 
   /**
@@ -64,12 +66,9 @@ export class DesktopChannelsComponent implements OnInit {
    * @param {any} channel - The channel to open.
    */
   openChannel(channel: any) {
+    this.threadService.closeThread();
     this.router.navigate(['/main', channel.id]);
-    this.mainService
-      .watchSingleChannelDoc(channel.id, 'channels')
-      .subscribe((dataChannel) => {
-        this.chatService.dataChannel = dataChannel as Channel;
-      });
+    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.desktopChatOpen = true;
