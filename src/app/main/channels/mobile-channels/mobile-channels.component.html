@@ -83,7 +83,7 @@
         </div>
 
         <div class="user-list" *ngIf="userListOpen">
-            <div class="logged-in-user" class="user" (click)="directMessageService.openDirectMessage(currentUser)">
+            <div class="logged-in-user" class="user" (click)="openDirectChat(currentUser)">
                 <div *ngIf="currentUser" class="user-img">
                     <img class="user-avatar" src="{{ currentUser.avatar }}">
                     <img class="user-status" [src]="currentUser.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >
@@ -91,7 +91,7 @@
                 <span *ngIf="currentUser">{{ currentUser.name }} (Du)</span>
             </div>
             <ng-container *ngFor="let user of mainService.allUsers; let i = index">
-                <div *ngIf="currentUser && user.name !== currentUser.name" class="user" (click)="directMessageService.openDirectMessage(user)">
+                <div *ngIf="currentUser && user.name !== currentUser.name" class="user" (click)="openDirectChat(user)">
                     <div class="user-img">
                         <img class="user-avatar" src="{{ user.avatar }}">
                         <img class="user-status" [src]="user.online ? './assets/img/online-icon.svg' : './assets/img/offline-icon.svg'" >

@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -11,7 +11,7 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
@@ -36,13 +36,14 @@ import { Channel } from '../../../../assets/models/channel.class';
   templateUrl: './direct-chat.component.html',
   styleUrl: './direct-chat.component.scss',
 })
-export class DirectChatComponent {
+export class DirectChatComponent implements OnInit {
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   loggedInUser: User = new User();
   parmsId: string = '';
 
   constructor(
+    private route: ActivatedRoute,
     private router: Router,
     public chatService: ChatService,
     public mainService: MainServiceService,
@@ -51,6 +52,10 @@ export class DirectChatComponent {
     private loginService: LoginService,
     public channelService: ChannelService
   ) {
+    this.route.params.subscribe((params: any) => {
+      this.parmsId = params.id;
+      chatService.idOfChannel = params.id;
+    });
     if (!this.directMessageService.dataDirectMessage) {
       this.directMessageService.dataDirectMessage = {} as Channel;
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
@@ -64,6 +69,11 @@ export class DirectChatComponent {
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
   ngOnInit() {
+    if (this.parmsId) {
+      this.mainService.watchSingleChannelDoc(this.parmsId, 'direct-message').subscribe(dataDirectChat => {
+        this.directMessageService.dataDirectMessage = dataDirectChat as Channel;
+      });
+    }
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);

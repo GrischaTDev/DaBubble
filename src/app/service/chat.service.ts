@@ -46,6 +46,7 @@ export class ChatService {
   loggedInUser: User = new User();
   mobileChatIsOpen: boolean = false;
   mobileDirectChatIsOpen: boolean = false;
+  mobileThreadIsOpen: boolean = false;
   directChatOpen: boolean = false;
   desktopChatOpen: boolean = true;
   newMessageOpen: boolean = false;

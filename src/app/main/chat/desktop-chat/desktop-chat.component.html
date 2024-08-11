@@ -248,6 +248,7 @@
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
               <textarea
+                (keydown)="checkForEnter($event)"
                 #autofocus
                 [(ngModel)]="chatService.editText"
                 name="newTextarea"

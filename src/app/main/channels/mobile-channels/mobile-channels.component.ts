@@ -107,10 +107,12 @@ export class MobileChannelsComponent implements OnInit {
    * @param user - The user to open the direct chat with.
    */
   openDirectChat(user: any) {
+    this.chatService.mobileDirectChatIsOpen = true;
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
     this.chatService.clickedUser = user;
     this.searchValue = '';
+    this.directMessageService.openDirectMessage(user);
   }
 
   /**

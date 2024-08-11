@@ -22,7 +22,6 @@ import { ThreadService } from '../../../service/thread.service';
 export class MobileChatHeaderComponent implements OnInit {
   constructor(
     public mainService: MainServiceService,
-    private firestore: Firestore,
     private loginService: LoginService,
     private router: Router,
     public chatService: ChatService,

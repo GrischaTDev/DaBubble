@@ -161,7 +161,6 @@ export class DirectMessageService {
   */
   async openDirectMessage(user: User) {
     this.chatService.mobileChatIsOpen = false;
-    this.chatService.mobileDirectChatIsOpen = true;
     this.chatService.clickedUser = user;
     await this.directMessageIsAvailable();
     this.directMessageDocId = this.mainService.docId;
@@ -202,7 +201,6 @@ export class DirectMessageService {
       await this.loadDirectChatContent(this.mainService.docId);
     }
     setTimeout(() => {
-      this.navigateDirectMessage(this.directMessageId);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
@@ -235,17 +233,6 @@ export class DirectMessageService {
     );
     await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.newDataDirectMessage)
     );
-
-  }
-
-  /**
-   * Navigates to the direct chat page using the specified direct message ID.
-   * @param {string} id - The ID of the direct message to navigate to.
-   */
-  navigateDirectMessage(id: string) {
-    setTimeout(() => {
-      this.router.navigate(['/direct-chat', id]);
-    }, 500);
   }
 
   /**
@@ -302,9 +289,13 @@ export class DirectMessageService {
    * @param {string} userId - The ID of the user whose direct message content is to be loaded.
    */
   async loadDirectChatContent(chatId: string) {
-    this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
-      this.dataDirectMessage = dataDirectMessage as Channel;
-    });
+    if(this.chatService.mobileDirectChatIsOpen) {
+      this.router.navigate(['/direct-chat', chatId]);
+    } else {
+      this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
+        this.chatService.dataChannel = dataDirectMessage as Channel;   
+      });
+    }
   }
 
   /**
