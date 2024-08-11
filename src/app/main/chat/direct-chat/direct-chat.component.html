@@ -5,14 +5,19 @@
     (click)="openUserProfile(chatService.clickedUser)"
   >
     <div>
-      <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User Avatar"/>
+      <img
+        class="user-avatar"
+        src="{{ chatService.clickedUser.avatar }}"
+        alt="User Avatar"
+      />
       <img
         class="user-status"
         [src]="
           chatService.clickedUser.online
             ? './assets/img/online-icon.svg'
             : './assets/img/offline-icon.svg'
-        " alt="User Status"
+        "
+        alt="User Status"
       />
     </div>
     <span class="user-name">{{ chatService.clickedUser.name }}</span>
@@ -20,10 +25,16 @@
   <div class="mobile-chat-content">
     <div
       class="direct-chat-info"
-      *ngIf="directMessageService.dataDirectMessage?.messageChannel?.length === 0"
+      *ngIf="
+        directMessageService.dataDirectMessage?.messageChannel?.length === 0
+      "
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
-        <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}"  alt="User Avatar"/>
+        <img
+          class="user-avatar"
+          src="{{ chatService.clickedUser.avatar }}"
+          alt="User Avatar"
+        />
         <span class="user-name">{{ chatService.clickedUser.name }}</span>
       </div>
       <span
@@ -226,14 +237,25 @@
             >
               {{ singleMessage.message }}
 
-              <div class="image-to-message-container" *ngIf="singleMessage.imageToMessage">
-                <img (click)="chatService.openImageMessageDialog(singleMessage.imageToMessage)" src="{{ singleMessage.imageToMessage }}" alt="message width">
-             </div>
-             
+              <div
+                class="image-to-message-container"
+                *ngIf="singleMessage.imageToMessage"
+              >
+                <img
+                  (click)="
+                    chatService.openImageMessageDialog(
+                      singleMessage.imageToMessage
+                    )
+                  "
+                  src="{{ singleMessage.imageToMessage }}"
+                  alt="message width"
+                />
+              </div>
             </span>
 
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
               <textarea
+                #autofocus
                 [(ngModel)]="chatService.editText"
                 name="newTextarea"
                 (input)="chatService.adjustHeight($event.target)"
@@ -298,9 +320,8 @@
             <div
               class="mobile-chat-message-reaction-content"
               *ngFor="
-                let emojie of directMessageService.dataDirectMessage.messageChannel[
-                  singleMessageIndex
-                ].emojiReaction;
+                let emojie of directMessageService.dataDirectMessage
+                  .messageChannel[singleMessageIndex].emojiReaction;
                 let emojiIndex = index
               "
               [ngClass]="{
@@ -341,7 +362,10 @@
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
       <div class="add-image-container-width">
-        <div class="add-image-container" *ngIf="directMessageService.imageMessage">
+        <div
+          class="add-image-container"
+          *ngIf="directMessageService.imageMessage"
+        >
           <img src="{{ directMessageService.imageMessage }}" alt="" />
           <div class="delete-img" (click)="chatService.deleteMessage()">
             <mat-icon>close</mat-icon>
@@ -349,6 +373,7 @@
         </div>
       </div>
       <textarea
+        #autofocus
         [(ngModel)]="chatService.text"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
@@ -361,7 +386,11 @@
           <div class="mobile-chat-border-right">
             <div class="mobile-chat-input-icon">
               <mat-icon>add</mat-icon>
-              <input id="file-upload" type="file" (change)="directMessageService.onFileSelected($event)">
+              <input
+                id="file-upload"
+                type="file"
+                (change)="directMessageService.onFileSelected($event)"
+              />
             </div>
           </div>
           <div class="mobile-chat-input-icon">

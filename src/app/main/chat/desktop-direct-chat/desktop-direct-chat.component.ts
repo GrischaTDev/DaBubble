@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -18,6 +18,7 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { EmojiService } from '../../../service/emoji.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-direct-chat',
@@ -38,6 +39,7 @@ export class DesktopDirectChatComponent {
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   loggedInUser: User = new User();
   parmsId: any;
+  private channelSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,6 +52,21 @@ export class DesktopDirectChatComponent {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
+  }
+
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+
+  ngAfterViewInit() {
+    this.focusInputField();
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+      this.focusInputField();
+    });
+  }
+
+  private focusInputField() {
+    setTimeout(() => {
+      this.meinInputField.nativeElement.focus();
+    }, 0);
   }
 
   /**
@@ -70,6 +87,12 @@ export class DesktopDirectChatComponent {
         this.directMessageService.directMessageDocId,
         this.chatService.text
       )
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.channelSubscription) {
+      this.channelSubscription.unsubscribe();
     }
   }
 }

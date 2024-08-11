@@ -22,6 +22,7 @@ import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { SearchFieldService } from '../../../search-field.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-new-message',
@@ -53,6 +54,7 @@ export class DesktopNewMessageComponent {
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
   searchText: string = '';
+  private channelSubscription!: Subscription;
 
   userData: any;
   channelData: any;
@@ -99,6 +101,21 @@ export class DesktopNewMessageComponent {
     }
   }
 
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+
+  ngAfterViewInit() {
+    this.focusInputField();
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+      this.focusInputField();
+    });
+  }
+
+  private focusInputField() {
+    setTimeout(() => {
+      this.meinInputField.nativeElement.focus();
+    }, 0);
+  }
+
   @HostListener('document:click', ['$event'])
   /**
    * Handles the document click event.
@@ -138,6 +155,10 @@ export class DesktopNewMessageComponent {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+
+    if (this.channelSubscription) {
+      this.channelSubscription.unsubscribe();
+    }
   }
 
   chooseUser(name: string, user: any) {

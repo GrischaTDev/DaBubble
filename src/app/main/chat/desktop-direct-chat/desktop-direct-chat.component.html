@@ -233,9 +233,8 @@
               <div
                 class="mobile-chat-message-reaction-content"
                 *ngFor="
-                  let emojie of directMessageService.dataDirectMessage.messageChannel[
-                    singleMessageIndex
-                  ].emojiReaction;
+                  let emojie of directMessageService.dataDirectMessage
+                    .messageChannel[singleMessageIndex].emojiReaction;
                   let emojiIndex = index
                 "
                 [ngClass]="{
@@ -290,6 +289,7 @@
         </div>
       </div>
       <textarea
+        #autofocus
         (keydown)="checkForEnter($event)"
         [(ngModel)]="chatService.text"
         name="textarea"
