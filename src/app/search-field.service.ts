@@ -8,6 +8,7 @@ import { ChatService } from './service/chat.service';
 export class SearchFieldService {
 
   allUser: DocumentData[] = [];
+  allChannel: DocumentData[] = [];
   filterUser: DocumentData[] = [];
   filterChannel: DocumentData[] = [];
   filterMessage: DocumentData[] = [];
@@ -35,6 +36,14 @@ export class SearchFieldService {
         this.filterUser = [];
       }
     }
+
+    filterNewMessage(searchValue: string) {
+      if(searchValue.startsWith('@')) {
+        this.setAllUser();
+      } else if(searchValue.startsWith('#')) {
+        this.setAllChannel();
+      }
+    }
   
     /**
      * 
@@ -48,13 +57,34 @@ export class SearchFieldService {
         userList.forEach(user => {
           const userData = user.data();
           if (userData && userData['name'] && searchValue) {
-            this.allUser.push(userData)
             const name = userData['name'].toLowerCase();
             const searchValueLower = searchValue.toLowerCase();
             if (name.includes(searchValueLower)) {
               this.filterUser.push(userData);
             }
           }
+        });
+      })
+    }
+
+    setAllUser() {
+      const docRef = collection(this.firestore, 'users');
+      return onSnapshot(docRef, (channelList) => {
+        this.allUser= [];
+        channelList.forEach(channel => {
+          const userData = channel.data();
+          this.allUser.push(userData);
+        });
+      })
+    }
+
+    setAllChannel() {
+      const docRef = collection(this.firestore, 'channels');
+      return onSnapshot(docRef, (channelList) => {
+        this.allChannel= [];
+          channelList.forEach(channel => {
+          const channelData = channel.data();
+          this.allChannel.push(channelData);
         });
       })
     }

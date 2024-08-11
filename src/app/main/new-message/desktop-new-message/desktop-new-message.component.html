@@ -1,8 +1,23 @@
 <div class="new-message-container">
     <div class="input-container">
         <h2>Neue Nachricht</h2>
-        <input type="search" placeholder="An: #channel, oder @jemand">
+        <input [(ngModel)]="searchText" type="search" placeholder="An: #channel, oder @jemand"
+        (ngModelChange)="searchField.filterNewMessage(searchText)"
+        >
         <div class="shadow"></div>
+    </div>
+
+    <div class="result-container">
+        <div class="user-content-container content" *ngIf="searchText.startsWith('@')" >
+            <div (click)="chooseUser(user['name'], user)" class="user-content" *ngFor="let user of searchField.allUser" >
+                <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
+            </div>
+        </div>
+        <div class="user-content-container content" *ngIf="searchText.startsWith('#')" >
+            <div (click)="chooseChannel(channel['name'], channel)" class="user-content" *ngFor="let channel of searchField.allChannel" >
+               {{ channel['name'] }}
+            </div>
+        </div>
     </div>
   
     <div class="mobile-chat-input-container" id="meinTextarea">
@@ -28,7 +43,7 @@
                 </div>
                 <div>
                     <div>
-                        <mat-icon (click)="chatService.sendMessageFromChannel(this.parmsId, this.text)"
+                        <mat-icon (click)="sendMessage(text)"
                             class="mobile-chat-send-icon">send</mat-icon>
                     </div>
                 </div>

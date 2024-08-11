@@ -20,6 +20,8 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { SearchFieldService } from '../../../search-field.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
 
 @Component({
   selector: 'app-desktop-new-message',
@@ -50,12 +52,18 @@ export class DesktopNewMessageComponent {
   loggedInUser: User = new User();
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
+  searchText: string = '';
+
+  userData: any;
+  channelData: any;
 
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public searchField: SearchFieldService,
+    public directMessageService: DirectMessageService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -131,4 +139,30 @@ export class DesktopNewMessageComponent {
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+  chooseUser(name: string, user: any) {
+    this.searchText = name;
+    this.userData = user;
+    console.log(this.userData)
+  }
+
+  chooseChannel(name: string, channel: any) {
+    this.searchText = name;
+    this.channelData = channel;
+  }
+
+  sendMessage(message: string) {
+    if(this.userData) {
+      console.log(this.userData)
+      this.directMessageService.sendMessageFromDirectMessage(this.userData.idUser, message);
+      this.userData = '';
+    } else if (this.channelData) {
+      console.log('Das sind die Daten aus dem Channel den man gewählt hat:', this.channelData)
+      this.chatService.messageChannel = new Message(this.channelData);
+      console.log('Übergeben der Daten an den chatService:', this.chatService.messageChannel)
+      this.chatService.sendMessageFromChannel(this.channelData.id, message);
+      this.channelData = '';
+    }
+  }
+
 }
