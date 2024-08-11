@@ -11,7 +11,7 @@ import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
 
 @Injectable({
@@ -58,7 +58,13 @@ export class ChatService {
   emojiReactionIndexHoverThread: number | null = null;
   activeMessageIndexReactonThread: number | null = null;
 
-  constructor(public mainService: MainServiceService, private router: Router) {
+  constructor(public mainService: MainServiceService, private router: Router) {}
+
+  private channelChangedSource = new Subject<void>();
+  channelChanged$ = this.channelChangedSource.asObservable();
+
+  activateChatFocus() {
+    this.channelChangedSource.next();
   }
 
   /**

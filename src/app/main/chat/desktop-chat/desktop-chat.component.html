@@ -242,12 +242,13 @@
                     )
                   "
                   src="{{ singleMessage.imageToMessage }}"
-                  alt="message width image"
+                  alt="message width"
                 />
               </div>
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
               <textarea
+                #autofocus
                 [(ngModel)]="chatService.editText"
                 name="newTextarea"
                 (input)="chatService.adjustHeight($event.target)"
@@ -353,7 +354,7 @@
               (mouseleave)="this.toggleIconHoverContainerChatOut($event)"
             >
               <div
-              [ngClass]="{
+                [ngClass]="{
                 'desktop-chat-message-reaction-hover-content-right': chatService.ifMessageFromMe(
                   singleMessage.userId
                 ),
@@ -417,14 +418,26 @@
                   <p
                     *ngIf="emojie.userName.length === 4 && emojiUserIndex === 3"
                     class="desktop-chat-message-reaction-hover-link"
-                    (click)="channelService.openDialogShowsUserReaction(singleMessageIndex, emojiIndex, emojie.emoji)"
+                    (click)="
+                      channelService.openDialogShowsUserReaction(
+                        singleMessageIndex,
+                        emojiIndex,
+                        emojie.emoji
+                      )
+                    "
                   >
                     {{ emojie.userName.length - 3 }} weitere Person
                   </p>
                   <p
                     *ngIf="emojie.userName.length > 4 && emojiUserIndex === 4"
                     class="desktop-chat-message-reaction-hover-link"
-                    (click)="channelService.openDialogShowsUserReaction(singleMessageIndex, emojiIndex, emojie.emoji)"
+                    (click)="
+                      channelService.openDialogShowsUserReaction(
+                        singleMessageIndex,
+                        emojiIndex,
+                        emojie.emoji
+                      )
+                    "
                   >
                     {{ emojie.userName.length - 3 }} weitere Personen
                   </p>
@@ -471,16 +484,24 @@
     </div>
   </div>
 
-  <div id="user-result-container" class="user-result-container" *ngIf="chatService.text && searchField.filterUser.length > 0">
-
-    <div class="user-content-container" *ngIf="searchField.filterUser.length > 0">
-        <div class="user-list-container" *ngFor="let user of searchField.filterUser">
-            <div class="user-list" (click)="chooseUser(user['name'])" >
-              <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
-            </div>
+  <div
+    id="user-result-container"
+    class="user-result-container"
+    *ngIf="chatService.text && searchField.filterUser.length > 0"
+  >
+    <div
+      class="user-content-container"
+      *ngIf="searchField.filterUser.length > 0"
+    >
+      <div
+        class="user-list-container"
+        *ngFor="let user of searchField.filterUser"
+      >
+        <div class="user-list" (click)="chooseUser(user['name'])">
+          <img src="{{ user['avatar'] }}" alt="" />{{ user["name"] }}
         </div>
+      </div>
     </div>
-
   </div>
 
   <div class="desktop-chat-input-container" id="meinTextarea">
@@ -494,6 +515,7 @@
         </div>
       </div>
       <textarea
+        #autofocus
         [(ngModel)]="chatService.text"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
@@ -552,3 +574,4 @@
       </div>
     </form>
   </div>
+</div>

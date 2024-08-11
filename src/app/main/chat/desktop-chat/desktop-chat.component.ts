@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  ViewChild,
+  OnInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -21,6 +27,7 @@ import { ThreadService } from '../../../service/thread.service';
 import { SearchFieldService } from '../../../search-field.service';
 import { Emoji } from '../../../../assets/models/emoji.class';
 import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -40,12 +47,15 @@ import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user
 export class DesktopChatComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
-  dialogInstance?: MatDialogRef<DialogEmojiComponent>| MatDialogRef<DialogShowsUserReactionComponent> ;
+  dialogInstance?:
+    | MatDialogRef<DialogEmojiComponent>
+    | MatDialogRef<DialogShowsUserReactionComponent>;
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   emojiReactionIndexHover: number | null = null;
   activeMessageIndexReacton: number | null = null;
+  private channelSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -76,18 +86,20 @@ export class DesktopChatComponent implements OnInit {
   }
 
   /**
- * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
- * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
- * This is typically used to ensure that the component has access to the latest user information when it is initialized.
- */
+   * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+   */
   ngOnInit() {
-    this.loginService.currentLoggedUser()
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
-      this.chatService.dataChannel = dataChannel as Channel;
-    });
+    this.mainService
+      .watchSingleChannelDoc(this.parmsId, 'channels')
+      .subscribe((dataChannel) => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -101,11 +113,27 @@ export class DesktopChatComponent implements OnInit {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
+      this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
+  }
+
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+
+  ngAfterViewInit() {
+    this.focusInputField();
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+      this.focusInputField();
+    });
+  }
+
+  private focusInputField() {
+    setTimeout(() => {
+      this.meinInputField.nativeElement.focus();
+    }, 0);
   }
 
   /**
@@ -117,7 +145,11 @@ export class DesktopChatComponent implements OnInit {
       this.scrollContainer.nativeElement.scrollHeight;
   }
 
-  toggleIconHoverContainerChat(singleMessageIndex: number, emojiUserIndex: number, event: MouseEvent) {
+  toggleIconHoverContainerChat(
+    singleMessageIndex: number,
+    emojiUserIndex: number,
+    event: MouseEvent
+  ) {
     event.stopPropagation();
     this.activeMessageIndexReacton = singleMessageIndex;
     this.emojiReactionIndexHover = emojiUserIndex;
@@ -134,14 +166,18 @@ export class DesktopChatComponent implements OnInit {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+
+    if (this.channelSubscription) {
+      this.channelSubscription.unsubscribe();
+    }
   }
 
   chooseUser(name: string) {
     const atIndex = this.chatService.text.lastIndexOf('@');
     if (atIndex !== -1) {
-      this.chatService.text = this.chatService.text.slice(0, atIndex + 1) + name + ' ';
+      this.chatService.text =
+        this.chatService.text.slice(0, atIndex + 1) + name + ' ';
       this.searchField.filterUser = [];
     }
   }
 }
-
