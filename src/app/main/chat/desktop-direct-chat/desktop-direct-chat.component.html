@@ -4,7 +4,11 @@
     (click)="openUserProfile(chatService.clickedUser)"
   >
     <div>
-      <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User avatar"/>
+      <img
+        class="user-avatar"
+        src="{{ chatService.clickedUser.avatar }}"
+        alt="User avatar"
+      />
       <img
         alt="online-icon"
         class="user-status"
@@ -20,10 +24,16 @@
   <div class="mobile-chat-content">
     <div
       class="direct-chat-info"
-      *ngIf="directMessageService.dataDirectMessage?.messageChannel?.length === 0"
+      *ngIf="
+        directMessageService.dataDirectMessage?.messageChannel?.length === 0
+      "
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
-        <img class="user-avatar" src="{{ chatService.clickedUser.avatar }}" alt="User Avatars"/>
+        <img
+          class="user-avatar"
+          src="{{ chatService.clickedUser.avatar }}"
+          alt="User Avatars"
+        />
         <span class="user-name">{{ chatService.clickedUser.name }}</span>
       </div>
       <span
@@ -269,7 +279,10 @@
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
       <div class="add-image-container-width">
-        <div class="add-image-container" *ngIf="directMessageService.imageMessage">
+        <div
+          class="add-image-container"
+          *ngIf="directMessageService.imageMessage"
+        >
           <img src="{{ directMessageService.imageMessage }}" alt="" />
           <div class="delete-img" (click)="chatService.deleteMessage()">
             <mat-icon>close</mat-icon>
@@ -277,6 +290,7 @@
         </div>
       </div>
       <textarea
+        (keydown)="checkForEnter($event)"
         [(ngModel)]="chatService.text"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
