@@ -34,7 +34,7 @@ export class EmojiService {
   async addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     this.chatService.indexOfChannelMessage = indexSingleMessage;
     if (!this.chatService.isThreadOpen) {
-      this.pushEmojieToRelatedMessageOfTheThread()
+      this.pushEmojieToRelatedMessageOfTheThread(indexSingleMessage)
         .then(() => {
           this.addReactionToMessageChannelSetData(emoji, indexSingleMessage)
         })
@@ -43,6 +43,34 @@ export class EmojiService {
         .then(() => {
           this.addReactionToMessageChannelSetData(emoji, indexSingleMessage)
         })
+    }
+  }
+
+  /**
+* Asynchronously pushes an emoji to the related message of the thread if not already done.
+* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
+* @returns {Promise<void>} A promise that resolves once the operation is complete.
+*/
+  async pushEmojieToRelatedMessageOfTheThread(indexSingleMessage: number): Promise<void> {
+    if (!this.emojiToDirectMessage) {
+      const dataThreadChannel = await firstValueFrom(
+        this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads')
+      );
+      this.emojiServiceThread = dataThreadChannel as Channel;
+    }
+  }
+
+  /**
+* Asynchronously pushes an emoji to the related message of the thread if not already done.
+* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
+* @returns {Promise<void>} A promise that resolves once the operation is complete.
+*/
+  async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
+    if (!this.emojiToDirectMessage) {
+      const dataThreadChannel = await firstValueFrom(
+        this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads')
+      );
+      this.emojiServiceThread = dataThreadChannel as Channel;
     }
   }
 
@@ -232,36 +260,6 @@ export class EmojiService {
   }
 
   /**
-  * Asynchronously pushes an emoji to the related message of the thread if not already done.
-  * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-  * @returns {Promise<void>} A promise that resolves once the operation is complete.
-  */
-  async pushEmojieToRelatedMessageOfTheThread(): Promise<void> {
-    if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(
-        this.mainService.watchSingleThreadDoc(this.chatService.contentMessageOfThread.thread, 'threads')
-      );
-      this.emojiServiceThread = dataThreadChannel as Channel;
-    }
-  }
-
-  /**
-* Asynchronously pushes an emoji to the related message of the thread if not already done.
-* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-* @returns {Promise<void>} A promise that resolves once the operation is complete.
-*/
-  async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
-    if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(
-          this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads')     
-      );
-      this.emojiServiceThread = dataThreadChannel as Channel;
-    }
-  }
-
-
-
-  /**
   * Resets the emoji arrays for a user.
   * Clears all existing emoji data by emptying the arrays that hold user emojis,
   * user names, and user avatars. This method is typically used when initializing
@@ -295,12 +293,13 @@ export class EmojiService {
     for (let index = 0; index < arrayEmoji.user.length; index++) {
       const user = arrayEmoji.user[index];
       if (user === this.mainService.loggedInUser.id) {
-        this.emojiIndex = index;
-        arrayEmoji.user.splice(index, 1);
-        arrayEmoji.userName.splice(index, 1);
-        arrayEmoji.userAvatar.splice(index, 1);
-        if (arrayEmoji.user.length === 0) {
+        if (arrayEmoji.user.length === 1) {
           this.removeEmojie();
+        } else {
+          this.emojiIndex = index;
+          arrayEmoji.user.splice(index, 1);
+          arrayEmoji.userName.splice(index, 1);
+          arrayEmoji.userAvatar.splice(index, 1);
         }
       }
     }
@@ -385,7 +384,7 @@ export class EmojiService {
   * processing a new reaction or at the end of an operation involving reactions.
   */
   async resetReactionVariables() {
-    this.pushEmojieToRelatedMessageOfTheThread();
+    this.pushEmojieToRelatedMessageOfTheThread(this.chatService.indexOfThreadMessageForEditChatMessage);
     this.emojiIsAvailable = false;
     this.userIsAvailable = false;
     this.mainService.emojiReactionMessage = false;
