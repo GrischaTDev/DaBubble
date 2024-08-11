@@ -233,7 +233,7 @@
               <div
                 class="mobile-chat-message-reaction-content"
                 *ngFor="
-                  let emojie of chatService.dataChannel.messageChannel[
+                  let emojie of directMessageService.dataDirectMessage.messageChannel[
                     singleMessageIndex
                   ].emojiReaction;
                   let emojiIndex = index
