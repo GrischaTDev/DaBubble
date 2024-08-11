@@ -20,14 +20,7 @@ import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  dialogInstance:
-    | MatDialogRef<DialogEmojiComponent, any>
-    | MatDialogRef<DialogMentionUsersComponent, any>
-    | MatDialogRef<DialogUserChatComponent, any>
-    | MatDialogRef<DialogAddUserComponent, any>
-    | MatDialogRef<DialogEditChannelComponent, any>
-    | MatDialogRef<DialogImageMessageComponent, any>
-    | undefined;
+  dialogInstance:| MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any>| MatDialogRef<DialogAddUserComponent, any>| MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any>| undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   dialogAddUserOpen = false;
@@ -222,7 +215,6 @@ export class ChatService {
     this.newThreadOnFb.name = this.dataChannel.name;
     await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb));
     await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
-    console.log('Id_', this.dataChannel.id);
   }
 
   /**
@@ -415,8 +407,6 @@ export class ChatService {
 
   /**
    * Opens a thread for a given message and initializes relevant properties.
-   * @param {Message} threadMessage - The message object associated with the thread to be opened.
-   * @param {number} indexSingleMessage - The index of the message in the message list.
    */
   async openThread(threadMessage: Message, indexSingleMessage: number) {
     this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe(dataThreadChannel => {

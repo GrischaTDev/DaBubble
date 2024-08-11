@@ -10,6 +10,7 @@ import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
 import { ChatService } from '../../../service/chat.service';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-mobile-chat-header',
@@ -24,7 +25,8 @@ export class MobileChatHeaderComponent implements OnInit {
     private firestore: Firestore,
     private loginService: LoginService,
     private router: Router,
-    public chatService: ChatService
+    public chatService: ChatService,
+    public threadService: ThreadService
   ) {}
   currentUser: any;
 
@@ -73,6 +75,7 @@ export class MobileChatHeaderComponent implements OnInit {
    * This method logs out the user by calling the `logoutUser` method of the `loginService` and then navigating to the login page.
    */
   logout() {
+    this.threadService.closeThread();
     const auth = getAuth();
     this.loginService.logoutUser(auth);
 

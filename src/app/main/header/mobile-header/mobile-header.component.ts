@@ -8,6 +8,7 @@ import { getAuth, signOut } from '@angular/fire/auth';
 import { LoginService } from '../../../service/login.service';
 import { Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-mobile-header',
@@ -22,7 +23,7 @@ export class MobileHeaderComponent implements OnInit {
   userMenu: boolean = false;
 
 
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public threadService: ThreadService) {}
 
 
   /**
@@ -69,6 +70,7 @@ export class MobileHeaderComponent implements OnInit {
    * Logs out the user.
    */
   logout() {
+    this.threadService.closeThread();
     const auth = getAuth();
     this.loginService.logoutUser(auth);
 

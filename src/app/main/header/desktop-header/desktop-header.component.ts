@@ -13,6 +13,7 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';
 import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-desktop-header',
@@ -34,7 +35,8 @@ export class DesktopHeaderComponent implements OnInit {
     private router: Router,
     private directMessageService: DirectMessageService,
     private chatService: ChatService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
+    public threadService: ThreadService
   ) {}
 
   /**
@@ -107,6 +109,7 @@ export class DesktopHeaderComponent implements OnInit {
    * Logs out the user.
    */
   logout() {
+    this.threadService.closeThread();
     const auth = getAuth();
     this.loginService.logoutUser(auth);
   }

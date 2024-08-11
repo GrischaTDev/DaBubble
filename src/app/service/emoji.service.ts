@@ -5,17 +5,12 @@ import { Emoji } from '../../assets/models/emoji.class';
 import { ThreadService } from './thread.service';
 import { Channel } from '../../assets/models/channel.class';
 import { firstValueFrom } from 'rxjs';
-import { log } from 'console';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmojiService {
-  constructor(
-    public mainService: MainServiceService,
-    public chatService: ChatService,
-    public threadService: ThreadService
-  ) { }
+  constructor(public mainService: MainServiceService, public chatService: ChatService, public threadService: ThreadService) { }
   emojiIsAvailable = false;
   userIsAvailable = false;
   newEmoji: Emoji = new Emoji();
@@ -29,33 +24,23 @@ export class EmojiService {
   /**
    * Adds a reaction to a message in the current channel, updating the emoji reactions based on the user interactions.
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
-   * @param {string} emoji - The emoji character to add as a reaction.
    */
   async addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     this.chatService.indexOfChannelMessage = indexSingleMessage;
     if (!this.chatService.isThreadOpen) {
-      this.pushEmojieToRelatedMessageOfTheThread(indexSingleMessage)
-        .then(() => {
-          this.addReactionToMessageChannelSetData(emoji, indexSingleMessage)
-        })
+      this.pushEmojieToRelatedMessageOfTheThread(indexSingleMessage).then(() => { this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
     } else {
-      this.pushEmojieToRelatedMessageOfTheThreadOpen()
-        .then(() => {
-          this.addReactionToMessageChannelSetData(emoji, indexSingleMessage)
-        })
+      this.pushEmojieToRelatedMessageOfTheThreadOpen().then(() => { this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
     }
   }
 
   /**
 * Asynchronously pushes an emoji to the related message of the thread if not already done.
 * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-* @returns {Promise<void>} A promise that resolves once the operation is complete.
 */
   async pushEmojieToRelatedMessageOfTheThread(indexSingleMessage: number): Promise<void> {
     if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(
-        this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads')
-      );
+      const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads'));
       this.emojiServiceThread = dataThreadChannel as Channel;
     }
   }
@@ -63,13 +48,10 @@ export class EmojiService {
   /**
 * Asynchronously pushes an emoji to the related message of the thread if not already done.
 * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-* @returns {Promise<void>} A promise that resolves once the operation is complete.
 */
   async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
     if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(
-        this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads')
-      );
+      const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads'));
       this.emojiServiceThread = dataThreadChannel as Channel;
     }
   }
@@ -78,9 +60,6 @@ export class EmojiService {
   * Adds an emoji reaction to a specific message in a message channel.
   * If the message already has emoji reactions, it prepares and processes the user and emoji data.
   * If the message has no emoji reactions, it adds the emoji to the array and saves the updated content.
-  * 
-  * @param {string} emoji - The emoji to be added as a reaction.
-  * @param {number} indexSingleMessage - The index of the specific message within the message channel to which the emoji is added.
   */
   async addReactionToMessageChannelSetData(emoji: string, indexSingleMessage: number) {
     let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
@@ -100,7 +79,6 @@ export class EmojiService {
   /**
   * Adds a reaction to a message in the current channel, updating the emoji reactions based on the user interactions.
   * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
-  * @param {string} emoji - The emoji character to add as a reaction.
   */
   async addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
     this.chatService.indexOfThreadMessage = indexSingleMessage;
@@ -121,12 +99,8 @@ export class EmojiService {
   /**
    * Prepares and initiates a search through existing emoji reactions to find specific user and emoji matches.
    * Calls a function to handle each individual search iteration.
-   * @param {string} emoji - The emoji to search for within the reactions.
    */
-  preparedSearchUserAndEmoji(
-    emoji: string,
-    data: { emoji: string; user: string[] }[]
-  ) {
+  preparedSearchUserAndEmoji(emoji: string, data: { emoji: string; user: string[] }[]) {
     for (let index = 0; index < data.length; index++) {
       const emojiFb = data[index].emoji;
       const userFb = data[index].user;
@@ -136,13 +110,8 @@ export class EmojiService {
 
   /**
    * Flags that an additional reaction is being added and calls the method to add a reaction to a message.
-   * @param {string} emoji - The emoji to add as a reaction.
    */
-  addAdditionalReactionToMessage(
-    emoji: string,
-    singleMessageIndex: number,
-    emojiIndex: number
-  ) {
+  addAdditionalReactionToMessage(emoji: string, singleMessageIndex: number, emojiIndex: number) {
     this.additionalReaction = true;
     this.emojiIndex = emojiIndex;
     if (this.emojiToChannel || this.emojiToDirectMessage) {
@@ -153,13 +122,8 @@ export class EmojiService {
 
   /**
  * Flags that an additional reaction is being added and calls the method to add a reaction to a message.
- * @param {string} emoji - The emoji to add as a reaction.
  */
-  addAdditionalReactionToMessageThread(
-    emoji: string,
-    singleMessageIndex: number,
-    emojiIndex: number
-  ) {
+  addAdditionalReactionToMessageThread(emoji: string, singleMessageIndex: number, emojiIndex: number) {
     this.additionalReaction = true;
     this.emojiIndex = emojiIndex;
     if (this.emojieToThread) {
@@ -168,13 +132,9 @@ export class EmojiService {
     }
   }
 
-
   /**
    * Searches through a list of users associated with a specific emoji reaction to check for specific conditions.
    * It sets flags if the current logged-in user has already reacted with the emoji or if the emoji is present.
-   * @param {string} emoji - The emoji to search for.
-   * @param {string} emojiFb - The emoji from the feedback (existing emoji reactions).
-   * @param {string[]} userFb - Array of user IDs who have reacted with emojiFb.
    */
   searchUserAndEmoji(emoji: string, emojiFb: string, userFb: string[]) {
     for (let index = 0; index < userFb.length; index++) {
@@ -282,8 +242,7 @@ export class EmojiService {
   /**
   * Resets the emoji arrays for a user.
   * Clears all existing emoji data by emptying the arrays that hold user emojis,
-  * user names, and user avatars. This method is typically used when initializing
-  * or reinitializing user data in the emoji handling system.
+  * user names, and user avatars. 
   */
   resetEmojiArray() {
     this.newEmoji.user = [];
@@ -294,7 +253,6 @@ export class EmojiService {
   /**
    * Adds the current logged-in user's ID to the user array of a specific emoji reaction in a message.
    * Updates the document data in Firestore for the channel with the updated reactions.
-   * @param {string} emoji - The emoji associated with the reaction to which the user ID is added.
    */
   pushUserToArray(arrayEmoji: any) {
     arrayEmoji.user.push(this.mainService.loggedInUser.id);
@@ -306,8 +264,6 @@ export class EmojiService {
   * Removes the logged-in user from the specified emoji object.
   * It updates the emoji object by removing user ID, userName, and userAvatar from their respective arrays.
   * If there are no users left in the emoji object, it calls `removeEmijie`.
-  *
-  * @param {Object} arrayEmoji - The emoji object containing arrays of user IDs, user names, and user avatars.
   */
   removeUserFromEmoji(arrayEmoji: any) {
     if (arrayEmoji) {
