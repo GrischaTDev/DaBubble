@@ -7,6 +7,8 @@ import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/d
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { Message } from '../../assets/models/message.class';
+import { DialogShowsUserReactionComponent } from '../main/dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +30,23 @@ export class ChannelService {
   filterContentMarginTop: number = 0;
   editUserList: User[] = [];
   public dialog = inject(MatDialog);
-  dialogInstance: MatDialogRef<DialogEditChannelComponent, any> | undefined;
+  dialogInstance: MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogShowsUserReactionComponent, any> | undefined;
   editChannelNameIsOpen: boolean = false;
   editChannelDescriptionIsOpen: boolean = false;
   editChannelAddUserIsOpen: boolean = false;
   textName: string = '';
   textDescription: string = '';
+  indexOfThreadMessage: number = 0;
+  emojiReactionIndexHoverThread: number | null = null;
+  activeMessageIndexReactonThread: number | null = null;
+  showEmojiReaction: string = '';
+  showUserReactionIndex: number = 0;
+  showUserReactionIndexOfEmoji: number = 0;
+  showEmojiUserPath: Message[] = [];
+  userOfEmoji: string[] = [];
+  userIdOfEmoji: string[] = [];
+  userAvatarOfEmoji: string[] = [];
+  
 
   constructor(public chatService: ChatService,
     public mainService: MainServiceService, private router: Router) { }
@@ -237,7 +250,39 @@ export class ChannelService {
       this.chatService.dataChannel = dataChannel as Channel;
     })
   }
+
+async  openDialogShowsUserReaction(singleMessageIndex: number, emojiIndex: number, emoji: string) {
+    this.closeDialogShowsUserReaction();
+    this.showEmojiReaction = emoji;
+    this.showUserReactionIndex = singleMessageIndex;
+    this.showUserReactionIndexOfEmoji = emojiIndex;
+    this.showEmojiUserPath = this.chatService.dataChannel.messageChannel;
+    await this.loadDataFromShowReactionUsers();
+    this.dialogInstance = this.dialog.open(DialogShowsUserReactionComponent);
+  }
+
+async loadDataFromShowReactionUsers() {
+    this.userOfEmoji = [];
+    this.userIdOfEmoji = [];
+    this.userAvatarOfEmoji = [];
+    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[this.showUserReactionIndexOfEmoji].userAvatar.forEach(avatar => {
+      this.userAvatarOfEmoji.push(avatar)
+    });
+    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[this.showUserReactionIndexOfEmoji].userName.forEach(name => {
+      this.userOfEmoji.push(name)
+    });
+    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[this.showUserReactionIndexOfEmoji].user.forEach(idUser => {
+      this.userIdOfEmoji.push(idUser)
+    });
+  }
+
+  closeDialogShowsUserReaction() {
+    if (this.dialogInstance) {
+      this.dialogInstance.close();
+    }
+  }
 }
+
 
 
 

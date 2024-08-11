@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MainServiceService } from './main-service.service';
 import { ChatService } from './chat.service';
 import { Emoji } from '../../assets/models/emoji.class';

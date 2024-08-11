@@ -417,12 +417,14 @@
                   <p
                     *ngIf="emojie.userName.length === 4 && emojiUserIndex === 3"
                     class="desktop-chat-message-reaction-hover-link"
+                    (click)="channelService.openDialogShowsUserReaction(singleMessageIndex, emojiIndex, emojie.emoji)"
                   >
                     {{ emojie.userName.length - 3 }} weitere Person
                   </p>
                   <p
                     *ngIf="emojie.userName.length > 4 && emojiUserIndex === 4"
                     class="desktop-chat-message-reaction-hover-link"
+                    (click)="channelService.openDialogShowsUserReaction(singleMessageIndex, emojiIndex, emojie.emoji)"
                   >
                     {{ emojie.userName.length - 3 }} weitere Personen
                   </p>

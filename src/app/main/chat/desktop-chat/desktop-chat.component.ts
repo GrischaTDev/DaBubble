@@ -19,6 +19,8 @@ import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
 import { SearchFieldService } from '../../../search-field.service';
+import { Emoji } from '../../../../assets/models/emoji.class';
+import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -38,7 +40,7 @@ import { SearchFieldService } from '../../../search-field.service';
 export class DesktopChatComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
-  dialogInstance?: MatDialogRef<DialogEmojiComponent>;
+  dialogInstance?: MatDialogRef<DialogEmojiComponent>| MatDialogRef<DialogShowsUserReactionComponent> ;
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
