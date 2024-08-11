@@ -62,4 +62,14 @@ export class DesktopDirectChatComponent {
     dialogConfig.data = directUser;
     this.dialog.open(UserProfileComponent, dialogConfig);
   }
+
+  checkForEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.directMessageService.sendMessageFromDirectMessage(
+        this.directMessageService.directMessageDocId,
+        this.chatService.text
+      )
+    }
+  }
 }

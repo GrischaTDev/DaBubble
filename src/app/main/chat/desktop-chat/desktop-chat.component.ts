@@ -180,4 +180,14 @@ export class DesktopChatComponent implements OnInit {
       this.searchField.filterUser = [];
     }
   }
+
+  checkForEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.chatService.sendMessageFromChannel(
+        this.chatService.dataChannel.id,
+        this.chatService.text
+      )
+    }
+  }
 }

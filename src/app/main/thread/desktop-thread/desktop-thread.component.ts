@@ -125,5 +125,15 @@ export class DesktopThreadComponent implements OnInit  {
     this.chatService.activeMessageIndexReactonThread = null;
     this.chatService.emojiReactionIndexHoverThread = null;
   }
+
+  checkForEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.threadService.sendMessageFromThread(
+        this.chatService.dataThread.id,
+        this.threadService.textThread
+      )
+    }
+  }
 }
 

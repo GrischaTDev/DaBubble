@@ -32,7 +32,7 @@ export class DirectMessageService {
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
   indexUserDirectmessage: number = 0;
-  private subscription: Subscription = new Subscription();
+  messageDirectChat: Message = new Message();
   private itemsSubscription?: Subscription;
 
 
@@ -217,7 +217,6 @@ export class DirectMessageService {
     this.mainService.loggedInUser.message.push(this.mainService.docId);
     this.chatService.clickedUser.message.push(this.mainService.docId);
     this.directMessageId = this.mainService.docId;
-    console.log('-----------', this.mainService.docId)
     this.newDataDirectMessage.id = this.mainService.docId;
     this.newDataDirectMessage.channelUsers.push(new User(this.mainService.loggedInUser));
     this.newDataDirectMessage.channelUsers.push(new User(this.chatService.clickedUser));
@@ -283,14 +282,14 @@ export class DirectMessageService {
    * @param {string} textContent - The text content of the message to be sent.
    */
   async sendMessageFromDirectMessage(channelId: string, textContent: string) {
-    this.chatService.messageChannel.message = textContent;
-    this.chatService.messageChannel.date = Date.now();
-    this.chatService.messageChannel.userId = this.mainService.loggedInUser.id;
-    this.chatService.messageChannel.userName = this.mainService.loggedInUser.name;
-    this.chatService.messageChannel.userEmail = this.mainService.loggedInUser.email;
-    this.chatService.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-    this.chatService.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
-    this.dataDirectMessage.messageChannel.push(this.chatService.messageChannel);
+    this.messageDirectChat.message = textContent;
+    this.messageDirectChat.date = Date.now();
+    this.messageDirectChat.userId = this.mainService.loggedInUser.id;
+    this.messageDirectChat.userName = this.mainService.loggedInUser.name;
+    this.messageDirectChat.userEmail = this.mainService.loggedInUser.email;
+    this.messageDirectChat.userAvatar = this.mainService.loggedInUser.avatar;
+    this.messageDirectChat.imageToMessage = this.imageMessage as ArrayBuffer;
+    this.dataDirectMessage.messageChannel.push(this.messageDirectChat);
     await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.dataDirectMessage));
     console.log(this.directMessageDocId);
     this.chatService.text = '';
