@@ -277,8 +277,8 @@ export class DirectMessageService {
     this.messageDirectChat.userAvatar = this.mainService.loggedInUser.avatar;
     this.messageDirectChat.imageToMessage = this.imageMessage as ArrayBuffer;
     this.dataDirectMessage.messageChannel.push(this.messageDirectChat);
+    console.log('daWDAD', this.directMessageDocId);
     await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.dataDirectMessage));
-    console.log(this.directMessageDocId);
     this.chatService.text = '';
     this.imageMessage = '';
   }
@@ -289,6 +289,7 @@ export class DirectMessageService {
    * @param {string} userId - The ID of the user whose direct message content is to be loaded.
    */
   async loadDirectChatContent(chatId: string) {
+    this.directMessageDocId = chatId;
     if(this.chatService.mobileDirectChatIsOpen) {
       this.router.navigate(['/direct-chat', chatId]);
     } else {
