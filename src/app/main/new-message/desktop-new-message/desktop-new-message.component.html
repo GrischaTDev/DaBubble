@@ -1,53 +1,86 @@
 <div class="new-message-container">
-    <div class="input-container">
-        <h2>Neue Nachricht</h2>
-        <input [(ngModel)]="searchText" type="search" placeholder="An: #channel, oder @jemand"
-        (ngModelChange)="searchField.filterNewMessage(searchText)"
-        >
-        <div class="shadow"></div>
-    </div>
+  <div class="input-container">
+    <h2>Neue Nachricht</h2>
+    <input
+      [(ngModel)]="searchText"
+      type="search"
+      placeholder="An: #channel, oder @jemand"
+      (ngModelChange)="searchField.filterNewMessage(searchText)"
+    />
+    <div class="shadow"></div>
+  </div>
 
-    <div class="result-container">
-        <div class="user-content-container content" *ngIf="searchText.startsWith('@')" >
-            <div (click)="chooseUser(user['name'], user)" class="user-content" *ngFor="let user of searchField.allUser" >
-                <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
-            </div>
-        </div>
-        <div class="user-content-container content" *ngIf="searchText.startsWith('#')" >
-            <div (click)="chooseChannel(channel['name'], channel)" class="user-content" *ngFor="let channel of searchField.allChannel" >
-               {{ channel['name'] }}
-            </div>
-        </div>
+  <div class="result-container">
+    <div
+      class="user-content-container content"
+      *ngIf="searchText.startsWith('@')"
+    >
+      <div
+        (click)="chooseUser(user['name'], user)"
+        class="user-content"
+        *ngFor="let user of searchField.allUser"
+      >
+        <img src="{{ user['avatar'] }}" alt="" />{{ user["name"] }}
+      </div>
     </div>
-  
-    <div class="mobile-chat-input-container" id="meinTextarea">
-        <form class="mobile-chat-input-field-container br-20">
-            <textarea [(ngModel)]="text" name="textarea" (input)="chatService.adjustHeight($event.target)"
-                style="min-height: 50px; width: 100%" placeholder="Starte eine neue Nachricht"></textarea>
-  
-            <div class="mobile-chat-input-field-icon-container">
-                <div class="mobile-chat-input-icon-container">
-                    <div class="mobile-chat-border-right">
-                        <div class="mobile-chat-input-icon">
-                            <mat-icon>add</mat-icon>
-                        </div>
-                    </div>
-                    <div class="mobile-chat-input-icon">
-                        <mat-icon
-                            (click)="chatService.onButtonClick($event); chatService.openDialogEmoji()">sentiment_satisfied</mat-icon>
-                    </div>
-                    <div class="mobile-chat-input-icon">
-                        <mat-icon
-                            (click)="chatService.onButtonClick($event); chatService.openDialogMentionUser()">alternate_email</mat-icon>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <mat-icon (click)="sendMessage(text)"
-                            class="mobile-chat-send-icon">send</mat-icon>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div
+      class="user-content-container content"
+      *ngIf="searchText.startsWith('#')"
+    >
+      <div
+        (click)="chooseChannel(channel['name'], channel)"
+        class="user-content"
+        *ngFor="let channel of searchField.allChannel"
+      >
+        {{ channel["name"] }}
+      </div>
     </div>
   </div>
+
+  <div class="mobile-chat-input-container" id="meinTextarea">
+    <form class="mobile-chat-input-field-container br-20">
+      <textarea
+        #autofocus
+        [(ngModel)]="text"
+        name="textarea"
+        (input)="chatService.adjustHeight($event.target)"
+        style="min-height: 50px; width: 100%"
+        placeholder="Starte eine neue Nachricht"
+      ></textarea>
+
+      <div class="mobile-chat-input-field-icon-container">
+        <div class="mobile-chat-input-icon-container">
+          <div class="mobile-chat-border-right">
+            <div class="mobile-chat-input-icon">
+              <mat-icon>add</mat-icon>
+            </div>
+          </div>
+          <div class="mobile-chat-input-icon">
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event); chatService.openDialogEmoji()
+              "
+              >sentiment_satisfied</mat-icon
+            >
+          </div>
+          <div class="mobile-chat-input-icon">
+            <mat-icon
+              (click)="
+                chatService.onButtonClick($event);
+                chatService.openDialogMentionUser()
+              "
+              >alternate_email</mat-icon
+            >
+          </div>
+        </div>
+        <div>
+          <div>
+            <mat-icon (click)="sendMessage(text)" class="mobile-chat-send-icon"
+              >send</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
