@@ -28,7 +28,7 @@ export class EmojiService {
   async addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     this.chatService.indexOfChannelMessage = indexSingleMessage;
     if (!this.chatService.isThreadOpen) {
-      this.pushEmojieToRelatedMessageOfTheThread(indexSingleMessage).then(() => { this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
+      this.pushEmojieToRelatedMessageOfTheChat(indexSingleMessage).then(() => {this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
     } else {
       this.pushEmojieToRelatedMessageOfTheThreadOpen().then(() => { this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
     }
@@ -38,10 +38,12 @@ export class EmojiService {
 * Asynchronously pushes an emoji to the related message of the thread if not already done.
 * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
 */
-  async pushEmojieToRelatedMessageOfTheThread(indexSingleMessage: number): Promise<void> {
+  async pushEmojieToRelatedMessageOfTheChat(indexSingleMessage: number): Promise<void> {
     if (!this.emojiToDirectMessage) {
       const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads'));
       this.emojiServiceThread = dataThreadChannel as Channel;
+    } else {
+      this.emojiServiceThread = this.chatService.dataChannel as Channel;
     }
   }
 
@@ -344,7 +346,7 @@ export class EmojiService {
   * Updates the respective documents for channels and threads with the current state of the dataChannel or emojiServiceThread.
   */
   async saveEmojiContentToFb() {
-    if (this.emojiToChannel || this.emojiToDirectMessage) {
+    if (this.emojiToChannel) {
       await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       if (this.emojiToChannel) {
         await this.mainService.setDocData('threads', this.emojiServiceThread.id, this.emojiServiceThread);
@@ -354,6 +356,9 @@ export class EmojiService {
       if (this.chatService.indexOfChannelMessage === 0) {
         await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       }
+    } else if(this.emojiToDirectMessage) {
+      console.log('ddddddddddddddddddddddddd', this.chatService.dataChannel)
+      await this.mainService.setDocData('direct-message', this.chatService.dataChannel.id, this.chatService.dataChannel);
     }
     this.resetReactionVariables()
   }
@@ -363,7 +368,7 @@ export class EmojiService {
   * processing a new reaction or at the end of an operation involving reactions.
   */
   async resetReactionVariables() {
-    this.pushEmojieToRelatedMessageOfTheThread(this.chatService.indexOfThreadMessageForEditChatMessage);
+    this.pushEmojieToRelatedMessageOfTheChat(this.chatService.indexOfThreadMessageForEditChatMessage);
     this.emojiIsAvailable = false;
     this.userIsAvailable = false;
     this.mainService.emojiReactionMessage = false;

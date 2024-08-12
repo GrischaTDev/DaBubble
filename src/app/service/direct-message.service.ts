@@ -34,6 +34,7 @@ export class DirectMessageService {
   indexUserDirectmessage: number = 0;
   messageDirectChat: Message = new Message();
   private itemsSubscription?: Subscription;
+  switchContent: boolean = false;
 
 
 
@@ -163,7 +164,6 @@ export class DirectMessageService {
     this.chatService.mobileChatIsOpen = false;
     this.chatService.clickedUser = user;
     await this.directMessageIsAvailable();
-    this.directMessageDocId = this.mainService.docId;
   }
 
   /**
@@ -200,11 +200,6 @@ export class DirectMessageService {
       await this.pushDirectMessageIdToUser();
       await this.loadDirectChatContent(this.mainService.docId);
     }
-    setTimeout(() => {
-      this.chatService.desktopChatOpen = false;
-      this.chatService.directChatOpen = true;
-      this.chatService.newMessageOpen = false;
-    }, 500);
   }
 
   /**
@@ -276,9 +271,8 @@ export class DirectMessageService {
     this.messageDirectChat.userEmail = this.mainService.loggedInUser.email;
     this.messageDirectChat.userAvatar = this.mainService.loggedInUser.avatar;
     this.messageDirectChat.imageToMessage = this.imageMessage as ArrayBuffer;
-    this.dataDirectMessage.messageChannel.push(this.messageDirectChat);
-    console.log('daWDAD', this.directMessageDocId);
-    await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.dataDirectMessage));
+    this.chatService.dataChannel.messageChannel.push(this.messageDirectChat);
+    await this.mainService.addDoc('direct-message', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
     this.chatService.text = '';
     this.imageMessage = '';
   }
@@ -292,9 +286,14 @@ export class DirectMessageService {
     this.directMessageDocId = chatId;
     if(this.chatService.mobileDirectChatIsOpen) {
       this.router.navigate(['/direct-chat', chatId]);
+      this.switchContent = true;
     } else {
       this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
-        this.chatService.dataChannel = dataDirectMessage as Channel;   
+        this.chatService.dataChannel = dataDirectMessage as Channel;
+        this.chatService.desktopChatOpen = false;
+        this.chatService.directChatOpen = true;
+        this.chatService.newMessageOpen = false;
+        this.switchContent = true; 
       });
     }
   }

@@ -24,8 +24,7 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
-import { SearchFieldService } from '../../../search-field.service';
-import { Emoji } from '../../../../assets/models/emoji.class';
+import { SearchFieldService } from '../../../search-field.service'
 import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
 import { Subscription } from 'rxjs';
 
