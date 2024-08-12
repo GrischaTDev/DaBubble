@@ -36,8 +36,6 @@ export class DirectMessageService {
   private itemsSubscription?: Subscription;
   switchContent: boolean = false;
 
-
-
   constructor(public chatService: ChatService, public mainService: MainServiceService, private router: Router) { }
 
   /**
@@ -322,5 +320,9 @@ export class DirectMessageService {
     } else {
       return false;
     }
+  }
+
+  fromWhichChannel() {
+    this.chatService.fromDirectChat = true;
   }
 }

@@ -14,13 +14,14 @@ import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/d
 import { firstValueFrom, Subject } from 'rxjs';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  dialogInstance:| MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any>| MatDialogRef<DialogAddUserComponent, any>| MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any>| undefined;
+  dialogInstance: | MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any> | MatDialogRef<DialogAddUserComponent, any> | MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any> | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   dialogAddUserOpen = false;
@@ -58,8 +59,9 @@ export class ChatService {
   indexOfThreadMessage: number = 0;
   emojiReactionIndexHoverThread: number | null = null;
   activeMessageIndexReactonThread: number | null = null;
+  fromDirectChat: boolean = false;
 
-  constructor(public mainService: MainServiceService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private router: Router) { }
 
   private channelChangedSource = new Subject<void>();
   channelChanged$ = this.channelChangedSource.asObservable();
@@ -195,7 +197,7 @@ export class ChatService {
     }, 2000);
     setTimeout(() => {
       this.sendetMessage = false;
-    }, 2000);   
+    }, 2000);
   }
 
   /**
@@ -296,7 +298,7 @@ export class ChatService {
    */
   openDialogEmojiReactionMessage(index: number) {
     this.mainService.emojiReactionMessage = true;
-    if(!this.mainService.contentToThread) {
+    if (!this.mainService.contentToThread) {
       this.indexOfChannelMessage = index;
     } else {
       this.indexOfThreadMessage = index;
@@ -367,10 +369,15 @@ export class ChatService {
     this.loadContenThreadForEditMessage(singleMessageIndex)
       .then(() => {
         this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-        this.dataThread.messageChannel[0].message = newText;
-        this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
-        this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+        if (!this.fromDirectChat) {
+          this.dataThread.messageChannel[0].message = newText;
+          this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+          this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+        } else {  
+          this.mainService.addDoc('direct-message', this.dataChannel.id, new Channel(this.dataChannel));
+        }
         this.closeWithoutSaving();
+        this.fromDirectChat = false;
       })
   }
 
@@ -380,13 +387,15 @@ export class ChatService {
   * @returns {Promise<void>} A promise that resolves when the thread content is loaded.
   */
   async loadContenThreadForEditMessage(singleMessageIndex: number): Promise<void> {
-    const dataThreadChannel = await firstValueFrom(
-      this.mainService.watchSingleThreadDoc(
-        this.dataChannel.messageChannel[singleMessageIndex].thread,
-        'threads'
-      )
-    );
-    this.dataThread = dataThreadChannel as Channel;
+      if (!this.fromDirectChat) {
+        const dataThreadChannel = await firstValueFrom(
+          this.mainService.watchSingleThreadDoc( this.dataChannel.messageChannel[singleMessageIndex].thread, 'threads'));
+        this.dataThread = dataThreadChannel as Channel;
+      } else {
+        const dataThreadChannel = await firstValueFrom(
+          this.mainService.watchSingleThreadDoc( this.dataChannel.id, 'direct-message'));
+        this.dataThread = dataThreadChannel as Channel;
+      }
   }
 
   /**

@@ -106,11 +106,11 @@ export class DesktopDirectChatComponent implements OnInit {
   ngAfterViewChecked() {
     if (
       this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight ||
-      this.chatService.sendetMessage || this.directMessageService.switchContent
+      this.chatService.sendetMessage || this.directMessageService.switchContent 
     ) {
-      this.scrollToBottom();
-      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
-      this.directMessageService.switchContent = false;
+        this.scrollToBottom();
+        this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+        this.directMessageService.switchContent = false;
     }
   }
 
@@ -134,8 +134,13 @@ export class DesktopDirectChatComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
+    if (!this.chatService.fromDirectChat) {
       this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
+    }
+    setTimeout(() => {
+      this.chatService.fromDirectChat = false;
+    }, 1000);
   }
 
   toggleIconHoverContainerChat(

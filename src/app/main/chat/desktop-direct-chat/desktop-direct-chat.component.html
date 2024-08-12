@@ -96,6 +96,7 @@
         <div
           class="desktop-chat-edit-icon-container"
           (click)="
+            directMessageService.fromWhichChannel();
             emojiService.forWhichDocIsTheEmoji('direct-message');
             emojiService.addReactionToMessageChannel('✅', singleMessageIndex)
           "
@@ -105,6 +106,7 @@
         <div
           class="desktop-chat-edit-icon-container"
           (click)="
+            directMessageService.fromWhichChannel();
             emojiService.forWhichDocIsTheEmoji('direct-message');
             emojiService.addReactionToMessageChannel('🙌', singleMessageIndex)
           "
@@ -114,19 +116,13 @@
         <div
           class="desktop-chat-edit-icon-container"
           (click)="
+            directMessageService.fromWhichChannel();
             emojiService.forWhichDocIsTheEmoji('direct-message');
             chatService.onButtonClick($event);
             chatService.openDialogEmojiReactionMessage(singleMessageIndex)
           "
         >
           <mat-icon>add_reaction</mat-icon>
-        </div>
-        <div
-          (mouseenter)="chatService.onMouseLeave()"
-          class="desktop-chat-edit-icon-container"
-          (click)="chatService.openThread(singleMessage, singleMessageIndex)"
-        >
-          <mat-icon>comment</mat-icon>
         </div>
         <div
           class="desktop-chat-edit-icon-container"
@@ -257,6 +253,7 @@
                     <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
+                          directMessageService.fromWhichChannel();
                           emojiService.forWhichDocIsTheEmoji('direct-message');
                           chatService.onButtonClick($event);
                           chatService.openDialogEmoji()
@@ -282,6 +279,7 @@
                         </p>
                         <p
                           (click)="
+                            directMessageService.fromWhichChannel();
                             chatService.editMessageFromChannel(
                               this.parmsId,
                               this.chatService.editText,
@@ -442,6 +440,7 @@
               </div>
               <div
                 (click)="
+                  directMessageService.fromWhichChannel();
                   emojiService.forWhichDocIsTheEmoji('direct-message');
                   emojiService.addAdditionalReactionToMessage(
                     emojie.emoji,
@@ -461,6 +460,7 @@
               <mat-icon
                 *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
+                  directMessageService.fromWhichChannel();
                   emojiService.forWhichDocIsTheEmoji('direct-message');
                   chatService.onButtonClick($event);
                   chatService.openDialogEmojiReactionMessage(singleMessageIndex)
@@ -514,6 +514,7 @@
           <div class="desktop-chat-input-icon">
             <mat-icon
               (click)="
+                directMessageService.fromWhichChannel();
                 emojiService.forWhichDocIsTheEmoji('direct-message');
                 chatService.onButtonClick($event);
                 chatService.openDialogEmoji()
@@ -539,7 +540,7 @@
                 directMessageService.sendMessageFromDirectMessage(
                   this.chatService.dataChannel.id,
                   this.chatService.text
-                );
+                )
               "
               class="desktop-chat-send-icon"
               >send</mat-icon
