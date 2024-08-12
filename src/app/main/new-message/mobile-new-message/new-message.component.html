@@ -1,16 +1,37 @@
 <app-mobile-chat-header></app-mobile-chat-header>
 <div class="test">
-    
+
     <div class="input-container">
-        <h2>Neue Nachricht</h2>
-        <input type="search" placeholder="An: #channel, oder @jemand">
+        <div>
+            <h2>Neue Nachricht</h2>
+            <input [(ngModel)]="searchText" type="search" placeholder="An: #channel, oder @jemand"
+                (ngModelChange)="searchField.filterNewMessage(searchText)">
+        </div>
+
+        <div class="result-container">
+            <div class="user-content-container content" *ngIf="searchText.startsWith('@')">
+                <div (click)="chooseUser(user['name'], user)" class="user-content"
+                    *ngFor="let user of searchField.allUser">
+                    <img src="{{ user['avatar'] }}" alt="" />{{ user["name"] }}
+                </div>
+            </div>
+            <div class="user-content-container content" *ngIf="searchText.startsWith('#')">
+                <div (click)="chooseChannel(channel['name'], channel)" class="user-content"
+                    *ngFor="let channel of searchField.allChannel">
+                    {{ channel["name"] }}
+                </div>
+                <div *ngIf="searchField.allChannel.length === 0">
+                    Keine Ergebnisse vorhanden.
+                </div>
+            </div>
+        </div>
     </div>
-  
+
     <div class="mobile-chat-input-container" id="meinTextarea">
         <form class="mobile-chat-input-field-container br-20">
             <textarea [(ngModel)]="text" name="textarea" (input)="chatService.adjustHeight($event.target)"
                 style="min-height: 50px; width: 100%" placeholder="Starte eine neue Nachricht"></textarea>
-  
+
             <div class="mobile-chat-input-field-icon-container">
                 <div class="mobile-chat-input-icon-container">
                     <div class="mobile-chat-border-right">
@@ -36,4 +57,4 @@
             </div>
         </form>
     </div>
-  </div>
+</div>

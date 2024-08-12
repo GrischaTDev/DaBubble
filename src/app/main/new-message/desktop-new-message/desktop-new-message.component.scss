@@ -215,13 +215,15 @@
         gap: 8px;
         padding-left: 45px;
         padding-right: 45px;
+        padding-top: 18px;
     }
 
     .content {
         background-color: #fff;
         border-radius: 30px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        height: 350px;
+        height: auto;
+        max-height: 350px;
         overflow-x: scroll;
     }
 

@@ -8,33 +8,36 @@
       (ngModelChange)="searchField.filterNewMessage(searchText)"
     />
     <div class="shadow"></div>
-  </div>
 
-  <div class="result-container">
-    <div
-      class="user-content-container content"
-      *ngIf="searchText.startsWith('@')"
-    >
-      <div
-        (click)="chooseUser(user['name'], user)"
-        class="user-content"
-        *ngFor="let user of searchField.allUser"
-      >
-        <img src="{{ user['avatar'] }}" alt="" />{{ user["name"] }}
+    <div class="result-container">
+        <div
+          class="user-content-container content"
+          *ngIf="searchText.startsWith('@')"
+        >
+          <div
+            (click)="chooseUser(user['name'], user)"
+            class="user-content"
+            *ngFor="let user of searchField.allUser"
+          >
+            <img src="{{ user['avatar'] }}" alt="" />{{ user["name"] }}
+          </div>
+        </div>
+        <div
+          class="user-content-container content"
+          *ngIf="searchText.startsWith('#')"
+        >
+          <div
+            (click)="chooseChannel(channel['name'], channel)"
+            class="user-content"
+            *ngFor="let channel of searchField.allChannel"
+          >
+            {{ channel["name"] }}
+          </div>
+          <div *ngIf="searchField.allChannel.length === 0">
+            Keine Ergebnisse vorhanden.
+        </div>
+        </div>
       </div>
-    </div>
-    <div
-      class="user-content-container content"
-      *ngIf="searchText.startsWith('#')"
-    >
-      <div
-        (click)="chooseChannel(channel['name'], channel)"
-        class="user-content"
-        *ngFor="let channel of searchField.allChannel"
-      >
-        {{ channel["name"] }}
-      </div>
-    </div>
   </div>
 
   <div class="mobile-chat-input-container" id="meinTextarea">

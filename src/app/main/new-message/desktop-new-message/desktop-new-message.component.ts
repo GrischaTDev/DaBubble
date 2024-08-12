@@ -23,6 +23,7 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { SearchFieldService } from '../../../search-field.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { Subscription } from 'rxjs';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-desktop-new-message',
@@ -169,10 +170,10 @@ export class DesktopNewMessageComponent {
 
   chooseChannel(name: string, channel: any) {
     this.searchText = name;
-    this.channelData = channel;
+    this.channelData = new Channel(channel);
   }
 
-  sendMessage(message: string) {
+  async sendMessage(message: string) {
     if(this.userData) {
       console.log(this.userData)
       this.directMessageService.sendMessageFromDirectMessage(this.userData.idUser, message);
@@ -181,7 +182,7 @@ export class DesktopNewMessageComponent {
       console.log('Das sind die Daten aus dem Channel den man gewählt hat:', this.channelData)
       this.chatService.messageChannel = new Message(this.channelData);
       console.log('Übergeben der Daten an den chatService:', this.chatService.messageChannel)
-      this.chatService.sendMessageFromChannel(this.channelData.id, message);
+      await this.chatService.sendMessageFromChannel(this.channelData.id, message);
       this.channelData = '';
     }
   }

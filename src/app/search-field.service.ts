@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { collection, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
 import { ChatService } from './service/chat.service';
+import { MainServiceService } from './service/main-service.service';
+import { User } from '../assets/models/user.class';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +18,7 @@ export class SearchFieldService {
   isSearchActive = false;
   at: any;
 
-  constructor(private firestore: Firestore, private chatService: ChatService) { }
-
+  constructor(private firestore: Firestore, private chatService: ChatService, private mainService: MainServiceService) { }
     /**
    * 
    * After entering a query in the search field, the data is filtered.
@@ -81,10 +82,13 @@ export class SearchFieldService {
     setAllChannel() {
       const docRef = collection(this.firestore, 'channels');
       return onSnapshot(docRef, (channelList) => {
-        this.allChannel= [];
+        this.allChannel = [];
           channelList.forEach(channel => {
           const channelData = channel.data();
-          this.allChannel.push(channelData);
+
+          if (channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
+            this.allChannel.push(channelData);
+          }
         });
       })
     }
@@ -107,7 +111,12 @@ export class SearchFieldService {
             const name = channelData['name'].toLowerCase();
             const searchValueLower = searchValue.toLowerCase();
             if (name.includes(searchValueLower)) {
-              this.filterChannel.push(channelData);
+
+              if(channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
+                this.filterChannel.push(channelData);
+                console.log('Filter Channel', this.filterChannel)
+              }
+
             } 
           }
 
@@ -116,7 +125,9 @@ export class SearchFieldService {
               const messageLower = message['message'].toLowerCase();
               const searchValueLower = searchValue.toLowerCase();
               if(messageLower.includes(searchValueLower)) {
-                this.filterMessage.push( { channelData: channelData, channelName: channelData['name'] , message: message['message']} );
+                if(channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
+                  this.filterMessage.push( { channelData: channelData, channelName: channelData['name'] , message: message['message']} );
+                }
               }
             });
           }
