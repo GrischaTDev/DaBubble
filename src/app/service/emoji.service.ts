@@ -357,7 +357,6 @@ export class EmojiService {
         await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       }
     } else if(this.emojiToDirectMessage) {
-      console.log('ddddddddddddddddddddddddd', this.chatService.dataChannel)
       await this.mainService.setDocData('direct-message', this.chatService.dataChannel.id, this.chatService.dataChannel);
     }
     this.resetReactionVariables()

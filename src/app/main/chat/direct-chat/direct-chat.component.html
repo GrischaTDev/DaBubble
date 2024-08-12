@@ -22,12 +22,14 @@
     </div>
     <span class="user-name">{{ chatService.clickedUser.name }}</span>
   </div>
-  <div class="mobile-chat-content">
+  <div
+    (click)="chatService.closeIconContainer()"
+    #scrollContainer
+    class="mobile-chat-content"
+  >
     <div
       class="direct-chat-info"
-      *ngIf="
-        directMessageService.dataDirectMessage?.messageChannel?.length === 0
-      "
+      *ngIf="chatService.dataChannel.messageChannel.length === 0"
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
         <img
@@ -62,16 +64,9 @@
         ></span>
       </span>
     </div>
-  </div>
-  <div
-    (click)="chatService.closeIconContainer()"
-    #scrollContainer
-    class="mobile-chat-content"
-  >
     <div
       *ngFor="
-        let singleMessage of directMessageService.dataDirectMessage
-          .messageChannel;
+        let singleMessage of chatService.dataChannel.messageChannel;
         let singleMessageIndex = index
       "
       [ngClass]="{
@@ -320,8 +315,9 @@
             <div
               class="mobile-chat-message-reaction-content"
               *ngFor="
-                let emojie of directMessageService.dataDirectMessage
-                  .messageChannel[singleMessageIndex].emojiReaction;
+                let emojie of chatService.dataChannel.messageChannel[
+                  singleMessageIndex
+                ].emojiReaction;
                 let emojiIndex = index
               "
               [ngClass]="{

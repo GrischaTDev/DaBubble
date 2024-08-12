@@ -38,10 +38,10 @@ export class MobileThreadComponent implements OnInit {
   }
 
   /**
- * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
- * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
- * This is typically used to ensure that the component has access to the latest user information when it is initialized.
-*/
+  * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+  * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+  */
   ngOnInit() {
     this.mainService.watchSingleChannelDoc(this.parmsId1, 'channels').subscribe(dataChannel => {
       this.chatService.dataChannel = dataChannel as Channel;
@@ -55,9 +55,9 @@ export class MobileThreadComponent implements OnInit {
   }
 
   /**
- * Handles window resize events by checking if the screen size exceeds a specific width.
- * This method is triggered whenever the window is resized.
- */
+  * Handles window resize events by checking if the screen size exceeds a specific width.
+  * This method is triggered whenever the window is resized.
+  */
   @HostListener('window:resize')
   onResize() {
     this.checkScreenSize(window.innerWidth);
@@ -73,6 +73,7 @@ export class MobileThreadComponent implements OnInit {
     } 
   }
 
+  /** @ViewChild decorator to access the scrollable container element within a thread. */
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
 
@@ -92,22 +93,19 @@ export class MobileThreadComponent implements OnInit {
   }
 
   /**
- * Scrolls the content of the scrollable container to the bottom.
- * This is typically used to ensure the user sees the most recent messages or content added to the container.
- */
+  * Scrolls the content of the scrollable container to the bottom.
+  * This is typically used to ensure the user sees the most recent messages or content added to the container.
+  */
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
   }
 
-
-  /**
-* Navigates to a specified thread by ID.
-* This method subscribes to a single thread document from a service, updates the chat service's data thread, 
-* and then navigates to the thread page using the router.
-*
-* @param {string} threadId - The unique identifier of the thread to navigate to.
-*/
+/**
+ * Navigates to a specified thread by ID.
+ * This method subscribes to a single thread document from a service, updates the chat service's data thread, 
+ * and then navigates to the thread page using the router.
+ */
  navigateToChat() {
     this.router.navigate(['/chat', this.chatService.dataThread.idOfChannelOnThred]);
   }

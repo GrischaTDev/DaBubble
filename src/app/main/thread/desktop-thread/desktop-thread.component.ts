@@ -36,8 +36,6 @@ export class DesktopThreadComponent implements OnInit  {
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
 
-
-
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
@@ -66,10 +64,10 @@ export class DesktopThreadComponent implements OnInit  {
   }
 
   /**
- * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
- * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
- * This is typically used to ensure that the component has access to the latest user information when it is initialized.
- */
+  * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+  * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+  */
   ngOnInit() {
     this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].thread, 'threads').subscribe(dataThreadChannel => {
       this.chatService.dataThread = dataThreadChannel as Channel;
@@ -80,6 +78,7 @@ export class DesktopThreadComponent implements OnInit  {
     });
   }
 
+  /** @ViewChild decorator to access the scrollable container element within a thread. */
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
 
@@ -115,17 +114,31 @@ export class DesktopThreadComponent implements OnInit  {
     this.subscription.unsubscribe();
   }
 
+  /**
+  * Toggles the hover state for an emoji reaction container in a message thread.
+  * Stops the propagation of the mouse event to handle interactions locally.
+  */
   toggleIconHoverContainerThread(singleMessageIndex: number, emojiUserIndex: number, event: MouseEvent) {
     event.stopPropagation();
     this.chatService.activeMessageIndexReactonThread = singleMessageIndex;
     this.chatService.emojiReactionIndexHoverThread = emojiUserIndex;
   }
 
+  /**
+  * Resets the hover state for emoji reaction containers in a message thread when the mouse exits.
+  * Clears the indices tracking the active message and emoji reaction.
+  * @param {MouseEvent} event - The mouse event that triggers the state reset.
+  */
   toggleIconHoverContainerThreadOut(event: MouseEvent) {
     this.chatService.activeMessageIndexReactonThread = null;
     this.chatService.emojiReactionIndexHoverThread = null;
   }
 
+  /**
+  * Checks for the 'Enter' key press without the 'Shift' key to send a message in a thread.
+  * If the condition is met, the default action of the key press is prevented and a message is sent.
+  * @param {KeyboardEvent} event - The keyboard event to evaluate.
+  */
   checkForEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();

@@ -53,7 +53,7 @@ export class DirectChatComponent implements OnInit {
     public channelService: ChannelService
   ) {
     this.route.params.subscribe((params: any) => {
-      this.parmsId = params.id;
+      this.parmsId = params['userId'];
       chatService.idOfChannel = params.id;
     });
     if (!this.directMessageService.dataDirectMessage) {
@@ -69,9 +69,10 @@ export class DirectChatComponent implements OnInit {
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
   ngOnInit() {
+    
     if (this.parmsId) {
       this.mainService.watchSingleChannelDoc(this.parmsId, 'direct-message').subscribe(dataDirectChat => {
-        this.directMessageService.dataDirectMessage = dataDirectChat as Channel;
+        this.chatService.dataChannel = dataDirectChat as Channel;
       });
     }
     this.loginService.currentLoggedUser();

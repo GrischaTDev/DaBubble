@@ -78,7 +78,7 @@ export class DesktopDirectChatComponent implements OnInit {
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
       this.scrollToBottom();
-    }, 500); 
+    }, 500);
   }
 
   /**
@@ -94,6 +94,7 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
 
+  /** Stores the last scroll height of the container to detect changes. */
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
 
@@ -106,16 +107,22 @@ export class DesktopDirectChatComponent implements OnInit {
   ngAfterViewChecked() {
     if (
       this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight ||
-      this.chatService.sendetMessage || this.directMessageService.switchContent 
+      this.chatService.sendetMessage || this.directMessageService.switchContent
     ) {
-        this.scrollToBottom();
-        this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
-        this.directMessageService.switchContent = false;
+      this.scrollToBottom();
+      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+      this.directMessageService.switchContent = false;
     }
   }
 
+  /** @ViewChild decorator to access and manage focus on the input field. */
   @ViewChild('autofocus') meinInputField!: ElementRef;
 
+  /**
+  * Initializes components after Angular has fully initialized the view.
+  * It sets focus to an input field and subscribes to channel change notifications
+  * to refocus as needed.
+  */
   ngAfterViewInit() {
     this.focusInputField();
     this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
@@ -123,6 +130,10 @@ export class DesktopDirectChatComponent implements OnInit {
     });
   }
 
+  /**
+  * Focuses on the designated input field.
+  * A delay ensures the action is processed within the Angular event lifecycle.
+  */
   private focusInputField() {
     setTimeout(() => {
       this.meinInputField.nativeElement.focus();
@@ -136,13 +147,17 @@ export class DesktopDirectChatComponent implements OnInit {
   scrollToBottom(): void {
     if (!this.chatService.fromDirectChat) {
       this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
+        this.scrollContainer.nativeElement.scrollHeight;
     }
     setTimeout(() => {
       this.chatService.fromDirectChat = false;
     }, 1000);
   }
 
+  /**
+  * Toggles the hover state for an emoji reaction container associated with a chat message.
+  * Prevents event propagation to manage interaction effects locally.
+  */
   toggleIconHoverContainerChat(
     singleMessageIndex: number,
     emojiUserIndex: number,
@@ -153,6 +168,9 @@ export class DesktopDirectChatComponent implements OnInit {
     this.emojiReactionIndexHover = emojiUserIndex;
   }
 
+  /**
+  * Resets the hover state for the emoji reaction containers when the mouse leaves.
+  */
   toggleIconHoverContainerChatOut(event: MouseEvent) {
     this.activeMessageIndexReacton = null;
     this.emojiReactionIndexHover = null;
@@ -170,7 +188,10 @@ export class DesktopDirectChatComponent implements OnInit {
     }
   }
 
-
+  /**
+  * Checks if the Enter key is pressed without the Shift key to send a message.
+  * If the condition is met, it prevents the default action and sends a message.
+  */
   checkForEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -182,10 +203,10 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
   /**
-* Opens a user profile in a modal dialog using Angular Material's Dialog component.
-* The function configures the dialog to display details about a specified user.
-* @param {User} directUser - The user whose profile is to be displayed in the dialog.
-*/
+  * Opens a user profile in a modal dialog using Angular Material's Dialog component.
+  * The function configures the dialog to display details about a specified user.
+  * @param {User} directUser - The user whose profile is to be displayed in the dialog.
+  */
   openUserProfile(directUser: User) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = directUser;
