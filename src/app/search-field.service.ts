@@ -29,14 +29,22 @@ export class SearchFieldService {
     }
 
     filterDataChannelchat(searchValue: string) {
-      this.at = searchValue.lastIndexOf('@')
-      if(this.at !== -1) {
-        const searchValueFilter = searchValue.slice(this.at + 1);
-        this.setUser(searchValueFilter);
-      } else {
+    this.at = searchValue.lastIndexOf('@');
+    if (this.at !== -1) {
+        const searchValueFilter = searchValue.slice(this.at + 1).toLowerCase();
+        if (searchValueFilter.length === 0) {
+            this.filterUser = this.allUsers; 
+        } else {
+            this.filterUser = this.allUsers.filter(user => 
+                user.toLowerCase().includes(searchValueFilter)
+            );
+        }
+        this.setUser(this.filterUser);
+    } else {
         this.filterUser = [];
-      }
+        this.setUser(this.filterUser);
     }
+}
 
     filterNewMessage(searchValue: string) {
       if(searchValue.startsWith('@')) {
