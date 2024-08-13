@@ -89,7 +89,7 @@ export class MobileChatHeaderComponent implements OnInit {
    * Sets the mobileChatIsOpen and mobileDirectChatIsOpen properties of the chatService to false.
    */
   closeMobileChat() {
-    this.router.navigate(['/main', this.chatService.dataChannel.id]);
+    this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user']);
     this.chatService.mobileChatIsOpen = false;
     this.chatService.mobileDirectChatIsOpen = false;
   }

@@ -28,7 +28,7 @@ export const routes: Routes = [
     { path: 'thread/:id1/:id2', component: MobileThreadComponent },
     { path: 'user-profile', component: UserProfileComponent, resolve: {auth: authGuard} },
     { path: 'chat/:id', component: MobileChatComponent, resolve: {auth: authGuard} },
-    { path: 'direct-chat/:nameOfContent/:userId', component: DirectChatComponent, resolve: {auth: authGuard} },
+    { path: 'direct-chat/:id/:userId', component: DirectChatComponent, resolve: {auth: authGuard} },
     { path: 'imprint', component: ImprintComponent },
     { path: 'policy', component: PolicyComponent }
 ];
