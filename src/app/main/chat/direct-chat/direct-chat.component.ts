@@ -42,6 +42,7 @@ export class DirectChatComponent implements OnInit {
   loggedInUser: User = new User();
   parmsIdContent: string = '';
   parmsIdUser: string = '';
+  parmsIdOfChat: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -55,7 +56,8 @@ export class DirectChatComponent implements OnInit {
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsIdContent = params['id'];
-      this.parmsIdUser = params['idUser']; 
+      this.parmsIdUser = params['idUser'];
+      this.parmsIdOfChat = params['idOfChat']; 
     });
     if (!this.directMessageService.dataDirectMessage) {
       this.directMessageService.dataDirectMessage = {} as Channel;

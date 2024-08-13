@@ -106,7 +106,7 @@ export class MobileChatComponent implements OnInit {
   */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user']);
+      this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user', 'chat']);
       this.chatService.mobileDirectChatIsOpen = false
       this.chatService.mobileThreadIsOpen = false;  
     }

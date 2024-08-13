@@ -214,8 +214,8 @@ export class MainServiceService {
    * This function is typically used to route to a specific chat based on the channel or user's ID.
    * @param {Channel|User} data - The data object containing the ID to navigate to, which can be a Channel or User instance.
    */
-  async goToCollectionPath(data: Channel | User, path: string) {
-    this.router.navigateByUrl(path + data.id);
+  async goToCollectionPath(data: Channel | User, path: string) { 
+    this.router.navigate([path, data.id, 'user', data.id]);
   }
 
   /**

@@ -238,7 +238,7 @@ export class ChannelService {
     }
     await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
     this.closeEditChannelDialog();
-    this.router.navigate(['/main']);
+    this.router.navigate(['/main', 'chat', this.mainService.allChannels[0].id, 'user', 'chat']);
     this.loadNewChannel();
   }
 

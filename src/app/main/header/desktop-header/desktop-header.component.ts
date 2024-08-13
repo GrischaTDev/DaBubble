@@ -73,7 +73,7 @@ export class DesktopHeaderComponent implements OnInit {
   openChannel(channel: any) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
-    this.router.navigate(['/main', channel.id]);
+    this.router.navigate(['/main', 'chat', channel.id, 'user', 'chat']);
     this.mainService
       .watchSingleChannelDoc(channel.id, 'channels')
       .subscribe((dataChannel) => {
