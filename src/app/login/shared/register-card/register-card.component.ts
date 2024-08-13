@@ -73,10 +73,9 @@ export class RegisterCardComponent implements OnInit {
       this.router.navigate(['/create-avatar']);
 
       this.mainService.allChannels.forEach(async channel => {
-        const channelRef = doc(this.firestore, 'channels', channel.id);
-        await updateDoc(channelRef, {
-          channelUsers: arrayUnion(newUser)
-        })
+        channel.channelUsers.push(new User(newUser));
+
+        this.mainService.addDoc('channels', channel.id, new Channel(channel));
       });
 
     } catch (error: any) {
