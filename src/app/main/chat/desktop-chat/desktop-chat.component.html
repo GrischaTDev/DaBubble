@@ -1,4 +1,4 @@
-<div class="desktop-chat-container" (click)="chatService.closeDialog()">
+<div class="desktop-chat-container" (click)="chatService.closeDialog()" *ngIf="searchField.allChannel.length !== 0" >
   <div class="desktop-chat-header-container">
     <div
       class="desktop-chat-header-headline"
@@ -575,4 +575,11 @@
       </div>
     </form>
   </div>
+</div>
+
+<div class="desktop-chat-container" *ngIf="searchField.allChannel.length === 0">
+    <div class="no-result">
+        <h1>Willkommen!</h1>
+        <p>Es sieht so aus, als wärst du noch in keinem Channel unterwegs. Keine Sorge, du wirst bald eingeladen! Lehne dich zurück und warte, bis du einer Gruppe beitreten kannst.</p>
+    </div>
 </div>

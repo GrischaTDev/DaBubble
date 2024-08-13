@@ -35,20 +35,10 @@ export class SearchFieldService implements OnInit {
     }
 
     filterDataChannelchat(searchValue: string) {
-    this.at = searchValue.lastIndexOf('@');
-    const searchValueFilter = searchValue.slice(this.at + 1).toLowerCase();
-    if (this.at !== -1) {
-        if (searchValueFilter.length === 0) {
-            this.filterUser = this.allUser; 
-        } else {
-            this.filterUser = this.allUser.filter(user => 
-                user['name'].toLowerCase().includes(searchValueFilter),
-            );
-            this.setUser(searchValueFilter)
-        }
-    } else {
-        this.filterUser = [];
-        this.setUser(searchValueFilter);
+    this.at = searchValue.includes('@');
+    if(this.at) {
+      this.mainService.contentOfWhichInput('channels');
+      this.chatService.openDialogMentionUser();
     }
 }
 
@@ -100,7 +90,9 @@ export class SearchFieldService implements OnInit {
           channelList.forEach(channel => {
           const channelData = channel.data();
 
-          if (channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
+          if (channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id) ||
+              channelData['ownerUser'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)
+          ) {
             this.allChannel.push(channelData);
           }
         });

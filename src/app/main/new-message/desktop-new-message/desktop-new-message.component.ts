@@ -57,8 +57,8 @@ export class DesktopNewMessageComponent {
   searchText: string = '';
   private channelSubscription!: Subscription;
 
-  userData: any;
-  channelData: any;
+  userData: User | undefined;
+  channelData: Channel | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -176,14 +176,12 @@ export class DesktopNewMessageComponent {
   async sendMessage(message: string) {
     if(this.userData) {
       console.log(this.userData)
-      this.directMessageService.sendMessageFromDirectMessage(this.userData.idUser, message);
-      this.userData = '';
+      this.directMessageService.sendMessageFromDirectMessage(this.userData.id, message);
     } else if (this.channelData) {
       console.log('Das sind die Daten aus dem Channel den man gewählt hat:', this.channelData)
       this.chatService.messageChannel = new Message(this.channelData);
       console.log('Übergeben der Daten an den chatService:', this.chatService.messageChannel)
       await this.chatService.sendMessageFromChannel(this.channelData.id, message);
-      this.channelData = '';
     }
   }
 
