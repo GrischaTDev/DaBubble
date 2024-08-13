@@ -71,7 +71,7 @@ export class DesktopChannelsComponent implements OnInit {
    */
   openChannel(channel: any) {
     this.threadService.closeThread();
-    this.router.navigate(['/main', channel.id]);
+    this.router.navigate(['/main','chat', channel.id, 'user']);
     this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;

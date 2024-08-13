@@ -535,6 +535,8 @@
   margin-bottom: 8px;
   width: 200px;
   flex-wrap: wrap;
+  margin-left: calc(100% - 200px);
+  gap: 4px;
 }
 
 .desktop-chat-message-reaction-left-container {
@@ -544,6 +546,8 @@
   margin-bottom: 8px;
   width: 200px;
   flex-wrap: wrap;
+  margin-right: calc(100% - 200px);
+  gap: 4px;
 }
 
 .desktop-chat-message-reaction-content {

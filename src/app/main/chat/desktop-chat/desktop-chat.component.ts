@@ -57,7 +57,6 @@ export class DesktopChatComponent implements OnInit {
   private channelSubscription!: Subscription;
 
   constructor(
-    private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
     public mainService: MainServiceService,
@@ -73,10 +72,6 @@ export class DesktopChatComponent implements OnInit {
       } else {
         this.chatService.editText += content;
       }
-    });
-    this.route.params.subscribe((params: any) => {
-      this.parmsId = params.id;
-      chatService.idOfChannel = params.id;
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
@@ -94,11 +89,6 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService
-      .watchSingleChannelDoc(this.parmsId, 'channels')
-      .subscribe((dataChannel) => {
-        this.chatService.dataChannel = dataChannel as Channel;
-      });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

@@ -20,6 +20,9 @@ import { DirectMessageService } from '../service/direct-message.service';
 import { ChatService } from '../service/chat.service';
 import { NewMessageComponent } from './new-message/mobile-new-message/new-message.component';
 import { DesktopNewMessageComponent } from './new-message/desktop-new-message/desktop-new-message.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Channel } from '../../assets/models/channel.class';
+import { User } from '../../assets/models/user.class';
 
 @Component({
   selector: 'app-main',
@@ -53,12 +56,39 @@ export class MainComponent {
   closeMenu: string = 'arrow_drop_up';
   closeMenuText: string = 'Workspace-Menü schließen';
   currentChannel: any = [];
+  nameOfContent: string = '';
+  parmsIdContent: string = '';
+  parmsIdUser: string = '';
 
   constructor(
     public mainService: MainServiceService,
     public directMessage: DirectMessageService,
-    public chatService: ChatService
-  ) {}
+    public chatService: ChatService,
+    private route: ActivatedRoute, 
+  ) {
+    this.route.params.subscribe((params: any) => {
+      this.nameOfContent = params['nameOfContent'];
+      this.parmsIdContent = params['id'];
+      this.parmsIdUser = params['idUser'];
+      
+    });
+    if(this.nameOfContent === 'chat') {
+      this.chatService.directChatOpen = false;
+      this.chatService.desktopChatOpen = true;
+      this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'channels').subscribe((dataChannel) => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
+    } else if (this.nameOfContent === 'direct-message') {
+      this.chatService.desktopChatOpen = false;
+      this.chatService.directChatOpen = true;
+      this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message').subscribe((dataChannel) => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
+      this.mainService.watchUsersDoc(this.parmsIdUser, 'users').subscribe((dataUser) => {
+        this.chatService.clickedUser = dataUser as User;
+      });
+    }
+  }
 
   /**
    * Toggles the state of the workspace and updates the menu icon and text accordingly.
