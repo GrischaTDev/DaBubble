@@ -104,7 +104,7 @@ export class DirectChatComponent implements OnInit {
    */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', this.parmsIdOfChat]);
+      this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', 'chat']);
       this.chatService.mobileDirectChatIsOpen = false
       this.chatService.mobileThreadIsOpen = false;
     } 
