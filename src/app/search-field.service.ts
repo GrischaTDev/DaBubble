@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { collection, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
 import { ChatService } from './service/chat.service';
 import { MainServiceService } from './service/main-service.service';
@@ -7,7 +7,7 @@ import { User } from '../assets/models/user.class';
 @Injectable({
   providedIn: 'root'
 })
-export class SearchFieldService {
+export class SearchFieldService implements OnInit {
 
   allUser: DocumentData[] = [];
   allChannel: DocumentData[] = [];
@@ -19,6 +19,12 @@ export class SearchFieldService {
   at: any;
 
   constructor(private firestore: Firestore, private chatService: ChatService, private mainService: MainServiceService) { }
+
+  ngOnInit(): void {
+    this.setAllChannel();
+    this.setAllUser();
+  }
+
     /**
    * 
    * After entering a query in the search field, the data is filtered.
@@ -30,19 +36,19 @@ export class SearchFieldService {
 
     filterDataChannelchat(searchValue: string) {
     this.at = searchValue.lastIndexOf('@');
+    const searchValueFilter = searchValue.slice(this.at + 1).toLowerCase();
     if (this.at !== -1) {
-        const searchValueFilter = searchValue.slice(this.at + 1).toLowerCase();
         if (searchValueFilter.length === 0) {
-            this.filterUser = this.allUsers; 
+            this.filterUser = this.allUser; 
         } else {
-            this.filterUser = this.allUsers.filter(user => 
-                user.toLowerCase().includes(searchValueFilter)
+            this.filterUser = this.allUser.filter(user => 
+                user['name'].toLowerCase().includes(searchValueFilter),
             );
+            this.setUser(searchValueFilter)
         }
-        this.setUser(this.filterUser);
     } else {
         this.filterUser = [];
-        this.setUser(this.filterUser);
+        this.setUser(searchValueFilter);
     }
 }
 
