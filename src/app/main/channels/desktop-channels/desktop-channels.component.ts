@@ -43,7 +43,6 @@ export class DesktopChannelsComponent implements OnInit {
   activeChannelId: string | null = null;
 
   constructor(
-    private firestore: Firestore,
     public mainService: MainServiceService,
     private loginService: LoginService,
     private router: Router,
@@ -61,7 +60,6 @@ export class DesktopChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
-
     this.searchField.setAllChannel();
   }
 
@@ -72,7 +70,6 @@ export class DesktopChannelsComponent implements OnInit {
   openChannel(channel: any) {
     this.threadService.closeThread();
     this.router.navigate(['/main','chat', channel.id, 'user']);
-    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.desktopChatOpen = true;
