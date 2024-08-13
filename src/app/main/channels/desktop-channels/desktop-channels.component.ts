@@ -15,6 +15,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
 import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-channels',
@@ -48,7 +49,8 @@ export class DesktopChannelsComponent implements OnInit {
     private router: Router,
     public chatService: ChatService,
     public directMessageService: DirectMessageService,
-    public threadService: ThreadService
+    public threadService: ThreadService,
+    public searchField: SearchFieldService
   ) {}
 
   /**
@@ -59,6 +61,8 @@ export class DesktopChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
+
+    this.searchField.setAllChannel();
   }
 
   /**

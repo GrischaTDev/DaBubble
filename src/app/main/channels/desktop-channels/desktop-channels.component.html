@@ -25,12 +25,12 @@
             </div>
 
             <div  *ngIf="channelListOpen"> 
-                <div class="channels" *ngFor="let channel of mainService.allChannels; let i = index">
+                <div class="channels" *ngFor="let channel of searchField.allChannel; let i = index">
                     <mat-icon></mat-icon>
                     <div class="icon-and-name">
-                        <div class="sub-channel active-channel" [ngClass]="{'active-channel': channel.id === activeChannelId}" (click)="openChannel(channel); setVariableOpenChat()">
+                        <div class="sub-channel active-channel" [ngClass]="{'active-channel': channel['id'] === activeChannelId}" (click)="openChannel(channel); setVariableOpenChat()">
                             <mat-icon>tag</mat-icon>
-                            <a>{{ channel.name }} </a>
+                            <a>{{ channel['name'] }} </a>
                         </div>
                     </div>
                 </div>

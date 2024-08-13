@@ -111,28 +111,34 @@ export class DesktopChatComponent implements OnInit {
    * and updates the last known scrollHeight.
    */
   ngAfterViewChecked() {
-    if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
-      this.chatService.sendetMessage
-    ) {
-      this.scrollToBottom();
-      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+    if(this.searchField.allChannel.length !== 0) {
+      if (
+        this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
+        this.chatService.sendetMessage
+      ) {
+        this.scrollToBottom();
+        this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+      }
     }
   }
 
   @ViewChild('autofocus') meinInputField!: ElementRef;
 
   ngAfterViewInit() {
-    this.focusInputField();
-    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+    if(this.searchField.allChannel.length !== 0) {
+      this.focusInputField();
+      this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
       this.focusInputField();
     });
+    }
   }
 
   private focusInputField() {
-    setTimeout(() => {
-      this.meinInputField.nativeElement.focus();
-    }, 0);
+    if(this.searchField.allChannel.length !== 0) {
+      setTimeout(() => {
+        this.meinInputField.nativeElement.focus();
+      }, 0);
+    }
   }
 
   /**
@@ -140,8 +146,10 @@ export class DesktopChatComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
+    if(this.searchField.allChannel.length !== 0) {
+      this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
+    }
   }
 
   toggleIconHoverContainerChat(

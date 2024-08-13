@@ -773,3 +773,23 @@
     }
   }
 }
+
+.no-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+  padding: 25px 60px;
+  text-align: center;
+
+  h1 {
+    margin: 0;
+    color: $background-blue;
+  }
+
+  p {
+    width: 80%;
+    color: gray;
+  }
+}
