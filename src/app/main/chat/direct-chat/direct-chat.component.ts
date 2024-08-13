@@ -40,7 +40,8 @@ export class DirectChatComponent implements OnInit {
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   loggedInUser: User = new User();
-  parmsId: string = '';
+  parmsIdContent: string = '';
+  parmsIdUser: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -53,8 +54,8 @@ export class DirectChatComponent implements OnInit {
     public channelService: ChannelService
   ) {
     this.route.params.subscribe((params: any) => {
-      this.parmsId = params['userId'];
-      chatService.idOfChannel = params.id;
+      this.parmsIdContent = params['id'];
+      this.parmsIdUser = params['idUser']; 
     });
     if (!this.directMessageService.dataDirectMessage) {
       this.directMessageService.dataDirectMessage = {} as Channel;
@@ -68,11 +69,15 @@ export class DirectChatComponent implements OnInit {
    * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
-  ngOnInit() {
-    
-    if (this.parmsId) {
-      this.mainService.watchSingleChannelDoc(this.parmsId, 'direct-message').subscribe(dataDirectChat => {
+  ngOnInit() {  
+    if (this.parmsIdContent) {
+      this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message').subscribe(dataDirectChat => {
         this.chatService.dataChannel = dataDirectChat as Channel;
+      });
+    }
+    if (this.parmsIdUser) {
+      this.mainService.watchSingleChannelDoc(this.parmsIdUser, 'users').subscribe(dataUser => {
+        this.chatService.clickedUser = dataUser as User;
       });
     }
     this.loginService.currentLoggedUser();
@@ -97,9 +102,12 @@ export class DirectChatComponent implements OnInit {
    */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main', this.chatService.dataChannel.id]);
+      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.chatService.clickedUser.id]);
       this.chatService.mobileChatIsOpen = true;
-    }
+      this.chatService.mobileChatIsOpen = false;
+      this.chatService.mobileDirectChatIsOpen = false
+      this.chatService.mobileThreadIsOpen = false;
+    } 
   }
 
   /**

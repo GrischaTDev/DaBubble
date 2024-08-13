@@ -59,15 +59,6 @@ export class MobileChannelsComponent implements OnInit {
   }
 
   /**
-   * Navigates to the direct chat page for the specified user.
-   * 
-   * @param userId - The ID of the user to navigate to the chat for.
-   */
-  navigateToChat(userId: string) {
-    this.router.navigate(['/direct-chat', userId]);
-  }
-
-  /**
    * Opens the dialog to add a new channel.
    */
   openDialogAddChannel() {

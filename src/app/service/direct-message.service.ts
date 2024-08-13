@@ -283,7 +283,7 @@ export class DirectMessageService {
   async loadDirectChatContent(chatId: string) {
     this.directMessageDocId = chatId;
     if(this.chatService.mobileDirectChatIsOpen) {
-      this.router.navigate(['/direct-chat','direct-message', chatId]);
+      this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.id]);
       this.switchContent = true;
     } else {
       this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
