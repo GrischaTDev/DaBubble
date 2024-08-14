@@ -84,6 +84,13 @@ export class DesktopNewMessageComponent implements OnInit {
       this.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
+
+    if (!this.directMessageService.dataDirectMessage) {
+      this.directMessageService.dataDirectMessage = {} as Channel;
+    } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
+      this.directMessageService.dataDirectMessage.messageChannel = [];
+    }
+
   }
   ngOnInit(): void {
     this.subscription = this.searchField.allChannel$.subscribe(channels => {
@@ -169,9 +176,15 @@ export class DesktopNewMessageComponent implements OnInit {
     }
   }
 
-  chooseUser(name: string, user: any) {
+  async chooseUser(name: string, user: User) {
     this.searchText = name;
     this.userData = user;
+    try {
+      await this.directMessageIsAvailable(this.userData)
+    }
+    catch(err) {
+      console.log('Ist hier ein Fehler:', err);
+    }
     console.log(this.userData)
   }
 
@@ -182,14 +195,56 @@ export class DesktopNewMessageComponent implements OnInit {
 
   async sendMessage(message: string) {
     if(this.userData) {
-      console.log(this.userData)
-      this.directMessageService.sendMessageFromDirectMessage(this.userData.id, message);
+      console.log(this.chatService.dataChannel.id);
+      this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message);
     } else if (this.channelData) {
       console.log('Das sind die Daten aus dem Channel den man gewählt hat:', this.channelData)
       this.chatService.messageChannel = new Message(this.channelData);
       console.log('Übergeben der Daten an den chatService:', this.chatService.messageChannel)
       await this.chatService.sendMessageFromChannel(this.channelData.id, message);
     }
+  }
+
+  async directMessageIsAvailable(userData: User) {
+    this.directMessageService.directMessageIdIsAvailable = false;
+    this.directMessageService.directMessageId = '';
+    let choosedUserMessages = userData.message;
+    let loggedInUserMessages = this.mainService.loggedInUser.message;
+    if (Array.isArray(choosedUserMessages) && Array.isArray(loggedInUserMessages)) {
+      let commonMessages = choosedUserMessages.filter(msg => loggedInUserMessages.includes(msg));
+      if (commonMessages.length !== 0) {
+        this.directMessageService.directMessageDocId = commonMessages[0].toString();
+        this.directMessageService.directMessageIdIsAvailable = true;
+      }
+    }
+    await this.pushDirectMessageDocToFirebase(userData);
+  }
+
+  async pushDirectMessageDocToFirebase(userData: User) {
+    if (!this.directMessageService.directMessageIdIsAvailable) {
+      this.directMessageService.newDataDirectMessage.channelUsers = [];
+      await this.mainService.addNewDocOnFirebase('direct-message', new Channel(this.directMessageService.newDataDirectMessage));
+      await this.pushDirectMessageIdToUser(userData);
+    }
+  }
+
+  async pushDirectMessageIdToUser(userData: User) {
+    this.mainService.loggedInUser.message.push(this.mainService.docId);
+    userData.message.push(this.mainService.docId);
+    this.directMessageService.directMessageId = this.mainService.docId;
+    this.directMessageService.newDataDirectMessage.id = this.mainService.docId;
+    this.directMessageService.newDataDirectMessage.channelUsers.push(new User(this.mainService.loggedInUser));
+    this.directMessageService.newDataDirectMessage.channelUsers.push(new User(userData));
+    this.pushNewDirectmessageContenToFb(userData);
+  }
+
+  async pushNewDirectmessageContenToFb(userData: User) {
+    await this.mainService.addDoc(
+      'users', this.mainService.loggedInUser.id, new User(this.mainService.loggedInUser));
+    await this.mainService.addDoc('users', userData.id, new User(userData)
+    );
+    await this.mainService.addDoc('direct-message', this.directMessageService.directMessageDocId, new Channel(this.directMessageService.newDataDirectMessage)
+    );
   }
 
 }
