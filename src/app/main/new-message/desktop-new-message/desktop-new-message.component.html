@@ -2,20 +2,20 @@
   <div class="input-container">
     <h2>Neue Nachricht</h2>
     <input
-      [(ngModel)]="searchText"
+      [(ngModel)]="newMessageService.searchText"
       type="search"
       placeholder="An: #channel, oder @jemand"
-      (ngModelChange)="searchField.filterNewMessage(searchText)"
+      (ngModelChange)="searchField.filterNewMessage(newMessageService.searchText)"
     />
     <div class="shadow"></div>
 
     <div class="result-container">
         <div
           class="user-content-container content"
-          *ngIf="searchText.startsWith('@')"
+          *ngIf="newMessageService.searchText.startsWith('@')"
         >
           <div
-            (click)="chooseUser(user['name'], user)"
+            (click)="newMessageService.chooseUser(user['name'], user)"
             class="user-content"
             *ngFor="let user of searchField.allUser"
           >
@@ -24,10 +24,10 @@
         </div>
         <div
           class="user-content-container content"
-          *ngIf="searchText.startsWith('#')"
+          *ngIf="newMessageService.searchText.startsWith('#')"
         >
           <div
-            (click)="chooseChannel(channel['name'], channel)"
+            (click)="newMessageService.chooseChannel(channel['name'], channel)"
             class="user-content"
             *ngFor="let channel of allChannel"
           >
@@ -44,7 +44,7 @@
     <form class="mobile-chat-input-field-container br-20">
       <textarea
         #autofocus
-        [(ngModel)]="text"
+        [(ngModel)]="newMessageService.text"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -78,7 +78,7 @@
         </div>
         <div>
           <div>
-            <mat-icon (click)="sendMessage(text)" class="mobile-chat-send-icon"
+            <mat-icon (click)="newMessageService.sendMessage(newMessageService.text)" class="mobile-chat-send-icon"
               >send</mat-icon
             >
           </div>

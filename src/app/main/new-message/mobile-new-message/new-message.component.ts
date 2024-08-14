@@ -23,6 +23,7 @@ import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { NewMessageService } from '../../../service/new-message.service';
 
 @Component({
   selector: 'app-new-message',
@@ -43,8 +44,6 @@ export class NewMessageComponent implements OnInit {
   items$;
   items;
   parmsId: string = '';
-  searchText: string = '';
-  text: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
@@ -64,7 +63,8 @@ export class NewMessageComponent implements OnInit {
     public chatService: ChatService,
     public emojiService: EmojiService,
     public mainService: MainServiceService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
+    public newMessageService: NewMessageService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -77,7 +77,7 @@ export class NewMessageComponent implements OnInit {
       });
     }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      this.text += content;
+      this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
   }
@@ -144,16 +144,5 @@ export class NewMessageComponent implements OnInit {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  chooseUser(name: string, user: any) {
-    this.searchText = name;
-    this.userData = user;
-    console.log(this.userData)
-  }
-
-  chooseChannel(name: string, channel: any) {
-    this.searchText = name;
-    this.channelData = new Channel(channel);
   }
 }
