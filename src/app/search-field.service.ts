@@ -12,7 +12,7 @@ import { LoginService } from './service/login.service';
 })
 export class SearchFieldService implements OnInit {
 
-  allUser: DocumentData[] = [];
+  allUser: User[] = [];
   filterUser: DocumentData[] = [];
   filterChannel: DocumentData[] = [];
   filterMessage: DocumentData[] = [];
@@ -88,9 +88,9 @@ export class SearchFieldService implements OnInit {
     setAllUser() {
       const docRef = collection(this.firestore, 'users');
       return onSnapshot(docRef, (channelList) => {
-        this.allUser= [];
+        this.allUser = [];
         channelList.forEach(channel => {
-          const userData = channel.data();
+          const userData = new User(channel.data());
           this.allUser.push(userData);
         });
       })
