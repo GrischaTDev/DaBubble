@@ -111,6 +111,10 @@ export class ChatService {
     } else {
       this.closeDialog();
     }
+    setTimeout(() => { 
+      this.activateChatFocus();
+    } , 400);
+    
   }
 
   /**
