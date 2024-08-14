@@ -88,6 +88,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = false;
     this.activeChannelId = channel.id;
+    this.chatService.text = '';
     this.chatService.activateChatFocus();
   }
 
@@ -100,6 +101,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.clickedUser = user;
     await this.directMessageService.directMessageIsAvailable();
     this.directMessageService.directMessageDocId = this.mainService.docId;
+    this.chatService.text = '';
     this.chatService.activateChatFocus();
   }
 
