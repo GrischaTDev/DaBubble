@@ -118,22 +118,17 @@ export class DesktopChatComponent implements OnInit {
   }
 
   @ViewChild('autofocus') meinInputField!: ElementRef;
-
   ngAfterViewInit() {
-    if(this.allChannel.length !== 0) {
       this.focusInputField();
       this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
       this.focusInputField();
     });
-    }
   }
 
   private focusInputField() {
-    if(this.allChannel.length !== 0) {
       setTimeout(() => {
         this.meinInputField.nativeElement.focus();
       }, 0);
-    }
   }
 
   /**
