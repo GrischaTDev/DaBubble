@@ -24,4 +24,18 @@
   background: rgba(241, 241, 241, 0.5);
 }
 
+@media (max-width: 960px) {
+  .emoji-container {
+    right: 20px; 
+    bottom: 164px; 
+  }
+}
+
+@media (max-width: 400px) {
+  .emoji-container {
+    right: calc((100vw - 343px) / 2); 
+   
+  }
+}
+
 

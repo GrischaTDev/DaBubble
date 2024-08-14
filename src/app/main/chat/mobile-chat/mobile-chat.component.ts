@@ -67,6 +67,7 @@ export class MobileChatComponent implements OnInit {
       }
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
+    this.chatService.mobileChatIsOpen = true;
   }
 
   /**
@@ -105,7 +106,7 @@ export class MobileChatComponent implements OnInit {
   * @param {number} width - The current width of the screen.
   */
   private checkScreenSize(width: number) {
-    if(this.chatService.mobileChatIsOpen) {
+    if(this.chatService.mobileChatIsOpen) {  
       if (width > 960) {
         this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user', 'chat']);
         this.chatService.mobileDirectChatIsOpen = false

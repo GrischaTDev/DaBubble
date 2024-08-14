@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ChatService } from '../../../service/chat.service';
 import { User } from '../../../../assets/models/user.class';
 import { MainServiceService } from '../../../service/main-service.service';
+import { EmojiService } from '../../../service/emoji.service';
 
 @Component({
   selector: 'app-dialog-mention-users',
@@ -32,7 +33,8 @@ export class DialogMentionUsersComponent {
 
   constructor(
     public chatService: ChatService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public emojiService: EmojiService
   ) {
     this.chatService = chatService;
   }
@@ -42,9 +44,9 @@ export class DialogMentionUsersComponent {
   * @param {User} user - The user to be mentioned.
   */
   addMentionUser(user: User) {
+    this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1); 
     console.log(lastChar);
-    
     if (lastChar !== '@') {
       this.inputContent += '@' + user.name; 
     } else {
