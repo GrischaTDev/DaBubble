@@ -23,7 +23,7 @@ export class SearchFieldService implements OnInit {
   filterChannel: DocumentData[] = [];
   filterMessage: DocumentData[] = [];
 
-  private allChannelSubject = new BehaviorSubject<Channel[]>([]);
+  public allChannelSubject = new BehaviorSubject<Channel[]>([]);
   public allChannel$ = this.allChannelSubject.asObservable();
 
   isSearchActive = false;

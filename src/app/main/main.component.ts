@@ -81,8 +81,10 @@ export class MainComponent {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     } else if (this.nameOfContent === 'direct-message') {
+      if(!chatService.newMessageOpen) {
+        this.chatService.directChatOpen = true;
+      }
       this.chatService.desktopChatOpen = false;
-      this.chatService.directChatOpen = true;
       this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message').subscribe((dataChannel) => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
