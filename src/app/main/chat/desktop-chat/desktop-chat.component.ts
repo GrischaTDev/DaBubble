@@ -55,6 +55,7 @@ export class DesktopChatComponent implements OnInit {
   emojiReactionIndexHover: number | null = null;
   activeMessageIndexReacton: number | null = null;
   private channelSubscription!: Subscription;
+  allChannel: Channel[] = [];
 
   constructor(
     public chatService: ChatService,
@@ -89,6 +90,10 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
+
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -101,7 +106,7 @@ export class DesktopChatComponent implements OnInit {
    * and updates the last known scrollHeight.
    */
   ngAfterViewChecked() {
-    if(this.searchField.allChannel.length !== 0) {
+    if(this.allChannel.length !== 0) {
       if (
         this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
         this.chatService.sendetMessage
@@ -115,7 +120,7 @@ export class DesktopChatComponent implements OnInit {
   @ViewChild('autofocus') meinInputField!: ElementRef;
 
   ngAfterViewInit() {
-    if(this.searchField.allChannel.length !== 0) {
+    if(this.allChannel.length !== 0) {
       this.focusInputField();
       this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
       this.focusInputField();
@@ -124,7 +129,7 @@ export class DesktopChatComponent implements OnInit {
   }
 
   private focusInputField() {
-    if(this.searchField.allChannel.length !== 0) {
+    if(this.allChannel.length !== 0) {
       setTimeout(() => {
         this.meinInputField.nativeElement.focus();
       }, 0);
@@ -136,7 +141,7 @@ export class DesktopChatComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    if(this.searchField.allChannel.length !== 0) {
+    if(this.allChannel.length !== 0) {
       this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
     }

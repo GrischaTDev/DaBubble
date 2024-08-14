@@ -29,11 +29,11 @@
           <div
             (click)="chooseChannel(channel['name'], channel)"
             class="user-content"
-            *ngFor="let channel of searchField.allChannel"
+            *ngFor="let channel of allChannel"
           >
             {{ channel["name"] }}
           </div>
-          <div *ngIf="searchField.allChannel.length === 0">
+          <div *ngIf="allChannel.length === 0">
             Keine Ergebnisse vorhanden.
         </div>
         </div>

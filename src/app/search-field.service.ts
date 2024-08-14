@@ -3,6 +3,9 @@ import { collection, DocumentData, Firestore, onSnapshot, QuerySnapshot } from '
 import { ChatService } from './service/chat.service';
 import { MainServiceService } from './service/main-service.service';
 import { User } from '../assets/models/user.class';
+import { Channel } from '../assets/models/channel.class';
+import { BehaviorSubject } from 'rxjs';
+import { LoginService } from './service/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,18 +13,28 @@ import { User } from '../assets/models/user.class';
 export class SearchFieldService implements OnInit {
 
   allUser: DocumentData[] = [];
-  allChannel: DocumentData[] = [];
   filterUser: DocumentData[] = [];
   filterChannel: DocumentData[] = [];
   filterMessage: DocumentData[] = [];
 
+  private allChannelSubject = new BehaviorSubject<Channel[]>([]);
+  public allChannel$ = this.allChannelSubject.asObservable();
+
   isSearchActive = false;
   at: any;
 
-  constructor(private firestore: Firestore, private chatService: ChatService, private mainService: MainServiceService) { }
+  constructor(private firestore: Firestore, private chatService: ChatService, private mainService: MainServiceService, private loginService: LoginService) { 
+    this.loginService.currentLoggedUser();
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.mainService.loggedInUser = new User(user);
+
+      if(user) {
+        this.setAllChannel();
+      }
+    });
+  }
 
   ngOnInit(): void {
-    this.setAllChannel();
     this.setAllUser();
   }
 
@@ -86,16 +99,20 @@ export class SearchFieldService implements OnInit {
     setAllChannel() {
       const docRef = collection(this.firestore, 'channels');
       return onSnapshot(docRef, (channelList) => {
-        this.allChannel = [];
+        const channels: Channel[] = [];
           channelList.forEach(channel => {
-          const channelData = channel.data();
+          const channelData = new Channel(channel.data());
+          console.log('Channel List:', channel.data())
 
-          if (channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id) ||
-              channelData['ownerUser'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)
+          if (channelData.channelUsers.some((channeluser: User) => channeluser.id === this.mainService.loggedInUser.id) ||
+              channelData.ownerUser.some((channeluser: User) => channeluser.id === this.mainService.loggedInUser.id)
           ) {
-            this.allChannel.push(channelData);
+            channels.push(channelData);
+            console.log('Daten:', channelData);
           }
         });
+        console.log('Gefiltertet Channel', channels)
+        this.allChannelSubject.next(channels);
       })
     }
   
@@ -120,7 +137,6 @@ export class SearchFieldService implements OnInit {
 
               if(channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
                 this.filterChannel.push(channelData);
-                console.log('Filter Channel', this.filterChannel)
               }
 
             } 
@@ -131,7 +147,8 @@ export class SearchFieldService implements OnInit {
               const messageLower = message['message'].toLowerCase();
               const searchValueLower = searchValue.toLowerCase();
               if(messageLower.includes(searchValueLower)) {
-                if(channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
+                if(channelData['channelUsers'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id) ||
+                channelData['ownerUser'].some((channeluser: User) => channeluser['id'] === this.mainService.loggedInUser.id)) {
                   this.filterMessage.push( { channelData: channelData, channelName: channelData['name'] , message: message['message']} );
                 }
               }

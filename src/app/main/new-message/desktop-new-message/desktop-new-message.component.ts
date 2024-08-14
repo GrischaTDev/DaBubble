@@ -4,6 +4,7 @@ import {
   inject,
   ViewChild,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -40,7 +41,7 @@ import { Channel } from '../../../../assets/models/channel.class';
   templateUrl: './desktop-new-message.component.html',
   styleUrl: './desktop-new-message.component.scss',
 })
-export class DesktopNewMessageComponent {
+export class DesktopNewMessageComponent implements OnInit {
   items$;
   items;
   parmsId: string = '';
@@ -59,6 +60,7 @@ export class DesktopNewMessageComponent {
 
   userData: User | undefined;
   channelData: Channel | undefined;
+  allChannel: Channel[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -82,6 +84,11 @@ export class DesktopNewMessageComponent {
       this.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
+  }
+  ngOnInit(): void {
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
