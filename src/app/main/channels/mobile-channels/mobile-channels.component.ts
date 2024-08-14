@@ -27,6 +27,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class MobileChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
+  searchValue: string = '';
+  channelListOpen: boolean = true;
+  userListOpen: boolean = true;
+  currentUser: any;
+  arrowIconChannels: string = 'arrow_drop_down';
+  arrowIconUser: string = 'arrow_drop_down';
 
   constructor(
     public mainService: MainServiceService,
@@ -36,14 +42,7 @@ export class MobileChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public searchField: SearchFieldService
   ) {}
-  
-  channelListOpen: boolean = true;
-  userListOpen: boolean = true;
-  currentUser: any;
-  arrowIconChannels: string = 'arrow_drop_down';
-  arrowIconUser: string = 'arrow_drop_down';
 
-  searchValue: string = '';
 
 
   /**
