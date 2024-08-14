@@ -14,6 +14,7 @@ import { ChatService } from '../../../service/chat.service';
 import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-header',
@@ -26,8 +27,9 @@ export class DesktopHeaderComponent implements OnInit {
   currentUser: any;
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
-
+  private subscription: Subscription = new Subscription();
   searchValue: string = '';
+  allChannel: Channel[] = [];
 
   constructor(
     public mainService: MainServiceService,
@@ -49,6 +51,10 @@ export class DesktopHeaderComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
+    });
+
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
     });
   }
 

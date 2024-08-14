@@ -42,6 +42,8 @@ export class DesktopChannelsComponent implements OnInit {
   selectedChannel: any;
   activeChannelId: string | null = null;
 
+  allChannel: Channel[] = [];
+
   constructor(
     public mainService: MainServiceService,
     private loginService: LoginService,
@@ -60,7 +62,16 @@ export class DesktopChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
-    this.searchField.setAllChannel();
+
+      this.subscription = this.searchField.allChannel$.subscribe(channels => {
+        this.allChannel = channels;
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   /**

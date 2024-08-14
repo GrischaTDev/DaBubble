@@ -21,6 +21,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-direct-chat',
@@ -52,7 +53,8 @@ export class DirectChatComponent implements OnInit {
     public emojiService: EmojiService,
     public directMessageService: DirectMessageService,
     private loginService: LoginService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public searchField: SearchFieldService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsIdContent = params['id'];

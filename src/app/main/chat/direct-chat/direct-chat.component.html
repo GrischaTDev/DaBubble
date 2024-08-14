@@ -371,6 +371,7 @@
       <textarea
         #autofocus
         [(ngModel)]="chatService.text"
+        (ngModelChange)="searchField.filterDataChannelchat(chatService.text)"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"

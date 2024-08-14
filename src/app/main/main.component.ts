@@ -23,6 +23,7 @@ import { DesktopNewMessageComponent } from './new-message/desktop-new-message/de
 import { ActivatedRoute, Router } from '@angular/router';
 import { Channel } from '../../assets/models/channel.class';
 import { User } from '../../assets/models/user.class';
+import { SearchFieldService } from '../search-field.service';
 
 @Component({
   selector: 'app-main',
@@ -64,6 +65,7 @@ export class MainComponent {
     public mainService: MainServiceService,
     public directMessage: DirectMessageService,
     public chatService: ChatService,
+    public searchField: SearchFieldService,
     private route: ActivatedRoute, 
   ) {
     this.route.params.subscribe((params: any) => {
@@ -88,6 +90,8 @@ export class MainComponent {
         this.chatService.clickedUser = dataUser as User;
       });
     }
+
+    this.searchField.setAllChannel();
   }
 
   /**

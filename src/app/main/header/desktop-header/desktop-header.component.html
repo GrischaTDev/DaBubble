@@ -19,8 +19,8 @@
 
             <div *ngIf="searchField.filterChannel.length > 0">
                 <p>Channel:</p>
-                <div class="user-list-container" *ngFor="let channel of searchField.filterChannel" (click)="openChannel(channel)">
-                    <span>#</span>{{ channel['name'] }}
+                <div class="user-list-container" *ngFor="let channel of allChannel" (click)="openChannel(channel)">
+                    <span>#</span>{{ channel.name }}
                 </div>
             </div>
 

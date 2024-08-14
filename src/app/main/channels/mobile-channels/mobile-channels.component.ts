@@ -11,6 +11,8 @@ import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { SearchFieldService } from '../../../search-field.service';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-mobile-channels',
@@ -33,6 +35,8 @@ export class MobileChannelsComponent implements OnInit {
   currentUser: any;
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
+  private subscription: Subscription = new Subscription();
+  allChannel: Channel[] = [];
 
   constructor(
     public mainService: MainServiceService,
@@ -54,6 +58,10 @@ export class MobileChannelsComponent implements OnInit {
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
+    });
+
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
     });
   }
 
