@@ -110,6 +110,6 @@ export class MobileThreadComponent implements OnInit {
  * and then navigates to the thread page using the router.
  */
  navigateToChat() {
-    this.router.navigate(['/chat', this.chatService.dataThread.idOfChannelOnThred]);
+    this.router.navigate(['/main', 'chat', this.chatService.dataThread.idOfChannelOnThred, 'user', 'chat']);
   }
 }
