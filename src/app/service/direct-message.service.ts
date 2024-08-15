@@ -35,6 +35,7 @@ export class DirectMessageService {
   messageDirectChat: Message = new Message();
   private itemsSubscription?: Subscription;
   switchContent: boolean = false;
+  userIdNewMessage: string = '';
 
   constructor(public chatService: ChatService, public mainService: MainServiceService, public router: Router) { }
 
@@ -204,7 +205,7 @@ export class DirectMessageService {
    * Updates the message arrays for both the logged-in and clicked users with a new direct message ID.
    * Also updates the new direct message content in Firebase by adding both users to the message's channel users list.
    */
- async pushDirectMessageIdToUser() {
+  async pushDirectMessageIdToUser() {
     this.mainService.loggedInUser.message.push(this.mainService.docId);
     this.chatService.clickedUser.message.push(this.mainService.docId);
     this.directMessageId = this.mainService.docId;
@@ -271,6 +272,10 @@ export class DirectMessageService {
     this.messageDirectChat.imageToMessage = this.imageMessage as ArrayBuffer;
     this.chatService.dataChannel.messageChannel.push(this.messageDirectChat);
     await this.mainService.addDoc('direct-message', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
+    this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
+    this.chatService.newMessageOpen = false;
     this.chatService.text = '';
     this.imageMessage = '';
   }
@@ -282,17 +287,18 @@ export class DirectMessageService {
    */
   async loadDirectChatContent(chatId: string) {
     this.directMessageDocId = chatId;
-    if(this.chatService.mobileDirectChatIsOpen) {
+    if (this.chatService.mobileDirectChatIsOpen) {
       this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
       this.switchContent = true;
     } else {
+      console.log('4394309jrff0')
       this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
-        this.chatService.dataChannel = dataDirectMessage as Channel;
-        this.router.navigate(['/main','direct-message', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
+        this.chatService.dataChannel = dataDirectMessage as Channel
+        this.router.navigate(['/main', 'direct-message', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
         this.chatService.desktopChatOpen = false;
         this.chatService.directChatOpen = true;
         this.chatService.newMessageOpen = false;
-        this.switchContent = true; 
+        this.switchContent = true;
       });
     }
   }

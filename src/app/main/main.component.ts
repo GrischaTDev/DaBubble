@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MobileHeaderComponent } from './header/mobile-header/mobile-header.component';
 import { DesktopHeaderComponent } from './header/desktop-header/desktop-header.component';
 import { CommonModule } from '@angular/common';
@@ -51,7 +51,7 @@ import { SearchFieldService } from '../search-field.service';
     DesktopNewMessageComponent,
   ],
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
   isThreadOpen: boolean = false;
   isWorkspaceOpen: boolean = true;
   closeMenu: string = 'arrow_drop_up';
@@ -67,12 +67,14 @@ export class MainComponent {
     public chatService: ChatService,
     public searchField: SearchFieldService,
     private route: ActivatedRoute, 
-  ) {
+  ) { }
+
+  ngOnInit() {
+    console.log('786543678')
     this.route.params.subscribe((params: any) => {
       this.nameOfContent = params['nameOfContent'];
       this.parmsIdContent = params['id'];
       this.parmsIdUser = params['idUser'];
-      
     });
     if(this.nameOfContent === 'chat') {
       this.chatService.directChatOpen = false;
@@ -81,7 +83,7 @@ export class MainComponent {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     } else if (this.nameOfContent === 'direct-message') {
-      if(!chatService.newMessageOpen) {
+      if(!this.chatService.newMessageOpen) {
         this.chatService.directChatOpen = true;
       }
       this.chatService.desktopChatOpen = false;
@@ -92,9 +94,9 @@ export class MainComponent {
         this.chatService.clickedUser = dataUser as User;
       });
     }
-
     this.searchField.setAllChannel();
   }
+
 
   /**
    * Toggles the state of the workspace and updates the menu icon and text accordingly.

@@ -17,7 +17,7 @@
           <div
             (click)="newMessageService.chooseUser(user['name'], user)"
             class="user-content"
-            *ngFor="let user of searchField.allUser"
+            *ngFor="let user of this.mainService.allUsers"
           >
             <img src="{{ user['avatar'] }}" alt="" />{{ user["name"] }}
           </div>
