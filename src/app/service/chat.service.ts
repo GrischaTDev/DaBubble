@@ -13,6 +13,7 @@ import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-ad
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
 import { firstValueFrom, Subject } from 'rxjs';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { NewMessageService } from './new-message.service';
 
 
 @Injectable({
@@ -171,7 +172,7 @@ export class ChatService {
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
     if (textContent || this.imageMessage) {
-      await this.generateThreadDoc();
+      // await this.generateThreadDoc();
       this.messageChannel.message = textContent;
       this.messageChannel.date = Date.now();
       this.messageChannel.userId = this.mainService.loggedInUser.id;

@@ -5,6 +5,7 @@ import { MainServiceService } from './main-service.service';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +15,17 @@ export class NewMessageService {
   searchText: string = '';
   text: string = '';
   userData: User | undefined;
-  channelData: Channel | undefined;
+  channelData: Channel = new Channel();
+  sendetMessage: boolean = false;
+  messageChannel: Message = new Message();
+  dataChannel: Channel = new Channel();
+  newThreadOnFb: Channel = new Channel();
 
   constructor(
     private chatService: ChatService,
     private directMessageService: DirectMessageService,
-    private mainService: MainServiceService
-
+    private mainService: MainServiceService,
+    private router: Router
   ) { }
 
   async chooseUser(name: string, user: User) {
@@ -40,17 +45,16 @@ export class NewMessageService {
     this.channelData = new Channel(channel);
   }
 
+  // Send Direct Message
+
   async sendMessage(message: string) {
     if(this.userData) {
-      console.log(this.chatService.dataChannel.id);
       this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message);
       this.searchText = '';
       this.text = '';
     } else if (this.channelData) {
-      console.log('Das sind die Daten aus dem Channel den man gewählt hat:', this.channelData)
-      this.chatService.messageChannel = new Message(this.channelData);
-      console.log('Übergeben der Daten an den chatService:', this.chatService.messageChannel)
-      await this.chatService.sendMessageFromChannel(this.channelData.id, message);
+      console.log('Channel Data Id:', this.channelData.id);
+      await this.sendMessageFromChannel(this.channelData.id, message);
     }
   }
 
@@ -105,5 +109,60 @@ export class NewMessageService {
       });
     }
 
+
+    // Send Channel Message 
+
+    async sendMessageFromChannel(channelId: string, textContent: string) {
+      if (textContent) {
+        try {
+          console.log('Console.log vor der generate Doc')
+          await this.generateThreadDoc();
+        }
+        catch(err) {
+          console.log('Error', err);
+        }
+        this.messageChannel.message = textContent;
+        this.messageChannel.date = Date.now();
+        this.messageChannel.userId = this.mainService.loggedInUser.id;
+        this.messageChannel.userName = this.mainService.loggedInUser.name;
+        this.messageChannel.userEmail = this.mainService.loggedInUser.email;
+        this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+        this.messageChannel.dateOfLastThreadMessage = Date.now();
+        this.messageChannel.numberOfMessage = 0;
+        this.channelData.messageChannel.push(this.messageChannel);
+        this.sendMessageChannel();
+      }
+    }
+
+    async generateThreadDoc() {
+      this.sendetMessage = true;
+      this.newThreadOnFb.messageChannel.splice(0, 1)
+      this.newThreadOnFb.id = '';
+      await this.mainService.addNewDocOnFirebase('threads', this.newThreadOnFb);
+      this.messageChannel.thread = this.mainService.docId;
+      this.newThreadOnFb.id = this.mainService.docId;
+      this.resetMessageContent();
+    }
+
+    resetMessageContent() {
+      this.text = '';
+      this.searchText = '';
+      setTimeout(() => {
+        this.sendetMessage = false;
+      }, 2000);
+    }
+
+    async sendMessageChannel() {
+      this.newThreadOnFb.messageChannel.push(this.messageChannel);
+      this.newThreadOnFb.idOfChannelOnThred = this.channelData.id;
+      this.newThreadOnFb.name = this.channelData.name;
+      try {
+        await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb));
+        await this.mainService.addDoc('channels', this.channelData.id, new Channel(this.channelData));
+      }
+      catch(err) {
+        console.log('error', err);
+      }
+    }
 
 }

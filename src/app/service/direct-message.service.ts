@@ -36,7 +36,7 @@ export class DirectMessageService {
   private itemsSubscription?: Subscription;
   switchContent: boolean = false;
 
-  constructor(public chatService: ChatService, public mainService: MainServiceService, private router: Router) { }
+  constructor(public chatService: ChatService, public mainService: MainServiceService, public router: Router) { }
 
   /**
  * Opens a user profile and initializes a chat dialog.
