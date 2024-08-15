@@ -104,7 +104,6 @@ export class AvatarCardComponent {
    */
   chooseAvatar(index: number) {
     this.selectedAvatarImage = this.avatarImg[index];
-    console.log(this.selectedAvatarImage)
   }
 
   /**

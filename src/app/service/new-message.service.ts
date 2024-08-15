@@ -37,7 +37,6 @@ export class NewMessageService {
     catch(err) {
       console.log('Ist hier ein Fehler:', err);
     }
-    console.log(this.userData)
   }
 
   chooseChannel(name: string, channel: any) {
@@ -53,7 +52,6 @@ export class NewMessageService {
       this.searchText = '';
       this.text = '';
     } else if (this.channelData) {
-      console.log('Channel Data Id:', this.channelData.id);
       await this.sendMessageFromChannel(this.channelData.id, message);
     }
   }
@@ -115,7 +113,6 @@ export class NewMessageService {
     async sendMessageFromChannel(channelId: string, textContent: string) {
       if (textContent) {
         try {
-          console.log('Console.log vor der generate Doc')
           await this.generateThreadDoc();
         }
         catch(err) {

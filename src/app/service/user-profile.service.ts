@@ -30,7 +30,6 @@ export class UserProfileService {
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
-      console.log('Nutzer Daten von ProfileService', this.currentUser);
     });
 
     if(!name) { name = this.currentUser.name; } 

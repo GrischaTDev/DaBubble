@@ -202,7 +202,6 @@ export class ChannelService {
   * updated in the current dataChannel object, and then saved to the database. It also closes the channel description edit interface.
   */
   async saveChannelDescription() {
-    console.log('this.isEmpty', this.isEmpty)
     if (!this.isChannelDescriptionEmpty) {
       this.chatService.dataChannel.description = this.textareaChannelDescription;
       await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
