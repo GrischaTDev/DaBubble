@@ -47,15 +47,14 @@ export class NewMessageService {
   }
 
 
-  async sendMessage(message: string) {
-      await this.loadDirectChatContent(this.directMessageService.directMessageDocId);
+  async sendMessage(message: string) {  
       if (this.userData) {
+        await this.loadDirectChatContent(this.directMessageService.directMessageDocId);
         this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message);
         this.searchText = '';
         this.text = '';
       } else if (this.channelData) {
-        console.log('Channel Data Id:', this.channelData.id);
-        this.sendMessageFromChannel(this.channelData.id, message);
+        this.sendMessageFromChannelNewChannelMessage(this.channelData.id, message);
       }
   }
 
@@ -121,10 +120,10 @@ export class NewMessageService {
 
   // Send Channel Message 
 
-    async sendMessageFromChannel(channelId: string, textContent: string) {
+    async sendMessageFromChannelNewChannelMessage(channelId: string, textContent: string) {
+      
       if (textContent) {
         try {
-          console.log('Console.log vor der generate Doc')
           await this.generateThreadDoc();
         }
         catch(err) {
@@ -139,7 +138,7 @@ export class NewMessageService {
         this.messageChannel.dateOfLastThreadMessage = Date.now();
         this.messageChannel.numberOfMessage = 0;
         this.channelData.messageChannel.push(this.messageChannel);
-        this.sendMessageChannel();
+        this.sendMessageChannelNewChannelMessage();
       }
     }
 
@@ -161,7 +160,7 @@ export class NewMessageService {
     }, 2000);
   }
 
-  async sendMessageChannel() {
+  async sendMessageChannelNewChannelMessage() {
     this.newThreadOnFb.messageChannel.push(this.messageChannel);
     this.newThreadOnFb.idOfChannelOnThred = this.channelData.id;
     this.newThreadOnFb.name = this.channelData.name;
@@ -172,6 +171,17 @@ export class NewMessageService {
     catch (err) {
       console.log('error', err);
     }
+    this.loadChatFromNewMessage(); 
   }
 
+  loadChatFromNewMessage() {
+    this.router.navigate(['/main', 'chat', this.channelData.id, 'user', 'chat']);
+    this.mainService.watchSingleChannelDoc(this.channelData.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
+    this.chatService.mobileChatIsOpen = true;
+    this.chatService.mobileDirectChatIsOpen = false;
+    this.chatService.desktopChatOpen = true;
+    this.chatService.directChatOpen = false;
+    this.chatService.newMessageOpen = false;
+    this.chatService.text = '';
+  }
 }

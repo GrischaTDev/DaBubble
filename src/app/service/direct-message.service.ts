@@ -272,10 +272,20 @@ export class DirectMessageService {
     this.messageDirectChat.imageToMessage = this.imageMessage as ArrayBuffer;
     this.chatService.dataChannel.messageChannel.push(this.messageDirectChat);
     await this.mainService.addDoc('direct-message', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
-    this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
-    this.chatService.desktopChatOpen = false;
-    this.chatService.directChatOpen = true;
-    this.chatService.newMessageOpen = false;
+    this.loadDirectMessageFromNewMessage();
+  }
+
+  /**
+  * Navigates to the direct message channel when a new message is received and updates chat states.
+  * Clears any text and image messages after navigating.
+  */
+  loadDirectMessageFromNewMessage() {
+    if (this.chatService.newMessageOpen) {
+      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
+      this.chatService.desktopChatOpen = false;
+      this.chatService.directChatOpen = true;
+      this.chatService.newMessageOpen = false;
+    }
     this.chatService.text = '';
     this.imageMessage = '';
   }
