@@ -70,7 +70,6 @@ export class MainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('786543678')
     this.route.params.subscribe((params: any) => {
       this.nameOfContent = params['nameOfContent'];
       this.parmsIdContent = params['id'];

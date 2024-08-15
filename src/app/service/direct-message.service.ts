@@ -301,7 +301,6 @@ export class DirectMessageService {
       this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
       this.switchContent = true;
     } else {
-      console.log('4394309jrff0')
       this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
         this.chatService.dataChannel = dataDirectMessage as Channel
         this.router.navigate(['/main', 'direct-message', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
