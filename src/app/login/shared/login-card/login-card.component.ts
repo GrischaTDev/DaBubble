@@ -63,7 +63,6 @@ export class LoginCardComponent implements OnInit {
         }
       })
       .catch((error: any) => {
-        console.log('Fehler beim login', error);
         if (error.code === 'auth/invalid-credential') {
           this.wrongEmail = 'Diese E-Mail-Adresse ist leider ungültig';
           this.wrongPassword = 'Falsches Passwort. Bitte noch einmal prüfen';
@@ -109,10 +108,8 @@ export class LoginCardComponent implements OnInit {
         if (credential) {
 
           const token = credential.accessToken;
-          console.log(token);
 
           const user = result.user;
-          console.log(user);
           if (user) {
             const userRef = doc(this.firestore, 'users', user.uid);
             await setDoc(userRef, {

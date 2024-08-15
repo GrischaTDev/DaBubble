@@ -35,45 +35,45 @@
 </div>
 
 <div *ngIf="editProfileOpen" class="profile-container" (click)="closeDialog()">
-    <div class="edit-user-pofile-dialog" (click)="doNotClose($event)">
-        <div class="headline">
-            <h2>Dein Profil bearbeiten</h2>
-            <div class="close" (click)="closeDialog()">
-                <mat-icon>close</mat-icon>
-            </div>
-        </div>
-        <div class="avatar">
-            <img src="{{ this.loggedInUser.avatar }}" alt="">
-        </div>
-        <div class="edit-name">
-            <div>
-                <mat-icon class="edit">account_circle</mat-icon>
-                <span>Vollständiger Name</span>
-            </div>
-            <input [(ngModel)]="updateUserName" type="text" placeholder="{{ this.loggedInUser.name }}">
-        </div>
-        <div class="edit-email">
-            <div>
-                <mat-icon class="edit">mail</mat-icon>
-                <span class="titel">E-Mail-Adresse</span>
-            </div>
-            <input [(ngModel)]="updateUserEmail" type="text" placeholder="{{ this.loggedInUser.email }}">
-        </div>
-        <div class="send-email-container" >
-            <div class="verify-mail" *ngIf="userProfileService.isEmailSend" >
-                Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine neue E-Mail-Adresse und bestätige diese.
-            </div>
-            <div class="error-mail" *ngIf="userProfileService.isEmailError" >
-                Verifizierungs-E-Mail wurde nicht gesendet. Bitte melde dich erneut an.
-            </div>
-        </div>
-        <div class="edit-btn">
-            <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>
-            <button [ngClass]="{
-                'primary-btn': updateUserName || updateUserEmail,
-                'disabled-btn': !updateUserName && !updateUserEmail
-              }" (click)="updateCurrentUser()" [disabled]="!updateUserName">Speichern</button>
-        </div>
+  <form #editForm="ngForm" class="edit-user-pofile-dialog" (click)="doNotClose($event)"> 
+    <div class="headline">
+      <h2>Dein Profil bearbeiten</h2>
+      <div class="close" (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+      </div>
     </div>
+    <div class="avatar">
+      <img src="{{ this.loggedInUser.avatar }}" alt="">
+    </div>
+    <div class="edit-name">
+      <div>
+        <mat-icon class="edit">account_circle</mat-icon>
+        <span>Vollständiger Name</span>
+      </div>
+      <input #nameInput="ngModel" [(ngModel)]="updateUserName" name="userName" type="text" placeholder="{{ this.loggedInUser.name }}" pattern="^[a-zA-Z]+ [a-zA-Z]+$" required>
+    </div>
+    <div class="edit-email">
+      <div>
+        <mat-icon class="edit">mail</mat-icon>
+        <span class="titel">E-Mail-Adresse</span>
+      </div>
+      <input #emailInput="ngModel" [(ngModel)]="updateUserEmail" name="userEmail" type="email" placeholder="{{ this.loggedInUser.email }}" pattern="^[^@]+@[^@]+\.(de|com)$" required>
+    </div>
+    <div class="send-email-container" >
+      <div class="verify-mail" *ngIf="userProfileService.isEmailSend" >
+        Verifizierungs-E-Mail wurde gesendet. Bitte überprüfe deine neue E-Mail-Adresse und bestätige diese.
+      </div>
+      <div class="error-mail" *ngIf="userProfileService.isEmailError" >
+        Verifizierungs-E-Mail wurde nicht gesendet. Bitte melde dich erneut an.
+      </div>
+    </div>
+    <div class="edit-btn">
+      <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>
+      <button [ngClass]="{
+        'primary-btn': (nameInput.valid || emailInput.valid) && (nameInput.dirty || emailInput.dirty),
+        'disabled-btn': (!nameInput.valid && !emailInput.valid) || (nameInput.pristine && emailInput.pristine)
+      }" (click)="updateCurrentUser()" [disabled]="(!nameInput.valid && !emailInput.valid) || (nameInput.pristine && emailInput.pristine)">Speichern</button>
+    </div>
+  </form> 
 </div>
 

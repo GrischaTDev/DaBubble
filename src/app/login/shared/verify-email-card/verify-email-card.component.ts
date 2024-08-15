@@ -30,7 +30,6 @@ export class VerifyEmailCardComponent {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    console.log('Eingegebene E-Mail Adresse:', this.newEmail)
 
     try {
 
@@ -43,10 +42,8 @@ export class VerifyEmailCardComponent {
           await setDoc(doc(this.firestore, 'users', user.uid), {
             email: this.newEmail
           }, { merge: true });
-          console.log('Daten wurden auf firebase hochgeladen..')
 
           await updateEmail(user, this.newEmail);
-          console.log(user);
 
           setTimeout(() => {
             this.loginService.setResetPasswordOverlay(false);
@@ -64,7 +61,6 @@ export class VerifyEmailCardComponent {
         await setDoc(doc(this.firestore, 'users', user.uid), {
           email: this.newEmail
         }, { merge: true });
-        console.log('Daten wurden auf firebase hochgeladen..')
   
         if (error.code === 'auth/user-token-expired') {
           this.router.navigate(['login']);

@@ -46,7 +46,6 @@ export class DialogMentionUsersComponent {
   addMentionUser(user: User) {
     this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1); 
-    console.log(lastChar);
     if (lastChar !== '@') {
       this.inputContent += '@' + user.name; 
     } else {

@@ -45,8 +45,6 @@ export class RegisterCardComponent implements OnInit {
   submitRegister(registerForm: NgForm) {
     if(registerForm.valid) {
       this.saveRegister();
-    } else {
-      console.log('Bitte fülle alle restlichen Felder aus');
     }
   }
 

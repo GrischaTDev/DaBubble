@@ -39,7 +39,6 @@ export class NewMessageService {
     catch (err) {
       console.log('Ist hier ein Fehler:', err);
     }
-    console.log(this.userData)
   }
 
   chooseChannel(name: string, channel: any) {
@@ -122,27 +121,27 @@ export class NewMessageService {
 
   // Send Channel Message 
 
-  async sendMessageFromChannel(channelId: string, textContent: string) {
-    if (textContent) {
-      try {
-        console.log('Console.log vor der generate Doc')
-        await this.generateThreadDoc();
+    async sendMessageFromChannel(channelId: string, textContent: string) {
+      if (textContent) {
+        try {
+          console.log('Console.log vor der generate Doc')
+          await this.generateThreadDoc();
+        }
+        catch(err) {
+          console.log('Error', err);
+        }
+        this.messageChannel.message = textContent;
+        this.messageChannel.date = Date.now();
+        this.messageChannel.userId = this.mainService.loggedInUser.id;
+        this.messageChannel.userName = this.mainService.loggedInUser.name;
+        this.messageChannel.userEmail = this.mainService.loggedInUser.email;
+        this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
+        this.messageChannel.dateOfLastThreadMessage = Date.now();
+        this.messageChannel.numberOfMessage = 0;
+        this.channelData.messageChannel.push(this.messageChannel);
+        this.sendMessageChannel();
       }
-      catch (err) {
-        console.log('Error', err);
-      }
-      this.messageChannel.message = textContent;
-      this.messageChannel.date = Date.now();
-      this.messageChannel.userId = this.mainService.loggedInUser.id;
-      this.messageChannel.userName = this.mainService.loggedInUser.name;
-      this.messageChannel.userEmail = this.mainService.loggedInUser.email;
-      this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
-      this.messageChannel.dateOfLastThreadMessage = Date.now();
-      this.messageChannel.numberOfMessage = 0;
-      this.channelData.messageChannel.push(this.messageChannel);
-      this.sendMessageChannel();
     }
-  }
 
   async generateThreadDoc() {
     this.sendetMessage = true;
