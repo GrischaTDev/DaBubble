@@ -32,6 +32,7 @@
             class="desktop-chat-header-members-img"
             src="{{ singleUserHeader.avatar }}"
             alt="singleUserHeaderImg"
+            *ngIf="singleUserIndexHeader < 3"
           />
         </div>
         <span class="desktop-chat-header-members-number">
