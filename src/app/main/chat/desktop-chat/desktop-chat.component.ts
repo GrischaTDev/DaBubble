@@ -80,6 +80,7 @@ export class DesktopChatComponent implements OnInit {
     }, 500);
   }
 
+
   /**
    * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
    * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.

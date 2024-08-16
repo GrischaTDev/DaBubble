@@ -76,8 +76,10 @@ export class AddChannelComponent implements OnInit {
 
   checkChannelNames() {
     const lowerCaseNewChannelName = this.newChannelName.toLowerCase();
-    this.searchChannelName = this.mainService.allChannels.find(channelName => channelName.name.toLowerCase() === lowerCaseNewChannelName);
-  
+    this.searchChannelName = this.mainService.allChannels.find(
+      (channelName) =>
+        channelName.name.toLowerCase() === lowerCaseNewChannelName
+    );
 
     if (this.newChannelName !== '' && !this.searchChannelName) {
       this.checkName = true;
@@ -113,9 +115,7 @@ export class AddChannelComponent implements OnInit {
   openAddUserMenu(event: Event) {
     event.stopPropagation();
     this.addUserMenu = !this.addUserMenu;
-    if (this.isDesktop) {
-      this.isAddUserMenuOpen = true;
-    }
+    this.isAddUserMenuOpen = true;
   }
 
   /**
@@ -168,7 +168,13 @@ export class AddChannelComponent implements OnInit {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.activeChannelId = channel.id;
-    this.router.navigate(['/main', 'chat', this.mainService.docId, 'user', 'chat']);
+    this.router.navigate([
+      '/main',
+      'chat',
+      this.mainService.docId,
+      'user',
+      'chat',
+    ]);
     this.mainService
       .watchSingleChannelDoc(this.mainService.docId, 'channels')
       .subscribe((dataChannel) => {
