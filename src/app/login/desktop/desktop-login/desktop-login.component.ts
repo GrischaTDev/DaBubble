@@ -31,14 +31,10 @@ import { CommonModule } from '@angular/common';
       ])
     ]),
     trigger('movingLogo', [
-      state('center', style({
-        top: '50%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0, visibility: 'hidden', witdh: '700px'
-      })),
-      state('final', style({
-        top: '75px', left: '75px', transform: 'translate(0, 0)', opacity: 1, visibility: 'visible', width: '243px'
-      })),
+
       transition('center => final', [
-        animate('1s ease-out')
+        style({ top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 10, opacity: 0 }),
+        animate('1s ease-out', style({ top: '75px', left: '75px', transform: 'translate(0, 0)', opacity: 1 }))
       ])
     ])
   ],

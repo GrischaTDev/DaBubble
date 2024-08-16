@@ -58,7 +58,11 @@ export class LoginCardComponent implements OnInit {
             online: true
           }, { merge: true });
 
-          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('user', JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL
+        }));
           this.router.navigate(['/main','chat', this.mainService.allChannels[0].id, 'user', 'chat']);
         }
       })
@@ -91,7 +95,11 @@ export class LoginCardComponent implements OnInit {
             online: true
           }, { merge: true });
 
-          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('user', JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL
+        }));
           this.router.navigate(['/main','chat', this.mainService.allChannels[0].id, 'user', 'chat']);
         }
       })
@@ -99,10 +107,12 @@ export class LoginCardComponent implements OnInit {
 
   async loginWithGoogle() {
 
-    const auth = getAuth();
+    try {
+
+      const auth = getAuth();
     const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider)
+    await signInWithPopup(auth, provider)
       .then(async (result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (credential) {
@@ -120,12 +130,23 @@ export class LoginCardComponent implements OnInit {
               online: true
             }, { merge: true });
 
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify({
+              uid: user.uid,
+              displayName: user.displayName,
+              photoURL: user.photoURL
+          }));
 
           }
           this.router.navigate(['/main','chat', this.mainService.allChannels[0].id, 'user', 'chat']);
         }
       })
-  }
+
+
+    }
+    catch (error) {
+      console.error("Fehler bei der Anmeldung mit Google:", error);
+    } 
+
+  } 
 
 }
