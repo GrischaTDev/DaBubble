@@ -24,8 +24,8 @@ import { animate, AnimationEvent, query, sequence, style, transition, trigger } 
       transition('hidden => visible', [
         sequence([
           query('h1', [
-            style({ display: 'none', transform: 'translateX(-100%)' }),
-            animate('500ms ease-in', style({ display: 'block', transform: 'translateX(0)' }))
+            style({ opacity: 0, visibility: 'hidden', transform: 'translateX(-100%)' }),
+            animate('500ms ease-in', style({ opacity: 1, visibility: 'visible', transform: 'translateX(0)' }))
           ], { optional: true })
         ])
       ]),
@@ -61,7 +61,10 @@ export class MobileLoginComponent {
   ngOnInit(): void {
     setTimeout(() => {
       this.isVisible = 'visible';
-    }, 0);
+      const headlineAnimation = document.getElementById('headlineMobile');
+      headlineAnimation?.classList.remove('hidden');
+      headlineAnimation?.classList.add('visible')
+    }, 1000);
   }
 
   toggleToHidden(event: any): void {
@@ -69,16 +72,16 @@ export class MobileLoginComponent {
       setTimeout(() => {
         this.isVisible = 'hidden';
         this.hideAnimationContainer = false;
-      }, 2000);
+      }, 1000);
       setTimeout(() => {
         this.isSectionVisible = 'visible';
         this.showSection = true;
-      }, 2000); 
+      }, 1000); 
       setTimeout(() => {
         if(this.showSection) {
           this.isLogoMoving = 'final'; 
         }
-      }, 2000);
+      }, 1000);
     }
   }
 

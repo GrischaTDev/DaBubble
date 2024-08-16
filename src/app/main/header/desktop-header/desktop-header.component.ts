@@ -13,6 +13,8 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';
 import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-header',
@@ -25,8 +27,9 @@ export class DesktopHeaderComponent implements OnInit {
   currentUser: any;
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
-
+  private subscription: Subscription = new Subscription();
   searchValue: string = '';
+  allChannel: Channel[] = [];
 
   constructor(
     public mainService: MainServiceService,
@@ -34,7 +37,8 @@ export class DesktopHeaderComponent implements OnInit {
     private router: Router,
     private directMessageService: DirectMessageService,
     private chatService: ChatService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
+    public threadService: ThreadService
   ) {}
 
   /**
@@ -47,6 +51,10 @@ export class DesktopHeaderComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
+    });
+
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
     });
   }
 
@@ -71,7 +79,7 @@ export class DesktopHeaderComponent implements OnInit {
   openChannel(channel: any) {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
-    this.router.navigate(['/main', channel.id]);
+    this.router.navigate(['/main', 'chat', channel.id, 'user', 'chat']);
     this.mainService
       .watchSingleChannelDoc(channel.id, 'channels')
       .subscribe((dataChannel) => {
@@ -107,6 +115,7 @@ export class DesktopHeaderComponent implements OnInit {
    * Logs out the user.
    */
   logout() {
+    this.threadService.closeThread();
     const auth = getAuth();
     this.loginService.logoutUser(auth);
   }

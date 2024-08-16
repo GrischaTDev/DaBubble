@@ -2,8 +2,8 @@
 
 .emoji-container {
   position: fixed; 
-  right: 50px; 
-  bottom: 194px; 
+  right: 70px; 
+  bottom: 210px; 
   display: inline-block; 
   background: rgba(241, 241, 241, 0.5);
 }
@@ -11,33 +11,31 @@
 .emoji-container-thread-open {
   position: fixed; 
   right: 29%;
-  bottom: 194px; 
+  bottom: 210px; 
   display: inline-block; 
   background: rgba(241, 241, 241, 0.5);
 }
 
-@media (max-width: 1856px) {
-  .emoji-container {
-    bottom: 176px; 
-  }
+.emoji-container-open-from-thread {
+  position: fixed; 
+  right: 50px; 
+  bottom: 210px; 
+  display: inline-block; 
+  background: rgba(241, 241, 241, 0.5);
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 960px) {
   .emoji-container {
-    bottom: 194px; 
+    right: 20px; 
+    bottom: 164px; 
   }
 }
-
-@media (max-width: 1320px) {
-  .emoji-container {
-    bottom: 176px; 
-  }
-}
-
 
 @media (max-width: 400px) {
   .emoji-container {
     right: calc((100vw - 343px) / 2); 
-    bottom: 164px; 
+   
   }
 }
+
+

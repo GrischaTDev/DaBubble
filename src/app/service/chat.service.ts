@@ -1,19 +1,19 @@
-import { ElementRef, HostListener, Injectable, ViewChild, inject } from '@angular/core';
+import { HostListener, Injectable, inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
 import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { MainServiceService } from './main-service.service';
-import { collection, doc, docData, Firestore, getDoc, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { MentionUser } from '../../assets/models/mention-user.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
 import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, Subject } from 'rxjs';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { NewMessageService } from './new-message.service';
 
 
 @Injectable({
@@ -22,14 +22,7 @@ import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  dialogInstance:
-    | MatDialogRef<DialogEmojiComponent, any>
-    | MatDialogRef<DialogMentionUsersComponent, any>
-    | MatDialogRef<DialogUserChatComponent, any>
-    | MatDialogRef<DialogAddUserComponent, any>
-    | MatDialogRef<DialogEditChannelComponent, any>
-    | MatDialogRef<DialogImageMessageComponent, any>
-    | undefined;
+  dialogInstance: | MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any> | MatDialogRef<DialogAddUserComponent, any> | MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any> | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   dialogAddUserOpen = false;
@@ -55,25 +48,32 @@ export class ChatService {
   loggedInUser: User = new User();
   mobileChatIsOpen: boolean = false;
   mobileDirectChatIsOpen: boolean = false;
+  mobileThreadIsOpen: boolean = false;
   directChatOpen: boolean = false;
   desktopChatOpen: boolean = true;
   newMessageOpen: boolean = false;
   isThreadOpen: boolean = false;
-  private subscription: Subscription = new Subscription();
-  private itemsSubscription?: Subscription;
   imageMessage: string | ArrayBuffer | null = '';
   indexOfThreadMessageForEditChatMessage: number = 0;
   ownerThreadMessage: boolean = false;
   sendetMessage: boolean = false;
+  indexOfThreadMessage: number = 0;
+  emojiReactionIndexHoverThread: number | null = null;
+  activeMessageIndexReactonThread: number | null = null;
+  fromDirectChat: boolean = false;
+  private channelChangedSource = new Subject<void>();
+  channelChanged$ = this.channelChangedSource.asObservable();
+  constructor(public mainService: MainServiceService, private router: Router) { }
 
-  constructor(public mainService: MainServiceService, private router: Router) {
+  /**
+  * Triggers a notification to indicate that the chat focus has changed.
+  */
+  activateChatFocus() {
+    this.channelChangedSource.next();
   }
 
   /**
    * Adjusts the height of a textarea to fit its content without scrolling.
-   * This function sets the textarea's overflow to hidden and height to the scrollHeight of the textarea,
-   * ensuring that the textarea fully displays all its content without needing an internal scrollbar.
-   * @param {EventTarget | null} eventTarget - The target of the event, expected to be a textarea element, or null.
    */
   adjustHeight(eventTarget: EventTarget | null): void {
     if (eventTarget instanceof HTMLTextAreaElement) {
@@ -87,8 +87,7 @@ export class ChatService {
 
   /**
    * Manages the state of the emoji dialog. If the emoji dialog is not open or if the chat dialog is open,
-   * it attempts to close any currently open dialogs and opens the emoji dialog. If the emoji dialog is already open,
-   * it simply closes it.
+   * it attempts to close any currently open dialogs and opens the emoji dialog. 
    */
   openDialogEmoji() {
     this.mainService.emojiReactionMessage = false;
@@ -103,8 +102,7 @@ export class ChatService {
 
   /**
    * Manages the state of the chat dialog. If the chat dialog is not open or if the emoji dialog is open,
-   * it closes any currently open dialogs and then opens the chat dialog. If the chat dialog is already open,
-   * it simply closes it.
+   * it closes any currently open dialogs and then opens the chat dialog. 
    */
   openDialogMentionUser() {
     if (!this.dialogMentionUserOpen || this.dialogEmojiOpen) {
@@ -114,11 +112,15 @@ export class ChatService {
     } else {
       this.closeDialog();
     }
+    setTimeout(() => { 
+      this.activateChatFocus();
+    } , 400);
+    
   }
 
   /**
- * Toggles the user addition dialog. Opens the dialog if it's not already open and closes it if it is.
- */
+  * Toggles the user addition dialog. Opens the dialog if it's not already open and closes it if it is.
+  */
   openDialogAddUser() {
     if (!this.dialogAddUserOpen) {
       this.closeDialog();
@@ -129,6 +131,10 @@ export class ChatService {
     }
   }
 
+  /**
+  * Opens a dialog with an image message.
+  * @param {ArrayBuffer} image - The image data to display in the dialog.
+  */
   openImageMessageDialog(image: ArrayBuffer) {
     const dialogRef = this.dialog.open(DialogImageMessageComponent, {
       data: { image: image }
@@ -136,16 +142,14 @@ export class ChatService {
   }
 
   /**
-   * Handles the emoji button click event.
-   * Prevents the event from propagating to parent elements.
+   * Handles the emoji button click event. Prevents the event from propagating to parent elements.
    */
   onButtonClick(event: MouseEvent): void {
     event.stopPropagation(); // Stoppt die Übertragung des Events zum Elternelement
   }
 
   /**
-   * Closes the dialog if it is currently open.
-   * Logs the attempt and the result of the dialog closure.
+   * Closes the dialog if it is currently open. Logs the attempt and the result of the dialog closure.
    */
   closeDialog(): void {
     if (this.dialogInstance) {
@@ -157,9 +161,7 @@ export class ChatService {
   }
 
   /**
-   * Prevents an event from bubbling up the event chain.
-   * Typically used to stop a parent handler from being notified of an event.
-   * @param {Event} event - The event to stop propagation for.
+   * Prevents an event from bubbling up the event chain. Typically used to stop a parent handler from being notified of an event.
    */
   doNotClose(event: Event) {
     event.stopPropagation();
@@ -167,11 +169,10 @@ export class ChatService {
 
   /**
    * Asynchronously sends a message from a specific channel, updating the channel data and triggering
-   * a sendMessage process.
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
     if (textContent || this.imageMessage) {
-      await this.generateThreadDoc();
+      // await this.generateThreadDoc();
       this.messageChannel.message = textContent;
       this.messageChannel.date = Date.now();
       this.messageChannel.userId = this.mainService.loggedInUser.id;
@@ -191,16 +192,16 @@ export class ChatService {
   */
   resetMessageContent() {
     this.text = '';
-    this.imageMessage = '';
+    setTimeout(() => {
+      this.imageMessage = '';
+    }, 2000);
     setTimeout(() => {
       this.sendetMessage = false;
-    }, 2000);   
+    }, 2000);
   }
 
   /**
-  * Asynchronously generates a new document for a thread in Firebase.
-  * It sets the newly created document's ID in the main service and updates it in the Firestore database.
-  * 
+  * Asynchronously generates a new document for a thread in Firebase. It sets the newly created document's ID in the main service and updates it in the Firestore database.
   */
   async generateThreadDoc() {
     this.sendetMessage = true;
@@ -225,16 +226,13 @@ export class ChatService {
 
   /**
   * Clears the content of the image message.
-  * 
-  * @function deleteMessage
   */
   deleteMessage() {
     this.imageMessage = '';
   }
 
   /**
-  * Handles file selection events and reads the first selected file as a data URL.
-  * If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+  * Handles file selection events and reads the first selected file as a data URL. If the file is successfully read, the resulting data URL is stored in `imageMessage`.
   */
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -252,8 +250,6 @@ export class ChatService {
 
   /**
    * Converts a timestamp from the server into a localized date string. If the date is today, it returns "Heute".
-   * @param {number} timeFromServer - The timestamp from the server to be converted.
-   * @returns {string} A formatted date string or "Heute" if the date is today.
    */
   setDate(timeFromServer: number): string {
     const date = new Date(timeFromServer);
@@ -270,8 +266,6 @@ export class ChatService {
 
   /**
    * Converts a timestamp from the server into a localized time string in 24-hour format.
-   * @param {number} timeFromServer - The timestamp from the server to be converted.
-   * @returns {string} A formatted time string in HH:mm format.
    */
   setTime(timeFromServer: number): string {
     const date = new Date(timeFromServer);
@@ -281,21 +275,22 @@ export class ChatService {
 
   /**
    * Checks if the message is sent by the logged-in user.
-   * @param {string} userIdFromMessage - The user ID from the message to compare.
-   * @returns {boolean} True if the message is from the logged-in user, false otherwise.
    */
   ifMessageFromMe(userIdFromMessage: string): boolean {
     return userIdFromMessage === this.mainService.loggedInUser.id;
   }
 
   /**
-   * Manages the state of the emoji dialog. If the emoji dialog is not open or if the chat dialog is open,
-   * it attempts to close any currently open dialogs and opens the emoji dialog. If the emoji dialog is already open,
+   * Manages the state of the emoji dialog. If the emoji dialog is not open or if the chat dialog is open, it attempts to close any currently open dialogs and opens the emoji dialog. If the emoji dialog is already open,
    * it simply closes it.
    */
   openDialogEmojiReactionMessage(index: number) {
     this.mainService.emojiReactionMessage = true;
-    this.indexOfChannelMessage = index;
+    if (!this.mainService.contentToThread) {
+      this.indexOfChannelMessage = index;
+    } else {
+      this.indexOfThreadMessage = index;
+    }
     if (!this.dialogEmojiOpen || this.dialogMentionUserOpen) {
       this.closeDialog();
       this.dialogInstance = this.dialog.open(DialogEmojiComponent);
@@ -326,7 +321,6 @@ export class ChatService {
   /**
   * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
   * If the edit message index matches the provided index, it closes the editor by resetting relevant indices to null.
-  * Otherwise, it sets up the editor for a new message, using the provided content and updates indices to reflect the current editing state.
   */
   toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string): void {
     event.stopPropagation();
@@ -362,26 +356,29 @@ export class ChatService {
     this.loadContenThreadForEditMessage(singleMessageIndex)
       .then(() => {
         this.dataChannel.messageChannel[singleMessageIndex].message = newText;
-        this.dataThread.messageChannel[0].message = newText;
-        this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
-        this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+        if (!this.fromDirectChat) {
+          this.dataThread.messageChannel[0].message = newText;
+          this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel));
+          this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread));
+        } else {  
+          this.mainService.addDoc('direct-message', this.dataChannel.id, new Channel(this.dataChannel));
+        }
         this.closeWithoutSaving();
+        this.fromDirectChat = false;
       })
   }
 
   /**
   * Asynchronously loads a content thread for editing a message based on its index.
-  * @param {number} singleMessageIndex - The index of the message within the message channel.
-  * @returns {Promise<void>} A promise that resolves when the thread content is loaded.
   */
   async loadContenThreadForEditMessage(singleMessageIndex: number): Promise<void> {
-    const dataThreadChannel = await firstValueFrom(
-      this.mainService.watchSingleThreadDoc(
-        this.dataChannel.messageChannel[singleMessageIndex].thread,
-        'threads'
-      )
-    );
-    this.dataThread = dataThreadChannel as Channel;
+      if (!this.fromDirectChat) {
+        const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc( this.dataChannel.messageChannel[singleMessageIndex].thread, 'threads'));
+        this.dataThread = dataThreadChannel as Channel;
+      } else {
+        const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc( this.dataChannel.id, 'direct-message')); 
+        this.dataThread = dataThreadChannel as Channel;
+      }
   }
 
   /**
@@ -394,7 +391,6 @@ export class ChatService {
 
   /**
   * Sets the hovered message index when the mouse enters a specific UI element. This function updates the hoveredMessageIndex to reflect the index of the currently hovered message.
-  * @param {number} index - The index of the message that the mouse has entered.
   */
   onMouseEnter(index: number): void {
     this.hoveredMessageIndex = index;
@@ -409,8 +405,6 @@ export class ChatService {
 
   /**
    * Opens a thread for a given message and initializes relevant properties.
-   * @param {Message} threadMessage - The message object associated with the thread to be opened.
-   * @param {number} indexSingleMessage - The index of the message in the message list.
    */
   async openThread(threadMessage: Message, indexSingleMessage: number) {
     this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe(dataThreadChannel => {

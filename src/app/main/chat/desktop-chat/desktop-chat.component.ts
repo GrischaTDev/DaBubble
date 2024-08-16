@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  ViewChild,
+  OnInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -18,6 +24,9 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service'
+import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -37,21 +46,26 @@ import { ThreadService } from '../../../service/thread.service';
 export class DesktopChatComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
-  dialogInstance?: MatDialogRef<DialogEmojiComponent>;
+  dialogInstance?:
+    | MatDialogRef<DialogEmojiComponent>
+    | MatDialogRef<DialogShowsUserReactionComponent>;
   subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
-
+  emojiReactionIndexHover: number | null = null;
+  activeMessageIndexReacton: number | null = null;
+  private channelSubscription!: Subscription;
+  allChannel: Channel[] = [];
 
   constructor(
-    private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
     public mainService: MainServiceService,
     public directMessageService: DirectMessageService,
     public channelService: ChannelService,
     public loginService: LoginService,
-    public threadService: ThreadService
+    public threadService: ThreadService,
+    public searchField: SearchFieldService
   ) {
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
       if (!this.chatService.editOpen) {
@@ -60,29 +74,27 @@ export class DesktopChatComponent implements OnInit {
         this.chatService.editText += content;
       }
     });
-        this.route.params.subscribe((params: any) => {
-      this.parmsId = params.id;
-      chatService.idOfChannel = params.id;
-    });
-    this.chatService.loggedInUser = this.mainService.loggedInUser;  
+    this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
   }
 
+
   /**
- * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
- * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
- * This is typically used to ensure that the component has access to the latest user information when it is initialized.
- */
+   * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+   */
   ngOnInit() {
-    this.loginService.currentLoggedUser()
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
-      this.chatService.dataChannel = dataChannel as Channel;
-    }); 
+
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -95,12 +107,29 @@ export class DesktopChatComponent implements OnInit {
    * and updates the last known scrollHeight.
    */
   ngAfterViewChecked() {
-    if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
-    ) {
-      this.scrollToBottom();
-      this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+    if(this.allChannel.length !== 0) {
+      if (
+        this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
+        this.chatService.sendetMessage
+      ) {
+        this.scrollToBottom();
+        this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
+      }
     }
+  }
+
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+  ngAfterViewInit() {
+      this.focusInputField();
+      this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+      this.focusInputField();
+    });
+  }
+
+  private focusInputField() {
+      setTimeout(() => {
+        this.meinInputField.nativeElement.focus();
+      }, 0);
   }
 
   /**
@@ -108,8 +137,25 @@ export class DesktopChatComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
+    if(this.allChannel.length !== 0) {
+      this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
+    }
+  }
+
+  toggleIconHoverContainerChat(
+    singleMessageIndex: number,
+    emojiUserIndex: number,
+    event: MouseEvent
+  ) {
+    event.stopPropagation();
+    this.activeMessageIndexReacton = singleMessageIndex;
+    this.emojiReactionIndexHover = emojiUserIndex;
+  }
+
+  toggleIconHoverContainerChatOut(event: MouseEvent) {
+    this.activeMessageIndexReacton = null;
+    this.emojiReactionIndexHover = null;
   }
 
   /**
@@ -118,6 +164,28 @@ export class DesktopChatComponent implements OnInit {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+
+    if (this.channelSubscription) {
+      this.channelSubscription.unsubscribe();
+    }
+  }
+
+  chooseUser(name: string) {
+    const atIndex = this.chatService.text.lastIndexOf('@');
+    if (atIndex !== -1) {
+      this.chatService.text =
+        this.chatService.text.slice(0, atIndex + 1) + name + ' ';
+      this.searchField.filterUser = [];
+    }
+  }
+
+  checkForEnter(event: KeyboardEvent): void {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.chatService.sendMessageFromChannel(
+        this.chatService.dataChannel.id,
+        this.chatService.text
+      )
+    }
   }
 }
-

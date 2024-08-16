@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MainServiceService } from './main-service.service';
 import { ChatService } from './chat.service';
 import { Emoji } from '../../assets/models/emoji.class';
@@ -10,11 +10,7 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class EmojiService {
-  constructor(
-    public mainService: MainServiceService,
-    public chatService: ChatService,
-    public threadService: ThreadService
-  ) { }
+  constructor(public mainService: MainServiceService, public chatService: ChatService, public threadService: ThreadService) { }
   emojiIsAvailable = false;
   userIsAvailable = false;
   newEmoji: Emoji = new Emoji();
@@ -28,36 +24,76 @@ export class EmojiService {
   /**
    * Adds a reaction to a message in the current channel, updating the emoji reactions based on the user interactions.
    * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
-   * @param {string} emoji - The emoji character to add as a reaction.
    */
-async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
-  this.chatService.indexOfChannelMessage = indexSingleMessage;
-    this.pushEmojieToRelatedMessageOfTheThread()
-      .then(() => {
-        let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
-        if (dataEmoji.length !== 0) {
-          this.preparedSearchUserAndEmoji(emoji, dataEmoji);
-          this.selectionTheAddedEmojiChannel(emoji);
-        } else {
-          this.pushEmojiToArray(emoji);
-          this.saveEmojiContentToFb();
-        }
-      })
+  async addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
+    this.chatService.indexOfChannelMessage = indexSingleMessage;
+    if (!this.chatService.isThreadOpen) {
+      this.pushEmojieToRelatedMessageOfTheChat(indexSingleMessage).then(() => {this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
+    } else {
+      this.pushEmojieToRelatedMessageOfTheThreadOpen().then(() => { this.addReactionToMessageChannelSetData(emoji, indexSingleMessage) })
+    }
   }
+
+  /**
+* Asynchronously pushes an emoji to the related message of the thread if not already done.
+* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
+*/
+  async pushEmojieToRelatedMessageOfTheChat(indexSingleMessage: number): Promise<void> {
+    if (!this.emojiToDirectMessage) {
+      const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads'));
+      this.emojiServiceThread = dataThreadChannel as Channel;
+    } else {
+      this.emojiServiceThread = this.chatService.dataChannel as Channel;
+    }
+  }
+
+  /**
+* Asynchronously pushes an emoji to the related message of the thread if not already done.
+* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
+*/
+  async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
+    if (!this.emojiToDirectMessage) {
+      const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads'));
+      this.emojiServiceThread = dataThreadChannel as Channel;
+    }
+  }
+
+  /**
+  * Adds an emoji reaction to a specific message in a message channel.
+  * If the message already has emoji reactions, it prepares and processes the user and emoji data.
+  * If the message has no emoji reactions, it adds the emoji to the array and saves the updated content.
+  */
+  async addReactionToMessageChannelSetData(emoji: string, indexSingleMessage: number) {
+    let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
+    if (dataEmoji.length !== 0) {
+      this.preparedSearchUserAndEmoji(emoji, dataEmoji);
+      await this.selectionTheAddedEmojiChannel(emoji, indexSingleMessage);
+      if (this.emojiToChannel) {
+        await this.selectionTheAddedEmojiThread(emoji, 0)
+      }
+    } else {
+      this.pushEmojiToArray(emoji);
+      this.saveEmojiContentToFb();
+    }
+  }
+
 
   /**
   * Adds a reaction to a message in the current channel, updating the emoji reactions based on the user interactions.
   * It processes all current reactions for the message, searching and updating as needed, and then marks the added emoji.
-  * @param {string} emoji - The emoji character to add as a reaction.
   */
-  addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
-    this.chatService.indexOfChannelMessage = indexSingleMessage;
+  async addReactionToMessageThread(emoji: string, indexSingleMessage: number) {
+    this.chatService.indexOfThreadMessage = indexSingleMessage;
     let dataEmoji = this.chatService.dataThread.messageChannel[indexSingleMessage].emojiReaction;
+    this.emojiServiceThread = this.chatService.dataThread;
     if (dataEmoji.length !== 0) {
       this.preparedSearchUserAndEmoji(emoji, dataEmoji);
-      this.selectionTheAddedEmojiThread(emoji);
+      await this.selectionTheAddedEmojiThread(emoji, indexSingleMessage);
+      if (indexSingleMessage === 0) {
+        await this.selectionTheAddedEmojiChannel(emoji, this.chatService.indexOfThreadMessageForEditChatMessage);
+      }
     } else {
-      this.pushEmojiToArray(emoji);
+      this.pushEmojiToArrayThread(emoji);
       this.saveEmojiContentToFb();
     }
   }
@@ -65,12 +101,8 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   /**
    * Prepares and initiates a search through existing emoji reactions to find specific user and emoji matches.
    * Calls a function to handle each individual search iteration.
-   * @param {string} emoji - The emoji to search for within the reactions.
    */
-  preparedSearchUserAndEmoji(
-    emoji: string,
-    data: { emoji: string; user: string[] }[]
-  ) {
+  preparedSearchUserAndEmoji(emoji: string, data: { emoji: string; user: string[] }[]) {
     for (let index = 0; index < data.length; index++) {
       const emojiFb = data[index].emoji;
       const userFb = data[index].user;
@@ -80,29 +112,31 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
 
   /**
    * Flags that an additional reaction is being added and calls the method to add a reaction to a message.
-   * @param {string} emoji - The emoji to add as a reaction.
    */
-  addAdditionalReactionToMessage(
-    emoji: string,
-    singleMessageIndex: number,
-    emojiIndex: number
-  ) {
+  addAdditionalReactionToMessage(emoji: string, singleMessageIndex: number, emojiIndex: number) {
     this.additionalReaction = true;
-    this.chatService.indexOfChannelMessage = singleMessageIndex;
     this.emojiIndex = emojiIndex;
     if (this.emojiToChannel || this.emojiToDirectMessage) {
+      this.chatService.indexOfChannelMessage = singleMessageIndex;
       this.addReactionToMessageChannel(emoji, this.chatService.indexOfChannelMessage);
-    } else if (this.emojieToThread) {
-      this.addReactionToMessageThread(emoji, this.chatService.indexOfChannelMessage);
+    }
+  }
+
+  /**
+ * Flags that an additional reaction is being added and calls the method to add a reaction to a message.
+ */
+  addAdditionalReactionToMessageThread(emoji: string, singleMessageIndex: number, emojiIndex: number) {
+    this.additionalReaction = true;
+    this.emojiIndex = emojiIndex;
+    if (this.emojieToThread) {
+      this.chatService.indexOfThreadMessage = singleMessageIndex;
+      this.addReactionToMessageThread(emoji, this.chatService.indexOfThreadMessage);
     }
   }
 
   /**
    * Searches through a list of users associated with a specific emoji reaction to check for specific conditions.
    * It sets flags if the current logged-in user has already reacted with the emoji or if the emoji is present.
-   * @param {string} emoji - The emoji to search for.
-   * @param {string} emojiFb - The emoji from the feedback (existing emoji reactions).
-   * @param {string[]} userFb - Array of user IDs who have reacted with emojiFb.
    */
   searchUserAndEmoji(emoji: string, emojiFb: string, userFb: string[]) {
     for (let index = 0; index < userFb.length; index++) {
@@ -122,8 +156,8 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
    * Checks if the emoji is already available in the array of reactions; if not, it adds the emoji to the array.
    * @param {string} emoji - The emoji to be added or checked within the array.
    */
-  async selectionTheAddedEmojiChannel(emoji: string) {
-    let arrayEmoji = this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex];
+  async selectionTheAddedEmojiChannel(emoji: string, indexOfData: number) {
+    let arrayEmoji = this.chatService.dataChannel.messageChannel[indexOfData].emojiReaction[this.emojiIndex];
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
       this.pushEmojiToArray(emoji);
     } else if (!this.userIsAvailable && this.emojiIsAvailable) {
@@ -142,10 +176,10 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   * Checks if the emoji is already available in the array of reactions; if not, it adds the emoji to the array.
   * @param {string} emoji - The emoji to be added or checked within the array.
   */
-  async selectionTheAddedEmojiThread(emoji: string) {
-    let arrayEmoji = this.chatService.dataThread.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction[this.emojiIndex];
+  async selectionTheAddedEmojiThread(emoji: string, indexDocNumber: number) {
+    let arrayEmoji = this.emojiServiceThread.messageChannel[indexDocNumber].emojiReaction[this.emojiIndex];
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
-      this.pushEmojiToArray(emoji);
+      this.pushEmojiToArrayThread(emoji);
     } else if (!this.userIsAvailable && this.emojiIsAvailable) {
       this.pushUserToArray(arrayEmoji);
     } else if (this.userIsAvailable && this.emojiIsAvailable) {
@@ -153,7 +187,7 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
         this.removeUserFromEmoji(arrayEmoji);
       }
     } else {
-      this.pushEmojiToArray(emoji);
+      this.pushEmojiToArrayThread(emoji);
     }
     this.saveEmojiContentToFb();
   }
@@ -174,9 +208,23 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
       if (this.emojiToChannel) {
         this.emojiServiceThread.messageChannel[0].emojiReaction.push(this.newEmoji.toJSON());
       }
-    } else if (this.emojieToThread) {
-      this.chatService.dataThread.messageChannel[this.chatService.indexOfChannelMessage].emojiReaction.push(this.newEmoji.toJSON());
-      if (this.chatService.ownerThreadMessage) {
+    }
+  }
+
+  /**
+  * Adds a new emoji reaction to the current message channel.
+  * This method first resets the existing emoji data arrays, sets the new emoji, 
+  * and then records the reacting user's ID, name, and avatar. It finally pushes 
+  * the updated emoji data to the appropriate message channel's emoji reactions.
+  *
+  * @param {string} emoji - The emoji character or string to be added to the message.
+  */
+  pushEmojiToArrayThread(emoji: string) {
+    this.resetEmojiArray();
+    this.setDataEmoji(emoji);
+    if (this.emojieToThread) {
+      this.emojiServiceThread.messageChannel[this.chatService.indexOfThreadMessage].emojiReaction.push(this.newEmoji.toJSON());
+      if (this.chatService.indexOfThreadMessage === 0) {
         this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].emojiReaction.push(this.newEmoji.toJSON());
       }
     }
@@ -194,27 +242,9 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   }
 
   /**
-  * Asynchronously pushes an emoji to the related message of the thread if not already done.
-  * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-  * @returns {Promise<void>} A promise that resolves once the operation is complete.
-  */
-  async pushEmojieToRelatedMessageOfTheThread(): Promise<void> {
-    if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(
-        this.mainService.watchSingleThreadDoc(
-          this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread,
-          'threads'
-        )
-      );
-      this.emojiServiceThread = dataThreadChannel as Channel;
-    }
-  }
-
-  /**
   * Resets the emoji arrays for a user.
   * Clears all existing emoji data by emptying the arrays that hold user emojis,
-  * user names, and user avatars. This method is typically used when initializing
-  * or reinitializing user data in the emoji handling system.
+  * user names, and user avatars. 
   */
   resetEmojiArray() {
     this.newEmoji.user = [];
@@ -225,7 +255,6 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   /**
    * Adds the current logged-in user's ID to the user array of a specific emoji reaction in a message.
    * Updates the document data in Firestore for the channel with the updated reactions.
-   * @param {string} emoji - The emoji associated with the reaction to which the user ID is added.
    */
   pushUserToArray(arrayEmoji: any) {
     arrayEmoji.user.push(this.mainService.loggedInUser.id);
@@ -237,19 +266,21 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   * Removes the logged-in user from the specified emoji object.
   * It updates the emoji object by removing user ID, userName, and userAvatar from their respective arrays.
   * If there are no users left in the emoji object, it calls `removeEmijie`.
-  *
-  * @param {Object} arrayEmoji - The emoji object containing arrays of user IDs, user names, and user avatars.
   */
   removeUserFromEmoji(arrayEmoji: any) {
-    for (let index = 0; index < arrayEmoji.user.length; index++) {
-      const user = arrayEmoji.user[index];
-      if (user === this.mainService.loggedInUser.id) {
-        this.emojiIndex = index;
-        arrayEmoji.user.splice(index, 1);
-        arrayEmoji.userName.splice(index, 1);
-        arrayEmoji.userAvatar.splice(index, 1);
-        if (arrayEmoji.user !== 0) {
-          this.removeEmojie();
+    if (arrayEmoji) {
+      for (let index = 0; index < arrayEmoji.user.length; index++) {
+        const user = arrayEmoji.user[index];
+        if (user === this.mainService.loggedInUser.id) {
+          if (arrayEmoji.user.length !== 0) {
+            if (arrayEmoji.user.length === 1) {
+              this.removeEmojie();
+            } else {
+              arrayEmoji.user.splice(index, 1);
+              arrayEmoji.userName.splice(index, 1);
+              arrayEmoji.userAvatar.splice(index, 1);
+            }
+          }
         }
       }
     }
@@ -268,7 +299,7 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
       }
     } else if (this.emojieToThread) {
       this.removeEmojiFromThreadMessage()
-      if (this.chatService.ownerThreadMessage) {
+      if (this.chatService.indexOfThreadMessage === 0) {
         this.removeEmojiFromThreadMessageAndChannelMessage();
       }
     }
@@ -287,8 +318,8 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   * Removes an emoji reaction from a specific message in the thread's message channel based on the current index.
   */
   removeEmojiFromThreadMessage() {
-    this.chatService.dataThread.messageChannel[
-      this.chatService.indexOfChannelMessage
+    this.emojiServiceThread.messageChannel[
+      this.chatService.indexOfThreadMessage
     ].emojiReaction.splice(this.emojiIndex, 1);
   }
 
@@ -302,29 +333,31 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
     ].emojiReaction.splice(this.emojiIndex, 1);
   }
 
-    /**
+  /**
   * Removes an emoji reaction from a specific message in the channel's message channel based on the current index.
   * This method is used for messages that are part of both a channel and a thread.
   */
-    removeEmojiFromThreadMessageFromChannelMessage() {
-      this.chatService.dataThread.messageChannel[0].emojiReaction.splice(this.emojiIndex, 1);
-    }
+  removeEmojiFromThreadMessageFromChannelMessage() {
+    this.emojiServiceThread.messageChannel[0].emojiReaction.splice(this.emojiIndex, 1);
+  }
 
   /**
   * Asynchronously saves emoji content updates to Firebase based on whether the emoji is added to a channel or a thread.
   * Updates the respective documents for channels and threads with the current state of the dataChannel or emojiServiceThread.
   */
   async saveEmojiContentToFb() {
-    if (this.emojiToChannel || this.emojiToDirectMessage) {
+    if (this.emojiToChannel) {
       await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       if (this.emojiToChannel) {
         await this.mainService.setDocData('threads', this.emojiServiceThread.id, this.emojiServiceThread);
       }
     } else if (this.emojieToThread) {
-      await this.mainService.setDocData('threads', this.chatService.dataThread.id, this.chatService.dataThread);
-      if (this.chatService.ownerThreadMessage) {
+      await this.mainService.setDocData('threads', this.emojiServiceThread.id, this.emojiServiceThread);
+      if (this.chatService.indexOfChannelMessage === 0) {
         await this.mainService.setDocData('channels', this.chatService.dataChannel.id, this.chatService.dataChannel);
       }
+    } else if(this.emojiToDirectMessage) {
+      await this.mainService.setDocData('direct-message', this.chatService.dataChannel.id, this.chatService.dataChannel);
     }
     this.resetReactionVariables()
   }
@@ -334,12 +367,15 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   * processing a new reaction or at the end of an operation involving reactions.
   */
   async resetReactionVariables() {
+    this.pushEmojieToRelatedMessageOfTheChat(this.chatService.indexOfThreadMessageForEditChatMessage);
     this.emojiIsAvailable = false;
     this.userIsAvailable = false;
     this.mainService.emojiReactionMessage = false;
     this.emojiToChannel = false;
     this.emojiToDirectMessage = false;
     this.emojieToThread = false;
+    this.chatService.activeMessageIndexReactonThread = null;
+    this.chatService.emojiReactionIndexHoverThread = null;
   }
 
   /**
@@ -347,12 +383,24 @@ async  addReactionToMessageChannel(emoji: string, indexSingleMessage: number) {
   * @param {string} docName - The name of the document type.
   */
   forWhichDocIsTheEmoji(docName: string) {
+    this.resetForWhichDocIsTheEmoji();
     if (docName === 'channels') {
       this.emojiToChannel = true;
     } else if (docName === 'direct-message') {
       this.emojiToDirectMessage = true;
     } else if (docName === 'thread') {
+      this.mainService.contentToThread = true;
       this.emojieToThread = true;
     }
+  }
+
+  /**
+  * Resets all emoji settings to false, indicating that emojis are not enabled for any message types including channels, direct messages, or threads.
+  */
+  resetForWhichDocIsTheEmoji() {
+    this.emojiToChannel = false;
+    this.emojiToDirectMessage = false;
+    this.emojieToThread = false;
+    this.mainService.contentToThread = false;
   }
 }

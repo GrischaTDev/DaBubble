@@ -38,6 +38,9 @@ export class AddChannelComponent implements OnInit {
   createdChannel: any;
   activeChannelId: string | null = null;
   selectetUser: boolean = false;
+  checkName: boolean = false;
+  searchChannelName: any;
+
   @Output() contentChange = new EventEmitter<string>();
 
   constructor(
@@ -71,6 +74,20 @@ export class AddChannelComponent implements OnInit {
     }
   }
 
+  checkChannelNames() {
+    const lowerCaseNewChannelName = this.newChannelName.toLowerCase();
+    this.searchChannelName = this.mainService.allChannels.find(
+      (channelName) =>
+        channelName.name.toLowerCase() === lowerCaseNewChannelName
+    );
+
+    if (this.newChannelName !== '' && !this.searchChannelName) {
+      this.checkName = true;
+    } else {
+      this.checkName = false;
+    }
+  }
+
   /**
    * Closes the dialog and resets the added user list.
    * Also, sets a timeout to close the add user menu after 2 seconds.
@@ -98,9 +115,7 @@ export class AddChannelComponent implements OnInit {
   openAddUserMenu(event: Event) {
     event.stopPropagation();
     this.addUserMenu = !this.addUserMenu;
-    if (this.isDesktop) {
-      this.isAddUserMenuOpen = true;
-    }
+    this.isAddUserMenuOpen = true;
   }
 
   /**
@@ -153,7 +168,13 @@ export class AddChannelComponent implements OnInit {
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.activeChannelId = channel.id;
-    this.router.navigate(['/main', this.mainService.docId]);
+    this.router.navigate([
+      '/main',
+      'chat',
+      this.mainService.docId,
+      'user',
+      'chat',
+    ]);
     this.mainService
       .watchSingleChannelDoc(this.mainService.docId, 'channels')
       .subscribe((dataChannel) => {

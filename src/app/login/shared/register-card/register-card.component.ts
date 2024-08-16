@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, getAuth } from '@angular/fire/auth';
-import { addDoc, collection, doc, Firestore, getFirestore, setDoc } from '@angular/fire/firestore';
+import { addDoc, arrayUnion, collection, doc, Firestore, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
+import { MainServiceService } from '../../../service/main-service.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-register-card',
@@ -32,7 +34,7 @@ export class RegisterCardComponent implements OnInit {
   isCheckedPolicy: boolean | undefined;
 
 
-  constructor(private router: Router, private firestore: Firestore) { 
+  constructor(private router: Router, private firestore: Firestore, private mainService: MainServiceService) { 
     
   }
 
@@ -43,8 +45,6 @@ export class RegisterCardComponent implements OnInit {
   submitRegister(registerForm: NgForm) {
     if(registerForm.valid) {
       this.saveRegister();
-    } else {
-      console.log('Bitte fülle alle restlichen Felder aus');
     }
   }
 
@@ -69,6 +69,12 @@ export class RegisterCardComponent implements OnInit {
       const userRef = doc(this.firestore, 'users', user.uid);
       await setDoc(userRef, newUser.toJSON());
       this.router.navigate(['/create-avatar']);
+
+      this.mainService.allChannels.forEach(async channel => {
+        channel.channelUsers.push(new User(newUser));
+
+        this.mainService.addDoc('channels', channel.id, new Channel(channel));
+      });
 
     } catch (error: any) {
       console.error("Fehler beim Registrieren des Benutzers:", error);

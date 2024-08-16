@@ -3,7 +3,7 @@
     <div class="logo-container">
         <img src="./../../../../assets/img/logo.svg" alt="">
     </div>
-    <div class="text-container">
+    <div id="headlineMobile" class="text-container hidden">
         <h1>DABubble</h1>
     </div>
 </div>
@@ -21,6 +21,11 @@
         <div class="register-container mobile-register-container">
             Neu bei DABubble?
             <button class="secondary-btn" (click)="routeToRegister()">Konto erstellen</button>
+        </div>
+
+        <div class="impress-policy">
+            <a class="desktop-links" href="/policy">Datenschutz</a>
+            <a class="desktop-links" href="/imprint">Impressum</a>
         </div>
     </div>
 

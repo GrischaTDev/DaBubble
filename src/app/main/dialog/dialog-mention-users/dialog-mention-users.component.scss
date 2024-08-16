@@ -2,8 +2,8 @@
 
 .dialog-mention-users-container {
   position: fixed;
-  right: 50px;
-  bottom: 194px;
+  right: 70px;
+  bottom: 210px;
   display: inline-block;
   background-color: $background-white;
   border: 1px solid $border-gray;
@@ -29,7 +29,33 @@
 .dialog-mention-users-container-thread-open {
   position: fixed;
   right: 29%;
-  bottom: 194px;
+  bottom: 210px;
+  display: inline-block;
+  background-color: $background-white;
+  border: 1px solid $border-gray;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll !important;
+  padding: 16px;
+  max-height: calc(100vh - 250px);
+  gap: 8px;
+  h2 {
+    font-size: 24px;
+    font-size: 700;
+  }
+}
+
+.dialog-mention-users-container-thread-open-from-thread {
+  position: fixed;
+  right: 50px; 
+  bottom: 210px; 
   display: inline-block;
   background-color: $background-white;
   border: 1px solid $border-gray;
@@ -115,24 +141,6 @@
     &:hover {
       color: $background-purple;
     }
-  }
-}
-
-@media (max-width: 1857px) {
-  .dialog-mention-users-container {
-    bottom: 178px;
-  }
-}
-
-@media (max-width: 1400px) {
-  .dialog-mention-users-container {
-    bottom: 194px;
-  }
-}
-
-@media (max-width: 1320px) {
-  .dialog-mention-users-container {
-    bottom: 178px;
   }
 }
 

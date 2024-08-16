@@ -7,9 +7,11 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { Firestore } from '@angular/fire/firestore';
 import { LoginService } from '../../../service/login.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../../../assets/models/user.class';
 import { ChatService } from '../../../service/chat.service';
+import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-mobile-chat-header',
@@ -19,13 +21,23 @@ import { ChatService } from '../../../service/chat.service';
   styleUrl: './mobile-chat-header.component.scss',
 })
 export class MobileChatHeaderComponent implements OnInit {
+  parmsIdContent: string = '';
+  parmsIdUser: string = '';
+  parmsIdOfChat: string = '';
   constructor(
+    private route: ActivatedRoute,
     public mainService: MainServiceService,
-    private firestore: Firestore,
     private loginService: LoginService,
     private router: Router,
-    public chatService: ChatService
-  ) {}
+    public chatService: ChatService,
+    public threadService: ThreadService
+  ) {
+    this.route.params.subscribe((params: any) => {
+      this.parmsIdContent = params['id'];
+      this.parmsIdUser = params['idUser'];
+      this.parmsIdOfChat = params['idOfChat']; 
+    });
+  }
   currentUser: any;
 
   /**
@@ -73,6 +85,7 @@ export class MobileChatHeaderComponent implements OnInit {
    * This method logs out the user by calling the `logoutUser` method of the `loginService` and then navigating to the login page.
    */
   logout() {
+    this.threadService.closeThread();
     const auth = getAuth();
     this.loginService.logoutUser(auth);
 
@@ -87,7 +100,13 @@ export class MobileChatHeaderComponent implements OnInit {
    * Sets the mobileChatIsOpen and mobileDirectChatIsOpen properties of the chatService to false.
    */
   closeMobileChat() {
-    this.router.navigate(['/main', this.chatService.dataChannel.id]);
+    if(this.parmsIdOfChat === 'chat') {
+      this.mainService.watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
+      this.router.navigate(['/main', 'chat',this.chatService.dataChannel.id , 'user', 'chat']);
+    } else {
+      this.mainService.watchSingleChannelDoc(this.parmsIdOfChat, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
+      this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', 'chat']);
+    }
     this.chatService.mobileChatIsOpen = false;
     this.chatService.mobileDirectChatIsOpen = false;
   }

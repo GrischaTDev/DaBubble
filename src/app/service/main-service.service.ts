@@ -56,6 +56,7 @@ export class MainServiceService {
   private dataChannelSubject = new Subject<any>();
   private dataThreadSubject = new Subject<any>();
   private dataDirectMessageSubject = new Subject<any>();
+  private dataUserSubject = new Subject<any>();
   contentToChannel = false;
   contentToDirectMessage = false;
   contentToThread = false;
@@ -213,8 +214,8 @@ export class MainServiceService {
    * This function is typically used to route to a specific chat based on the channel or user's ID.
    * @param {Channel|User} data - The data object containing the ID to navigate to, which can be a Channel or User instance.
    */
-  async goToCollectionPath(data: Channel | User, path: string) {
-    this.router.navigateByUrl(path + data.id);
+  async goToCollectionPath(data: Channel | User, path: string) { 
+    this.router.navigate([path, data.id, 'user', data.id]);
   }
 
   /**
@@ -258,6 +259,22 @@ export class MainServiceService {
     });
     return this.dataThreadSubject.asObservable();
   }
+
+    /**
+  * Observes a single document within a Firestore collection and emits its data via an Observable.
+  * @param {string} docId - The ID of the document to observe.
+  * @param {string} collectionName - The name of the collection containing the document.
+  * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
+  */
+    watchUsersDoc(docId: string, collectionName: string): Observable<any> {
+      onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+        let docData = {
+          ...element.data(),
+        };
+        this.dataUserSubject.next(docData);
+      });
+      return this.dataUserSubject.asObservable();
+    }
 
   /**
   * Observes a single document within a Firestore collection and emits its data via an Observable.

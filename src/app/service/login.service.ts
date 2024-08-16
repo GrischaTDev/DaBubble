@@ -53,9 +53,7 @@ export class LoginService {
       const user = localStorage.getItem('user');
       if (user) {
         this.loggedInUserSubject.next(JSON.parse(user));
-      } else {
-        console.log('No User in localStorage.')
-      }
+      } 
     }
   }
 
@@ -90,11 +88,9 @@ export class LoginService {
       signOut(auth).then(() => {
 
         const localStorageUser = localStorage.getItem('user');
-        console.log("Vor dem Löschen von localStorage, user:", localStorageUser);
 
         if (localStorageUser !== null) {
           localStorage.removeItem('user');
-          console.log("Nach dem Löschen von localStorage, user:", localStorage.getItem('user'));
         } else {
           console.warn("Kein 'user' Eintrag im localStorage vorhanden");
         }

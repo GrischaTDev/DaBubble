@@ -29,7 +29,6 @@ export class ResetPasswordCardComponent {
     this.eventPreventDefault(event);
 
     const auth = getAuth();
-    console.log(this.email);
     sendPasswordResetEmail(auth, this.email)
       .then(() => {
         this.loginService.setResetPasswordOverlay(true);

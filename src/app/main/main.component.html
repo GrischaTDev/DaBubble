@@ -5,7 +5,7 @@
             <span> {{ closeMenuText }}</span>
             <mat-icon>{{ closeMenu }}</mat-icon>
         </div>
-        <app-desktop-channels *ngIf="isWorkspaceOpen"></app-desktop-channels>
+        <app-desktop-channels *ngIf="isWorkspaceOpen"></app-desktop-channels> 
         <app-desktop-chat *ngIf="chatService.desktopChatOpen"></app-desktop-chat>
         <app-desktop-direct-chat *ngIf="chatService.directChatOpen"></app-desktop-direct-chat>
         <app-desktop-new-message *ngIf="chatService.newMessageOpen"></app-desktop-new-message>
@@ -18,5 +18,5 @@
     <app-mobile-channels *ngIf="!chatService.mobileChatIsOpen"></app-mobile-channels>
     <app-mobile-chat *ngIf="chatService.mobileChatIsOpen"></app-mobile-chat>
     <app-direct-chat *ngIf="chatService.mobileDirectChatIsOpen"></app-direct-chat>
-    <app-mobile-thread *ngIf="chatService.isThreadOpen"></app-mobile-thread>
+    <app-mobile-thread *ngIf="chatService.mobileThreadIsOpen"></app-mobile-thread>
 </div>

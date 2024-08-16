@@ -18,6 +18,7 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -51,7 +52,8 @@ export class MobileChatComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public loginService: LoginService,
     public channelService: ChannelService,
-    public threadService: ThreadService
+    public threadService: ThreadService,
+    public searchField: SearchFieldService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -65,6 +67,7 @@ export class MobileChatComponent implements OnInit {
       }
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
+    this.chatService.mobileChatIsOpen = true;
   }
 
   /**
@@ -103,8 +106,12 @@ export class MobileChatComponent implements OnInit {
   * @param {number} width - The current width of the screen.
   */
   private checkScreenSize(width: number) {
-    if (width > 960) {
-      this.router.navigate(['/main', this.chatService.dataChannel.id]);
+    if(this.chatService.mobileChatIsOpen) {  
+      if (width > 960) {
+        this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user', 'chat']);
+        this.chatService.mobileDirectChatIsOpen = false
+        this.chatService.mobileThreadIsOpen = false;  
+      }
     }
   }
 

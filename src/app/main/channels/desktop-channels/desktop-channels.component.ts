@@ -14,6 +14,8 @@ import { Subscription } from 'rxjs';
 import { Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
+import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-channels',
@@ -40,13 +42,16 @@ export class DesktopChannelsComponent implements OnInit {
   selectedChannel: any;
   activeChannelId: string | null = null;
 
+  allChannel: Channel[] = [];
+
   constructor(
-    private firestore: Firestore,
     public mainService: MainServiceService,
     private loginService: LoginService,
     private router: Router,
     public chatService: ChatService,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
+    public threadService: ThreadService,
+    public searchField: SearchFieldService
   ) {}
 
   /**
@@ -57,6 +62,16 @@ export class DesktopChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
+
+      this.subscription = this.searchField.allChannel$.subscribe(channels => {
+        this.allChannel = channels;
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   /**
@@ -64,18 +79,17 @@ export class DesktopChannelsComponent implements OnInit {
    * @param {any} channel - The channel to open.
    */
   openChannel(channel: any) {
-    this.router.navigate(['/main', channel.id]);
-    this.mainService
-      .watchSingleChannelDoc(channel.id, 'channels')
-      .subscribe((dataChannel) => {
-        this.chatService.dataChannel = dataChannel as Channel;
-      });
+    this.threadService.closeThread();
+    this.router.navigate(['/main', 'chat', channel.id, 'user', 'chat']);
+    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = false;
     this.activeChannelId = channel.id;
+    this.chatService.text = '';
+    this.chatService.activateChatFocus();
   }
 
   /**
@@ -87,23 +101,18 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.clickedUser = user;
     await this.directMessageService.directMessageIsAvailable();
     this.directMessageService.directMessageDocId = this.mainService.docId;
+    this.chatService.text = '';
+    this.chatService.activateChatFocus();
   }
 
   /**
    * Opens the new message interface.
    */
   openNewMessage() {
+    this.router.navigate(['/main', 'chat', this.mainService.allChannels[0].id, 'user', 'chat']);
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = true;
-  }
-
-  /**
-   * Navigates to the direct chat with a specific user.
-   * @param {string} userId - The ID of the user to chat with.
-   */
-  navigateToChat(userId: string) {
-    this.router.navigate(['/direct-chat', userId]);
   }
 
   /**

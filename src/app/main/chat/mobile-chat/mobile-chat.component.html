@@ -347,16 +347,32 @@
       </div>
     </div>
   </div>
+
+  <div id="user-result-container" class="user-result-container" *ngIf="chatService.text && searchField.filterUser.length > 0">
+
+    <div class="user-content-container" *ngIf="searchField.filterUser.length > 0">
+        <div class="user-list-container" *ngFor="let user of searchField.filterUser">
+            <div class="user-list" (click)="searchField.chooseUser(user['name'])" >
+              <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
+            </div>
+        </div>
+    </div>
+
+  </div>
+
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
-      <div class="add-image-container" *ngIf="chatService.imageMessage">
-        <img src="{{ chatService.imageMessage }}" alt="" />
-        <div class="delete-img" (click)="chatService.deleteMessage()">
-          <mat-icon>close</mat-icon>
+      <div class="add-image-container-width">
+        <div class="add-image-container" *ngIf="chatService.imageMessage">
+          <img src="{{ chatService.imageMessage }}" alt="" />
+          <div class="delete-img" (click)="chatService.deleteMessage()">
+            <mat-icon>close</mat-icon>
+          </div>
         </div>
       </div>
       <textarea
         [(ngModel)]="chatService.text"
+        (ngModelChange)="searchField.filterDataChannelchat(chatService.text)"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"

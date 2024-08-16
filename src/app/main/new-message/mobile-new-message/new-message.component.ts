@@ -4,6 +4,7 @@ import {
   inject,
   ViewChild,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +21,9 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { SearchFieldService } from '../../../search-field.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { NewMessageService } from '../../../service/new-message.service';
 
 @Component({
   selector: 'app-new-message',
@@ -36,11 +40,10 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
   templateUrl: './new-message.component.html',
   styleUrl: './new-message.component.scss',
 })
-export class NewMessageComponent {
+export class NewMessageComponent implements OnInit {
   items$;
   items;
   parmsId: string = '';
-  text: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
@@ -51,11 +54,17 @@ export class NewMessageComponent {
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
 
+  userData: any;
+  channelData: any;
+  allChannel: Channel[] = [];
+
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public searchField: SearchFieldService,
+    public newMessageService: NewMessageService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -68,9 +77,14 @@ export class NewMessageComponent {
       });
     }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      this.text += content;
+      this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
+  }
+  ngOnInit(): void {
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { getAuth } from '@angular/fire/auth';
 import { doc, Firestore, setDoc } from '@angular/fire/firestore';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { LoginService } from '../../../service/login.service';
 import { error } from 'console';
+import { MainServiceService } from '../../../service/main-service.service';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-avatar-card',
@@ -30,9 +32,9 @@ export class AvatarCardComponent {
     './assets/img/user/user6.svg',
   ];
 
-  selectedAvatarImage: string | ArrayBuffer | null = './assets/img/user/user1.svg';
+  selectedAvatarImage: any = './assets/img/user/user1.svg';
 
-  constructor(private router: Router, private firestore: Firestore, private loginService: LoginService) { }
+  constructor(private router: Router, private firestore: Firestore, private loginService: LoginService, private mainService: MainServiceService) { }
 
   /**
    * 
@@ -59,6 +61,17 @@ export class AvatarCardComponent {
     await setDoc(doc(this.firestore, 'users', user.uid), {
       avatar: this.selectedAvatarImage
     }, { merge: true });
+
+    this.mainService.allChannels.forEach(async channel => {
+
+      const filterId = channel.channelUsers.findIndex(userId => user.uid === userId.id);
+
+      if(filterId) {
+        channel.channelUsers[filterId].avatar = (this.selectedAvatarImage);
+        this.mainService.addDoc('channels', channel.id, new Channel(channel));
+      }
+    });
+
   }
 
   /**
@@ -91,7 +104,6 @@ export class AvatarCardComponent {
    */
   chooseAvatar(index: number) {
     this.selectedAvatarImage = this.avatarImg[index];
-    console.log(this.selectedAvatarImage)
   }
 
   /**

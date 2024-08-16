@@ -11,6 +11,8 @@ import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { SearchFieldService } from '../../../search-field.service';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { Channel } from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-mobile-channels',
@@ -27,6 +29,14 @@ import { FormsModule } from '@angular/forms';
 })
 export class MobileChannelsComponent implements OnInit {
   private dialog = inject(MatDialog);
+  searchValue: string = '';
+  channelListOpen: boolean = true;
+  userListOpen: boolean = true;
+  currentUser: any;
+  arrowIconChannels: string = 'arrow_drop_down';
+  arrowIconUser: string = 'arrow_drop_down';
+  private subscription: Subscription = new Subscription();
+  allChannel: Channel[] = [];
 
   constructor(
     public mainService: MainServiceService,
@@ -36,14 +46,7 @@ export class MobileChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public searchField: SearchFieldService
   ) {}
-  
-  channelListOpen: boolean = true;
-  userListOpen: boolean = true;
-  currentUser: any;
-  arrowIconChannels: string = 'arrow_drop_down';
-  arrowIconUser: string = 'arrow_drop_down';
 
-  searchValue: string = '';
 
 
   /**
@@ -56,15 +59,10 @@ export class MobileChannelsComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
-  }
 
-  /**
-   * Navigates to the direct chat page for the specified user.
-   * 
-   * @param userId - The ID of the user to navigate to the chat for.
-   */
-  navigateToChat(userId: string) {
-    this.router.navigate(['/direct-chat', userId]);
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
   }
 
   /**
@@ -107,10 +105,12 @@ export class MobileChannelsComponent implements OnInit {
    * @param user - The user to open the direct chat with.
    */
   openDirectChat(user: any) {
+    this.chatService.mobileDirectChatIsOpen = true;
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
     this.chatService.clickedUser = user;
     this.searchValue = '';
+    this.directMessageService.openDirectMessage(user);
   }
 
   /**

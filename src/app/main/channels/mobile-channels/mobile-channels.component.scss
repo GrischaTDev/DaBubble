@@ -1,5 +1,15 @@
 @import "./../../../../styles.scss";
 
+/**
+ * 
+ * This selector styles the track of the webkit scrollbar.
+ * It adds a top and bottom margin of 20 pixels.
+ */
+::-webkit-scrollbar-track {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 section {
     height: calc(100vh - 80px);
     padding: 16px;
@@ -25,6 +35,8 @@ section {
     max-height: 40vh;
     overflow-y: auto;
     overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
 
     p {
         font-weight: bold;

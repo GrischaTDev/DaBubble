@@ -58,12 +58,15 @@ export class LoginCardComponent implements OnInit {
             online: true
           }, { merge: true });
 
-          localStorage.setItem('user', JSON.stringify(user));
-          this.router.navigate(['/main', this.mainService.allChannels[0].id]);
+          localStorage.setItem('user', JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL
+        }));
+          this.router.navigate(['/main','chat', this.mainService.allChannels[0].id, 'user', 'chat']);
         }
       })
       .catch((error: any) => {
-        console.log('Fehler beim login', error);
         if (error.code === 'auth/invalid-credential') {
           this.wrongEmail = 'Diese E-Mail-Adresse ist leider ungültig';
           this.wrongPassword = 'Falsches Passwort. Bitte noch einmal prüfen';
@@ -92,27 +95,31 @@ export class LoginCardComponent implements OnInit {
             online: true
           }, { merge: true });
 
-          localStorage.setItem('user', JSON.stringify(user));
-          this.router.navigate(['/main', this.mainService.allChannels[0].id]);
+          localStorage.setItem('user', JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL
+        }));
+          this.router.navigate(['/main','chat', this.mainService.allChannels[0].id, 'user', 'chat']);
         }
       })
   }
 
   async loginWithGoogle() {
 
-    const auth = getAuth();
+    try {
+
+      const auth = getAuth();
     const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider)
+    await signInWithPopup(auth, provider)
       .then(async (result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (credential) {
 
           const token = credential.accessToken;
-          console.log(token);
 
           const user = result.user;
-          console.log(user);
           if (user) {
             const userRef = doc(this.firestore, 'users', user.uid);
             await setDoc(userRef, {
@@ -123,12 +130,23 @@ export class LoginCardComponent implements OnInit {
               online: true
             }, { merge: true });
 
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify({
+              uid: user.uid,
+              displayName: user.displayName,
+              photoURL: user.photoURL
+          }));
 
           }
-          this.router.navigate(['/main', this.mainService.allChannels[0].id]);
+          this.router.navigate(['/main','chat', this.mainService.allChannels[0].id, 'user', 'chat']);
         }
       })
-  }
+
+
+    }
+    catch (error) {
+      console.error("Fehler bei der Anmeldung mit Google:", error);
+    } 
+
+  } 
 
 }

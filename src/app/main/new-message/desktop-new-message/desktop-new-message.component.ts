@@ -4,6 +4,7 @@ import {
   inject,
   ViewChild,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +21,11 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { SearchFieldService } from '../../../search-field.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { Subscription } from 'rxjs';
+import { Channel } from '../../../../assets/models/channel.class';
+import { NewMessageService } from '../../../service/new-message.service';
 
 @Component({
   selector: 'app-desktop-new-message',
@@ -36,11 +42,10 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
   templateUrl: './desktop-new-message.component.html',
   styleUrl: './desktop-new-message.component.scss',
 })
-export class DesktopNewMessageComponent {
+export class DesktopNewMessageComponent implements OnInit {
   items$;
   items;
   parmsId: string = '';
-  text: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   subscription;
@@ -50,12 +55,18 @@ export class DesktopNewMessageComponent {
   loggedInUser: User = new User();
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
+  private channelSubscription!: Subscription;
+
+  allChannel: Channel[] = [];
 
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
     public emojiService: EmojiService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
+    public searchField: SearchFieldService,
+    public directMessageService: DirectMessageService,
+    public newMessageService: NewMessageService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -68,9 +79,21 @@ export class DesktopNewMessageComponent {
       });
     }
     this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      this.text += content;
+      this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
+
+    if (!this.directMessageService.dataDirectMessage) {
+      this.directMessageService.dataDirectMessage = {} as Channel;
+    } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
+      this.directMessageService.dataDirectMessage.messageChannel = [];
+    }
+
+  }
+  ngOnInit(): void {
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -89,6 +112,21 @@ export class DesktopNewMessageComponent {
     } else {
       this.activeMessageIndex = index;
     }
+  }
+
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+
+  ngAfterViewInit() {
+    this.focusInputField();
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+      this.focusInputField();
+    });
+  }
+
+  private focusInputField() {
+    setTimeout(() => {
+      this.meinInputField.nativeElement.focus();
+    }, 0);
   }
 
   @HostListener('document:click', ['$event'])
@@ -130,5 +168,10 @@ export class DesktopNewMessageComponent {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+
+    if (this.channelSubscription) {
+      this.channelSubscription.unsubscribe();
+    }
   }
+
 }
