@@ -8,6 +8,7 @@
         class="user-avatar"
         src="{{ chatService.clickedUser.avatar }}"
         alt="User avatar"
+        referrerpolicy="no-referrer"
       />
       <img
         alt="online-icon"
@@ -32,6 +33,7 @@
           class="user-avatar"
           src="{{ chatService.clickedUser.avatar }}"
           alt="User Avatars"
+          referrerpolicy="no-referrer"
         />
         <span class="user-name">{{ chatService.clickedUser.name }}</span>
       </div>
@@ -178,7 +180,7 @@
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-message-avatar-container"
         >
-          <img src="{{ singleMessage.userAvatar }}" alt="" />
+          <img referrerpolicy="no-referrer" src="{{ singleMessage.userAvatar }}" alt="" />
         </div>
         <div class="desktop-chat-message-content">
           <div

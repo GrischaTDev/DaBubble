@@ -20,6 +20,7 @@
             class="desktop-chat-header-members-img"
             src="{{ ownerUser.avatar }}"
             alt="singleUserHeaderImg"
+            referrerpolicy="no-referrer"
           />
         </div>
         <div
@@ -32,6 +33,7 @@
             class="desktop-chat-header-members-img"
             src="{{ singleUserHeader.avatar }}"
             alt="singleUserHeaderImg"
+            referrerpolicy="no-referrer"
             *ngIf="singleUserIndexHeader < 3"
           />
         </div>
@@ -188,7 +190,7 @@
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-message-avatar-container"
         >
-          <img src="{{ singleMessage.userAvatar }}" alt="" />
+          <img referrerpolicy="no-referrer" src="{{ singleMessage.userAvatar }}" alt="" />
         </div>
         <div class="desktop-chat-message-content">
           <div
