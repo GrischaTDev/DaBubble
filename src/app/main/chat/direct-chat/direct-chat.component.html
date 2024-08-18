@@ -31,7 +31,7 @@
   >
     <div
       class="direct-chat-info"
-      *ngIf="chatService.dataDirectChat.messageChannel.length === 0"
+      *ngIf="chatService.dataChannel?.messageChannel?.length === 0"
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
         <img
