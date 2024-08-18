@@ -44,6 +44,7 @@ export class DirectChatComponent implements OnInit {
   parmsIdContent: string = '';
   parmsIdUser: string = '';
   parmsIdOfChat: string = '';
+  directChatData: Channel = new Channel;
 
   constructor(
     private route: ActivatedRoute,
@@ -76,7 +77,9 @@ export class DirectChatComponent implements OnInit {
   ngOnInit() {  
     if (this.parmsIdContent) {
       this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message').subscribe(dataDirectChat => {
-        this.chatService.dataChannel = dataDirectChat as Channel;
+        console.log(dataDirectChat);
+        this.chatService.dataDirectChat = dataDirectChat as Channel;
+        console.log('Daten von einem Direct-Chat:', this.chatService.dataDirectChat);
       });
     }
     if (this.parmsIdUser) {

@@ -20,6 +20,7 @@ export class NewMessageService {
   messageChannel: Message = new Message();
   dataChannel: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
+  imageMessage: string | ArrayBuffer | null = '';
 
   constructor(
     private chatService: ChatService,
@@ -137,6 +138,7 @@ export class NewMessageService {
         this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
         this.messageChannel.dateOfLastThreadMessage = Date.now();
         this.messageChannel.numberOfMessage = 0;
+        this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
         this.channelData.messageChannel.push(this.messageChannel);
         this.sendMessageChannelNewChannelMessage();
       }
@@ -184,4 +186,31 @@ export class NewMessageService {
     this.chatService.newMessageOpen = false;
     this.chatService.text = '';
   }
+
+
+  /**
+  * Clears the content of the image message.
+  */
+  deleteMessage() {
+    this.imageMessage = '';
+  }
+
+  /**
+  * Handles file selection events and reads the first selected file as a data URL. If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+  */
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          this.imageMessage = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+
 }

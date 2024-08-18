@@ -81,6 +81,7 @@ export class MobileChatComponent implements OnInit {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     }
+    console.log('Daten aus einem Channel:', this.chatService.dataChannel);
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);

@@ -27,10 +27,11 @@
     (click)="chatService.closeIconContainer()"
     #scrollContainer
     class="mobile-chat-content"
+    *ngIf="chatService.dataDirectChat"
   >
     <div
       class="direct-chat-info"
-      *ngIf="chatService.dataChannel.messageChannel.length === 0"
+      *ngIf="chatService.dataDirectChat.messageChannel.length === 0"
     >
       <div class="user-img" (click)="openUserProfile(chatService.clickedUser)">
         <img

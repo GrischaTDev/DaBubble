@@ -29,6 +29,7 @@ export class ChatService {
   dialogImageMessageOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
+  dataDirectChat: Channel = new Channel();
   dataThread: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
   contentMessageOfThread: Message = new Message();
