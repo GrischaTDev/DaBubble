@@ -77,9 +77,7 @@ export class DirectChatComponent implements OnInit {
   ngOnInit() {  
     if (this.parmsIdContent) {
       this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message').subscribe(dataDirectChat => {
-        console.log(dataDirectChat);
         this.chatService.dataDirectChat = dataDirectChat as Channel;
-        console.log('Daten von einem Direct-Chat:', this.chatService.dataDirectChat);
       });
     }
     if (this.parmsIdUser) {
