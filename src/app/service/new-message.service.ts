@@ -51,9 +51,11 @@ export class NewMessageService {
   async sendMessage(message: string) {  
       if (this.userData) {
         await this.loadDirectChatContent(this.directMessageService.directMessageDocId);
-        this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message);
+        this.directMessageService.imageMessage = this.imageMessage;
+        this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message, this.imageMessage);
         this.searchText = '';
         this.text = '';
+        this.imageMessage = '';
       } else if (this.channelData) {
         this.sendMessageFromChannelNewChannelMessage(this.channelData.id, message);
       }
@@ -115,8 +117,6 @@ export class NewMessageService {
     );
 
   }
-
-
 
 
   // Send Channel Message 

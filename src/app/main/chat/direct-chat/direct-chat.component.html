@@ -419,7 +419,8 @@
               (click)="
                 directMessageService.sendMessageFromDirectMessage(
                   this.directMessageService.dataDirectMessage.id,
-                  this.chatService.text
+                  this.chatService.text,
+                  this.directMessageService.imageMessage
                 )
               "
               class="mobile-chat-send-icon"

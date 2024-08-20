@@ -199,7 +199,8 @@ export class DesktopDirectChatComponent implements OnInit {
       event.preventDefault();
       this.directMessageService.sendMessageFromDirectMessage(
         this.chatService.dataChannel.id,
-        this.chatService.text
+        this.chatService.text,
+        this.chatService.imageMessage
       )
     }
   }

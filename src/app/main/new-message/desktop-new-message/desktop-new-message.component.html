@@ -43,8 +43,8 @@
   <div class="mobile-chat-input-container" id="meinTextarea">
     <form class="mobile-chat-input-field-container br-20">
       <div class="add-image-container-width">
-        <div class="add-image-container" *ngIf="chatService.imageMessage">
-          <img src="{{ chatService.imageMessage }}" alt="" />
+        <div class="add-image-container" *ngIf="newMessageService.imageMessage">
+          <img src="{{ newMessageService.imageMessage }}" alt="" />
           <div class="delete-img" (click)="chatService.deleteMessage()">
             <mat-icon>close</mat-icon>
           </div>
@@ -67,7 +67,7 @@
               <input
                 id="file-upload"
                 type="file"
-                (change)="chatService.onFileSelected($event)"
+                (change)="newMessageService.onFileSelected($event)"
               />
             </div>
           </div>

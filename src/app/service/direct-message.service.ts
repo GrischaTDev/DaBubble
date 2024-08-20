@@ -9,6 +9,7 @@ import { Message } from '../../assets/models/message.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
+import { NewMessageService } from './new-message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -262,14 +263,14 @@ export class DirectMessageService {
    * @param {string} channelId - The ID of the direct message channel.
    * @param {string} textContent - The text content of the message to be sent.
    */
-  async sendMessageFromDirectMessage(channelId: string, textContent: string) {
+  async sendMessageFromDirectMessage(channelId: string, textContent: string, image: ArrayBuffer | null | string) {
     this.messageDirectChat.message = textContent;
     this.messageDirectChat.date = Date.now();
     this.messageDirectChat.userId = this.mainService.loggedInUser.id;
     this.messageDirectChat.userName = this.mainService.loggedInUser.name;
     this.messageDirectChat.userEmail = this.mainService.loggedInUser.email;
     this.messageDirectChat.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageDirectChat.imageToMessage = this.chatService.imageMessage as ArrayBuffer;
+    this.messageDirectChat.imageToMessage = image as ArrayBuffer;
     this.chatService.dataChannel.messageChannel.push(this.messageDirectChat);
     await this.mainService.addDoc('direct-message', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
     this.loadDirectMessageFromNewMessage();
