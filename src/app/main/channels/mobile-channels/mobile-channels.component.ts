@@ -79,7 +79,7 @@ export class MobileChannelsComponent implements OnInit {
    */
   openDialogNewMessage() {
     const newMessageDialog = this.dialog.open(NewMessageComponent);
-    this.newMessageService.newMessageDialog = newMessageDialog;
+    this.newMessageService.setDialogRef(newMessageDialog);
   }
 
   /**
