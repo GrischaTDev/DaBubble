@@ -109,7 +109,6 @@ export class DesktopChannelsComponent implements OnInit {
    * Opens the new message interface.
    */
   openNewMessage() {
-    this.router.navigate(['/main', 'chat', this.mainService.allChannels[0].id, 'user', 'chat']);
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = true;

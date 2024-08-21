@@ -14,7 +14,6 @@ import { MainServiceService } from '../../../service/main-service.service';
 import { ChatService } from '../../../service/chat.service';
 import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { Firestore, docData } from '@angular/fire/firestore';
 import { Message } from '../../../../assets/models/message.class';
 import { User } from '../../../../assets/models/user.class';
@@ -25,6 +24,11 @@ import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
 import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/dialog-image-message.component';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { ThreadService } from '../../../service/thread.service';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { LoginService } from '../../../service/login.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-message',
@@ -37,6 +41,7 @@ import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/d
     PickerComponent,
     MobileHeaderComponent,
     MobileChatHeaderComponent,
+    UserProfileComponent,
   ],
   templateUrl: './new-message.component.html',
   styleUrl: './new-message.component.scss',
@@ -54,10 +59,11 @@ export class NewMessageComponent implements OnInit {
   loggedInUser: User = new User();
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
-
+  userMenu: boolean = false;
   userData: any;
   channelData: any;
   allChannel: Channel[] = [];
+  currentUser: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -66,7 +72,10 @@ export class NewMessageComponent implements OnInit {
     public mainService: MainServiceService,
     public searchField: SearchFieldService,
     public newMessageService: NewMessageService,
-    public dialogRef: MatDialogRef<NewMessageComponent>
+    public dialogRef: MatDialogRef<NewMessageComponent>,
+    public threadService: ThreadService,
+    private loginService: LoginService,
+    private router: Router,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -82,13 +91,17 @@ export class NewMessageComponent implements OnInit {
       this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
-
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
 
+    this.loginService.currentLoggedUser();
+    this.loginService.loggedInUser$.subscribe((user) => {
+      this.currentUser = user;
+      this.mainService.loggedInUser = new User(user);
+    });
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -148,5 +161,48 @@ export class NewMessageComponent implements OnInit {
    */
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  /**
+   * Toggles the user menu.
+   */
+  openUserMenu() {
+    this.userMenu = !this.userMenu;
+  }
+
+  /**
+   * Prevents the event from propagating further.
+   *
+   * @param event - The event object.
+   */
+  doNotClose(event: Event) {
+    event.stopPropagation();
+  }
+
+  /**
+   * Opens the user profile dialog.
+   */
+  openUserProfile() {
+    this.dialog.open(UserProfileComponent);
+  }
+
+  /**
+   * Logs out the user.
+   *
+   * @remarks
+   * This method logs out the user by calling the `logoutUser` method of the `loginService` and then navigating to the login page.
+   */
+  logout() {
+    this.threadService.closeThread();
+    const auth = getAuth();
+    this.loginService.logoutUser(auth);
+
+    signOut(auth).then(() => {
+      this.router.navigate(['login']);
+    });
   }
 }

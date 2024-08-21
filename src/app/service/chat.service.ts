@@ -50,6 +50,7 @@ export class ChatService {
   mobileChatIsOpen: boolean = false;
   mobileDirectChatIsOpen: boolean = false;
   mobileThreadIsOpen: boolean = false;
+  mobileNewMessageOpen: boolean = false;
   directChatOpen: boolean = false;
   desktopChatOpen: boolean = true;
   newMessageOpen: boolean = false;
