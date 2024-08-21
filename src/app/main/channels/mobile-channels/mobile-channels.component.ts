@@ -13,6 +13,7 @@ import { SearchFieldService } from '../../../search-field.service';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
+import { NewMessageService } from '../../../service/new-message.service';
 
 @Component({
   selector: 'app-mobile-channels',
@@ -44,7 +45,8 @@ export class MobileChannelsComponent implements OnInit {
     private router: Router,
     public chatService: ChatService,
     public directMessageService: DirectMessageService,
-    public searchField: SearchFieldService
+    private newMessageService: NewMessageService,
+    public searchField: SearchFieldService,
   ) {}
 
 
@@ -76,7 +78,8 @@ export class MobileChannelsComponent implements OnInit {
    * Opens a dialog for creating a new message.
    */
   openDialogNewMessage() {
-    this.dialog.open(NewMessageComponent);
+    const newMessageDialog = this.dialog.open(NewMessageComponent);
+    this.newMessageService.setDialogRef(newMessageDialog);
   }
 
   /**

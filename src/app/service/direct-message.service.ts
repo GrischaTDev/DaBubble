@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, inject, Injectable, ViewChild } from '@angular/core';
+import { ElementRef, HostListener, inject, Injectable, OnInit, ViewChild } from '@angular/core';
 import { Channel } from '../../assets/models/channel.class';
 import { ChatService } from './chat.service';
 import { doc, docData, Firestore, getDoc, onSnapshot } from '@angular/fire/firestore';
@@ -36,8 +36,18 @@ export class DirectMessageService {
   private itemsSubscription?: Subscription;
   switchContent: boolean = false;
   userIdNewMessage: string = '';
+  windowWidth: number | undefined;
 
   constructor(public chatService: ChatService, public mainService: MainServiceService, public router: Router) { }
+
+  ngOnInit(): void {
+    this.windowWidth = window.innerWidth;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.windowWidth = window.innerWidth;
+  }
 
   /**
  * Opens a user profile and initializes a chat dialog.
@@ -262,14 +272,14 @@ export class DirectMessageService {
    * @param {string} channelId - The ID of the direct message channel.
    * @param {string} textContent - The text content of the message to be sent.
    */
-  async sendMessageFromDirectMessage(channelId: string, textContent: string) {
+  async sendMessageFromDirectMessage(channelId: string, textContent: string, image: ArrayBuffer | null | string) {
     this.messageDirectChat.message = textContent;
     this.messageDirectChat.date = Date.now();
     this.messageDirectChat.userId = this.mainService.loggedInUser.id;
     this.messageDirectChat.userName = this.mainService.loggedInUser.name;
     this.messageDirectChat.userEmail = this.mainService.loggedInUser.email;
     this.messageDirectChat.userAvatar = this.mainService.loggedInUser.avatar;
-    this.messageDirectChat.imageToMessage = this.imageMessage as ArrayBuffer;
+    this.messageDirectChat.imageToMessage = image as ArrayBuffer;
     this.chatService.dataChannel.messageChannel.push(this.messageDirectChat);
     await this.mainService.addDoc('direct-message', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel));
     this.loadDirectMessageFromNewMessage();
@@ -280,14 +290,22 @@ export class DirectMessageService {
   * Clears any text and image messages after navigating.
   */
   loadDirectMessageFromNewMessage() {
+    console.log('ist newMessageOpen?;', this.chatService.newMessageOpen)
     if (this.chatService.newMessageOpen) {
       this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
+    } else if(this.windowWidth) {
+      if(this.windowWidth < 960) {
+        console.log('Wird das ausgeführt?');
+        this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
+
+        this.switchContent = true;
+      }
     }
     this.chatService.text = '';
-    this.imageMessage = '';
+    this.chatService.imageMessage = '';
   }
 
   /**

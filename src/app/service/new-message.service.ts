@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { HostListener, Injectable, OnInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { DirectMessageService } from './direct-message.service';
 import { MainServiceService } from './main-service.service';
@@ -6,6 +6,9 @@ import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { Router } from '@angular/router';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { NewMessageComponent } from '../main/new-message/mobile-new-message/new-message.component';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +23,15 @@ export class NewMessageService {
   messageChannel: Message = new Message();
   dataChannel: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
+  imageMessage: string | ArrayBuffer | null = '';
+  newMessageDialog: any;
+
 
   constructor(
     private chatService: ChatService,
     private directMessageService: DirectMessageService,
     private mainService: MainServiceService,
-    private router: Router
+    private router: Router,
   ) { }
 
   async chooseUser(name: string, user: User) {
@@ -46,15 +52,27 @@ export class NewMessageService {
     this.channelData = new Channel(channel);
   }
 
+  setDialogRef(dialogRef: MatDialogRef<NewMessageComponent>): void {
+    this.newMessageDialog = dialogRef;
+  }
+
 
   async sendMessage(message: string) {  
       if (this.userData) {
         await this.loadDirectChatContent(this.directMessageService.directMessageDocId);
-        this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message);
+        this.directMessageService.imageMessage = this.imageMessage;
+        this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message, this.imageMessage);
+        if(this.newMessageDialog) {
+          this.newMessageDialog.close();
+        }
         this.searchText = '';
         this.text = '';
+        this.imageMessage = '';
       } else if (this.channelData) {
         this.sendMessageFromChannelNewChannelMessage(this.channelData.id, message);
+        if(this.newMessageDialog) {
+          this.newMessageDialog.close();
+        }
       }
   }
 
@@ -116,8 +134,6 @@ export class NewMessageService {
   }
 
 
-
-
   // Send Channel Message 
 
     async sendMessageFromChannelNewChannelMessage(channelId: string, textContent: string) {
@@ -137,6 +153,7 @@ export class NewMessageService {
         this.messageChannel.userAvatar = this.mainService.loggedInUser.avatar;
         this.messageChannel.dateOfLastThreadMessage = Date.now();
         this.messageChannel.numberOfMessage = 0;
+        this.messageChannel.imageToMessage = this.imageMessage as ArrayBuffer;
         this.channelData.messageChannel.push(this.messageChannel);
         this.sendMessageChannelNewChannelMessage();
       }
@@ -184,4 +201,31 @@ export class NewMessageService {
     this.chatService.newMessageOpen = false;
     this.chatService.text = '';
   }
+
+
+  /**
+  * Clears the content of the image message.
+  */
+  deleteMessage() {
+    this.imageMessage = '';
+  }
+
+  /**
+  * Handles file selection events and reads the first selected file as a data URL. If the file is successfully read, the resulting data URL is stored in `imageMessage`.
+  */
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          this.imageMessage = e.target.result;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+
 }

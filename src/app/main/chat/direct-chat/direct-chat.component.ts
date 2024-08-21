@@ -22,6 +22,7 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { SearchFieldService } from '../../../search-field.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-direct-chat',
@@ -73,11 +74,14 @@ export class DirectChatComponent implements OnInit {
    * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
-  ngOnInit() {  
+  async ngOnInit() {  
     if (this.parmsIdContent) {
-      this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message').subscribe(dataDirectChat => {
+      try {
+        const dataDirectChat = await lastValueFrom(this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message'));
         this.chatService.dataChannel = dataDirectChat as Channel;
-      });
+      } catch (error) {
+        console.error('Fehler beim Laden der Daten:', error);
+      }
     }
     if (this.parmsIdUser) {
       this.mainService.watchSingleChannelDoc(this.parmsIdUser, 'users').subscribe(dataUser => {

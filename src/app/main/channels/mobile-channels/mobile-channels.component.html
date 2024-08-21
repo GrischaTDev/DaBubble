@@ -8,7 +8,7 @@
             <div *ngIf="searchField.filterUser.length > 0" >
                 <p>Benutzer:</p>
                 <div class="user-list-container" *ngFor="let user of searchField.filterUser" (click)="openDirectChat(user)" >
-                    <img src="{{ user['avatar'] }}" alt="">
+                    <img referrerpolicy="no-referrer" src="{{ user['avatar'] }}" alt="">
                     {{ user['name'] }}
                 </div>
             </div>

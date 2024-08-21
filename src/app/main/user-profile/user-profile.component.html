@@ -7,8 +7,8 @@
             </div>
         </div>
         <div class="avatar">
-            <img *ngIf="!directUserProfile?.avatar" src="{{ loggedInUser.avatar }}" alt="">
-            <img *ngIf="directUserProfile?.avatar" src="{{ directUserProfile.avatar }}" alt="">
+            <img referrerpolicy="no-referrer" *ngIf="!directUserProfile?.avatar" src="{{ loggedInUser.avatar }}" alt="">
+            <img referrerpolicy="no-referrer" *ngIf="directUserProfile?.avatar" src="{{ directUserProfile.avatar }}" alt="">
         </div>
         <div class="name">
             <span *ngIf="!directUserProfile?.name">{{ loggedInUser.name }}</span>
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="avatar">
-      <img src="{{ this.loggedInUser.avatar }}" alt="">
+      <img referrerpolicy="no-referrer" src="{{ this.loggedInUser.avatar }}" alt="">
     </div>
     <div class="edit-name">
       <div>

@@ -34,29 +34,64 @@ export class EmojiService {
     }
   }
 
-  /**
-* Asynchronously pushes an emoji to the related message of the thread if not already done.
-* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-*/
-  async pushEmojieToRelatedMessageOfTheChat(indexSingleMessage: number): Promise<void> {
-    if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads'));
+/**
+ * Asynchronously pushes an emoji to the related message of the thread if not already done.
+ * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
+ */
+async pushEmojieToRelatedMessageOfTheChat(indexSingleMessage: number): Promise<void> {
+  if (!this.emojiToDirectMessage) {
+    // Überprüfe, ob dataChannel und messageChannel existieren und ob ein Element am Index indexSingleMessage vorhanden ist
+    if (
+      this.chatService.dataChannel &&
+      this.chatService.dataChannel.messageChannel &&
+      this.chatService.dataChannel.messageChannel[indexSingleMessage]
+    ) {
+      const dataThreadChannel = await firstValueFrom(
+        this.mainService.watchSingleThreadDoc(
+          this.chatService.dataChannel.messageChannel[indexSingleMessage].thread,
+          'threads'
+        )
+      );
       this.emojiServiceThread = dataThreadChannel as Channel;
     } else {
-      this.emojiServiceThread = this.chatService.dataChannel as Channel;
+      console.error(
+        'Fehler: messageChannel oder dataChannel ist undefiniert, oder messageChannel[indexSingleMessage] existiert nicht.'
+      );
+      // Optional: Hier könntest du einen Fehler werfen oder eine alternative Aktion durchführen, wenn die Daten nicht verfügbar sind
     }
+  } else {
+    this.emojiServiceThread = this.chatService.dataChannel as Channel;
   }
+}
 
-  /**
-* Asynchronously pushes an emoji to the related message of the thread if not already done.
-* If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
-*/
-  async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
-    if (!this.emojiToDirectMessage) {
-      const dataThreadChannel = await firstValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads'));
+/**
+ * Asynchronously pushes an emoji to the related message of the thread if not already done.
+ * If no emoji has been pushed directly to the message, it fetches the thread data and updates the emoji service.
+ */
+async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
+  if (!this.emojiToDirectMessage) {
+    // Überprüfe, ob dataChannel und messageChannel existieren und ob ein Element am Index this.chatService.indexOfChannelMessage vorhanden ist
+    if (
+      this.chatService.dataChannel &&
+      this.chatService.dataChannel.messageChannel &&
+      this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage]
+    ) {
+      const dataThreadChannel = await firstValueFrom(
+        this.mainService.watchSingleThreadDoc(
+          this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread,
+          'threads'
+        )
+      );
       this.emojiServiceThread = dataThreadChannel as Channel;
+    } else {
+      console.error(
+        'Fehler: messageChannel oder dataChannel ist undefiniert, oder messageChannel[this.chatService.indexOfChannelMessage] existiert nicht.'
+      );
+      // Optional: Hier könntest du einen Fehler werfen oder eine alternative Aktion durchführen, wenn die Daten nicht verfügbar sind
     }
   }
+}
+
 
   /**
   * Adds an emoji reaction to a specific message in a message channel.

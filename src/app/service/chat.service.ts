@@ -29,6 +29,7 @@ export class ChatService {
   dialogImageMessageOpen = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
+  dataDirectChat: Channel = new Channel();
   dataThread: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
   contentMessageOfThread: Message = new Message();
@@ -49,6 +50,7 @@ export class ChatService {
   mobileChatIsOpen: boolean = false;
   mobileDirectChatIsOpen: boolean = false;
   mobileThreadIsOpen: boolean = false;
+  mobileNewMessageOpen: boolean = false;
   directChatOpen: boolean = false;
   desktopChatOpen: boolean = true;
   newMessageOpen: boolean = false;
@@ -172,7 +174,7 @@ export class ChatService {
    */
   async sendMessageFromChannel(channelId: string, textContent: string) {
     if (textContent || this.imageMessage) {
-      // await this.generateThreadDoc();
+      await this.generateThreadDoc();
       this.messageChannel.message = textContent;
       this.messageChannel.date = Date.now();
       this.messageChannel.userId = this.mainService.loggedInUser.id;

@@ -71,7 +71,7 @@
             emojiService.addReactionToMessageChannel('✅', singleMessageIndex)
           "
         >
-          <img src="./../../../../assets/icons/good-mark.svg" alt="good-mark" />
+          <img src="./assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
@@ -80,7 +80,7 @@
             emojiService.addReactionToMessageChannel('🙌', singleMessageIndex)
           "
         >
-          <img src="./../../../../assets/icons/hands_up.svg" alt="hands_up" />
+          <img src="./assets/icons/hands_up.svg" alt="hands_up" />
         </div>
         <div
           class="mobile-chat-edit-icon-container"
@@ -151,6 +151,7 @@
             (click)="chatService.closeIconContainer()"
             src="{{ singleMessage.userAvatar }}"
             alt=""
+            referrerpolicy="no-referrer"
           />
         </div>
         <div
@@ -353,7 +354,7 @@
     <div class="user-content-container" *ngIf="searchField.filterUser.length > 0">
         <div class="user-list-container" *ngFor="let user of searchField.filterUser">
             <div class="user-list" (click)="searchField.chooseUser(user['name'])" >
-              <img src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
+              <img referrerpolicy="no-referrer" src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
             </div>
         </div>
     </div>

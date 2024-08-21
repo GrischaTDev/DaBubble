@@ -4,7 +4,7 @@
         <img class="logo" src="./assets/img/devscpace-logo.svg" alt="DaBubble logo">
         <span class="space-name">Devspace</span>
     </div>
-    <img (click)="openUserMenu()" class="user" src="{{ currentUser.avatar }}" alt="User avatar">
+    <img (click)="openUserMenu()" referrerpolicy="no-referrer" class="user" src="{{ currentUser.avatar }}" alt="User avatar">
 </header>
 
 <div *ngIf="userMenu" class="user-menu" (click)="openUserMenu()">

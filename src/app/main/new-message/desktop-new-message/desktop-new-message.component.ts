@@ -26,6 +26,7 @@ import { DirectMessageService } from '../../../service/direct-message.service';
 import { Subscription } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
+import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/dialog-image-message.component';
 
 @Component({
   selector: 'app-desktop-new-message',
@@ -66,7 +67,7 @@ export class DesktopNewMessageComponent implements OnInit {
     public mainService: MainServiceService,
     public searchField: SearchFieldService,
     public directMessageService: DirectMessageService,
-    public newMessageService: NewMessageService
+    public newMessageService: NewMessageService,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
