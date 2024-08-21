@@ -24,6 +24,7 @@ import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobil
 import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
+import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/dialog-image-message.component';
 
 @Component({
   selector: 'app-new-message',
@@ -64,7 +65,8 @@ export class NewMessageComponent implements OnInit {
     public emojiService: EmojiService,
     public mainService: MainServiceService,
     public searchField: SearchFieldService,
-    public newMessageService: NewMessageService
+    public newMessageService: NewMessageService,
+    public dialogRef: MatDialogRef<NewMessageComponent>
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -80,11 +82,13 @@ export class NewMessageComponent implements OnInit {
       this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
+
   }
   ngOnInit(): void {
     this.subscription = this.searchField.allChannel$.subscribe(channels => {
       this.allChannel = channels;
     });
+
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;

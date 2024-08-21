@@ -1,4 +1,4 @@
-import { ElementRef, HostListener, inject, Injectable, ViewChild } from '@angular/core';
+import { ElementRef, HostListener, inject, Injectable, OnInit, ViewChild } from '@angular/core';
 import { Channel } from '../../assets/models/channel.class';
 import { ChatService } from './chat.service';
 import { doc, docData, Firestore, getDoc, onSnapshot } from '@angular/fire/firestore';
@@ -9,7 +9,6 @@ import { Message } from '../../assets/models/message.class';
 import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
-import { NewMessageService } from './new-message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -281,11 +280,17 @@ export class DirectMessageService {
   * Clears any text and image messages after navigating.
   */
   loadDirectMessageFromNewMessage() {
+    console.log('ist newMessageOpen?;', this.chatService.newMessageOpen)
     if (this.chatService.newMessageOpen) {
       this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
+    } else {
+      console.log('Wird das ausgeführt?');
+      this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
+
+      this.switchContent = true;
     }
     this.chatService.text = '';
     this.chatService.imageMessage = '';

@@ -6,6 +6,9 @@ import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Message } from '../../assets/models/message.class';
 import { Router } from '@angular/router';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { NewMessageComponent } from '../main/new-message/mobile-new-message/new-message.component';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +24,14 @@ export class NewMessageService {
   dataChannel: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
   imageMessage: string | ArrayBuffer | null = '';
+  newMessageDialog: any;
+
 
   constructor(
     private chatService: ChatService,
     private directMessageService: DirectMessageService,
     private mainService: MainServiceService,
-    private router: Router
+    private router: Router,
   ) { }
 
   async chooseUser(name: string, user: User) {
@@ -47,17 +52,27 @@ export class NewMessageService {
     this.channelData = new Channel(channel);
   }
 
+  setDialogRef(dialogRef: MatDialogRef<NewMessageComponent>): void {
+    this.newMessageDialog = dialogRef;
+  }
+
 
   async sendMessage(message: string) {  
       if (this.userData) {
         await this.loadDirectChatContent(this.directMessageService.directMessageDocId);
         this.directMessageService.imageMessage = this.imageMessage;
         this.directMessageService.sendMessageFromDirectMessage(this.directMessageService.dataDirectMessage.id, message, this.imageMessage);
+        if(this.newMessageDialog) {
+          this.newMessageDialog.close();
+        }
         this.searchText = '';
         this.text = '';
         this.imageMessage = '';
       } else if (this.channelData) {
         this.sendMessageFromChannelNewChannelMessage(this.channelData.id, message);
+        if(this.newMessageDialog) {
+          this.newMessageDialog.close();
+        }
       }
   }
 
