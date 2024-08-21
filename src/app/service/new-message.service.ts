@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { HostListener, Injectable, OnInit } from '@angular/core';
 import { ChatService } from './chat.service';
 import { DirectMessageService } from './direct-message.service';
 import { MainServiceService } from './main-service.service';

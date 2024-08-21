@@ -36,8 +36,18 @@ export class DirectMessageService {
   private itemsSubscription?: Subscription;
   switchContent: boolean = false;
   userIdNewMessage: string = '';
+  windowWidth: number | undefined;
 
   constructor(public chatService: ChatService, public mainService: MainServiceService, public router: Router) { }
+
+  ngOnInit(): void {
+    this.windowWidth = window.innerWidth;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.windowWidth = window.innerWidth;
+  }
 
   /**
  * Opens a user profile and initializes a chat dialog.
@@ -286,11 +296,13 @@ export class DirectMessageService {
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
-    } else {
-      console.log('Wird das ausgeführt?');
-      this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
+    } else if(this.windowWidth) {
+      if(this.windowWidth < 960) {
+        console.log('Wird das ausgeführt?');
+        this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
 
-      this.switchContent = true;
+        this.switchContent = true;
+      }
     }
     this.chatService.text = '';
     this.chatService.imageMessage = '';
