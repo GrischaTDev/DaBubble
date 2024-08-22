@@ -221,10 +221,10 @@
 }
 
 .primary-btn {
-    background-color: $background-blue !important;
-    color: #fff;
-    border: unset;
-    padding: 12px 25px !important;
+  background-color: $background-blue !important;
+  color: #fff;
+  border: unset;
+  padding: 12px 25px !important;
 }
 
 .disabled-btn {
@@ -234,9 +234,9 @@
   padding: 12px 25px !important;
 }
 
-
 @media only screen and (min-width: 960px) {
   .profile-container {
+    background-color: #8080804f;
     > .user-pofile-dialog {
       top: 100px;
       right: 60px;
