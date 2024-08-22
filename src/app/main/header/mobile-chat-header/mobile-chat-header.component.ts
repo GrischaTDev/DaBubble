@@ -35,7 +35,7 @@ export class MobileChatHeaderComponent implements OnInit {
     this.route.params.subscribe((params: any) => {
       this.parmsIdContent = params['id'];
       this.parmsIdUser = params['idUser'];
-      this.parmsIdOfChat = params['idOfChat']; 
+      this.parmsIdOfChat = params['idOfChat'];
     });
   }
   currentUser: any;
@@ -100,12 +100,32 @@ export class MobileChatHeaderComponent implements OnInit {
    * Sets the mobileChatIsOpen and mobileDirectChatIsOpen properties of the chatService to false.
    */
   closeMobileChat() {
-    if(this.parmsIdOfChat === 'chat') {
-      this.mainService.watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
-      this.router.navigate(['/main', 'chat',this.chatService.dataChannel.id , 'user', 'chat']);
+    if (this.parmsIdOfChat === 'chat') {
+      this.mainService
+        .watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels')
+        .subscribe((dataChannel) => {
+          this.chatService.dataChannel = dataChannel as Channel;
+        });
+      this.router.navigate([
+        '/main',
+        'chat',
+        this.chatService.dataChannel.id,
+        'user',
+        'chat',
+      ]);
     } else {
-      this.mainService.watchSingleChannelDoc(this.parmsIdOfChat, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
-      this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', 'chat']);
+      this.mainService
+        .watchSingleChannelDoc(this.parmsIdOfChat, 'channels')
+        .subscribe((dataChannel) => {
+          this.chatService.dataChannel = dataChannel as Channel;
+        });
+      this.router.navigate([
+        '/main',
+        'chat',
+        this.parmsIdOfChat,
+        'user',
+        'chat',
+      ]);
     }
     this.chatService.mobileChatIsOpen = false;
     this.chatService.mobileDirectChatIsOpen = false;

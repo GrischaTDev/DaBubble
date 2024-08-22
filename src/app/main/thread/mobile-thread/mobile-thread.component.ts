@@ -1,4 +1,10 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
@@ -21,16 +27,28 @@ import { ActivatedRoute, Router } from '@angular/router';
     MobileChatHeaderComponent,
     MatIcon,
     FormsModule,
-    CommonModule, MatIconModule, AddChannelComponent, NewMessageComponent, DirectChatComponent
+    CommonModule,
+    MatIconModule,
+    AddChannelComponent,
+    NewMessageComponent,
+    DirectChatComponent,
   ],
   templateUrl: './mobile-thread.component.html',
-  styleUrl: './mobile-thread.component.scss'
+  styleUrl: './mobile-thread.component.scss',
 })
 export class MobileThreadComponent implements OnInit {
   parmsId1: string = '';
   parmsId2: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router, public mainService: MainServiceService, public chatService: ChatService, public threadService: ThreadService, public emojiService: EmojiService, public directMessageService: DirectMessageService) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    public mainService: MainServiceService,
+    public chatService: ChatService,
+    public threadService: ThreadService,
+    public emojiService: EmojiService,
+    public directMessageService: DirectMessageService
+  ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId1 = params['id1'];
       this.parmsId2 = params['id2'];
@@ -38,42 +56,51 @@ export class MobileThreadComponent implements OnInit {
   }
 
   /**
-  * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
-  * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
-  * This is typically used to ensure that the component has access to the latest user information when it is initialized.
-  */
+   * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+   */
   ngOnInit() {
-    this.mainService.watchSingleChannelDoc(this.parmsId1, 'channels').subscribe(dataChannel => {
-      this.chatService.dataChannel = dataChannel as Channel;
-    }); 
-    this.mainService.watchSingleDirectMessageDocThread(this.parmsId2, 'threads').subscribe(dataThread => {
-      this.chatService.dataThread = dataThread as Channel;
-    }); 
+    this.mainService
+      .watchSingleChannelDoc(this.parmsId1, 'channels')
+      .subscribe((dataChannel) => {
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
+    this.mainService
+      .watchSingleDirectMessageDocThread(this.parmsId2, 'threads')
+      .subscribe((dataThread) => {
+        this.chatService.dataThread = dataThread as Channel;
+      });
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
   }
 
   /**
-  * Handles window resize events by checking if the screen size exceeds a specific width.
-  * This method is triggered whenever the window is resized.
-  */
+   * Handles window resize events by checking if the screen size exceeds a specific width.
+   * This method is triggered whenever the window is resized.
+   */
   @HostListener('window:resize')
   onResize() {
     this.checkScreenSize(window.innerWidth);
   }
 
   /**
-  * Redirects to the main page if the screen width exceeds 960 pixels.
-  * @param {number} width - The current width of the screen.
-  */
+   * Redirects to the main page if the screen width exceeds 960 pixels.
+   * @param {number} width - The current width of the screen.
+   */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user']);
+      this.router.navigate([
+        '/main',
+        'chat',
+        this.chatService.dataChannel.id,
+        'user',
+      ]);
       this.chatService.mobileChatIsOpen = false;
-      this.chatService.mobileDirectChatIsOpen = false
+      this.chatService.mobileDirectChatIsOpen = false;
       this.chatService.mobileThreadIsOpen = false;
-    } 
+    }
   }
 
   /** @ViewChild decorator to access the scrollable container element within a thread. */
@@ -88,7 +115,8 @@ export class MobileThreadComponent implements OnInit {
    */
   ngAfterViewChecked() {
     if (
-      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight && this.chatService.sendetMessage
+      this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
+      this.chatService.sendetMessage
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
@@ -96,20 +124,26 @@ export class MobileThreadComponent implements OnInit {
   }
 
   /**
-  * Scrolls the content of the scrollable container to the bottom.
-  * This is typically used to ensure the user sees the most recent messages or content added to the container.
-  */
+   * Scrolls the content of the scrollable container to the bottom.
+   * This is typically used to ensure the user sees the most recent messages or content added to the container.
+   */
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
   }
 
-/**
- * Navigates to a specified thread by ID.
- * This method subscribes to a single thread document from a service, updates the chat service's data thread, 
- * and then navigates to the thread page using the router.
- */
- navigateToChat() {
-    this.router.navigate(['/main', 'chat', this.chatService.dataThread.idOfChannelOnThred, 'user', 'chat']);
+  /**
+   * Navigates to a specified thread by ID.
+   * This method subscribes to a single thread document from a service, updates the chat service's data thread,
+   * and then navigates to the thread page using the router.
+   */
+  navigateToChat() {
+    this.router.navigate([
+      '/main',
+      'chat',
+      this.chatService.dataThread.idOfChannelOnThred,
+      'user',
+      'chat',
+    ]);
   }
 }

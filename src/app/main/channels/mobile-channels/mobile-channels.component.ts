@@ -47,10 +47,8 @@ export class MobileChannelsComponent implements OnInit {
     public chatService: ChatService,
     public directMessageService: DirectMessageService,
     private newMessageService: NewMessageService,
-    public searchField: SearchFieldService,
+    public searchField: SearchFieldService
   ) {}
-
-
 
   /**
    * Initializes the component.
@@ -63,7 +61,7 @@ export class MobileChannelsComponent implements OnInit {
       this.currentUser = user;
     });
 
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
   }
@@ -105,16 +103,14 @@ export class MobileChannelsComponent implements OnInit {
 
   /**
    * Opens a direct chat with the specified user.
-   * 
+   *
    * @param user - The user to open the direct chat with.
    */
   openDirectChat(user: any) {
     this.chatService.mobileDirectChatIsOpen = true;
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
-    console.log('Userdaten aus der For-Schleife', user);
     this.chatService.clickedUser = user;
-    console.log('Userdaten die dem clickedUser übergeben werden', this.chatService.clickedUser)
     this.searchValue = '';
     this.directMessageService.openDirectMessage(user);
   }
