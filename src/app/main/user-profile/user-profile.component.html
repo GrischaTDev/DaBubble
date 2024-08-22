@@ -37,10 +37,15 @@
       >
     </div>
     <div class="status">
-      <img *ngIf="!directUserProfile?.name" src="{{ loggedInUserStatus }}" />
+      <img
+        *ngIf="!directUserProfile?.name"
+        src="{{ loggedInUserStatus }}"
+        alt="User Status"
+      />
       <img
         *ngIf="directUserProfile?.name"
         src="{{ directUserProfileStatus }}"
+        alt="User Status"
       />
     </div>
     <div class="email">
