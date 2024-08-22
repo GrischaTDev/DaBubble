@@ -103,6 +103,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.directMessageService.directMessageDocId = this.mainService.docId;
     this.chatService.text = '';
     this.chatService.activateChatFocus();
+    this.threadService.closeThread();
   }
 
   /**

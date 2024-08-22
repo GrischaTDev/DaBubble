@@ -36,12 +36,13 @@ export class DirectMessageService {
   private itemsSubscription?: Subscription;
   switchContent: boolean = false;
   userIdNewMessage: string = '';
-  windowWidth: number | undefined;
+  windowWidth!: number;
 
   constructor(public chatService: ChatService, public mainService: MainServiceService, public router: Router) { }
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
+    console.log(this.windowWidth);
   }
 
   @HostListener('window:resize', ['$event'])
@@ -290,22 +291,18 @@ export class DirectMessageService {
   * Clears any text and image messages after navigating.
   */
   loadDirectMessageFromNewMessage() {
-    console.log('ist newMessageOpen?;', this.chatService.newMessageOpen)
     if (this.chatService.newMessageOpen) {
       this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
-    } else if(this.windowWidth) {
-      if(this.windowWidth < 960) {
-        console.log('Wird das ausgeführt?');
-        this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
-
-        this.switchContent = true;
-      }
+    } else {
+      this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id]);
+      this.switchContent = true;
     }
     this.chatService.text = '';
     this.chatService.imageMessage = '';
+    this.imageMessage = '';
   }
 
   /**
@@ -316,12 +313,20 @@ export class DirectMessageService {
   async loadDirectChatContent(chatId: string) {
     this.directMessageDocId = chatId;
     if (this.chatService.mobileDirectChatIsOpen) {
-      this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
+      if(this.chatService.clickedUser.id) {
+        this.router.navigate(['/direct-chat', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id]);
+      } else {
+        this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id]);
+      }
       this.switchContent = true;
     } else {
       this.mainService.watchSingleDirectMessageDoc(chatId, 'direct-message').subscribe(dataDirectMessage => {
         this.chatService.dataChannel = dataDirectMessage as Channel
-        this.router.navigate(['/main', 'direct-message', chatId, this.chatService.clickedUser.id, this.mainService.allChannels[0].id]);
+        if(this.chatService.clickedUser.id) {
+          this.router.navigate(['/direct-chat', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id]);
+        } else {
+          this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id]);
+        }
         this.chatService.desktopChatOpen = false;
         this.chatService.directChatOpen = true;
         this.chatService.newMessageOpen = false;

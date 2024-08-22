@@ -19,6 +19,7 @@ import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
 import { SearchFieldService } from '../../../search-field.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -75,11 +76,15 @@ export class MobileChatComponent implements OnInit {
   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
   */
-  ngOnInit() {
+  async ngOnInit() {
     if (this.parmsId) {
-      this.mainService.watchSingleChannelDoc(this.parmsId, 'channels').subscribe(dataChannel => {
-        this.chatService.dataChannel = dataChannel as Channel;
-      });
+      try {
+        const channelData = await lastValueFrom(this.mainService.watchSingleChannelDoc(this.parmsId, 'channels'));
+        this.chatService.dataChannel = channelData as Channel;
+      } catch(err) {
+        console.error('Fehler beim Laden der Daten:', err);
+      }
+    
     }
     this.loginService.currentLoggedUser()
     this.loginService.loggedInUser$.subscribe((user) => {
