@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
+import { User } from '../../../../assets/models/user.class';
 
 @Component({
   selector: 'app-mobile-channels',
@@ -111,7 +112,9 @@ export class MobileChannelsComponent implements OnInit {
     this.chatService.mobileDirectChatIsOpen = true;
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
+    console.log('Userdaten aus der For-Schleife', user);
     this.chatService.clickedUser = user;
+    console.log('Userdaten die dem clickedUser übergeben werden', this.chatService.clickedUser)
     this.searchValue = '';
     this.directMessageService.openDirectMessage(user);
   }

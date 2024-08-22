@@ -125,7 +125,7 @@
             (mouseenter)="threadService.onMouseLeaveThread()"
             class="desktop-thread-message-avatar-container"
           >
-            <img src="{{ singleThreadMessage.userAvatar }}" alt="" />
+            <img src="{{ singleThreadMessage.userAvatar }}" alt="" referrerpolicy="no-referrer"/>
           </div>
           <div class="desktop-thread-message-content">
             <div
@@ -433,9 +433,9 @@
           <div class="desktop-thread-separating-line-content">
             <p
               *ngIf="
-                this.chatService.dataChannel.messageChannel[
+                this.chatService?.dataChannel?.messageChannel?.[
                   this.chatService.indexOfThreadMessageForEditChatMessage
-                ].numberOfMessage === 0
+                ]?.numberOfMessage === 0
               "
             >
               keine

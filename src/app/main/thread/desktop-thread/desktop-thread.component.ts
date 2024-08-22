@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { lastValueFrom } from 'rxjs';
 
 
 @Component({
@@ -68,10 +69,9 @@ export class DesktopThreadComponent implements OnInit  {
   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
   */
-  ngOnInit() {
-    this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].thread, 'threads').subscribe(dataThreadChannel => {
-      this.chatService.dataThread = dataThreadChannel as Channel;
-    });
+  async ngOnInit() {
+    const threadData = await lastValueFrom(this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfThreadMessageForEditChatMessage].thread, 'threads'));
+    this.chatService.dataThread = threadData as Channel;
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);

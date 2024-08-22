@@ -26,7 +26,7 @@ import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
 import { SearchFieldService } from '../../../search-field.service'
 import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
-import { Subscription } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-chat',
@@ -86,7 +86,7 @@ export class DesktopChatComponent implements OnInit {
    * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
-  ngOnInit() {
+  async ngOnInit() {
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
