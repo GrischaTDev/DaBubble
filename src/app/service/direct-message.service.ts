@@ -6,8 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Channel } from '../../assets/models/channel.class';
-import { ChatService } from './chat.service';
+import {Channel} from '../../assets/models/channel.class';
+import {ChatService} from './chat.service';
 import {
   doc,
   docData,
@@ -15,22 +15,22 @@ import {
   getDoc,
   onSnapshot,
 } from '@angular/fire/firestore';
-import { User } from '../../assets/models/user.class';
-import { MainServiceService } from './main-service.service';
-import { Router } from '@angular/router';
-import { Message } from '../../assets/models/message.class';
-import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
+import {User} from '../../assets/models/user.class';
+import {MainServiceService} from './main-service.service';
+import {Router} from '@angular/router';
+import {Message} from '../../assets/models/message.class';
+import {DialogUserChatComponent} from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
+import {MatDialog} from '@angular/material/dialog';
+import {Observable, Subscription} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DirectMessageService {
-  directMessageId: string = '';
+  directMessageId = '';
   newDataDirectMessage: Channel = new Channel();
   dataDirectMessage: Channel = new Channel();
-  directMessageDocId: string = '';
+  directMessageDocId = '';
   directMessageIdIsAvailable = false;
   firestore: Firestore = inject(Firestore);
   public dialog = inject(MatDialog);
@@ -39,16 +39,16 @@ export class DirectMessageService {
   imageMessage: string | ArrayBuffer | null = '';
   directUser: User = new User();
   loggedInUserUpdate: User = new User();
-  directUserStatus: string = './assets/img/offline-icon.svg';
-  directUserId: string = '';
-  loggedInUserId: string = '';
+  directUserStatus = './assets/img/offline-icon.svg';
+  directUserId = '';
+  loggedInUserId = '';
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
-  indexUserDirectmessage: number = 0;
+  indexUserDirectmessage = 0;
   messageDirectChat: Message = new Message();
   private itemsSubscription?: Subscription;
-  switchContent: boolean = false;
-  userIdNewMessage: string = '';
+  switchContent = false;
+  userIdNewMessage = '';
   windowWidth!: number;
 
   constructor(
@@ -85,7 +85,7 @@ export class DirectMessageService {
   async validationOfTheOtherUser() {
     const loggedInUserId = this.mainService.loggedInUser.id;
     const otherUsers = this.dataDirectMessage.channelUsers.filter(
-      (user) => user.id !== loggedInUserId
+      user => user.id !== loggedInUserId
     );
     if (otherUsers.length === 0) {
       this.directUser = new User(this.mainService.loggedInUser);
@@ -206,13 +206,13 @@ export class DirectMessageService {
   async directMessageIsAvailable() {
     this.directMessageIdIsAvailable = false;
     this.directMessageId = '';
-    let clickedUserMessages = this.chatService.clickedUser.message;
-    let loggedInUserMessages = this.mainService.loggedInUser.message;
+    const clickedUserMessages = this.chatService.clickedUser.message;
+    const loggedInUserMessages = this.mainService.loggedInUser.message;
     if (
       Array.isArray(clickedUserMessages) &&
       Array.isArray(loggedInUserMessages)
     ) {
-      let commonMessages = clickedUserMessages.filter((msg) =>
+      const commonMessages = clickedUserMessages.filter(msg =>
         loggedInUserMessages.includes(msg)
       );
       if (commonMessages.length !== 0) {
@@ -301,7 +301,7 @@ export class DirectMessageService {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         if (e.target) {
           this.imageMessage = e.target.result;
         }
@@ -394,18 +394,20 @@ export class DirectMessageService {
     } else {
       this.mainService
         .watchSingleDirectMessageDoc(chatId, 'direct-message')
-        .subscribe((dataDirectMessage) => {
+        .subscribe(dataDirectMessage => {
           this.chatService.dataChannel = dataDirectMessage as Channel;
           if (this.chatService.clickedUser.id) {
             this.router.navigate([
-              '/direct-chat',
+              '/main',
+              'direct-message',
               chatId,
               this.chatService?.clickedUser?.id,
               this.mainService.allChannels[0].id,
             ]);
           } else {
             this.router.navigate([
-              '/direct-chat',
+              '/main',
+              'direct-message',
               chatId,
               this.chatService.clickedUser.idUser,
               this.mainService.allChannels[0].id,
@@ -427,7 +429,7 @@ export class DirectMessageService {
   async loadUserChatContent(chatId: string) {
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `users/${chatId}`);
-    this.itemsSubscription = docData(docRef).subscribe((user) => {
+    this.itemsSubscription = docData(docRef).subscribe(user => {
       this.chatService.clickedUser = user as User;
     });
   }
