@@ -10,7 +10,7 @@ import { NewMessageComponent } from '../../new-message/mobile-new-message/new-me
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { Firestore } from '@angular/fire/firestore';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
@@ -63,9 +63,9 @@ export class DesktopChannelsComponent implements OnInit {
       this.currentUser = user;
     });
 
-      this.subscription = this.searchField.allChannel$.subscribe(channels => {
-        this.allChannel = channels;
-      });
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
+      this.allChannel = channels;
+    });
   }
 
   ngOnDestroy(): void {
@@ -81,7 +81,13 @@ export class DesktopChannelsComponent implements OnInit {
   openChannel(channel: any) {
     this.threadService.closeThread();
     this.router.navigate(['/main', 'chat', channel.id, 'user', 'chat']);
-    this.mainService.watchSingleChannelDoc(channel.id, 'channels').subscribe((dataChannel) => {this.chatService.dataChannel = dataChannel as Channel;});
+    this.mainService
+      .watchSingleChannelDoc(channel.id, 'channels')
+      // .pipe(take(1))
+      .subscribe((dataChannel) => {
+        console.log('desktop-channels.component.ts: dataChannel:', dataChannel);
+        this.chatService.dataChannel = dataChannel as Channel;
+      });
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.desktopChatOpen = true;
@@ -104,6 +110,11 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.text = '';
     this.chatService.activateChatFocus();
     this.threadService.closeThread();
+    this.chatService.mobileChatIsOpen = false;
+    this.chatService.mobileDirectChatIsOpen = false;
+    this.chatService.desktopChatOpen = false;
+    this.chatService.directChatOpen = true;
+    this.chatService.newMessageOpen = false;
   }
 
   /**
@@ -128,7 +139,9 @@ export class DesktopChannelsComponent implements OnInit {
   openChannels() {
     this.channelListOpen = !this.channelListOpen;
     this.arrowIconChannels =
-      this.arrowIconChannels === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
+      this.arrowIconChannels === 'arrow_right'
+        ? 'arrow_drop_down'
+        : 'arrow_right';
   }
 
   /**

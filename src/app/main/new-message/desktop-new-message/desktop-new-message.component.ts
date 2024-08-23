@@ -23,7 +23,7 @@ import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
 import { SearchFieldService } from '../../../search-field.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
 import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/dialog-image-message.component';
@@ -67,7 +67,7 @@ export class DesktopNewMessageComponent implements OnInit {
     public mainService: MainServiceService,
     public searchField: SearchFieldService,
     public directMessageService: DirectMessageService,
-    public newMessageService: NewMessageService,
+    public newMessageService: NewMessageService
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -75,7 +75,8 @@ export class DesktopNewMessageComponent implements OnInit {
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
+      this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
+        console.log('desktop-new-message.component.ts: channel: ', channel);
         this.chatService.dataChannel = channel;
       });
     }
@@ -89,10 +90,9 @@ export class DesktopNewMessageComponent implements OnInit {
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
       this.directMessageService.dataDirectMessage.messageChannel = [];
     }
-
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
   }
@@ -119,9 +119,11 @@ export class DesktopNewMessageComponent implements OnInit {
 
   ngAfterViewInit() {
     this.focusInputField();
-    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
-      this.focusInputField();
-    });
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(
+      () => {
+        this.focusInputField();
+      }
+    );
   }
 
   private focusInputField() {
@@ -174,5 +176,4 @@ export class DesktopNewMessageComponent implements OnInit {
       this.channelSubscription.unsubscribe();
     }
   }
-
 }

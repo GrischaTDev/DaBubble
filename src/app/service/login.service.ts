@@ -2,7 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { doc, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { User } from '../../assets/models/user.class';
 import { Router } from '@angular/router';
 
@@ -29,7 +29,8 @@ export class LoginService {
   constructor(
     private firestore: Firestore,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.checkLocalStorage();
   }
@@ -91,7 +92,8 @@ export class LoginService {
 
       signOut(auth)
         .then(() => {
-          const localStorageUser = localStorage.getItem('user');
+          const localStorageUser =
+            this.document.defaultView?.localStorage.getItem('user');
 
           if (localStorageUser !== null) {
             localStorage.removeItem('user');

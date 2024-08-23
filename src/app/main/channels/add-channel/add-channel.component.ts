@@ -18,6 +18,7 @@ import { User } from '../../../../assets/models/user.class';
 import { ChannelService } from '../../../service/channel.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-add-channel',
@@ -177,6 +178,7 @@ export class AddChannelComponent implements OnInit {
     ]);
     this.mainService
       .watchSingleChannelDoc(this.mainService.docId, 'channels')
+      .pipe(take(1))
       .subscribe((dataChannel) => {
         this.chatService.dataChannel = dataChannel as Channel;
       });

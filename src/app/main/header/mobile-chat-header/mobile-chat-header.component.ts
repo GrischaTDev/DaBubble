@@ -12,6 +12,7 @@ import { User } from '../../../../assets/models/user.class';
 import { ChatService } from '../../../service/chat.service';
 import { ThreadService } from '../../../service/thread.service';
 import { Channel } from '../../../../assets/models/channel.class';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-chat-header',
@@ -116,6 +117,7 @@ export class MobileChatHeaderComponent implements OnInit {
     } else {
       this.mainService
         .watchSingleChannelDoc(this.parmsIdOfChat, 'channels')
+        .pipe(take(1))
         .subscribe((dataChannel) => {
           this.chatService.dataChannel = dataChannel as Channel;
         });

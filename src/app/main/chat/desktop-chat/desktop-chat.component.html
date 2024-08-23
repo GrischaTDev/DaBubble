@@ -190,7 +190,11 @@
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-message-avatar-container"
         >
-          <img referrerpolicy="no-referrer" src="{{ singleMessage.userAvatar }}" alt="" />
+          <img
+            referrerpolicy="no-referrer"
+            src="{{ singleMessage.userAvatar }}"
+            alt=""
+          />
         </div>
         <div class="desktop-chat-message-content">
           <div
@@ -486,7 +490,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="desktop-chat-input-container" id="meinTextarea">
     <form class="desktop-chat-input-field-container br-20">
