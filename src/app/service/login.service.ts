@@ -1,10 +1,10 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
-import { doc, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { User } from '../../assets/models/user.class';
-import { Router } from '@angular/router';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {getAuth, onAuthStateChanged, signOut} from '@angular/fire/auth';
+import {doc, Firestore, onSnapshot, setDoc} from '@angular/fire/firestore';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import {User} from '../../assets/models/user.class';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -62,12 +62,12 @@ export class LoginService {
 
   currentLoggedUser() {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       const userId = user?.uid;
       if (userId) {
-        onSnapshot(doc(this.firestore, 'users', userId), (item) => {
+        onSnapshot(doc(this.firestore, 'users', userId), item => {
           if (item.exists()) {
-            let userData = {
+            const userData = {
               ...item.data(),
               id: item.id,
             };
@@ -87,7 +87,7 @@ export class LoginService {
         {
           online: false,
         },
-        { merge: true }
+        {merge: true}
       );
 
       signOut(auth)
@@ -105,7 +105,7 @@ export class LoginService {
 
           this.router.navigate(['login']);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log('fehler beim abmelden:', error);
         });
     }
@@ -113,9 +113,9 @@ export class LoginService {
 
   handleActionCode(actionCode: string, oobCode: string) {
     if (actionCode === 'resetPassword') {
-      this.router.navigate(['/new-password'], { queryParams: { oobCode } });
+      this.router.navigate(['/new-password'], {queryParams: {oobCode}});
     } else if (actionCode === 'verifyAndChangeEmail') {
-      this.router.navigate(['/verify-email'], { queryParams: { oobCode } });
+      this.router.navigate(['/verify-email'], {queryParams: {oobCode}});
     }
   }
 

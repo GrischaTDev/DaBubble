@@ -292,6 +292,13 @@
   padding-top: 24px;
   margin-bottom: 8px;
   cursor: pointer;
+
+  .image-to-message-container {
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 .dektop-thread-message-edit-textarea {
@@ -443,11 +450,23 @@
 }
 
 .dektop-thread-input-icon-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   gap: 5px;
+}
+
+#file-upload {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
 }
 
 .dektop-thread-input-icon {
@@ -457,6 +476,12 @@
   &:hover {
     background-color: $background-lightblue;
   }
+
+  &:first-child {
+    position: relative;
+    z-index: 1;
+  }
+
   mat-icon {
     display: flex;
     justify-content: center;

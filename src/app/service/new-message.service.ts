@@ -1,24 +1,24 @@
-import { HostListener, Injectable, OnInit } from '@angular/core';
-import { ChatService } from './chat.service';
-import { DirectMessageService } from './direct-message.service';
-import { MainServiceService } from './main-service.service';
-import { User } from '../../assets/models/user.class';
-import { Channel } from '../../assets/models/channel.class';
-import { Message } from '../../assets/models/message.class';
-import { Router } from '@angular/router';
-import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
-import { MatDialogRef } from '@angular/material/dialog';
-import { NewMessageComponent } from '../main/new-message/mobile-new-message/new-message.component';
+import {HostListener, Injectable, OnInit} from '@angular/core';
+import {ChatService} from './chat.service';
+import {DirectMessageService} from './direct-message.service';
+import {MainServiceService} from './main-service.service';
+import {User} from '../../assets/models/user.class';
+import {Channel} from '../../assets/models/channel.class';
+import {Message} from '../../assets/models/message.class';
+import {Router} from '@angular/router';
+import {DialogImageMessageComponent} from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import {MatDialogRef} from '@angular/material/dialog';
+import {NewMessageComponent} from '../main/new-message/mobile-new-message/new-message.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NewMessageService {
-  searchText: string = '';
-  text: string = '';
+  searchText = '';
+  text = '';
   userData: User | undefined;
   channelData: Channel = new Channel();
-  sendetMessage: boolean = false;
+  sendetMessage = false;
   messageChannel: Message = new Message();
   dataChannel: Channel = new Channel();
   newThreadOnFb: Channel = new Channel();
@@ -85,13 +85,13 @@ export class NewMessageService {
     this.directMessageService.directMessageDocId = chatId;
     this.mainService
       .watchUsersDoc(this.directMessageService.userIdNewMessage, 'users')
-      .subscribe((dataUser) => {
+      .subscribe(dataUser => {
         this.chatService.clickedUser = dataUser as User;
       });
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.mainService
         .watchSingleDirectMessageDoc(chatId, 'direct-message')
-        .subscribe((dataDirectMessage) => {
+        .subscribe(dataDirectMessage => {
           this.chatService.dataChannel = dataDirectMessage as Channel;
           resolve(dataDirectMessage);
         });
@@ -101,13 +101,13 @@ export class NewMessageService {
   async directMessageIsAvailableNewMessage(userData: User) {
     this.directMessageService.directMessageIdIsAvailable = false;
     this.directMessageService.directMessageId = '';
-    let choosedUserMessages = userData.message;
-    let loggedInUserMessages = this.mainService.loggedInUser.message;
+    const choosedUserMessages = userData.message;
+    const loggedInUserMessages = this.mainService.loggedInUser.message;
     if (
       Array.isArray(choosedUserMessages) &&
       Array.isArray(loggedInUserMessages)
     ) {
-      let commonMessages = choosedUserMessages.filter((msg) =>
+      const commonMessages = choosedUserMessages.filter(msg =>
         loggedInUserMessages.includes(msg)
       );
       if (commonMessages.length !== 0) {
@@ -233,7 +233,7 @@ export class NewMessageService {
     ]);
     this.mainService
       .watchSingleChannelDoc(this.channelData.id, 'channels')
-      .subscribe((dataChannel) => {
+      .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.chatService.mobileChatIsOpen = true;
@@ -259,7 +259,7 @@ export class NewMessageService {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         if (e.target) {
           this.imageMessage = e.target.result;
         }

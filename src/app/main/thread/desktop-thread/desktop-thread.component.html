@@ -176,6 +176,21 @@
                 "
               >
                 {{ singleThreadMessage.message }}
+
+                <div
+                class="image-to-message-container"
+                *ngIf="singleThreadMessage.imageToMessage"
+              >
+                <img
+                  (click)="
+                    chatService.openImageMessageDialog(
+                      singleThreadMessage.imageToMessage
+                    )
+                  "
+                  src="{{ singleThreadMessage.imageToMessage }}"
+                  alt="message width"
+                />
+              </div>
               </span>
               <div
                 *ngIf="
@@ -478,6 +493,14 @@
     </div>
     <div class="desktop-thread-input-container" id="meinTextarea">
       <form class="desktop-thread-input-field-container br-20">
+        <div class="add-image-container-width">
+          <div class="add-image-container" *ngIf="threadService.imageMessage">
+            <img src="{{ threadService.imageMessage }}" alt="" />
+            <div class="delete-img" (click)="threadService.deleteMessage()">
+              <mat-icon>close</mat-icon>
+            </div>
+          </div>
+        </div>
         <textarea
           (keydown)="checkForEnter($event)"
           [(ngModel)]="threadService.textThread"
@@ -492,6 +515,11 @@
             <div class="desktop-thread-border-right">
               <div class="desktop-thread-input-icon">
                 <mat-icon>add</mat-icon>
+                <input
+                id="file-upload"
+                type="file"
+                (change)="threadService.onFileSelected($event)"
+              />
               </div>
             </div>
             <div class="desktop-thread-input-icon">
