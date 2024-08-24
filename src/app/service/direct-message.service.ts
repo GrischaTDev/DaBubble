@@ -50,6 +50,7 @@ export class DirectMessageService {
   switchContent = false;
   userIdNewMessage = '';
   windowWidth!: number;
+  sendNewMessageFromDesktop = false;
 
   constructor(
     public chatService: ChatService,
@@ -64,6 +65,7 @@ export class DirectMessageService {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.windowWidth = window.innerWidth;
+    console.log(this.windowWidth);
   }
 
   /**
@@ -354,17 +356,28 @@ export class DirectMessageService {
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
     } else {
-      this.router.navigate([
-        '/direct-chat',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
-      ]);
-      this.switchContent = true;
+      if (this.sendNewMessageFromDesktop) {
+        this.router.navigate([
+          '/main',
+          'direct-message',
+          this.chatService.dataChannel.id,
+          this.userIdNewMessage,
+          this.mainService.allChannels[0].id,
+        ]);
+      } else {
+        this.router.navigate([
+          '/direct-chat',
+          this.chatService.dataChannel.id,
+          this.userIdNewMessage,
+          this.mainService.allChannels[0].id,
+        ]);
+        this.switchContent = true;
+      }
     }
     this.chatService.text = '';
     this.chatService.imageMessage = '';
     this.imageMessage = '';
+    this.sendNewMessageFromDesktop = false;
   }
 
   /**
