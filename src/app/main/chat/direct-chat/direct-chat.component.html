@@ -73,8 +73,8 @@
         let singleMessageIndex = index
       "
       [ngClass]="{
-          'mobile-chat-message-container-clicked':
-          chatService.activeMessageIndex === singleMessageIndex,
+        'mobile-chat-message-container-clicked':
+          chatService.activeMessageIndex === singleMessageIndex
       }"
       (mouseenter)="chatService.onMouseLeave()"
     >
@@ -95,7 +95,7 @@
           'mobile-chat-edit-message-container-right':
             chatService.ifMessageFromMe(singleMessage.userId),
           'mobile-chat-edit-message-container-left':
-            !chatService.ifMessageFromMe(singleMessage.userId),
+            !chatService.ifMessageFromMe(singleMessage.userId)
         }"
       >
         <div
@@ -228,7 +228,7 @@
                 singleMessage.userId
               ),
               'mobile-chat-message-clicked':
-              chatService.activeMessageIndex === singleMessageIndex,
+                chatService.activeMessageIndex === singleMessageIndex
             }"
           >
             <span
@@ -249,6 +249,14 @@
                   src="{{ singleMessage.imageToMessage }}"
                   alt="message width"
                 />
+
+                <a
+                  class="download-icon"
+                  href="{{ singleMessage.imageToMessage }}"
+                  download=""
+                >
+                  <mat-icon>download</mat-icon>
+                </a>
               </div>
             </span>
 
