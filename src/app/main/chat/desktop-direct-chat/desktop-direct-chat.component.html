@@ -92,7 +92,7 @@
           'desktop-chat-edit-message-container-right':
             chatService.ifMessageFromMe(singleMessage.userId),
           'desktop-chat-edit-message-container-left':
-            !chatService.ifMessageFromMe(singleMessage.userId),
+            !chatService.ifMessageFromMe(singleMessage.userId)
         }"
       >
         <div
@@ -168,8 +168,8 @@
           ),
           'desktop-chat-message-container-from-others':
             !chatService.ifMessageFromMe(singleMessage.userId),
-            'desktop-chat-message-container-clicked':
-             chatService.activeMessageIndex === singleMessageIndex,
+          'desktop-chat-message-container-clicked':
+            chatService.activeMessageIndex === singleMessageIndex
         }"
       >
         <div
@@ -180,7 +180,11 @@
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-message-avatar-container"
         >
-          <img referrerpolicy="no-referrer" src="{{ singleMessage.userAvatar }}" alt="" />
+          <img
+            referrerpolicy="no-referrer"
+            src="{{ singleMessage.userAvatar }}"
+            alt=""
+          />
         </div>
         <div class="desktop-chat-message-content">
           <div
@@ -216,7 +220,7 @@
                 singleMessage.userId
               ),
               'desktop-chat-message-clicked':
-              chatService.activeMessageIndex === singleMessageIndex,
+                chatService.activeMessageIndex === singleMessageIndex
             }"
           >
             <span
@@ -237,6 +241,14 @@
                   src="{{ singleMessage.imageToMessage }}"
                   alt="message width"
                 />
+
+                <a
+                  class="download-icon"
+                  href="{{ singleMessage.imageToMessage }}"
+                  download=""
+                >
+                  <mat-icon>download</mat-icon>
+                </a>
               </div>
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
@@ -350,13 +362,11 @@
             >
               <div
                 [ngClass]="{
-                'desktop-chat-message-reaction-hover-content-right': chatService.ifMessageFromMe(
-                  singleMessage.userId
-                ),
-                'desktop-chat-message-reaction-hover-content-left': !chatService.ifMessageFromMe(
-                  singleMessage.userId
-                ),
-              }"
+                  'desktop-chat-message-reaction-hover-content-right':
+                    chatService.ifMessageFromMe(singleMessage.userId),
+                  'desktop-chat-message-reaction-hover-content-left':
+                    !chatService.ifMessageFromMe(singleMessage.userId)
+                }"
                 *ngIf="
                   emojiIndex === emojiReactionIndexHover &&
                   singleMessageIndex === activeMessageIndexReacton

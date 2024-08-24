@@ -222,6 +222,13 @@
                   src="{{ singleMessage.imageToMessage }}"
                   alt="message width image"
                 />
+                <a
+                  class="download-icon"
+                  href="{{ singleMessage.imageToMessage }}"
+                  download=""
+                >
+                  <mat-icon>download</mat-icon>
+                </a>
               </div>
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">

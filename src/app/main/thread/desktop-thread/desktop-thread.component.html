@@ -46,11 +46,11 @@
             threadService.activeThreadMessageIndex === singleThreadMessageIndex
           "
           [ngClass]="{
-          'desktop-thread-edit-message-container-right':
-            chatService.ifMessageFromMe(singleThreadMessage.userId),
-          'desktop-thread-edit-message-container-left':
-            !chatService.ifMessageFromMe(singleThreadMessage.userId),
-        }"
+            'desktop-thread-edit-message-container-right':
+              chatService.ifMessageFromMe(singleThreadMessage.userId),
+            'desktop-thread-edit-message-container-left':
+              !chatService.ifMessageFromMe(singleThreadMessage.userId)
+          }"
         >
           <div
             class="desktop-thread-edit-icon-container"
@@ -108,14 +108,14 @@
         <div
           (mouseenter)="threadService.onMouseLeaveThread()"
           [ngClass]="{
-          'desktop-thread-message-container-from-me': chatService.ifMessageFromMe(
-            singleThreadMessage.userId
-          ),
-          'desktop-thread-message-container-from-others':
-            !chatService.ifMessageFromMe(singleThreadMessage.userId),
+            'desktop-thread-message-container-from-me':
+              chatService.ifMessageFromMe(singleThreadMessage.userId),
+            'desktop-thread-message-container-from-others':
+              !chatService.ifMessageFromMe(singleThreadMessage.userId),
             'desktop-thread-message-container-clicked':
-            threadService.activeThreadMessageIndex === singleThreadMessageIndex,
-        }"
+              threadService.activeThreadMessageIndex ===
+              singleThreadMessageIndex
+          }"
         >
           <div
             (click)="
@@ -125,7 +125,11 @@
             (mouseenter)="threadService.onMouseLeaveThread()"
             class="desktop-thread-message-avatar-container"
           >
-            <img src="{{ singleThreadMessage.userAvatar }}" alt="" referrerpolicy="no-referrer"/>
+            <img
+              src="{{ singleThreadMessage.userAvatar }}"
+              alt=""
+              referrerpolicy="no-referrer"
+            />
           </div>
           <div class="desktop-thread-message-content">
             <div
@@ -159,15 +163,15 @@
               "
               class="desktop-thread-message-text-container"
               [ngClass]="{
-              'desktop-thread-message-from-me': chatService.ifMessageFromMe(
-                singleThreadMessage.userId
-              ),
-              'desktop-thread-message-from-others': !chatService.ifMessageFromMe(
-                singleThreadMessage.userId
-              ),
-              'desktop-thread-message-clicked':
-              threadService.activeThreadMessageIndex === singleThreadMessageIndex,
-            }"
+                'desktop-thread-message-from-me': chatService.ifMessageFromMe(
+                  singleThreadMessage.userId
+                ),
+                'desktop-thread-message-from-others':
+                  !chatService.ifMessageFromMe(singleThreadMessage.userId),
+                'desktop-thread-message-clicked':
+                  threadService.activeThreadMessageIndex ===
+                  singleThreadMessageIndex
+              }"
             >
               <span
                 *ngIf="
@@ -178,19 +182,26 @@
                 {{ singleThreadMessage.message }}
 
                 <div
-                class="image-to-message-container"
-                *ngIf="singleThreadMessage.imageToMessage"
-              >
-                <img
-                  (click)="
-                    chatService.openImageMessageDialog(
-                      singleThreadMessage.imageToMessage
-                    )
-                  "
-                  src="{{ singleThreadMessage.imageToMessage }}"
-                  alt="message width"
-                />
-              </div>
+                  class="image-to-message-container"
+                  *ngIf="singleThreadMessage.imageToMessage"
+                >
+                  <img
+                    (click)="
+                      chatService.openImageMessageDialog(
+                        singleThreadMessage.imageToMessage
+                      )
+                    "
+                    src="{{ singleThreadMessage.imageToMessage }}"
+                    alt="message width"
+                  />
+                  <a
+                    class="download-icon"
+                    href="{{ singleThreadMessage.imageToMessage }}"
+                    download=""
+                  >
+                    <mat-icon>download</mat-icon>
+                  </a>
+                </div>
               </span>
               <div
                 *ngIf="
@@ -284,13 +295,11 @@
               >
                 <div
                   [ngClass]="{
-              'desktop-chat-message-reaction-hover-content-right': chatService.ifMessageFromMe(
-                singleThreadMessage.userId
-              ),
-              'desktop-chat-message-reaction-hover-content-left': !chatService.ifMessageFromMe(
-                singleThreadMessage.userId
-              ),
-            }"
+                    'desktop-chat-message-reaction-hover-content-right':
+                      chatService.ifMessageFromMe(singleThreadMessage.userId),
+                    'desktop-chat-message-reaction-hover-content-left':
+                      !chatService.ifMessageFromMe(singleThreadMessage.userId)
+                  }"
                   *ngIf="
                     emojiIndexThread ===
                       chatService.emojiReactionIndexHoverThread &&
@@ -516,10 +525,10 @@
               <div class="desktop-thread-input-icon">
                 <mat-icon>add</mat-icon>
                 <input
-                id="file-upload"
-                type="file"
-                (change)="threadService.onFileSelected($event)"
-              />
+                  id="file-upload"
+                  type="file"
+                  (change)="threadService.onFileSelected($event)"
+                />
               </div>
             </div>
             <div class="desktop-thread-input-icon">
