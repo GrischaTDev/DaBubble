@@ -24,23 +24,29 @@
     #scrollContainer
     class="mobile-chat-content"
   >
-  <div class="mobile-chat-owner-content-container" *ngIf="chatService.dataChannel?.messageChannel?.length === 0">
-    <div class="mobile-chat-owner-name-container" >
-      <p>#</p>
-      <p>{{chatService.dataChannel.name}}</p>
+    <div
+      class="mobile-chat-owner-content-container"
+      *ngIf="chatService.dataChannel?.messageChannel?.length === 0"
+    >
+      <div class="mobile-chat-owner-name-container">
+        <p>#</p>
+        <p>{{ chatService.dataChannel.name }}</p>
+      </div>
+      <div class="mobile-chat-owner-description-container">
+        <p>
+          Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels
+          <span># {{ chatService.dataChannel?.name }}</span>
+        </p>
+      </div>
     </div>
-    <div class="mobile-chat-owner-description-container" >
-      <p>Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels <span># {{chatService.dataChannel?.name}}</span></p>
-    </div>
-   </div>
     <div
       *ngFor="
         let singleMessage of chatService.dataChannel?.messageChannel;
         let singleMessageIndex = index
       "
       [ngClass]="{
-          'mobile-chat-message-container-clicked':
-          chatService.activeMessageIndex === singleMessageIndex,
+        'mobile-chat-message-container-clicked':
+          chatService.activeMessageIndex === singleMessageIndex
       }"
       (mouseenter)="chatService.onMouseLeave()"
     >
@@ -61,7 +67,7 @@
           'mobile-chat-edit-message-container-right':
             chatService.ifMessageFromMe(singleMessage.userId),
           'mobile-chat-edit-message-container-left':
-            !chatService.ifMessageFromMe(singleMessage.userId),
+            !chatService.ifMessageFromMe(singleMessage.userId)
         }"
       >
         <div
@@ -195,7 +201,7 @@
                 singleMessage.userId
               ),
               'mobile-chat-message-clicked':
-              chatService.activeMessageIndex === singleMessageIndex,
+                chatService.activeMessageIndex === singleMessageIndex
             }"
           >
             <span
@@ -349,16 +355,28 @@
     </div>
   </div>
 
-  <div id="user-result-container" class="user-result-container" *ngIf="chatService.text && searchField.filterUser.length > 0">
-
-    <div class="user-content-container" *ngIf="searchField.filterUser.length > 0">
-        <div class="user-list-container" *ngFor="let user of searchField.filterUser">
-            <div class="user-list" (click)="searchField.chooseUser(user['name'])" >
-              <img referrerpolicy="no-referrer" src="{{ user['avatar'] }}" alt="">{{ user['name'] }}
-            </div>
+  <div
+    id="user-result-container"
+    class="user-result-container"
+    *ngIf="chatService.text && searchField.filterUser.length > 0"
+  >
+    <div
+      class="user-content-container"
+      *ngIf="searchField.filterUser.length > 0"
+    >
+      <div
+        class="user-list-container"
+        *ngFor="let user of searchField.filterUser"
+      >
+        <div class="user-list" (click)="searchField.chooseUser(user['name'])">
+          <img
+            referrerpolicy="no-referrer"
+            src="{{ user['avatar'] }}"
+            alt=""
+          />{{ user['name'] }}
         </div>
+      </div>
     </div>
-
   </div>
 
   <div class="mobile-chat-input-container" id="meinTextarea">

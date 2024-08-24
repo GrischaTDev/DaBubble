@@ -1,60 +1,52 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, getAuth } from '@angular/fire/auth';
-import { addDoc, arrayUnion, collection, doc, Firestore, getFirestore, setDoc, updateDoc } from '@angular/fire/firestore';
-import { FormsModule, NgForm } from '@angular/forms';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { Router, RouterModule } from '@angular/router';
-import { User } from '../../../../assets/models/user.class';
-import { MainServiceService } from '../../../service/main-service.service';
-import { Channel } from '../../../../assets/models/channel.class';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {createUserWithEmailAndPassword, getAuth} from '@angular/fire/auth';
+import {doc, Firestore, setDoc} from '@angular/fire/firestore';
+import {FormsModule, NgForm} from '@angular/forms';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {Router, RouterModule} from '@angular/router';
+import {User} from '../../../../assets/models/user.class';
+import {MainServiceService} from '../../../service/main-service.service';
+import {Channel} from '../../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-register-card',
   standalone: true,
-  imports: [
-    MatIconModule,
-    RouterModule,
-    CommonModule,
-    FormsModule,
-    MatIcon
-  ],
+  imports: [MatIconModule, RouterModule, CommonModule, FormsModule, MatIcon],
   templateUrl: './register-card.component.html',
-  styleUrl: './register-card.component.scss'
+  styleUrl: './register-card.component.scss',
 })
-
-export class RegisterCardComponent implements OnInit {
-  name: string = '';
-  email: string = '';
-  password: string = '';
-  users = new User;
+export class RegisterCardComponent {
+  name = '';
+  email = '';
+  password = '';
+  users = new User();
   isEmailAvaiable: string | undefined;
   isUserRegister: string | undefined;
   isPasswordAvaiable: string | undefined;
   isCheckedPolicy: boolean | undefined;
 
-
-  constructor(private router: Router, private firestore: Firestore, private mainService: MainServiceService) { 
-    
-  }
-
-  ngOnInit(): void {
-    
-  }
+  constructor(
+    private router: Router,
+    private firestore: Firestore,
+    private mainService: MainServiceService
+  ) {}
 
   submitRegister(registerForm: NgForm) {
-    if(registerForm.valid) {
+    if (registerForm.valid) {
       this.saveRegister();
     }
   }
 
-
   async saveRegister() {
-
     const auth = getAuth();
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, this.email, this.password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        this.email,
+        this.password
+      );
       const user = userCredential.user;
 
       const newUser = new User({
@@ -63,7 +55,7 @@ export class RegisterCardComponent implements OnInit {
         email: this.email,
         avatar: '',
         message: '',
-        online: false
+        online: false,
       });
 
       const userRef = doc(this.firestore, 'users', user.uid);
@@ -75,25 +67,24 @@ export class RegisterCardComponent implements OnInit {
 
         this.mainService.addDoc('channels', channel.id, new Channel(channel));
       });
-
     } catch (error: any) {
-      console.error("Fehler beim Registrieren des Benutzers:", error);
+      console.error('Fehler beim Registrieren des Benutzers:', error);
       if (error.code === 'auth/email-already-in-use') {
         this.isEmailAvaiable = 'Diese E-Mail-Adresse ist bereits benutzt.';
       } else if (error.code === 'auth/invalid-email') {
         this.isEmailAvaiable = 'Diese E-Mail-Adresse ist nicht gültig.';
       } else if (error.code === 'auth/missing-email') {
-        this.isEmailAvaiable = 'Bitte gib eine E-Mail-Adresse ein.'
+        this.isEmailAvaiable = 'Bitte gib eine E-Mail-Adresse ein.';
       } else if (error.code === 'auth/operation-not-allowed') {
-        this.isUserRegister = 'Operation not allowed. Please enable Email/Password authentication.';
+        this.isUserRegister =
+          'Operation not allowed. Please enable Email/Password authentication.';
       } else if (error.code === 'auth/weak-password') {
         this.isPasswordAvaiable = 'Dieses Passwort ist zu schwach.';
       } else if (error.code === 'auth/missing-password') {
-        this.isPasswordAvaiable = 'Bitte gib ein Passwort ein'; 
+        this.isPasswordAvaiable = 'Bitte gib ein Passwort ein';
       } else {
         this.isUserRegister = 'User is not register';
       }
     }
   }
-
 }

@@ -30,7 +30,7 @@
           <div class="icon-and-name">
             <div
               class="sub-channel active-channel"
-              [ngClass]="{ 'active-channel': channel.id === activeChannelId }"
+              [ngClass]="{'active-channel': channel.id === activeChannelId}"
               (click)="openChannel(channel); setVariableOpenChat()"
             >
               <mat-icon>tag</mat-icon>
