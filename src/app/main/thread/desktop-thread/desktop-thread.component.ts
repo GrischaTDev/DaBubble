@@ -40,7 +40,7 @@ export class DesktopThreadComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public channelService: ChannelService,
     public loginService: LoginService,
-    public threadService: ThreadService
+    public threadService: ThreadService,
   ) {
     this.subscription = mainService.currentContentEmojiThread.subscribe(
       content => {
@@ -49,7 +49,7 @@ export class DesktopThreadComponent implements OnInit {
         } else {
           this.chatService.editText += content;
         }
-      }
+      },
     );
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -72,8 +72,8 @@ export class DesktopThreadComponent implements OnInit {
         this.chatService.dataChannel.messageChannel[
           this.chatService.indexOfThreadMessageForEditChatMessage
         ].thread,
-        'threads'
-      )
+        'threads',
+      ),
     );
     this.chatService.dataThread = threadData as Channel;
     this.loginService.currentLoggedUser();
@@ -126,7 +126,7 @@ export class DesktopThreadComponent implements OnInit {
   toggleIconHoverContainerThread(
     singleMessageIndex: number,
     emojiUserIndex: number,
-    event: MouseEvent
+    event: MouseEvent,
   ) {
     event.stopPropagation();
     this.chatService.activeMessageIndexReactonThread = singleMessageIndex;
@@ -153,7 +153,8 @@ export class DesktopThreadComponent implements OnInit {
       event.preventDefault();
       this.threadService.sendMessageFromThread(
         this.chatService.dataThread.id,
-        this.threadService.textThread
+        this.threadService.textThread,
+        this.threadService.imageMessage,
       );
     }
   }

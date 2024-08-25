@@ -19,7 +19,7 @@ export class ThreadService {
 
   constructor(
     public chatService: ChatService,
-    public mainService: MainServiceService
+    public mainService: MainServiceService,
   ) {}
 
   /**
@@ -56,7 +56,7 @@ export class ThreadService {
   toggleEditMessageContainerThread(
     index: number,
     event: MouseEvent,
-    messageContent: string
+    messageContent: string,
   ): void {
     event.stopPropagation();
     if (this.editMessageIndexThread === index) {
@@ -92,8 +92,12 @@ export class ThreadService {
    * @param {string} channelId - The ID of the channel from which the message is sent.
    * @param {string} textContent - The text content of the message.
    */
-  sendMessageFromThread(channelId: string, textContent: string) {
-    if (textContent || this.imageMessage) {
+  sendMessageFromThread(
+    channelId: string,
+    textContent: string,
+    imageMessage: ArrayBuffer | string | null,
+  ) {
+    if (textContent || imageMessage) {
       this.chatService.messageThread.message = textContent;
       this.chatService.messageThread.date = Date.now();
       this.chatService.messageThread.userId = this.mainService.loggedInUser.id;
@@ -103,8 +107,8 @@ export class ThreadService {
         this.mainService.loggedInUser.email;
       this.chatService.messageThread.userAvatar =
         this.mainService.loggedInUser.avatar;
-      this.chatService.messageChannel.imageToMessage = this
-        .imageMessage as ArrayBuffer;
+      this.chatService.messageThread.imageToMessage =
+        imageMessage as ArrayBuffer;
       this.setDataPreparatoryThreadOwnerMessage();
     }
   }
@@ -117,12 +121,9 @@ export class ThreadService {
    * increments the message count for both the edited message and the first message in the data thread.
    */
   async setDataPreparatoryThreadOwnerMessage() {
-    console.log('Message Thread', this.chatService.messageThread);
-    console.log('Data Thread', this.chatService.dataThread.messageChannel);
     this.chatService.dataThread.messageChannel.push(
-      this.chatService.messageThread
+      this.chatService.messageThread,
     );
-    console.log(this.chatService.dataThread.messageChannel);
     this.chatService.dataChannel.messageChannel[
       this.chatService.indexOfThreadMessageForEditChatMessage
     ].date = Date.now();
@@ -148,7 +149,7 @@ export class ThreadService {
   async editMessageFromThread(
     parmsId: string,
     newText: string,
-    singleMessageIndex: number
+    singleMessageIndex: number,
   ) {
     this.chatService.dataThread.messageChannel[singleMessageIndex].message =
       newText;
@@ -159,13 +160,13 @@ export class ThreadService {
       await this.mainService.addDoc(
         'channels',
         this.chatService.dataChannel.id,
-        new Channel(this.chatService.dataChannel)
+        new Channel(this.chatService.dataChannel),
       );
     }
     await this.mainService.addDoc(
       'threads',
       this.chatService.dataThread.id,
-      new Channel(this.chatService.dataThread)
+      new Channel(this.chatService.dataThread),
     );
     this.closeWithoutSavingThread();
   }
@@ -177,12 +178,12 @@ export class ThreadService {
     await this.mainService.addDoc(
       'channels',
       this.chatService.dataChannel.id,
-      new Channel(this.chatService.dataChannel)
+      new Channel(this.chatService.dataChannel),
     );
     await this.mainService.addDoc(
       'threads',
       this.chatService.dataThread.id,
-      new Channel(this.chatService.dataThread)
+      new Channel(this.chatService.dataThread),
     );
   }
 

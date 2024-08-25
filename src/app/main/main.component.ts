@@ -66,7 +66,7 @@ export class MainComponent implements OnInit {
     public directMessage: DirectMessageService,
     public chatService: ChatService,
     public searchField: SearchFieldService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
