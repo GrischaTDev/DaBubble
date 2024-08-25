@@ -2,23 +2,29 @@ import {
   Component,
   ElementRef,
   HostListener,
+  inject,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
-import { ChatService } from '../../../service/chat.service';
-import { ThreadService } from '../../../service/thread.service';
-import { EmojiService } from '../../../service/emoji.service';
-import { CommonModule } from '@angular/common';
-import { AddChannelComponent } from '../../channels/add-channel/add-channel.component';
-import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
-import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
-import { DirectMessageService } from '../../../service/direct-message.service';
-import { MainServiceService } from '../../../service/main-service.service';
-import { Channel } from '../../../../assets/models/channel.class';
-import { ActivatedRoute, Router } from '@angular/router';
+import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {FormsModule} from '@angular/forms';
+import {ChatService} from '../../../service/chat.service';
+import {ThreadService} from '../../../service/thread.service';
+import {EmojiService} from '../../../service/emoji.service';
+import {CommonModule, Location} from '@angular/common';
+import {AddChannelComponent} from '../../channels/add-channel/add-channel.component';
+import {NewMessageComponent} from '../../new-message/mobile-new-message/new-message.component';
+import {DirectChatComponent} from '../../chat/direct-chat/direct-chat.component';
+import {DirectMessageService} from '../../../service/direct-message.service';
+import {MainServiceService} from '../../../service/main-service.service';
+import {Channel} from '../../../../assets/models/channel.class';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {LoginService} from '../../../service/login.service';
+import {User} from '../../../../assets/models/user.class';
+import {UserProfileComponent} from '../../user-profile/user-profile.component';
 
 @Component({
   selector: 'app-mobile-thread',
@@ -31,6 +37,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatIconModule,
     AddChannelComponent,
     NewMessageComponent,
+    UserProfileComponent,
     DirectChatComponent,
   ],
   templateUrl: './mobile-thread.component.html',
@@ -39,6 +46,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class MobileThreadComponent implements OnInit {
   parmsId1: string = '';
   parmsId2: string = '';
+  dialogInstance?: MatDialogRef<DialogEmojiComponent>;
+  userMenu: boolean = false;
+  currentUser: any;
+  loggedInUser: User = new User();
+  public dialog = inject(MatDialog);
 
   constructor(
     private route: ActivatedRoute,
@@ -47,12 +59,18 @@ export class MobileThreadComponent implements OnInit {
     public chatService: ChatService,
     public threadService: ThreadService,
     public emojiService: EmojiService,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
+    private loginService: LoginService,
+    private location: Location,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId1 = params['id1'];
       this.parmsId2 = params['id2'];
     });
+  }
+
+  closeThread() {
+    this.location.back();
   }
 
   /**
@@ -63,17 +81,23 @@ export class MobileThreadComponent implements OnInit {
   ngOnInit() {
     this.mainService
       .watchSingleChannelDoc(this.parmsId1, 'channels')
-      .subscribe((dataChannel) => {
+      .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.mainService
       .watchSingleDirectMessageDocThread(this.parmsId2, 'threads')
-      .subscribe((dataThread) => {
+      .subscribe(dataThread => {
         this.chatService.dataThread = dataThread as Channel;
       });
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+
+    this.loginService.currentLoggedUser();
+    this.loginService.loggedInUser$.subscribe(user => {
+      this.currentUser = user;
+      this.mainService.loggedInUser = new User(user);
+    });
   }
 
   /**
@@ -146,4 +170,35 @@ export class MobileThreadComponent implements OnInit {
       'chat',
     ]);
   }
+
+  /**
+   * Toggles the user menu.
+   */
+  openUserMenu() {
+    this.userMenu = !this.userMenu;
+  }
+
+  /**
+   * Prevents the event from propagating further.
+   *
+   * @param event - The event object.
+   */
+  doNotClose(event: Event) {
+    event.stopPropagation();
+  }
+
+  /**
+   * Opens the user profile dialog.
+   */
+  openUserProfile() {
+    this.dialog.open(UserProfileComponent);
+  }
+
+  /**
+   * Logs out the user.
+   *
+   * @remarks
+   * This method logs out the user by calling the `logoutUser` method of the `loginService` and then navigating to the login page.
+   */
+  logout() {}
 }
