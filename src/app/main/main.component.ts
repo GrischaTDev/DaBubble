@@ -24,6 +24,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Channel} from '../../assets/models/channel.class';
 import {User} from '../../assets/models/user.class';
 import {SearchFieldService} from '../search-field.service';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -80,6 +81,7 @@ export class MainComponent implements OnInit {
       this.chatService.desktopChatOpen = true;
       this.mainService
         .watchSingleChannelDoc(this.parmsIdContent, 'channels')
+        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
@@ -90,6 +92,7 @@ export class MainComponent implements OnInit {
       this.chatService.desktopChatOpen = false;
       this.mainService
         .watchSingleChannelDoc(this.parmsIdContent, 'direct-message')
+        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });

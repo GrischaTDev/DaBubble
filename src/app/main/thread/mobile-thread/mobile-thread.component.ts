@@ -25,6 +25,8 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {LoginService} from '../../../service/login.service';
 import {User} from '../../../../assets/models/user.class';
 import {UserProfileComponent} from '../../user-profile/user-profile.component';
+import {getAuth, signOut} from '@angular/fire/auth';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-mobile-thread',
@@ -81,11 +83,13 @@ export class MobileThreadComponent implements OnInit {
   ngOnInit() {
     this.mainService
       .watchSingleChannelDoc(this.parmsId1, 'channels')
+      .pipe(take(1))
       .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.mainService
       .watchSingleDirectMessageDocThread(this.parmsId2, 'threads')
+      .pipe(take(1))
       .subscribe(dataThread => {
         this.chatService.dataThread = dataThread as Channel;
       });
@@ -200,5 +204,13 @@ export class MobileThreadComponent implements OnInit {
    * @remarks
    * This method logs out the user by calling the `logoutUser` method of the `loginService` and then navigating to the login page.
    */
-  logout() {}
+  logout() {
+    this.threadService.closeThread();
+    const auth = getAuth();
+    this.loginService.logoutUser(auth);
+
+    signOut(auth).then(() => {
+      this.router.navigate(['login']);
+    });
+  }
 }

@@ -28,6 +28,7 @@ import {ThreadService} from '../../../service/thread.service';
 import {getAuth, signOut} from '@angular/fire/auth';
 import {LoginService} from '../../../service/login.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-new-message',
@@ -76,13 +77,14 @@ export class NewMessageComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
   ) {
+    this.newMessageService.text = '';
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
+      this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
         this.chatService.dataChannel = channel;
       });
     }
@@ -92,9 +94,11 @@ export class NewMessageComponent implements OnInit {
     this.loggedInUser = mainService.loggedInUser;
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
-      this.allChannel = channels;
-    });
+    this.subscription = this.searchField.allChannel$
+      .pipe(take(1))
+      .subscribe(channels => {
+        this.allChannel = channels;
+      });
 
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe(user => {

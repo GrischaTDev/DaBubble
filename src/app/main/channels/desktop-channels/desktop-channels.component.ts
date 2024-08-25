@@ -10,7 +10,7 @@ import {NewMessageComponent} from '../../new-message/mobile-new-message/new-mess
 import {LoginService} from '../../../service/login.service';
 import {DirectMessageService} from '../../../service/direct-message.service';
 import {DirectChatComponent} from '../../chat/direct-chat/direct-chat.component';
-import {Subscription} from 'rxjs';
+import {Subscription, take} from 'rxjs';
 import {Channel} from '../../../../assets/models/channel.class';
 import {User} from '../../../../assets/models/user.class';
 import {ThreadService} from '../../../service/thread.service';
@@ -50,7 +50,7 @@ export class DesktopChannelsComponent implements OnInit {
     public chatService: ChatService,
     public directMessageService: DirectMessageService,
     public threadService: ThreadService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
   ) {}
 
   /**
@@ -82,9 +82,8 @@ export class DesktopChannelsComponent implements OnInit {
     this.router.navigate(['/main', 'chat', channel.id, 'user', 'chat']);
     this.mainService
       .watchSingleChannelDoc(channel.id, 'channels')
-      // .pipe(take(1))
+      .pipe(take(1))
       .subscribe(dataChannel => {
-        console.log('desktop-channels.component.ts: dataChannel:', dataChannel);
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.chatService.mobileChatIsOpen = true;
@@ -120,6 +119,7 @@ export class DesktopChannelsComponent implements OnInit {
    * Opens the new message interface.
    */
   openNewMessage() {
+    this.chatService.text = '';
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = true;

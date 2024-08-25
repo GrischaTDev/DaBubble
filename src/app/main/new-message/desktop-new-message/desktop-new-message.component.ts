@@ -67,7 +67,7 @@ export class DesktopNewMessageComponent implements OnInit {
     public mainService: MainServiceService,
     public searchField: SearchFieldService,
     public directMessageService: DirectMessageService,
-    public newMessageService: NewMessageService
+    public newMessageService: NewMessageService,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -76,7 +76,6 @@ export class DesktopNewMessageComponent implements OnInit {
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
       this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
-        console.log('desktop-new-message.component.ts: channel: ', channel);
         this.chatService.dataChannel = channel;
       });
     }
@@ -122,7 +121,7 @@ export class DesktopNewMessageComponent implements OnInit {
     this.channelSubscription = this.chatService.channelChanged$.subscribe(
       () => {
         this.focusInputField();
-      }
+      },
     );
   }
 

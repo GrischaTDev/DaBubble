@@ -30,7 +30,7 @@ export class MobileChatHeaderComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     public chatService: ChatService,
-    public threadService: ThreadService
+    public threadService: ThreadService,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsIdContent = params['id'];
@@ -103,6 +103,7 @@ export class MobileChatHeaderComponent implements OnInit {
     if (this.parmsIdOfChat === 'chat') {
       this.mainService
         .watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels')
+        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });

@@ -1,20 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MainServiceService } from '../../../service/main-service.service';
-import { MatDialog } from '@angular/material/dialog';
-import { AddChannelComponent } from '../add-channel/add-channel.component';
-import { Router } from '@angular/router';
-import { ChatService } from '../../../service/chat.service';
-import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
-import { LoginService } from '../../../service/login.service';
-import { DirectMessageService } from '../../../service/direct-message.service';
-import { SearchFieldService } from '../../../search-field.service';
-import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { Channel } from '../../../../assets/models/channel.class';
-import { NewMessageService } from '../../../service/new-message.service';
-import { User } from '../../../../assets/models/user.class';
+import {CommonModule} from '@angular/common';
+import {Component, inject, OnInit} from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MainServiceService} from '../../../service/main-service.service';
+import {MatDialog} from '@angular/material/dialog';
+import {AddChannelComponent} from '../add-channel/add-channel.component';
+import {Router} from '@angular/router';
+import {ChatService} from '../../../service/chat.service';
+import {NewMessageComponent} from '../../new-message/mobile-new-message/new-message.component';
+import {LoginService} from '../../../service/login.service';
+import {DirectMessageService} from '../../../service/direct-message.service';
+import {SearchFieldService} from '../../../search-field.service';
+import {FormsModule} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {Channel} from '../../../../assets/models/channel.class';
+import {NewMessageService} from '../../../service/new-message.service';
+import {User} from '../../../../assets/models/user.class';
 
 @Component({
   selector: 'app-mobile-channels',
@@ -47,7 +47,7 @@ export class MobileChannelsComponent implements OnInit {
     public chatService: ChatService,
     public directMessageService: DirectMessageService,
     private newMessageService: NewMessageService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
   ) {}
 
   /**
@@ -57,11 +57,11 @@ export class MobileChannelsComponent implements OnInit {
    */
   ngOnInit() {
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe((user) => {
+    this.loginService.loggedInUser$.subscribe(user => {
       this.currentUser = user;
     });
 
-    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
       this.allChannel = channels;
     });
   }
@@ -113,6 +113,7 @@ export class MobileChannelsComponent implements OnInit {
     this.chatService.clickedUser = user;
     this.searchValue = '';
     this.directMessageService.openDirectMessage(user);
+    this.chatService.text = '';
   }
 
   /**
@@ -127,5 +128,6 @@ export class MobileChannelsComponent implements OnInit {
     this.searchValue = '';
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
+    this.chatService.text = '';
   }
 }
