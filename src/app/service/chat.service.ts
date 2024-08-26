@@ -61,6 +61,9 @@ export class ChatService {
   desktopChatOpen = true;
   newMessageOpen = false;
   isThreadOpen = false;
+  isWorkspaceOpen: boolean = true;
+  closeMenu: string = 'arrow_drop_up';
+  closeMenuText: string = 'Workspace-Menü schließen';
   imageMessage: string | ArrayBuffer | null = '';
   indexOfThreadMessageForEditChatMessage = 0;
   ownerThreadMessage = false;
@@ -73,7 +76,7 @@ export class ChatService {
   channelChanged$ = this.channelChangedSource.asObservable();
   constructor(
     public mainService: MainServiceService,
-    private router: Router
+    private router: Router,
   ) {}
 
   /**
@@ -233,12 +236,12 @@ export class ChatService {
     await this.mainService.addDoc(
       'threads',
       this.newThreadOnFb.id,
-      new Channel(this.newThreadOnFb)
+      new Channel(this.newThreadOnFb),
     );
     await this.mainService.addDoc(
       'channels',
       this.dataChannel.id,
-      new Channel(this.dataChannel)
+      new Channel(this.dataChannel),
     );
   }
 
@@ -352,7 +355,7 @@ export class ChatService {
   toggleEditMessageContainer(
     index: number,
     event: MouseEvent,
-    messageContent: string
+    messageContent: string,
   ): void {
     event.stopPropagation();
     if (this.editMessageIndex === index) {
@@ -386,7 +389,7 @@ export class ChatService {
   async editMessageFromChannel(
     parmsId: string,
     newText: string,
-    singleMessageIndex: number
+    singleMessageIndex: number,
   ) {
     this.loadContenThreadForEditMessage(singleMessageIndex).then(() => {
       this.dataChannel.messageChannel[singleMessageIndex].message = newText;
@@ -395,18 +398,18 @@ export class ChatService {
         this.mainService.addDoc(
           'channels',
           this.dataChannel.id,
-          new Channel(this.dataChannel)
+          new Channel(this.dataChannel),
         );
         this.mainService.addDoc(
           'threads',
           this.dataThread.id,
-          new Channel(this.dataThread)
+          new Channel(this.dataThread),
         );
       } else {
         this.mainService.addDoc(
           'direct-message',
           this.dataChannel.id,
-          new Channel(this.dataChannel)
+          new Channel(this.dataChannel),
         );
       }
       this.closeWithoutSaving();
@@ -418,22 +421,22 @@ export class ChatService {
    * Asynchronously loads a content thread for editing a message based on its index.
    */
   async loadContenThreadForEditMessage(
-    singleMessageIndex: number
+    singleMessageIndex: number,
   ): Promise<void> {
     if (!this.fromDirectChat) {
       const dataThreadChannel = await firstValueFrom(
         this.mainService.watchSingleThreadDoc(
           this.dataChannel.messageChannel[singleMessageIndex].thread,
-          'threads'
-        )
+          'threads',
+        ),
       );
       this.dataThread = dataThreadChannel as Channel;
     } else {
       const dataThreadChannel = await firstValueFrom(
         this.mainService.watchSingleThreadDoc(
           this.dataChannel.id,
-          'direct-message'
-        )
+          'direct-message',
+        ),
       );
       this.dataThread = dataThreadChannel as Channel;
     }
@@ -473,5 +476,10 @@ export class ChatService {
     this.contentMessageOfThread = threadMessage;
     this.indexOfThreadMessageForEditChatMessage = indexSingleMessage;
     this.isThreadOpen = true;
+    this.isWorkspaceOpen = false;
+    this.closeMenu = this.isWorkspaceOpen ? 'arrow_drop_up' : 'arrow_drop_down';
+    this.closeMenuText = this.isWorkspaceOpen
+      ? 'Workspace-Menü schließen'
+      : 'Workspace-Menü öffnen';
   }
 }

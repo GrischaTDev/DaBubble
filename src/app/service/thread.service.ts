@@ -28,6 +28,7 @@ export class ThreadService {
    */
   closeThread() {
     this.chatService.isThreadOpen = false;
+    this.chatService.isWorkspaceOpen = true;
   }
 
   /**
