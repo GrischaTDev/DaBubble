@@ -29,7 +29,7 @@ export class NewMessageService {
     private chatService: ChatService,
     private directMessageService: DirectMessageService,
     private mainService: MainServiceService,
-    private router: Router
+    private router: Router,
   ) {}
 
   async chooseUser(name: string, user: User) {
@@ -56,13 +56,13 @@ export class NewMessageService {
   async sendMessage(message: string) {
     if (this.userData) {
       await this.loadDirectChatContent(
-        this.directMessageService.directMessageDocId
+        this.directMessageService.directMessageDocId,
       );
       this.directMessageService.imageMessage = this.imageMessage;
       this.directMessageService.sendMessageFromDirectMessage(
         this.directMessageService.dataDirectMessage.id,
         message,
-        this.imageMessage
+        this.imageMessage,
       );
       if (this.newMessageDialog) {
         this.newMessageDialog.close();
@@ -73,7 +73,7 @@ export class NewMessageService {
     } else if (this.channelData) {
       this.sendMessageFromChannelNewChannelMessage(
         this.channelData.id,
-        message
+        message,
       );
       if (this.newMessageDialog) {
         this.newMessageDialog.close();
@@ -108,7 +108,7 @@ export class NewMessageService {
       Array.isArray(loggedInUserMessages)
     ) {
       const commonMessages = choosedUserMessages.filter(msg =>
-        loggedInUserMessages.includes(msg)
+        loggedInUserMessages.includes(msg),
       );
       if (commonMessages.length !== 0) {
         this.directMessageService.directMessageDocId =
@@ -124,7 +124,7 @@ export class NewMessageService {
       this.directMessageService.newDataDirectMessage.channelUsers = [];
       await this.mainService.addNewDocOnFirebase(
         'direct-message',
-        new Channel(this.directMessageService.newDataDirectMessage)
+        new Channel(this.directMessageService.newDataDirectMessage),
       );
       await this.pushDirectMessageIdToUser(userData);
     }
@@ -136,10 +136,10 @@ export class NewMessageService {
     this.directMessageService.directMessageId = this.mainService.docId;
     this.directMessageService.newDataDirectMessage.id = this.mainService.docId;
     this.directMessageService.newDataDirectMessage.channelUsers.push(
-      new User(this.mainService.loggedInUser)
+      new User(this.mainService.loggedInUser),
     );
     this.directMessageService.newDataDirectMessage.channelUsers.push(
-      new User(userData)
+      new User(userData),
     );
     this.pushNewDirectmessageContenToFb(userData);
   }
@@ -148,13 +148,13 @@ export class NewMessageService {
     await this.mainService.addDoc(
       'users',
       this.mainService.loggedInUser.id,
-      new User(this.mainService.loggedInUser)
+      new User(this.mainService.loggedInUser),
     );
     await this.mainService.addDoc('users', userData.id, new User(userData));
     await this.mainService.addDoc(
       'direct-message',
       this.directMessageService.directMessageDocId,
-      new Channel(this.directMessageService.newDataDirectMessage)
+      new Channel(this.directMessageService.newDataDirectMessage),
     );
   }
 
@@ -162,7 +162,7 @@ export class NewMessageService {
 
   async sendMessageFromChannelNewChannelMessage(
     channelId: string,
-    textContent: string
+    textContent: string,
   ) {
     if (textContent) {
       try {
@@ -210,12 +210,12 @@ export class NewMessageService {
       await this.mainService.addDoc(
         'threads',
         this.newThreadOnFb.id,
-        new Channel(this.newThreadOnFb)
+        new Channel(this.newThreadOnFb),
       );
       await this.mainService.addDoc(
         'channels',
         this.channelData.id,
-        new Channel(this.channelData)
+        new Channel(this.channelData),
       );
     } catch (err) {
       console.log('error', err);
@@ -242,6 +242,7 @@ export class NewMessageService {
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = false;
     this.chatService.text = '';
+    this.imageMessage = '';
   }
 
   /**
