@@ -25,11 +25,12 @@ app-desktop-chat,
 app-desktop-direct-chat,
 app-desktop-new-message {
   flex-grow: 1;
+  transition: flex 0.3s ease-in-out;
 
 }
 
 app-desktop-thread {
-  width: 25%;
+  width: 30%;
   margin-left: 25px;
 }
 

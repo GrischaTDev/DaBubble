@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import {Injectable, inject} from '@angular/core';
 import {
   Firestore,
   addDoc,
@@ -10,15 +10,15 @@ import {
   query,
   orderBy,
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
-import { User } from '../../assets/models/user.class';
-import { Channel } from '../../assets/models/channel.class';
-import { Router } from '@angular/router';
-import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
-import { Emoji } from '../../assets/models/emoji.class';
-import { Message } from '../../assets/models/message.class';
-import { MentionUser } from '../../assets/models/mention-user.class';
-import { EmojiCollection } from '../../assets/models/emojiCollection.class';
+import {BehaviorSubject, Subject, Observable} from 'rxjs';
+import {User} from '../../assets/models/user.class';
+import {Channel} from '../../assets/models/channel.class';
+import {Router} from '@angular/router';
+import {getAuth, onAuthStateChanged} from '@angular/fire/auth';
+import {Emoji} from '../../assets/models/emoji.class';
+import {Message} from '../../assets/models/message.class';
+import {MentionUser} from '../../assets/models/mention-user.class';
+import {EmojiCollection} from '../../assets/models/emojiCollection.class';
 
 @Injectable({
   providedIn: 'root',
@@ -93,12 +93,12 @@ export class MainServiceService {
    */
   async addNewDocOnFirebase(
     docName: string,
-    data: Channel | User | EmojiCollection | MentionUser | Message
+    data: Channel | User | EmojiCollection | MentionUser | Message,
   ) {
     try {
       const docRef = await addDoc(
         collection(this.firestore, docName),
-        data.toJSON()
+        data.toJSON(),
       );
       this.docId = docRef.id;
       if (docName === 'channels' || docName === 'direct-message') {
@@ -116,7 +116,7 @@ export class MainServiceService {
       {
         id: docRef,
       },
-      { merge: true }
+      {merge: true},
     );
   }
 
@@ -126,21 +126,18 @@ export class MainServiceService {
    */
   currentLoggedUser() {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       const userId = user?.uid;
       if (user) {
-        onSnapshot(
-          doc(this.firestore, 'users', userId ?? 'default'),
-          (item) => {
-            if (item.exists()) {
-              let userData = {
-                ...item.data(),
-                id: item.id,
-              };
-              this.loggedInUser = new User(userData);
-            }
+        onSnapshot(doc(this.firestore, 'users', userId ?? 'default'), item => {
+          if (item.exists()) {
+            let userData = {
+              ...item.data(),
+              id: item.id,
+            };
+            this.loggedInUser = new User(userData);
           }
-        );
+        });
       }
     });
   }
@@ -151,9 +148,9 @@ export class MainServiceService {
    * Each `User` instance is created from the document's data, including a unique ID.
    */
   subUserList() {
-    return onSnapshot(collection(this.firestore, 'users'), (list) => {
+    return onSnapshot(collection(this.firestore, 'users'), list => {
       this.allUsers = [];
-      list.forEach((element) => {
+      list.forEach(element => {
         let userData = {
           ...element.data(),
           id: element.id,
@@ -172,18 +169,18 @@ export class MainServiceService {
     return onSnapshot(
       query(
         collection(this.firestore, 'channels'),
-        orderBy('openingDate', 'asc') // Sortieren nach 'openingDate' absteigend
+        orderBy('openingDate', 'asc'), // Sortieren nach 'openingDate' absteigend
       ),
-      (list) => {
+      list => {
         this.allChannels = [];
-        list.forEach((element) => {
+        list.forEach(element => {
           let channelData = {
             ...element.data(),
             id: element.id,
           };
           this.allChannels.push(new Channel(channelData));
         });
-      }
+      },
     );
   }
 
@@ -197,13 +194,13 @@ export class MainServiceService {
   async addDoc(
     collectionName: string,
     docId: string,
-    data: Channel | User | Emoji | EmojiCollection
+    data: Channel | User | Emoji | EmojiCollection,
   ) {
     await updateDoc(
       doc(collection(this.firestore, collectionName), docId),
-      data.toJSON()
+      data.toJSON(),
     )
-      .catch((err) => {
+      .catch(err => {
         console.error(err);
       })
       .then(() => {
@@ -220,7 +217,7 @@ export class MainServiceService {
   async setDocData(
     collectionName: string,
     docId: string,
-    data: Channel | User | Emoji | EmojiCollection
+    data: Channel | User | Emoji | EmojiCollection,
   ) {
     await setDoc(doc(this.firestore, collectionName, docId), data);
   }
@@ -252,9 +249,9 @@ export class MainServiceService {
    */
   watchSingleChannelDoc(
     docId: string,
-    collectionName: string
+    collectionName: string,
   ): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+    onSnapshot(doc(this.firestore, collectionName, docId), element => {
       let docData = {
         ...element.data(),
       };
@@ -270,7 +267,7 @@ export class MainServiceService {
    * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
    */
   watchSingleThreadDoc(docId: string, collectionName: string): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+    onSnapshot(doc(this.firestore, collectionName, docId), element => {
       let docData = {
         ...element.data(),
       };
@@ -286,7 +283,7 @@ export class MainServiceService {
    * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
    */
   watchUsersDoc(docId: string, collectionName: string): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+    onSnapshot(doc(this.firestore, collectionName, docId), element => {
       let docData = {
         ...element.data(),
       };
@@ -303,9 +300,9 @@ export class MainServiceService {
    */
   watchSingleDirectMessageDoc(
     docId: string,
-    collectionName: string
+    collectionName: string,
   ): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+    onSnapshot(doc(this.firestore, collectionName, docId), element => {
       let docData = {
         ...element.data(),
       };
@@ -322,9 +319,9 @@ export class MainServiceService {
    */
   watchSingleDirectMessageDocThread(
     docId: string,
-    collectionName: string
+    collectionName: string,
   ): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
+    onSnapshot(doc(this.firestore, collectionName, docId), element => {
       let docData = {
         ...element.data(),
       };

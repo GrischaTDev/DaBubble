@@ -67,19 +67,21 @@ export class DesktopThreadComponent implements OnInit {
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
   async ngOnInit() {
-    const threadData = await lastValueFrom(
-      this.mainService.watchSingleThreadDoc(
-        this.chatService.dataChannel.messageChannel[
-          this.chatService.indexOfThreadMessageForEditChatMessage
-        ].thread,
-        'threads',
-      ),
-    );
-    this.chatService.dataThread = threadData as Channel;
-    this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
-      this.mainService.loggedInUser = new User(user);
-    });
+    if (this.chatService.isThreadOpen) {
+      const threadData = await lastValueFrom(
+        this.mainService.watchSingleThreadDoc(
+          this.chatService.dataChannel.messageChannel[
+            this.chatService.indexOfThreadMessageForEditChatMessage
+          ].thread,
+          'threads',
+        ),
+      );
+      this.chatService.dataThread = threadData as Channel;
+      this.loginService.currentLoggedUser();
+      this.loginService.loggedInUser$.subscribe(user => {
+        this.mainService.loggedInUser = new User(user);
+      });
+    }
   }
 
   /** @ViewChild decorator to access the scrollable container element within a thread. */
