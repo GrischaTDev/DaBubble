@@ -75,14 +75,14 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       state(
         'in',
         style({
-          width: '25%',
+          width: '400px',
           display: 'block',
         }),
       ),
       state(
         'out',
         style({
-          width: '0%',
+          width: '0px',
           display: 'none',
         }),
       ),
