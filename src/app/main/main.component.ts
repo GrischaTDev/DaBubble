@@ -57,39 +57,37 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       state(
         'in',
         style({
-          transform: 'translateX(0)',
-          opacity: 1,
+          width: '35%',
           display: 'block',
         }),
       ),
       state(
         'out',
         style({
-          transform: 'translateX(100%)',
-          opacity: 0,
+          width: '0%',
           display: 'none',
         }),
       ),
-      transition('in => out', [animate('500ms ease-in-out')]),
-      transition('out => in', [animate('500ms ease-in-out')]),
+      transition('in => out', [animate('200ms ease-in-out')]),
+      transition('out => in', [animate('200ms ease-in-out')]),
     ]),
     trigger('slideLeftInOut', [
       state(
         'in',
         style({
-          transform: 'translateX(0)',
+          width: '25%',
           display: 'block',
         }),
       ),
       state(
         'out',
         style({
-          transform: 'translateX(-100%)',
+          width: '0%',
           display: 'none',
         }),
       ),
-      transition('in => out', [animate('500ms ease-in-out')]),
-      transition('out => in', [animate('500ms ease-in-out')]),
+      transition('in => out', [animate('200ms ease-in-out')]),
+      transition('out => in', [animate('200ms ease-in-out')]),
     ]),
   ],
 })

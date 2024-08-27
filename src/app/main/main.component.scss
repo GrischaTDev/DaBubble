@@ -24,7 +24,8 @@ app-desktop-channels {
 app-desktop-chat,
 app-desktop-direct-chat,
 app-desktop-new-message {
-  flex-grow: 1;
+  width: 100%;
+  transition: 0.2s ease-in;
 
 }
 
