@@ -25,6 +25,7 @@ import {Channel} from '../../assets/models/channel.class';
 import {User} from '../../assets/models/user.class';
 import {SearchFieldService} from '../search-field.service';
 import {take} from 'rxjs';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-main',
@@ -50,6 +51,44 @@ import {take} from 'rxjs';
     DesktopDirectChatComponent,
     NewMessageComponent,
     DesktopNewMessageComponent,
+  ],
+  animations: [
+    trigger('slideRightInOut', [
+      state(
+        'in',
+        style({
+          width: '35%',
+          display: 'block',
+        }),
+      ),
+      state(
+        'out',
+        style({
+          width: '0%',
+          display: 'none',
+        }),
+      ),
+      transition('in => out', [animate('200ms ease-in-out')]),
+      transition('out => in', [animate('200ms ease-in-out')]),
+    ]),
+    trigger('slideLeftInOut', [
+      state(
+        'in',
+        style({
+          width: '400px',
+          display: 'block',
+        }),
+      ),
+      state(
+        'out',
+        style({
+          width: '0px',
+          display: 'none',
+        }),
+      ),
+      transition('in => out', [animate('200ms ease-in-out')]),
+      transition('out => in', [animate('200ms ease-in-out')]),
+    ]),
   ],
 })
 export class MainComponent implements OnInit {

@@ -1,4 +1,4 @@
-@import './../../styles.scss';
+// 8import './../../styles.scss';
 
 body {
   background-color: $background-lightblue !important;
@@ -21,11 +21,12 @@ app-desktop-channels {
 app-desktop-chat,
 app-desktop-direct-chat,
 app-desktop-new-message {
-  flex-grow: 1;
+  width: 100%;
+  transition: 0.2s ease-in;
 }
 
 app-desktop-thread {
-  width: 25%;
+  width: 30%;
   margin-left: 25px;
 }
 
