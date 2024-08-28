@@ -55,7 +55,7 @@ export class DirectMessageService {
   constructor(
     public chatService: ChatService,
     public mainService: MainServiceService,
-    public router: Router
+    public router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -87,7 +87,7 @@ export class DirectMessageService {
   async validationOfTheOtherUser() {
     const loggedInUserId = this.mainService.loggedInUser.id;
     const otherUsers = this.dataDirectMessage.channelUsers.filter(
-      user => user.id !== loggedInUserId
+      user => user.id !== loggedInUserId,
     );
     if (otherUsers.length === 0) {
       this.directUser = new User(this.mainService.loggedInUser);
@@ -215,7 +215,7 @@ export class DirectMessageService {
       Array.isArray(loggedInUserMessages)
     ) {
       const commonMessages = clickedUserMessages.filter(msg =>
-        loggedInUserMessages.includes(msg)
+        loggedInUserMessages.includes(msg),
       );
       if (commonMessages.length !== 0) {
         this.directMessageDocId = commonMessages[0].toString();
@@ -237,7 +237,7 @@ export class DirectMessageService {
       this.newDataDirectMessage.channelUsers = [];
       await this.mainService.addNewDocOnFirebase(
         'direct-message',
-        new Channel(this.newDataDirectMessage)
+        new Channel(this.newDataDirectMessage),
       );
       await this.pushDirectMessageIdToUser();
       await this.loadDirectChatContent(this.mainService.docId);
@@ -254,10 +254,10 @@ export class DirectMessageService {
     this.directMessageId = this.mainService.docId;
     this.newDataDirectMessage.id = this.mainService.docId;
     this.newDataDirectMessage.channelUsers.push(
-      new User(this.mainService.loggedInUser)
+      new User(this.mainService.loggedInUser),
     );
     this.newDataDirectMessage.channelUsers.push(
-      new User(this.chatService.clickedUser)
+      new User(this.chatService.clickedUser),
     );
     this.pushNewDirectmessageContenToFb();
   }
@@ -271,17 +271,17 @@ export class DirectMessageService {
     await this.mainService.addDoc(
       'users',
       this.mainService.loggedInUser.id,
-      new User(this.mainService.loggedInUser)
+      new User(this.mainService.loggedInUser),
     );
     await this.mainService.addDoc(
       'users',
       this.chatService.clickedUser.id,
-      new User(this.chatService.clickedUser)
+      new User(this.chatService.clickedUser),
     );
     await this.mainService.addDoc(
       'direct-message',
       this.directMessageDocId,
-      new Channel(this.newDataDirectMessage)
+      new Channel(this.newDataDirectMessage),
     );
   }
 
@@ -321,7 +321,7 @@ export class DirectMessageService {
   async sendMessageFromDirectMessage(
     channelId: string,
     textContent: string,
-    image: ArrayBuffer | null | string
+    image: ArrayBuffer | null | string,
   ) {
     this.messageDirectChat.message = textContent;
     this.messageDirectChat.date = Date.now();
@@ -334,7 +334,7 @@ export class DirectMessageService {
     await this.mainService.addDoc(
       'direct-message',
       this.chatService.dataChannel.id,
-      new Channel(this.chatService.dataChannel)
+      new Channel(this.chatService.dataChannel),
     );
     this.loadDirectMessageFromNewMessage();
   }
@@ -355,24 +355,22 @@ export class DirectMessageService {
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
+    } else if (this.sendNewMessageFromDesktop) {
+      this.router.navigate([
+        '/main',
+        'direct-message',
+        this.chatService.dataChannel.id,
+        this.userIdNewMessage,
+        this.mainService.allChannels[0].id,
+      ]);
     } else {
-      if (this.sendNewMessageFromDesktop) {
-        this.router.navigate([
-          '/main',
-          'direct-message',
-          this.chatService.dataChannel.id,
-          this.userIdNewMessage,
-          this.mainService.allChannels[0].id,
-        ]);
-      } else {
-        this.router.navigate([
-          '/direct-chat',
-          this.chatService.dataChannel.id,
-          this.userIdNewMessage,
-          this.mainService.allChannels[0].id,
-        ]);
-        this.switchContent = true;
-      }
+      this.router.navigate([
+        '/direct-chat',
+        this.chatService.dataChannel.id,
+        this.userIdNewMessage,
+        this.mainService.allChannels[0].id,
+      ]);
+      this.switchContent = true;
     }
     this.chatService.text = '';
     this.chatService.imageMessage = '';

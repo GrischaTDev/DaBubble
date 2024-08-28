@@ -1,31 +1,31 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { MainServiceService } from '../../../service/main-service.service';
-import { ChatService } from '../../../service/chat.service';
-import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { User } from '../../../../assets/models/user.class';
-import { PickerComponent } from '@ctrl/ngx-emoji-mart';
-import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
-import { EmojiService } from '../../../service/emoji.service';
-import { DirectMessageService } from '../../../service/direct-message.service';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
-import { Subscription } from 'rxjs';
-import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
-import { Firestore } from '@angular/fire/firestore';
-import { ChannelService } from '../../../service/channel.service';
-import { LoginService } from '../../../service/login.service';
-import { ThreadService } from '../../../service/thread.service';
-import { Channel } from '../../../../assets/models/channel.class';
-import { SearchFieldService } from '../../../search-field.service';
+import {MainServiceService} from '../../../service/main-service.service';
+import {ChatService} from '../../../service/chat.service';
+import {MobileHeaderComponent} from '../../header/mobile-header/mobile-header.component';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute} from '@angular/router';
+import {User} from '../../../../assets/models/user.class';
+import {PickerComponent} from '@ctrl/ngx-emoji-mart';
+import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
+import {EmojiService} from '../../../service/emoji.service';
+import {DirectMessageService} from '../../../service/direct-message.service';
+import {UserProfileComponent} from '../../user-profile/user-profile.component';
+import {Subscription} from 'rxjs';
+import {DialogShowsUserReactionComponent} from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import {Firestore} from '@angular/fire/firestore';
+import {ChannelService} from '../../../service/channel.service';
+import {LoginService} from '../../../service/login.service';
+import {ThreadService} from '../../../service/thread.service';
+import {Channel} from '../../../../assets/models/channel.class';
+import {SearchFieldService} from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-direct-chat',
@@ -64,9 +64,9 @@ export class DesktopDirectChatComponent implements OnInit {
     public channelService: ChannelService,
     public loginService: LoginService,
     public threadService: ThreadService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
   ) {
-    this.subscription = mainService.currentContentEmoji.subscribe((content) => {
+    this.subscription = mainService.currentContentEmoji.subscribe(content => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
       } else {
@@ -84,17 +84,16 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
   /**
- * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
- * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
- * This is typically used to ensure that the component has access to the latest user information when it is initialized.
- */
+   * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
+   * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
+   * This is typically used to ensure that the component has access to the latest user information when it is initialized.
+   */
   ngOnInit() {
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe((user) => {
+    this.loginService.loggedInUser$.subscribe(user => {
       this.mainService.loggedInUser = new User(user);
     });
   }
-
 
   /** Stores the last scroll height of the container to detect changes. */
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -109,7 +108,8 @@ export class DesktopDirectChatComponent implements OnInit {
   ngAfterViewChecked() {
     if (
       this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight ||
-      this.chatService.sendetMessage || this.directMessageService.switchContent
+      this.chatService.sendetMessage ||
+      this.directMessageService.switchContent
     ) {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
@@ -121,21 +121,23 @@ export class DesktopDirectChatComponent implements OnInit {
   @ViewChild('autofocus') meinInputField!: ElementRef;
 
   /**
-  * Initializes components after Angular has fully initialized the view.
-  * It sets focus to an input field and subscribes to channel change notifications
-  * to refocus as needed.
-  */
+   * Initializes components after Angular has fully initialized the view.
+   * It sets focus to an input field and subscribes to channel change notifications
+   * to refocus as needed.
+   */
   ngAfterViewInit() {
     this.focusInputField();
-    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
-      this.focusInputField();
-    });
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(
+      () => {
+        this.focusInputField();
+      },
+    );
   }
 
   /**
-  * Focuses on the designated input field.
-  * A delay ensures the action is processed within the Angular event lifecycle.
-  */
+   * Focuses on the designated input field.
+   * A delay ensures the action is processed within the Angular event lifecycle.
+   */
   private focusInputField() {
     setTimeout(() => {
       this.meinInputField.nativeElement.focus();
@@ -157,13 +159,13 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
   /**
-  * Toggles the hover state for an emoji reaction container associated with a chat message.
-  * Prevents event propagation to manage interaction effects locally.
-  */
+   * Toggles the hover state for an emoji reaction container associated with a chat message.
+   * Prevents event propagation to manage interaction effects locally.
+   */
   toggleIconHoverContainerChat(
     singleMessageIndex: number,
     emojiUserIndex: number,
-    event: MouseEvent
+    event: MouseEvent,
   ) {
     event.stopPropagation();
     this.activeMessageIndexReacton = singleMessageIndex;
@@ -171,8 +173,8 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
   /**
-  * Resets the hover state for the emoji reaction containers when the mouse leaves.
-  */
+   * Resets the hover state for the emoji reaction containers when the mouse leaves.
+   */
   toggleIconHoverContainerChatOut(event: MouseEvent) {
     this.activeMessageIndexReacton = null;
     this.emojiReactionIndexHover = null;
@@ -191,28 +193,37 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
   /**
-  * Checks if the Enter key is pressed without the Shift key to send a message.
-  * If the condition is met, it prevents the default action and sends a message.
-  */
+   * Checks if the Enter key is pressed without the Shift key to send a message.
+   * If the condition is met, it prevents the default action and sends a message.
+   */
   checkForEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.directMessageService.sendMessageFromDirectMessage(
         this.chatService.dataChannel.id,
         this.chatService.text,
-        this.chatService.imageMessage
-      )
+        this.chatService.imageMessage,
+      );
     }
   }
 
   /**
-  * Opens a user profile in a modal dialog using Angular Material's Dialog component.
-  * The function configures the dialog to display details about a specified user.
-  * @param {User} directUser - The user whose profile is to be displayed in the dialog.
-  */
+   * Opens a user profile in a modal dialog using Angular Material's Dialog component.
+   * The function configures the dialog to display details about a specified user.
+   * @param {User} directUser - The user whose profile is to be displayed in the dialog.
+   */
   openUserProfile(directUser: User) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = directUser;
     this.dialog.open(UserProfileComponent, dialogConfig);
+  }
+
+  sendDirectMessage() {
+    this.directMessageService.sendNewMessageFromDesktop = true;
+    this.directMessageService.sendMessageFromDirectMessage(
+      this.chatService.dataChannel.id,
+      this.chatService.text,
+      this.chatService.imageMessage,
+    );
   }
 }
