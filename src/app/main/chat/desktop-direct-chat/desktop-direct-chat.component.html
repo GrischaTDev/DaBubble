@@ -549,13 +549,7 @@
         <div>
           <div>
             <mat-icon
-              (click)="
-                directMessageService.sendMessageFromDirectMessage(
-                  this.chatService.dataChannel.id,
-                  this.chatService.text,
-                  this.chatService.imageMessage
-                )
-              "
+              (click)="sendDirectMessage()"
               class="desktop-chat-send-icon"
               >send</mat-icon
             >
