@@ -83,13 +83,11 @@ export class MobileThreadComponent implements OnInit {
   ngOnInit() {
     this.mainService
       .watchSingleChannelDoc(this.parmsId1, 'channels')
-      .pipe(take(1))
       .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.mainService
       .watchSingleDirectMessageDocThread(this.parmsId2, 'threads')
-      .pipe(take(1))
       .subscribe(dataThread => {
         this.chatService.dataThread = dataThread as Channel;
       });

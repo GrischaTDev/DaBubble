@@ -117,7 +117,6 @@ export class MainComponent implements OnInit {
       this.chatService.desktopChatOpen = true;
       this.mainService
         .watchSingleChannelDoc(this.parmsIdContent, 'channels')
-        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
@@ -128,7 +127,6 @@ export class MainComponent implements OnInit {
       this.chatService.desktopChatOpen = false;
       this.mainService
         .watchSingleChannelDoc(this.parmsIdContent, 'direct-message')
-        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });

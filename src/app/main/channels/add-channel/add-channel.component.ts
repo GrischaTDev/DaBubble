@@ -53,7 +53,7 @@ export class AddChannelComponent implements OnInit {
     public channelService: ChannelService,
     private cdr: ChangeDetectorRef,
     public directMessageService: DirectMessageService,
-    private router: Router
+    private router: Router,
   ) {
     this.channelService.pushUserToEditList();
   }
@@ -78,7 +78,7 @@ export class AddChannelComponent implements OnInit {
   checkChannelNames() {
     const lowerCaseNewChannelName = this.newChannelName.toLowerCase();
     this.searchChannelName = this.mainService.allChannels.find(
-      channelName => channelName.name.toLowerCase() === lowerCaseNewChannelName
+      channelName => channelName.name.toLowerCase() === lowerCaseNewChannelName,
     );
 
     if (this.newChannelName !== '' && !this.searchChannelName) {
@@ -177,7 +177,6 @@ export class AddChannelComponent implements OnInit {
     ]);
     this.mainService
       .watchSingleChannelDoc(this.mainService.docId, 'channels')
-      .pipe(take(1))
       .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });

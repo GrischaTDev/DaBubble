@@ -84,7 +84,7 @@ export class NewMessageComponent implements OnInit {
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
+      this.items = this.items$.subscribe((channel: any) => {
         this.chatService.dataChannel = channel;
       });
     }
@@ -94,11 +94,9 @@ export class NewMessageComponent implements OnInit {
     this.loggedInUser = mainService.loggedInUser;
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$
-      .pipe(take(1))
-      .subscribe(channels => {
-        this.allChannel = channels;
-      });
+    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+      this.allChannel = channels;
+    });
 
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe(user => {

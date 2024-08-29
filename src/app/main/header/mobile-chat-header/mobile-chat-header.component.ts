@@ -103,7 +103,6 @@ export class MobileChatHeaderComponent implements OnInit {
     if (this.parmsIdOfChat === 'chat') {
       this.mainService
         .watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels')
-        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
@@ -117,7 +116,6 @@ export class MobileChatHeaderComponent implements OnInit {
     } else {
       this.mainService
         .watchSingleChannelDoc(this.parmsIdOfChat, 'channels')
-        .pipe(take(1))
         .subscribe(dataChannel => {
           this.chatService.dataChannel = dataChannel as Channel;
         });

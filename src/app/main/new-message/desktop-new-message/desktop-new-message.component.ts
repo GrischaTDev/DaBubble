@@ -75,7 +75,7 @@ export class DesktopNewMessageComponent implements OnInit {
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
+      this.items = this.items$.subscribe((channel: any) => {
         this.chatService.dataChannel = channel;
       });
     }
