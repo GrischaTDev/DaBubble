@@ -45,7 +45,7 @@ export class DialogEmojiComponent {
   addEmoji(event: any) {
 
     if (!this.mainService.emojiReactionMessage) {
-      this.setInputReaction(event)   
+      this.setInputReaction(event)
     } else {
       this.setMessageReaction(event)
     }
@@ -70,9 +70,7 @@ export class DialogEmojiComponent {
   * @param {any} event - The event containing the emoji information.
   */
   setMessageReaction(event: any) {
-    console.log('222222222222222222')
     if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
-      console.log('bbbbbbbbbbbbbbbbbbbbbbb')
       this.emojiService.addReactionToMessageChannel(event.emoji.native, this.chatService.indexOfChannelMessage);
     } else if (this.emojiService.emojieToThread) {
       this.emojiService.addReactionToMessageThread(event.emoji.native, this.chatService.indexOfThreadMessage);
