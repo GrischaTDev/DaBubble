@@ -275,6 +275,7 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
+                          emojiService.forWhichDocIsTheEmoji('direct-message');
                           chatService.onButtonClick($event);
                           chatService.openDialogEmoji()
                         "
@@ -284,6 +285,7 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
+                          emojiService.forWhichDocIsTheEmoji('direct-message');
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
                         "
@@ -351,6 +353,7 @@
               <mat-icon
                 *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
+                  emojiService.forWhichDocIsTheEmoji('direct-message');
                   chatService.onButtonClick($event);
                   chatService.openDialogEmojiReactionMessage(singleMessageIndex)
                 "
@@ -405,7 +408,9 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmoji()
+                emojiService.forWhichDocIsTheEmoji('direct-message');
+                chatService.onButtonClick($event); 
+                chatService.openDialogEmoji()
               "
               >sentiment_satisfied</mat-icon
             >
