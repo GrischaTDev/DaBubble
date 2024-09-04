@@ -1,19 +1,19 @@
-import {HostListener, Injectable, inject} from '@angular/core';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DialogEmojiComponent} from '../main/dialog/dialog-emoji/dialog-emoji.component';
-import {DialogMentionUsersComponent} from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
-import {Channel} from '../../assets/models/channel.class';
-import {Message} from '../../assets/models/message.class';
-import {MainServiceService} from './main-service.service';
-import {MentionUser} from '../../assets/models/mention-user.class';
-import {DialogUserChatComponent} from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
-import {User} from '../../assets/models/user.class';
-import {Router} from '@angular/router';
-import {DialogAddUserComponent} from '../main/dialog/dialog-add-user/dialog-add-user.component';
-import {DialogEditChannelComponent} from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import {firstValueFrom, Subject} from 'rxjs';
-import {DialogImageMessageComponent} from '../main/dialog/dialog-image-message/dialog-image-message.component';
-import {NewMessageService} from './new-message.service';
+import { HostListener, Injectable, inject } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogEmojiComponent } from '../main/dialog/dialog-emoji/dialog-emoji.component';
+import { DialogMentionUsersComponent } from '../main/dialog/dialog-mention-users/dialog-mention-users.component';
+import { Channel } from '../../assets/models/channel.class';
+import { Message } from '../../assets/models/message.class';
+import { MainServiceService } from './main-service.service';
+import { MentionUser } from '../../assets/models/mention-user.class';
+import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
+import { User } from '../../assets/models/user.class';
+import { Router } from '@angular/router';
+import { DialogAddUserComponent } from '../main/dialog/dialog-add-user/dialog-add-user.component';
+import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
+import { firstValueFrom, Subject } from 'rxjs';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { NewMessageService } from './new-message.service';
 
 @Injectable({
   providedIn: 'root',
@@ -77,7 +77,7 @@ export class ChatService {
   constructor(
     public mainService: MainServiceService,
     private router: Router,
-  ) {}
+  ) { }
 
   /**
    * Triggers a notification to indicate that the chat focus has changed.
@@ -150,7 +150,7 @@ export class ChatService {
    */
   openImageMessageDialog(image: ArrayBuffer) {
     const dialogRef = this.dialog.open(DialogImageMessageComponent, {
-      data: {image: image},
+      data: { image: image },
     });
   }
 

@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {ChatService} from './chat.service';
-import {MainServiceService} from './main-service.service';
-import {Channel} from '../../assets/models/channel.class';
+import { Injectable } from '@angular/core';
+import { ChatService } from './chat.service';
+import { MainServiceService } from './main-service.service';
+import { Channel } from '../../assets/models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -20,13 +20,14 @@ export class ThreadService {
   constructor(
     public chatService: ChatService,
     public mainService: MainServiceService,
-  ) {}
+  ) { }
 
   /**
    * Closes the currently open thread by setting `isThreadOpen` to false.
    * @function closeThread
    */
   closeThread() {
+    this.chatService.dataThread = new Channel;
     this.chatService.isThreadOpen = false;
     this.chatService.isWorkspaceOpen = true;
   }
