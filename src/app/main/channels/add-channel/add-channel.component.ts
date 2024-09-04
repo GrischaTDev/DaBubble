@@ -177,6 +177,7 @@ export class AddChannelComponent implements OnInit {
     ]);
     this.mainService
       .watchSingleChannelDoc(this.mainService.docId, 'channels')
+      .pipe(take(1))
       .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
