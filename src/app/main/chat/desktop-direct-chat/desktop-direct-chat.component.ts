@@ -1,31 +1,31 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {MainServiceService} from '../../../service/main-service.service';
-import {ChatService} from '../../../service/chat.service';
-import {MobileHeaderComponent} from '../../header/mobile-header/mobile-header.component';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
-import {User} from '../../../../assets/models/user.class';
-import {PickerComponent} from '@ctrl/ngx-emoji-mart';
-import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
-import {EmojiService} from '../../../service/emoji.service';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {UserProfileComponent} from '../../user-profile/user-profile.component';
-import {Subscription} from 'rxjs';
-import {DialogShowsUserReactionComponent} from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
-import {Firestore} from '@angular/fire/firestore';
-import {ChannelService} from '../../../service/channel.service';
-import {LoginService} from '../../../service/login.service';
-import {ThreadService} from '../../../service/thread.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {SearchFieldService} from '../../../search-field.service';
+import { MainServiceService } from '../../../service/main-service.service';
+import { ChatService } from '../../../service/chat.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { EmojiService } from '../../../service/emoji.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { Subscription } from 'rxjs';
+import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import { Firestore } from '@angular/fire/firestore';
+import { ChannelService } from '../../../service/channel.service';
+import { LoginService } from '../../../service/login.service';
+import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-direct-chat',

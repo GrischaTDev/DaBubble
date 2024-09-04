@@ -49,7 +49,7 @@ export class DesktopChatComponent implements OnInit {
   dialogInstance?:
     | MatDialogRef<DialogEmojiComponent>
     | MatDialogRef<DialogShowsUserReactionComponent>;
-  subscription;
+  subscription: Subscription | undefined;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   emojiReactionIndexHover: number | null = null;
@@ -67,13 +67,6 @@ export class DesktopChatComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService
   ) {
-    this.subscription = mainService.currentContentEmoji.subscribe((content) => {
-      if (!this.chatService.editOpen) {
-        this.chatService.text += content;
-      } else {
-        this.chatService.editText += content;
-      }
-    });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
       this.scrollToBottom();
@@ -107,7 +100,7 @@ export class DesktopChatComponent implements OnInit {
    * and updates the last known scrollHeight.
    */
   ngAfterViewChecked() {
-    if(this.allChannel.length !== 0) {
+    if (this.allChannel.length !== 0) {
       if (
         this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
         this.chatService.sendetMessage
@@ -120,16 +113,16 @@ export class DesktopChatComponent implements OnInit {
 
   @ViewChild('autofocus') meinInputField!: ElementRef;
   ngAfterViewInit() {
-      this.focusInputField();
-      this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
+    this.focusInputField();
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
       this.focusInputField();
     });
   }
 
   private focusInputField() {
-      setTimeout(() => {
-        this.meinInputField.nativeElement.focus();
-      }, 0);
+    setTimeout(() => {
+      this.meinInputField.nativeElement.focus();
+    }, 0);
   }
 
   /**
@@ -137,9 +130,9 @@ export class DesktopChatComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    if(this.allChannel.length !== 0) {
+    if (this.allChannel.length !== 0) {
       this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
+        this.scrollContainer.nativeElement.scrollHeight;
     }
   }
 
@@ -163,7 +156,7 @@ export class DesktopChatComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+
 
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();

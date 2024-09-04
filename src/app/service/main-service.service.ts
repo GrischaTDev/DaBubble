@@ -1,4 +1,4 @@
-import {Injectable, inject} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   addDoc,
@@ -10,15 +10,15 @@ import {
   query,
   orderBy,
 } from '@angular/fire/firestore';
-import {BehaviorSubject, Subject, Observable} from 'rxjs';
-import {User} from '../../assets/models/user.class';
-import {Channel} from '../../assets/models/channel.class';
-import {Router} from '@angular/router';
-import {getAuth, onAuthStateChanged} from '@angular/fire/auth';
-import {Emoji} from '../../assets/models/emoji.class';
-import {Message} from '../../assets/models/message.class';
-import {MentionUser} from '../../assets/models/mention-user.class';
-import {EmojiCollection} from '../../assets/models/emojiCollection.class';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { User } from '../../assets/models/user.class';
+import { Channel } from '../../assets/models/channel.class';
+import { Router } from '@angular/router';
+import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { Emoji } from '../../assets/models/emoji.class';
+import { Message } from '../../assets/models/message.class';
+import { MentionUser } from '../../assets/models/mention-user.class';
+import { EmojiCollection } from '../../assets/models/emojiCollection.class';
 
 @Injectable({
   providedIn: 'root',
@@ -39,8 +39,6 @@ export class MainServiceService {
   private contentSourceEmoji = new BehaviorSubject<any>([]);
   currentContentEmoji = this.contentSource.asObservable();
   currentContentEmojiThread = this.contentSourceThread.asObservable();
-  mentionUser = this.contentSource.asObservable();
-  mentionUserThread = this.contentSourceThread.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -116,7 +114,7 @@ export class MainServiceService {
       {
         id: docRef,
       },
-      {merge: true},
+      { merge: true },
     );
   }
 
