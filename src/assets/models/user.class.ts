@@ -6,6 +6,7 @@ export class User {
   avatar: string;
   message: String[] = [];
   online: boolean;
+  idUser: string | undefined
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : '';

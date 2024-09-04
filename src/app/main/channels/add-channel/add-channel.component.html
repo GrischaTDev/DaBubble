@@ -1,7 +1,7 @@
 <div class="add-channel-container" (click)="closeDialog()">
   <div
     class="add-channel-dialog"
-    [ngClass]="{ 'd-none': isAddUserMenuOpen }"
+    [ngClass]="{'d-none': isAddUserMenuOpen}"
     (click)="doNotClose($event)"
   >
     <div class="headline">
@@ -20,13 +20,15 @@
         <div>
           <mat-icon>tag</mat-icon>
           <input
-          [(ngModel)]="newChannelName"
-          class="inputfield"
-          type="text"
-          placeholder="z.B. Kooperationsprojekte"
-          (input)="checkChannelNames()"
-        />
-        <span *ngIf="this.searchChannelName" class="error-msg">Channelname bereits vorhanden!</span>
+            [(ngModel)]="newChannelName"
+            class="inputfield"
+            type="text"
+            placeholder="z.B. Kooperationsprojekte"
+            (input)="checkChannelNames()"
+          />
+          <span *ngIf="this.searchChannelName" class="error-msg"
+            >Channelname bereits vorhanden!</span
+          >
         </div>
       </div>
     </div>
@@ -136,9 +138,8 @@
                       pushAddetUser(usersAll, indexusersNotYetAdded, $event)
                     "
                     [ngClass]="{
-                    'd-none':
-                    mainService.loggedInUser.id === usersAll.id,
-                  }"
+                      'd-none': mainService.loggedInUser.id === usersAll.id
+                    }"
                   >
                     <img [src]="usersAll.avatar" alt="User Avatar" />
                     <p>{{ usersAll.name }}</p>

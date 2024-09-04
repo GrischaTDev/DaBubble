@@ -5,7 +5,7 @@
       (click)="channelService.openEditDialog()"
     >
       <p>#</p>
-      <p>{{ chatService.dataChannel.name }}</p>
+      <p>{{ chatService.dataChannel?.name }}</p>
       <mat-icon>keyboard_arrow_down</mat-icon>
     </div>
     <div>
@@ -15,7 +15,7 @@
           this.chatService.doNotClose($event); chatService.openDialogAddUser()
         "
       >
-        <div *ngFor="let ownerUser of this.chatService.dataChannel.ownerUser">
+        <div *ngFor="let ownerUser of this.chatService.dataChannel?.ownerUser">
           <img
             class="desktop-chat-header-members-img"
             src="{{ ownerUser.avatar }}"
@@ -25,7 +25,7 @@
         </div>
         <div
           *ngFor="
-            let singleUserHeader of chatService.dataChannel.channelUsers;
+            let singleUserHeader of chatService.dataChannel?.channelUsers;
             let singleUserIndexHeader = index
           "
         >
@@ -38,7 +38,7 @@
           />
         </div>
         <span class="desktop-chat-header-members-number">
-          {{ chatService.dataChannel.channelUsers.length + 1 }}
+          {{ (chatService.dataChannel?.channelUsers?.length || 0) + 1 }}
         </span>
       </div>
       <div
@@ -54,10 +54,10 @@
   <div #scrollContainer class="desktop-chat-content">
     <div
       class="desktop-chat-owner-content-container"
-      *ngIf="chatService.dataChannel.messageChannel.length === 0"
+      *ngIf="chatService.dataChannel?.messageChannel?.length === 0"
     >
       <div class="desktop-chat-owner-name-container">
-        <p># {{ chatService.dataChannel.name }}</p>
+        <p># {{ chatService.dataChannel?.name }}</p>
       </div>
       <span class="desktop-chat-owner-description-container">
         <p>
@@ -72,7 +72,7 @@
       (mouseover)="chatService.toggleIconContainer(singleMessageIndex, $event)"
       (mouseleave)="chatService.closeIconContainer()"
       *ngFor="
-        let singleMessage of chatService.dataChannel.messageChannel;
+        let singleMessage of chatService.dataChannel?.messageChannel;
         let singleMessageIndex = index
       "
       (click)="chatService.onMouseLeave()"
@@ -98,7 +98,7 @@
           'desktop-chat-edit-message-container-right':
             chatService.ifMessageFromMe(singleMessage.userId),
           'desktop-chat-edit-message-container-left':
-            !chatService.ifMessageFromMe(singleMessage.userId),
+            !chatService.ifMessageFromMe(singleMessage.userId)
         }"
       >
         <div
@@ -178,8 +178,8 @@
           ),
           'desktop-chat-message-container-from-others':
             !chatService.ifMessageFromMe(singleMessage.userId),
-            'desktop-chat-message-container-clicked':
-             chatService.activeMessageIndex === singleMessageIndex,
+          'desktop-chat-message-container-clicked':
+            chatService.activeMessageIndex === singleMessageIndex
         }"
       >
         <div
@@ -190,7 +190,11 @@
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-message-avatar-container"
         >
-          <img referrerpolicy="no-referrer" src="{{ singleMessage.userAvatar }}" alt="" />
+          <img
+            referrerpolicy="no-referrer"
+            src="{{ singleMessage.userAvatar }}"
+            alt=""
+          />
         </div>
         <div class="desktop-chat-message-content">
           <div
@@ -226,7 +230,7 @@
                 singleMessage.userId
               ),
               'desktop-chat-message-clicked':
-              chatService.activeMessageIndex === singleMessageIndex,
+                chatService.activeMessageIndex === singleMessageIndex
             }"
           >
             <span
@@ -247,6 +251,14 @@
                   src="{{ singleMessage.imageToMessage }}"
                   alt="message width"
                 />
+
+                <a
+                  class="download-icon"
+                  href="{{ singleMessage.imageToMessage }}"
+                  download=""
+                >
+                  <mat-icon>download</mat-icon>
+                </a>
               </div>
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
@@ -358,13 +370,11 @@
             >
               <div
                 [ngClass]="{
-                'desktop-chat-message-reaction-hover-content-right': chatService.ifMessageFromMe(
-                  singleMessage.userId
-                ),
-                'desktop-chat-message-reaction-hover-content-left': !chatService.ifMessageFromMe(
-                  singleMessage.userId
-                ),
-              }"
+                  'desktop-chat-message-reaction-hover-content-right':
+                    chatService.ifMessageFromMe(singleMessage.userId),
+                  'desktop-chat-message-reaction-hover-content-left':
+                    !chatService.ifMessageFromMe(singleMessage.userId)
+                }"
                 *ngIf="
                   emojiIndex === emojiReactionIndexHover &&
                   singleMessageIndex === activeMessageIndexReacton
@@ -486,7 +496,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="desktop-chat-input-container" id="meinTextarea">
     <form class="desktop-chat-input-field-container br-20">

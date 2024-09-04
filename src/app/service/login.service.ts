@@ -1,16 +1,15 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { getAuth, onAuthStateChanged, signOut } from '@angular/fire/auth';
-import { doc, Firestore, onSnapshot, setDoc } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
-import { User } from '../../assets/models/user.class';
-import { Router } from '@angular/router';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {getAuth, onAuthStateChanged, signOut} from '@angular/fire/auth';
+import {doc, Firestore, onSnapshot, setDoc} from '@angular/fire/firestore';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import {User} from '../../assets/models/user.class';
+import {Router} from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
-
   private userRegisteredSubject = new BehaviorSubject<boolean>(false);
   isUserRegistered$ = this.userRegisteredSubject.asObservable();
 
@@ -23,12 +22,16 @@ export class LoginService {
   private newMailSubject = new BehaviorSubject<boolean>(false);
   isNewMail$ = this.newMailSubject.asObservable();
 
-
   private loggedInUserSubject = new BehaviorSubject<User | null>(null);
-  loggedInUser$: Observable<User | null> = this.loggedInUserSubject.asObservable();
+  loggedInUser$: Observable<User | null> =
+    this.loggedInUserSubject.asObservable();
 
-  constructor(private firestore: Firestore, private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
-
+  constructor(
+    private firestore: Firestore,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document
+  ) {
     this.checkLocalStorage();
   }
 
@@ -49,30 +52,28 @@ export class LoginService {
   }
 
   private checkLocalStorage() {
-    if(isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       const user = localStorage.getItem('user');
       if (user) {
         this.loggedInUserSubject.next(JSON.parse(user));
-      } 
+      }
     }
   }
 
   currentLoggedUser() {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       const userId = user?.uid;
       if (userId) {
-        onSnapshot(
-          doc(this.firestore, 'users', userId),
-          (item) => {
-            if (item.exists()) {
-              let userData = {
-                ...item.data(),
-                id: item.id,
-              };
-              this.loggedInUserSubject.next(new User(userData));
-            }
-          });
+        onSnapshot(doc(this.firestore, 'users', userId), item => {
+          if (item.exists()) {
+            const userData = {
+              ...item.data(),
+              id: item.id,
+            };
+            this.loggedInUserSubject.next(new User(userData));
+          }
+        });
       }
     });
   }
@@ -81,38 +82,41 @@ export class LoginService {
     const user = auth.currentUser;
 
     if (user) {
-      setDoc(doc(this.firestore, 'users', user.uid), {
-        online: false
-      }, { merge: true });
+      setDoc(
+        doc(this.firestore, 'users', user.uid),
+        {
+          online: false,
+        },
+        {merge: true}
+      );
 
-      signOut(auth).then(() => {
+      signOut(auth)
+        .then(() => {
+          const localStorageUser =
+            this.document.defaultView?.localStorage.getItem('user');
 
-        const localStorageUser = localStorage.getItem('user');
+          if (localStorageUser !== null) {
+            localStorage.removeItem('user');
+          } else {
+            console.warn("Kein 'user' Eintrag im localStorage vorhanden");
+          }
 
-        if (localStorageUser !== null) {
-          localStorage.removeItem('user');
-        } else {
-          console.warn("Kein 'user' Eintrag im localStorage vorhanden");
-        }
+          this.loggedInUserSubject.next(null); // Update the subject
 
-        this.loggedInUserSubject.next(null); // Update the subject
-
-        this.router.navigate(['login']);
-
-      })
-        .catch((error) => {
-          console.log('fehler beim abmelden:', error)
+          this.router.navigate(['login']);
         })
-
+        .catch(error => {
+          console.log('fehler beim abmelden:', error);
+        });
     }
   }
 
   handleActionCode(actionCode: string, oobCode: string) {
     if (actionCode === 'resetPassword') {
-      this.router.navigate(['/new-password'], { queryParams: { oobCode } });
+      this.router.navigate(['/new-password'], {queryParams: {oobCode}});
     } else if (actionCode === 'verifyAndChangeEmail') {
-      this.router.navigate(['/verify-email'], { queryParams: { oobCode } });
-    } 
+      this.router.navigate(['/verify-email'], {queryParams: {oobCode}});
+    }
   }
 
   isLoggedIn(): boolean {

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {
   Component,
   OnInit,
@@ -7,17 +7,18 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialogRef } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
-import { MainServiceService } from '../../../service/main-service.service';
-import { Channel } from '../../../../assets/models/channel.class';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ChatService } from '../../../service/chat.service';
-import { User } from '../../../../assets/models/user.class';
-import { ChannelService } from '../../../service/channel.service';
-import { DirectMessageService } from '../../../service/direct-message.service';
-import { Router } from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {MatDialogRef} from '@angular/material/dialog';
+import {FormsModule} from '@angular/forms';
+import {MainServiceService} from '../../../service/main-service.service';
+import {Channel} from '../../../../assets/models/channel.class';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {ChatService} from '../../../service/chat.service';
+import {User} from '../../../../assets/models/user.class';
+import {ChannelService} from '../../../service/channel.service';
+import {DirectMessageService} from '../../../service/direct-message.service';
+import {Router} from '@angular/router';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-add-channel',
@@ -52,7 +53,7 @@ export class AddChannelComponent implements OnInit {
     public channelService: ChannelService,
     private cdr: ChangeDetectorRef,
     public directMessageService: DirectMessageService,
-    private router: Router
+    private router: Router,
   ) {
     this.channelService.pushUserToEditList();
   }
@@ -63,7 +64,7 @@ export class AddChannelComponent implements OnInit {
   ngOnInit() {
     this.breakpointObserver
       .observe([Breakpoints.Handset, Breakpoints.Tablet])
-      .subscribe((result) => {
+      .subscribe(result => {
         this.isDesktop = !result.matches;
       });
 
@@ -77,8 +78,7 @@ export class AddChannelComponent implements OnInit {
   checkChannelNames() {
     const lowerCaseNewChannelName = this.newChannelName.toLowerCase();
     this.searchChannelName = this.mainService.allChannels.find(
-      (channelName) =>
-        channelName.name.toLowerCase() === lowerCaseNewChannelName
+      channelName => channelName.name.toLowerCase() === lowerCaseNewChannelName,
     );
 
     if (this.newChannelName !== '' && !this.searchChannelName) {
@@ -177,7 +177,7 @@ export class AddChannelComponent implements OnInit {
     ]);
     this.mainService
       .watchSingleChannelDoc(this.mainService.docId, 'channels')
-      .subscribe((dataChannel) => {
+      .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.chatService.dataChannel = channel;

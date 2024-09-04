@@ -1,9 +1,8 @@
-@import "./../../styles.scss";
+@import './../../styles.scss';
 
 body {
   background-color: $background-lightblue !important;
 }
-
 
 .main-desktop {
   display: flex;
@@ -14,25 +13,22 @@ body {
   background-color: $background-lightblue !important;
 }
 
-
 app-desktop-channels {
   width: 366px;
   margin-right: 25px;
 }
 
-
 app-desktop-chat,
 app-desktop-direct-chat,
 app-desktop-new-message {
-  flex-grow: 1;
-
+  width: 100%;
+  transition: 0.2s ease-in;
 }
 
 app-desktop-thread {
-  width: 25%;
+  width: 30%;
   margin-left: 25px;
 }
-
 
 .hide-server-sidebar {
   display: flex;
@@ -56,7 +52,7 @@ app-desktop-thread {
     color: $background-blue;
   }
 
-  >span {
+  > span {
     font-size: 20px;
     font-weight: 500;
   }
@@ -66,7 +62,6 @@ app-desktop-thread {
 //   app-desktop-thread {
 //     width: 100%; /* Nimmt die volle Breite ein, wenn sichtbar */
 //   }
-
 
 @media only screen and (min-width: 960px) {
   .desktop {

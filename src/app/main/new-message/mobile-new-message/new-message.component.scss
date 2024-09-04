@@ -1,60 +1,61 @@
-@import "./../../../../styles.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
+@import './../../../../styles.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-  font-family: "TwemojiMozilla";
-  src: local("TwemojiMozilla"),
-    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+  font-family: 'TwemojiMozilla';
+  src:
+    local('TwemojiMozilla'),
+    url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
 .input-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    margin-top: 50px;
-    box-sizing: border-box;
-    padding: 20px 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-top: 50px;
+  box-sizing: border-box;
+  padding: 20px 0;
+  width: 100%;
+
+  > h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 10px 0;
+  }
+  > input {
+    font-size: 17px;
+    height: 48px;
     width: 100%;
+    border: 1px solid $background-gray;
+    border-radius: 42px;
+    padding: 8px 24px;
+  }
 
-    >h2 {
-        font-size: 20px;
-        font-weight: 700;
-        margin: 10px 0;
-    }
-    >input {
-        font-size: 17px;
-        height: 48px;
-        width: 100%;
-        border: 1px solid $background-gray;
-        border-radius: 42px;
-        padding: 8px 24px;
-    }
-
-    >.mat-icon {
-        position: absolute;
-        padding-right: 30px;
-        width: 32px;
-        height: 32px;
-        font-size: 32px;
-        color: $background-gray;
-    }
+  > .mat-icon {
+    position: absolute;
+    padding-right: 30px;
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+    color: $background-gray;
+  }
 }
 
 .test {
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    padding: 16px;
-    background-color: white;
-    margin: 0;
-    z-index: 900;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  padding: 16px;
+  background-color: white;
+  margin: 0;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .mobile-chat-header-container {
@@ -104,39 +105,39 @@
   width: 100%;
 
   .user-content-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-left: 45px;
-      padding-right: 45px;
-      padding-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 45px;
+    padding-right: 45px;
+    padding-top: 18px;
   }
 
   .content {
-      background-color: #fff;
-      border-radius: 30px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      height: auto;
-      max-height: 350px;
-      overflow-x: scroll;
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-height: 350px;
+    overflow-x: scroll;
   }
 
   .user-content {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 20px;
-      cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 20px;
+    cursor: pointer;
 
-      &:hover {
-          background-color: $background-lightblue;
-          border-radius: 30px;
-      }
+    &:hover {
+      background-color: $background-lightblue;
+      border-radius: 30px;
+    }
 
-      img {
-          width: 50px;
-          border-radius: 50%
-      }
+    img {
+      width: 50px;
+      border-radius: 50%;
+    }
   }
 }
 
@@ -214,7 +215,6 @@
   right: 60px;
   margin-top: 120px;
   gap: 5px;
-  height: 46px;
   width: 269px;
   height: 67px;
   border-top-right-radius: 25px;
@@ -381,7 +381,7 @@
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, 'TwemojiMozilla';
   }
 }
 
@@ -407,13 +407,12 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  width: 0;
   height: 100%;
   opacity: 0;
   z-index: 2;
   cursor: pointer;
 }
-
 
 .mobile-chat-input-icon {
   height: 40px;
@@ -506,11 +505,6 @@
   }
 }
 
-
-
-
-
-
 header {
   position: fixed;
   top: 0;
@@ -525,35 +519,35 @@ header {
   box-sizing: border-box;
   z-index: 999;
 
-  >.logo-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
+  > .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
 
-      >.logo {
-          height: 50px;
-      }
-
-      >.space-name {
-          font-size: 20px;
-          font-weight: 700;
-          color: black;
-      }
-
-      >mat-icon {
-          color: black;
-      }
-  }
-
-  >.user {
+    > .logo {
       height: 50px;
-      border-radius: 50px;
-      cursor: pointer;
+    }
+
+    > .space-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: black;
+    }
+
+    > mat-icon {
+      color: black;
+    }
   }
 
-  >mat-icon {
-      height: 40px;
+  > .user {
+    height: 50px;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+
+  > mat-icon {
+    height: 40px;
   }
 }
 
@@ -565,37 +559,36 @@ header {
   background: #00000040;
   z-index: 1000;
 
-  >.menu-container {
-      background-color: white;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 30px 26px;
-      border-radius: 30px 30px 0px 0px;
-      box-shadow: 0px -3px 10px 0px #00000033;
+  > .menu-container {
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 26px;
+    border-radius: 30px 30px 0px 0px;
+    box-shadow: 0px -3px 10px 0px #00000033;
 
-      >.border-container {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          padding: 0 0 30px 0;
-          >.border {
-              height: 6px;
-              width: 62px;
-              background-color: $background-lightgray;
-              border-radius: 23px;
-          }
+    > .border-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 0 0 30px 0;
+      > .border {
+        height: 6px;
+        width: 62px;
+        background-color: $background-lightgray;
+        border-radius: 23px;
       }
+    }
 
-      >div {
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-      }
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
   }
 }
-
 
 .icon-and-name {
   display: flex;
@@ -605,9 +598,9 @@ header {
   padding: 10px 30px;
 
   .mat-icon {
-      font-size: 30px;
-      text-align: center;
-      height: 30px;
-      width: 30px;
+    font-size: 30px;
+    text-align: center;
+    height: 30px;
+    width: 30px;
   }
 }

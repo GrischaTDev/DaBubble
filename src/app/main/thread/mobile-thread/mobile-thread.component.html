@@ -1,4 +1,42 @@
-<app-mobile-chat-header></app-mobile-chat-header>
+<!---- START HEADER ---->
+<header>
+  <div class="logo-container" (click)="closeThread()">
+    <mat-icon>chevron_left</mat-icon>
+    <img
+      class="logo"
+      src="./assets/img/devscpace-logo.svg"
+      alt="DaBubble logo"
+    />
+    <span class="space-name">Devspace</span>
+  </div>
+  <img
+    (click)="openUserMenu()"
+    referrerpolicy="no-referrer"
+    class="user"
+    src="{{ currentUser.avatar }}"
+    alt="User avatar"
+  />
+</header>
+
+<div *ngIf="userMenu" class="user-menu" (click)="openUserMenu()">
+  <div class="menu-container" (click)="doNotClose($event)">
+    <div class="border-container">
+      <div class="border"></div>
+    </div>
+    <div>
+      <div class="icon-and-name" (click)="openUserProfile()">
+        <mat-icon>account_circle_outline</mat-icon>
+        <span>Profile</span>
+      </div>
+      <div class="icon-and-name" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!---- END HEADER ---->
+
 <div class="mobile-thread-container">
   <div class="dektop-thread-container">
     <div class="dektop-thread-container" (click)="chatService.closeDialog()">
@@ -47,11 +85,11 @@
               singleThreadMessageIndex
             "
             [ngClass]="{
-            'dektop-thread-edit-message-container-right':
-              chatService.ifMessageFromMe(singleThreadMessage.userId),
-            'dektop-thread-edit-message-container-left':
-              !chatService.ifMessageFromMe(singleThreadMessage.userId),
-          }"
+              'dektop-thread-edit-message-container-right':
+                chatService.ifMessageFromMe(singleThreadMessage.userId),
+              'dektop-thread-edit-message-container-left':
+                !chatService.ifMessageFromMe(singleThreadMessage.userId)
+            }"
           >
             <div
               class="dektop-thread-edit-icon-container"
@@ -110,14 +148,14 @@
           <div
             (mouseenter)="threadService.onMouseLeaveThread()"
             [ngClass]="{
-            'dektop-thread-message-container-from-me': chatService.ifMessageFromMe(
-              singleThreadMessage.userId
-            ),
-            'dektop-thread-message-container-from-others':
-              !chatService.ifMessageFromMe(singleThreadMessage.userId),
+              'dektop-thread-message-container-from-me':
+                chatService.ifMessageFromMe(singleThreadMessage.userId),
+              'dektop-thread-message-container-from-others':
+                !chatService.ifMessageFromMe(singleThreadMessage.userId),
               'dektop-thread-message-container-clicked':
-              threadService.activeThreadMessageIndex === singleThreadMessageIndex,
-          }"
+                threadService.activeThreadMessageIndex ===
+                singleThreadMessageIndex
+            }"
           >
             <div
               (click)="
@@ -127,7 +165,11 @@
               (mouseenter)="threadService.onMouseLeaveThread()"
               class="dektop-thread-message-avatar-container"
             >
-              <img src="{{ singleThreadMessage.userAvatar }}" alt="" />
+              <img
+                src="{{ singleThreadMessage.userAvatar }}"
+                alt=""
+                referrerpolicy="no-referrer"
+              />
             </div>
             <div class="dektop-thread-message-content">
               <div
@@ -161,15 +203,15 @@
                 "
                 class="dektop-thread-message-text-container"
                 [ngClass]="{
-                'dektop-thread-message-from-me': chatService.ifMessageFromMe(
-                  singleThreadMessage.userId
-                ),
-                'dektop-thread-message-from-others': !chatService.ifMessageFromMe(
-                  singleThreadMessage.userId
-                ),
-                'dektop-thread-message-clicked':
-                threadService.activeThreadMessageIndex === singleThreadMessageIndex,
-              }"
+                  'dektop-thread-message-from-me': chatService.ifMessageFromMe(
+                    singleThreadMessage.userId
+                  ),
+                  'dektop-thread-message-from-others':
+                    !chatService.ifMessageFromMe(singleThreadMessage.userId),
+                  'dektop-thread-message-clicked':
+                    threadService.activeThreadMessageIndex ===
+                    singleThreadMessageIndex
+                }"
               >
                 <span
                   *ngIf="
@@ -178,6 +220,29 @@
                   "
                 >
                   {{ singleThreadMessage.message }}
+
+                  <div
+                    class="image-to-message-container"
+                    *ngIf="singleThreadMessage.imageToMessage"
+                  >
+                    <img
+                      (click)="
+                        chatService.openImageMessageDialog(
+                          singleThreadMessage.imageToMessage
+                        )
+                      "
+                      src="{{ singleThreadMessage.imageToMessage }}"
+                      alt="message width"
+                    />
+
+                    <a
+                      class="download-icon"
+                      href="{{ singleThreadMessage.imageToMessage }}"
+                      download=""
+                    >
+                      <mat-icon>download</mat-icon>
+                    </a>
+                  </div>
                 </span>
                 <div
                   *ngIf="
@@ -350,6 +415,14 @@
       </div>
       <div class="dektop-thread-input-container" id="meinTextarea">
         <form class="dektop-thread-input-field-container br-20">
+          <div class="add-image-container-width">
+            <div class="add-image-container" *ngIf="threadService.imageMessage">
+              <img src="{{ threadService.imageMessage }}" alt="" />
+              <div class="delete-img" (click)="threadService.deleteMessage()">
+                <mat-icon>close</mat-icon>
+              </div>
+            </div>
+          </div>
           <textarea
             [(ngModel)]="threadService.textThread"
             name="textarea"
@@ -363,6 +436,11 @@
               <div class="dektop-thread-border-right">
                 <div class="dektop-thread-input-icon">
                   <mat-icon>add</mat-icon>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    (change)="threadService.onFileSelected($event)"
+                  />
                 </div>
               </div>
               <div class="dektop-thread-input-icon">
@@ -392,7 +470,8 @@
                   (click)="
                     threadService.sendMessageFromThread(
                       this.chatService.dataThread.id,
-                      this.threadService.textThread
+                      this.threadService.textThread,
+                      this.threadService.imageMessage
                     )
                   "
                   class="dektop-thread-send-icon"
