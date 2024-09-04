@@ -222,9 +222,9 @@
                           threadService.ifMessageOwnerMessageFromThread(
                             singleThreadMessageIndex
                           );
+                          chatService.openDialogEmoji();
                           emojiService.forWhichDocIsTheEmoji('thread');
-                          chatService.onButtonClick($event);
-                          chatService.openDialogEmoji()
+                          chatService.onButtonClick($event)
                         "
                         >sentiment_satisfied</mat-icon
                       >
@@ -529,9 +529,9 @@
           <div class="desktop-thread-input-icon">
             <mat-icon
               (click)="
+                chatService.openDialogEmoji();
                 emojiService.forWhichDocIsTheEmoji('thread');
-                chatService.onButtonClick($event);
-                chatService.openDialogEmoji()
+                chatService.onButtonClick($event)
               "
               >sentiment_satisfied</mat-icon
             >

@@ -43,7 +43,6 @@ export class DialogEmojiComponent {
   * @param {any} event - The event containing the emoji information.
   */
   addEmoji(event: any) {
-
     if (!this.mainService.emojiReactionMessage) {
       this.setInputReaction(event)
     } else {
