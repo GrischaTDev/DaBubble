@@ -1,10 +1,11 @@
-@import "./../../../../styles.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
+@import './../../../../styles.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-  font-family: "TwemojiMozilla";
-  src: local("TwemojiMozilla"),
-    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+  font-family: 'TwemojiMozilla';
+  src:
+    local('TwemojiMozilla'),
+    url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
 .mobile-chat-container {
@@ -91,13 +92,14 @@
   }
 }
 
-@import "./../../../../styles.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
+@import './../../../../styles.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-  font-family: "TwemojiMozilla";
-  src: local("TwemojiMozilla"),
-    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+  font-family: 'TwemojiMozilla';
+  src:
+    local('TwemojiMozilla'),
+    url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
 .mobile-chat-container {
@@ -290,7 +292,6 @@
   display: flex;
   justify-content: flex-start;
   flex-direction: row-reverse;
-  margin-left: 16px;
   margin-right: 16px;
 }
 
@@ -363,6 +364,7 @@
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
   margin-right: 90px;
+  overflow-wrap: anywhere;
 }
 
 .mobile-chat-message-from-me {
@@ -373,7 +375,7 @@
   border-top-left-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  margin-left: 90px;
+  overflow-wrap: anywhere;
 }
 
 .mobile-chat-message-clicked {
@@ -389,11 +391,11 @@
 
 .mobile-chat-input-field-container {
   width: 100%;
-  min-height: 145px;
+  max-height: 145px;
   padding-top: 4px;
   padding-bottom: 4px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
   border: 1px solid $border-gray;
@@ -403,13 +405,12 @@
     max-width: 90%;
     min-height: 80px;
     font-size: 18px;
+    padding-top: 20px;
     box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: auto;
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, 'TwemojiMozilla', sans-serif;
   }
 }
 
@@ -488,7 +489,7 @@
   align-items: center;
   margin-bottom: 8px;
   gap: 10px;
-  width: 200px;
+  width: 100%;
   flex-wrap: wrap;
 }
 
