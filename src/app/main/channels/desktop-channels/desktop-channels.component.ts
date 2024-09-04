@@ -1,20 +1,20 @@
-import {CommonModule} from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
-import {MatIconModule} from '@angular/material/icon';
-import {MainServiceService} from '../../../service/main-service.service';
-import {MatDialog} from '@angular/material/dialog';
-import {AddChannelComponent} from '../add-channel/add-channel.component';
-import {Router} from '@angular/router';
-import {ChatService} from '../../../service/chat.service';
-import {NewMessageComponent} from '../../new-message/mobile-new-message/new-message.component';
-import {LoginService} from '../../../service/login.service';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {DirectChatComponent} from '../../chat/direct-chat/direct-chat.component';
-import {Subscription, take} from 'rxjs';
-import {Channel} from '../../../../assets/models/channel.class';
-import {User} from '../../../../assets/models/user.class';
-import {ThreadService} from '../../../service/thread.service';
-import {SearchFieldService} from '../../../search-field.service';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MainServiceService } from '../../../service/main-service.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddChannelComponent } from '../add-channel/add-channel.component';
+import { Router } from '@angular/router';
+import { ChatService } from '../../../service/chat.service';
+import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
+import { LoginService } from '../../../service/login.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { DirectChatComponent } from '../../chat/direct-chat/direct-chat.component';
+import { Subscription, take } from 'rxjs';
+import { Channel } from '../../../../assets/models/channel.class';
+import { User } from '../../../../assets/models/user.class';
+import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-channels',
@@ -51,7 +51,7 @@ export class DesktopChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public threadService: ThreadService,
     public searchField: SearchFieldService,
-  ) {}
+  ) { }
 
   /**
    * Initializes the component and sets up necessary subscriptions.
@@ -100,6 +100,7 @@ export class DesktopChannelsComponent implements OnInit {
    * @param {User} user - The user to open a direct chat with.
    */
   async openDirectChat(user: User) {
+    this.clearData();
     this.chatService.clickedUser.id = user.id;
     this.chatService.clickedUser = user;
     await this.directMessageService.directMessageIsAvailable();
@@ -118,10 +119,17 @@ export class DesktopChannelsComponent implements OnInit {
    * Opens the new message interface.
    */
   openNewMessage() {
+    this.clearData();
     this.chatService.text = '';
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = true;
+  }
+
+  clearData() {
+    this.chatService.dataChannel = new Channel;
+    this.chatService.dataThread = new Channel;
+    this.chatService.dataDirectChat = new Channel;
   }
 
   /**
