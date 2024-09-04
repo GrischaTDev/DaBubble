@@ -267,10 +267,10 @@
                     <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
+                          chatService.openDialogEmoji();
                           directMessageService.fromWhichChannel();
                           emojiService.forWhichDocIsTheEmoji('direct-message');
-                          chatService.onButtonClick($event);
-                          chatService.openDialogEmoji()
+                          chatService.onButtonClick($event)
                         "
                         >sentiment_satisfied</mat-icon
                       >
@@ -527,10 +527,10 @@
           <div class="desktop-chat-input-icon">
             <mat-icon
               (click)="
+                chatService.openDialogEmoji();
                 directMessageService.fromWhichChannel();
                 emojiService.forWhichDocIsTheEmoji('direct-message');
-                chatService.onButtonClick($event);
-                chatService.openDialogEmoji()
+                chatService.onButtonClick($event)
               "
               >sentiment_satisfied</mat-icon
             >

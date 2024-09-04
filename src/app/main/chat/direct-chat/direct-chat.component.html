@@ -275,9 +275,9 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
+                          chatService.openDialogEmoji();
                           emojiService.forWhichDocIsTheEmoji('direct-message');
-                          chatService.onButtonClick($event);
-                          chatService.openDialogEmoji()
+                          chatService.onButtonClick($event)
                         "
                         >sentiment_satisfied</mat-icon
                       >
@@ -408,9 +408,9 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
+                chatService.openDialogEmoji();
                 emojiService.forWhichDocIsTheEmoji('direct-message');
-                chatService.onButtonClick($event); 
-                chatService.openDialogEmoji()
+                chatService.onButtonClick($event)
               "
               >sentiment_satisfied</mat-icon
             >
