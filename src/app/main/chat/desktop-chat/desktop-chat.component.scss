@@ -1,10 +1,11 @@
-@import "./../../../../styles.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
+@import './../../../../styles.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-  font-family: "TwemojiMozilla";
-  src: local("TwemojiMozilla"),
-    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+  font-family: 'TwemojiMozilla';
+  src:
+    local('TwemojiMozilla'),
+    url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
 /* -----------DESKTOP-------------- */
@@ -405,23 +406,25 @@
 
 .desktop-chat-message-from-others {
   background-color: $background-lightblue;
-  max-width: 300px;
+  max-width: 600px;
   padding: 16px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
   margin-right: 90px;
+  overflow-wrap: anywhere;
 }
 
 .desktop-chat-message-from-me {
   background-color: $background-purple;
   color: $background-white;
-  max-width: 300px;
+  max-width: 600px;
   padding: 16px;
   border-top-left-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
   margin-left: 90px;
+  overflow-wrap: anywhere;
 }
 
 .desktop-chat-message-clicked {
@@ -459,7 +462,7 @@
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla", sans-serif;
+    font-family: Arial, 'TwemojiMozilla', sans-serif;
   }
 }
 
@@ -650,7 +653,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
+    flex-direction: column;
     padding: 0;
     margin: 0;
     > p {
@@ -692,7 +695,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
+    flex-direction: column;
     padding: 0;
     margin: 0;
     > p {
@@ -717,7 +720,7 @@
 .desktop-chat-message-reaction-hover-link {
   cursor: pointer !important;
   &:hover {
-   color: $border-ligth-purple !important;
+    color: $border-ligth-purple !important;
   }
 }
 
@@ -767,7 +770,7 @@
       gap: 18px;
       cursor: pointer;
       border-radius: 30px;
-        padding: 4px 20px;
+      padding: 4px 20px;
 
       &:hover {
         background-color: $background-lightblue;
