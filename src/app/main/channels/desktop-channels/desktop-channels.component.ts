@@ -82,6 +82,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.router.navigate(['/main', 'chat', channel.id, 'user', 'chat']);
     this.mainService
       .watchSingleChannelDoc(channel.id, 'channels')
+      .pipe(take(1))
       .subscribe(dataChannel => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
