@@ -45,6 +45,7 @@ export class DirectChatComponent implements OnInit {
   parmsIdContent: string = '';
   parmsIdUser: string = '';
   parmsIdOfChat: string = '';
+  subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,13 +61,20 @@ export class DirectChatComponent implements OnInit {
     this.route.params.subscribe((params: any) => {
       this.parmsIdContent = params['id'];
       this.parmsIdUser = params['idUser'];
-      this.parmsIdOfChat = params['idOfChat']; 
+      this.parmsIdOfChat = params['idOfChat'];
     });
     if (!this.directMessageService.dataDirectMessage) {
       this.directMessageService.dataDirectMessage = {} as Channel;
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
       this.directMessageService.dataDirectMessage.messageChannel = [];
     }
+    this.subscription = mainService.currentContentEmoji.subscribe(content => {
+      if (!this.chatService.editOpen) {
+        this.chatService.text += content;
+      } else {
+        this.chatService.editText += content;
+      }
+    });
   }
 
   /**
@@ -74,7 +82,7 @@ export class DirectChatComponent implements OnInit {
    * Upon receiving an update, it creates a new User instance and assigns it to a service for use within the application.
    * This is typically used to ensure that the component has access to the latest user information when it is initialized.
    */
-  async ngOnInit() {  
+  async ngOnInit() {
     if (this.parmsIdContent) {
       try {
         const dataDirectChat = await lastValueFrom(this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message'));
@@ -113,7 +121,7 @@ export class DirectChatComponent implements OnInit {
       this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', 'chat']);
       this.chatService.mobileDirectChatIsOpen = false
       this.chatService.mobileThreadIsOpen = false;
-    } 
+    }
   }
 
   /**
@@ -125,5 +133,13 @@ export class DirectChatComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = directUser;
     this.dialog.open(UserProfileComponent, dialogConfig);
+  }
+
+  /**
+ * A lifecycle hook that is called when the component is destroyed.
+ * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+ */
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
