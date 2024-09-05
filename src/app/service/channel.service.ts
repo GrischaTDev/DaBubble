@@ -1,14 +1,14 @@
-import {inject, Injectable, Input} from '@angular/core';
-import {User} from '../../assets/models/user.class';
-import {ChatService} from './chat.service';
-import {MainServiceService} from './main-service.service';
-import {Channel} from '../../assets/models/channel.class';
-import {DialogEditChannelComponent} from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {DialogImageMessageComponent} from '../main/dialog/dialog-image-message/dialog-image-message.component';
-import {Message} from '../../assets/models/message.class';
-import {DialogShowsUserReactionComponent} from '../main/dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import { inject, Injectable, Input } from '@angular/core';
+import { User } from '../../assets/models/user.class';
+import { ChatService } from './chat.service';
+import { MainServiceService } from './main-service.service';
+import { Channel } from '../../assets/models/channel.class';
+import { DialogEditChannelComponent } from '../main/dialog/dialog-edit-channel/dialog-edit-channel.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
+import { Message } from '../../assets/models/message.class';
+import { DialogShowsUserReactionComponent } from '../main/dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
 
 @Injectable({
   providedIn: 'root',
@@ -30,10 +30,7 @@ export class ChannelService {
   filterContentMarginTop: number = 0;
   editUserList: User[] = [];
   public dialog = inject(MatDialog);
-  dialogInstance:
-    | MatDialogRef<DialogEditChannelComponent, any>
-    | MatDialogRef<DialogShowsUserReactionComponent, any>
-    | undefined;
+  dialogInstance: | MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogShowsUserReactionComponent, any> | undefined;
   editChannelNameIsOpen: boolean = false;
   editChannelDescriptionIsOpen: boolean = false;
   editChannelAddUserIsOpen: boolean = false;
@@ -54,7 +51,7 @@ export class ChannelService {
     public chatService: ChatService,
     public mainService: MainServiceService,
     private router: Router,
-  ) {}
+  ) { }
 
   /**
    * Adds each user from the added users list to the current channel and updates the channel's document in the database.
@@ -259,19 +256,9 @@ export class ChannelService {
         this.chatService.dataChannel.channelUsers.splice(index, 1);
       }
     }
-    await this.mainService.addDoc(
-      'channels',
-      this.chatService.dataChannel.id,
-      new Channel(this.chatService.dataChannel),
-    );
+    await this.mainService.addDoc('channels', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel),);
     this.closeEditChannelDialog();
-    this.router.navigate([
-      '/main',
-      'chat',
-      this.mainService.allChannels[0].id,
-      'user',
-      'chat',
-    ]);
+    this.router.navigate(['/main', 'chat', this.mainService.allChannels[0].id, 'user', 'chat',]);
     this.loadNewChannel();
   }
 
@@ -286,11 +273,14 @@ export class ChannelService {
       });
   }
 
-  async openDialogShowsUserReaction(
-    singleMessageIndex: number,
-    emojiIndex: number,
-    emoji: string,
-  ) {
+  /**
+  * Opens a dialog to show user reactions for a specific message and emoji.
+  * 
+  * Closes any previous reaction dialog, sets the selected emoji and its index, 
+  * and loads the reaction data for the message at the given index.
+  * Then opens a dialog to display the users who reacted to the message.
+  */
+  async openDialogShowsUserReaction(singleMessageIndex: number, emojiIndex: number, emoji: string,) {
     this.closeDialogShowsUserReaction();
     this.showEmojiReaction = emoji;
     this.showUserReactionIndex = singleMessageIndex;
@@ -300,27 +290,30 @@ export class ChannelService {
     this.dialogInstance = this.dialog.open(DialogShowsUserReactionComponent);
   }
 
+  /**
+  * Loads the user data for the selected emoji reaction on a specific message.
+  * 
+  * Clears the current lists of user avatars, names, and IDs. Then, it populates these lists
+  * based on the users who reacted with the selected emoji at the given message and emoji index.
+  */
   async loadDataFromShowReactionUsers() {
     this.userOfEmoji = [];
     this.userIdOfEmoji = [];
     this.userAvatarOfEmoji = [];
-    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[
-      this.showUserReactionIndexOfEmoji
-    ].userAvatar.forEach(avatar => {
+    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[this.showUserReactionIndexOfEmoji].userAvatar.forEach(avatar => {
       this.userAvatarOfEmoji.push(avatar);
     });
-    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[
-      this.showUserReactionIndexOfEmoji
-    ].userName.forEach(name => {
+    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[this.showUserReactionIndexOfEmoji].userName.forEach(name => {
       this.userOfEmoji.push(name);
     });
-    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[
-      this.showUserReactionIndexOfEmoji
-    ].user.forEach(idUser => {
+    this.showEmojiUserPath[this.showUserReactionIndex].emojiReaction[this.showUserReactionIndexOfEmoji].user.forEach(idUser => {
       this.userIdOfEmoji.push(idUser);
     });
   }
 
+  /**
+  * Closes the dialog showing user reactions, if it is currently open.
+  */
   closeDialogShowsUserReaction() {
     if (this.dialogInstance) {
       this.dialogInstance.close();

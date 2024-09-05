@@ -40,24 +40,17 @@ export class EmojiService {
    */
   async pushEmojieToRelatedMessageOfTheChat(indexSingleMessage: number): Promise<void> {
     if (!this.emojiToDirectMessage) {
-      // Überprüfe, ob dataChannel und messageChannel existieren und ob ein Element am Index indexSingleMessage vorhanden ist
       if (
         this.chatService.dataChannel &&
         this.chatService.dataChannel.messageChannel &&
         this.chatService.dataChannel.messageChannel[indexSingleMessage]
       ) {
         const dataThreadChannel = await firstValueFrom(
-          this.mainService.watchSingleThreadDoc(
-            this.chatService.dataChannel.messageChannel[indexSingleMessage].thread,
-            'threads'
-          )
+          this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[indexSingleMessage].thread, 'threads')
         );
         this.emojiServiceThread = dataThreadChannel as Channel;
       } else {
-        console.error(
-          'Fehler: messageChannel oder dataChannel ist undefiniert, oder messageChannel[indexSingleMessage] existiert nicht.'
-        );
-        // Optional: Hier könntest du einen Fehler werfen oder eine alternative Aktion durchführen, wenn die Daten nicht verfügbar sind
+        console.error('Fehler: messageChannel oder dataChannel ist undefiniert, oder messageChannel[indexSingleMessage] existiert nicht.');
       }
     } else {
       this.emojiServiceThread = this.chatService.dataChannel as Channel;
@@ -70,24 +63,17 @@ export class EmojiService {
    */
   async pushEmojieToRelatedMessageOfTheThreadOpen(): Promise<void> {
     if (!this.emojiToDirectMessage) {
-      // Überprüfe, ob dataChannel und messageChannel existieren und ob ein Element am Index this.chatService.indexOfChannelMessage vorhanden ist
       if (
         this.chatService.dataChannel &&
         this.chatService.dataChannel.messageChannel &&
         this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage]
       ) {
         const dataThreadChannel = await firstValueFrom(
-          this.mainService.watchSingleThreadDoc(
-            this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread,
-            'threads'
-          )
+          this.mainService.watchSingleThreadDoc(this.chatService.dataChannel.messageChannel[this.chatService.indexOfChannelMessage].thread, 'threads')
         );
         this.emojiServiceThread = dataThreadChannel as Channel;
       } else {
-        console.error(
-          'Fehler: messageChannel oder dataChannel ist undefiniert, oder messageChannel[this.chatService.indexOfChannelMessage] existiert nicht.'
-        );
-        // Optional: Hier könntest du einen Fehler werfen oder eine alternative Aktion durchführen, wenn die Daten nicht verfügbar sind
+        console.error('Fehler: messageChannel oder dataChannel ist undefiniert, oder messageChannel[this.chatService.indexOfChannelMessage] existiert nicht.');
       }
     }
   }
@@ -96,7 +82,6 @@ export class EmojiService {
   /**
   * Adds an emoji reaction to a specific message in a message channel.
   * If the message already has emoji reactions, it prepares and processes the user and emoji data.
-  * If the message has no emoji reactions, it adds the emoji to the array and saves the updated content.
   */
   async addReactionToMessageChannelSetData(emoji: string, indexSingleMessage: number) {
     let dataEmoji = this.chatService.dataChannel.messageChannel[indexSingleMessage].emojiReaction;
@@ -189,7 +174,6 @@ export class EmojiService {
 
   /**
    * Checks if the emoji is already available in the array of reactions; if not, it adds the emoji to the array.
-   * @param {string} emoji - The emoji to be added or checked within the array.
    */
   async selectionTheAddedEmojiChannel(emoji: string, indexOfData: number) {
     let arrayEmoji = this.chatService.dataChannel.messageChannel[indexOfData].emojiReaction[this.emojiIndex];
@@ -209,7 +193,6 @@ export class EmojiService {
 
   /**
   * Checks if the emoji is already available in the array of reactions; if not, it adds the emoji to the array.
-  * @param {string} emoji - The emoji to be added or checked within the array.
   */
   async selectionTheAddedEmojiThread(emoji: string, indexDocNumber: number) {
     let arrayEmoji = this.emojiServiceThread.messageChannel[indexDocNumber].emojiReaction[this.emojiIndex];
@@ -229,11 +212,6 @@ export class EmojiService {
 
   /**
   * Adds a new emoji reaction to the current message channel.
-  * This method first resets the existing emoji data arrays, sets the new emoji, 
-  * and then records the reacting user's ID, name, and avatar. It finally pushes 
-  * the updated emoji data to the appropriate message channel's emoji reactions.
-  *
-  * @param {string} emoji - The emoji character or string to be added to the message.
   */
   pushEmojiToArray(emoji: string) {
     this.resetEmojiArray();
@@ -248,11 +226,6 @@ export class EmojiService {
 
   /**
   * Adds a new emoji reaction to the current message channel.
-  * This method first resets the existing emoji data arrays, sets the new emoji, 
-  * and then records the reacting user's ID, name, and avatar. It finally pushes 
-  * the updated emoji data to the appropriate message channel's emoji reactions.
-  *
-  * @param {string} emoji - The emoji character or string to be added to the message.
   */
   pushEmojiToArrayThread(emoji: string) {
     this.resetEmojiArray();
@@ -300,7 +273,6 @@ export class EmojiService {
   /**
   * Removes the logged-in user from the specified emoji object.
   * It updates the emoji object by removing user ID, userName, and userAvatar from their respective arrays.
-  * If there are no users left in the emoji object, it calls `removeEmijie`.
   */
   removeUserFromEmoji(arrayEmoji: any) {
     if (arrayEmoji) {
@@ -415,7 +387,6 @@ export class EmojiService {
 
   /**
   * Assigns emoji handling to different types of communication documents.
-  * @param {string} docName - The name of the document type.
   */
   forWhichDocIsTheEmoji(docName: string) {
     this.resetForWhichDocIsTheEmoji();

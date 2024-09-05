@@ -127,6 +127,15 @@ export class MainServiceService {
     }
   }
 
+  /**
+  * Sets the channel ID in Firebase for a specified document.
+  * 
+  * Updates the Firebase document with the given reference and document name, setting the document's ID.
+  * Uses the merge option to avoid overwriting existing data.
+  * 
+  * @param {string} docRef - The reference ID of the document to update.
+  * @param {string} docName - The name of the document collection in Firebase.
+  */
   setChannelIdOnFirebase(docRef: string, docName: string) {
     setDoc(
       doc(this.firestore, docName, docRef),
