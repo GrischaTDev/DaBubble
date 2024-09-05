@@ -44,8 +44,6 @@ import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/d
   styleUrl: './desktop-new-message.component.scss',
 })
 export class DesktopNewMessageComponent implements OnInit {
-  items$;
-  items;
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
@@ -73,22 +71,10 @@ export class DesktopNewMessageComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    if (this.parmsId) {
-      this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
-        this.chatService.dataChannel = channel;
-      });
-    }
     this.subscription = mainService.currentContent.subscribe(content => {
       this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
-
-    if (!this.directMessageService.dataDirectMessage) {
-      this.directMessageService.dataDirectMessage = {} as Channel;
-    } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
-      this.directMessageService.dataDirectMessage.messageChannel = [];
-    }
   }
   ngOnInit(): void {
     this.subscription = this.searchField.allChannel$.subscribe(channels => {

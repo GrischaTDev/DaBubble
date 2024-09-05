@@ -121,6 +121,7 @@ export class DesktopChannelsComponent implements OnInit {
    */
   openNewMessage() {
     this.clearData();
+    this.mainService.clearObservable();
     this.chatService.text = '';
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
