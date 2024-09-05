@@ -74,7 +74,9 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                chatService.onButtonClick($event); chatService.openDialogEmoji()
+                emojiService.forWhichDocIsTheEmoji('channels');
+                chatService.onButtonClick($event);
+                chatService.openDialogEmoji()
               "
               >sentiment_satisfied</mat-icon
             >
@@ -82,6 +84,7 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
+                mainService.contentOfWhichInput('channels');
                 chatService.onButtonClick($event);
                 chatService.openDialogMentionUser()
               "

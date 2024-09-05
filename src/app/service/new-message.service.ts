@@ -97,7 +97,15 @@ export class NewMessageService {
         this.newMessageDialog.close();
       }
     }
+    this.clearData();
+  }
+
+  /**
+  * Clears the current user data and resets the new message flag in the main service.
+  */
+  clearData() {
     this.userData = undefined;
+    this.mainService.newMessage = false;
   }
 
   /**

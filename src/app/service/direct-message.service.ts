@@ -65,7 +65,6 @@ export class DirectMessageService {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.windowWidth = window.innerWidth;
-    console.log(this.windowWidth);
   }
 
   /**

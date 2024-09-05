@@ -31,16 +31,17 @@ export class MainServiceService {
     throw new Error('Method not implemented.');
   }
   constructor(private router: Router) {
-    this.unsubUserList = this.subUserList();
-    this.unsubChannelsList = this.subChannelsList();
+    this.unsubUserList = this.subUserList(); this.unsubChannelsList = this.subChannelsList();
   }
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceThread = new BehaviorSubject<any>([]);
   private contentSourceEmoji = new BehaviorSubject<any>([]);
   private contentSourceDirectChat = new BehaviorSubject<any>([]);
+  private contentSourceNewMessage = new BehaviorSubject<any>([]);
   currentContent = this.contentSource.asObservable();
   currentContentThread = this.contentSourceThread.asObservable();
   currentContentDirectChat = this.contentSourceDirectChat.asObservable();
+  currentContentNewMessage = this.contentSourceNewMessage.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -49,6 +50,7 @@ export class MainServiceService {
   loggedInUser: User = new User();
   testUser: User = new User();
   emojiReactionMessage = false;
+  newMessage: boolean = false;
   docId: string = '';
   private dataChannelSubject = new Subject<any>();
   private dataThreadSubject = new Subject<any>();
@@ -64,6 +66,9 @@ export class MainServiceService {
    */
   changeInputContent(content: any) {
     this.contentSource.next(content);
+    if (this.newMessage) {
+      this.contentSourceNewMessage.next(content);
+    }
   }
 
   /**
@@ -89,6 +94,8 @@ export class MainServiceService {
     this.contentSource.next('');
     this.contentSourceDirectChat.next('');
     this.contentSourceThread.next('');
+    this.contentSourceEmoji.next('');
+    this.contentSourceNewMessage.next('');
   }
 
   /**

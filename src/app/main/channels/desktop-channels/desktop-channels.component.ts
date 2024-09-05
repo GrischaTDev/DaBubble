@@ -15,6 +15,7 @@ import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
 import { ThreadService } from '../../../service/thread.service';
 import { SearchFieldService } from '../../../search-field.service';
+import { NewMessageService } from '../../../service/new-message.service';
 
 @Component({
   selector: 'app-desktop-channels',
@@ -51,6 +52,7 @@ export class DesktopChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public threadService: ThreadService,
     public searchField: SearchFieldService,
+    public newMessageService: NewMessageService
   ) { }
 
   /**
@@ -106,7 +108,6 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.clickedUser = user;
     await this.directMessageService.directMessageIsAvailable();
     this.directMessageService.directMessageDocId = this.mainService.docId;
-    this.chatService.text = '';
     this.chatService.activateChatFocus();
     this.threadService.closeThread();
     this.chatService.mobileChatIsOpen = false;
@@ -121,10 +122,9 @@ export class DesktopChannelsComponent implements OnInit {
    */
   openNewMessage() {
     this.clearData();
-    this.mainService.clearObservable();
-    this.chatService.text = '';
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
+    this.mainService.newMessage = true;
     this.chatService.newMessageOpen = true;
   }
 
@@ -136,6 +136,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.dataChannel = new Channel;
     this.chatService.dataThread = new Channel;
     this.chatService.dataDirectChat = new Channel;
+    this.chatService.text = '';
   }
 
   /**

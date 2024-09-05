@@ -84,7 +84,6 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-
     this.subscription = this.searchField.allChannel$.subscribe(channels => {
       this.allChannel = channels;
     });
@@ -156,8 +155,6 @@ export class DesktopChatComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-
-
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }

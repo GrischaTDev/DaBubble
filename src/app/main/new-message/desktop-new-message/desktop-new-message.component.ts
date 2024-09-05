@@ -47,7 +47,7 @@ export class DesktopNewMessageComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  subscription;
+  private subscription: Subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   messageToChannel: Message = new Message();
@@ -71,7 +71,7 @@ export class DesktopNewMessageComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.subscription = mainService.currentContent.subscribe(content => {
+    this.subscription = mainService.currentContentNewMessage.subscribe(content => {
       this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
@@ -163,6 +163,10 @@ export class DesktopNewMessageComponent implements OnInit {
   }
 
   sendMessage() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.mainService.newMessage = false;
     this.directMessageService.sendNewMessageFromDesktop = true;
     this.newMessageService.sendMessage(this.newMessageService.text);
   }
