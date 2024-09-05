@@ -1,21 +1,21 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {Firestore} from '@angular/fire/firestore';
-import {MainServiceService} from '../../../service/main-service.service';
-import {LoginService} from '../../../service/login.service';
-import {ChatService} from '../../../service/chat.service';
-import {FormsModule} from '@angular/forms';
-import {MatIcon} from '@angular/material/icon';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
-import {User} from '../../../../assets/models/user.class';
-import {ActivatedRoute} from '@angular/router';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {ChannelService} from '../../../service/channel.service';
-import {CommonModule} from '@angular/common';
-import {EmojiService} from '../../../service/emoji.service';
-import {ThreadService} from '../../../service/thread.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {lastValueFrom, take} from 'rxjs';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { MainServiceService } from '../../../service/main-service.service';
+import { LoginService } from '../../../service/login.service';
+import { ChatService } from '../../../service/chat.service';
+import { FormsModule } from '@angular/forms';
+import { MatIcon } from '@angular/material/icon';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import { User } from '../../../../assets/models/user.class';
+import { ActivatedRoute } from '@angular/router';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { ChannelService } from '../../../service/channel.service';
+import { CommonModule } from '@angular/common';
+import { EmojiService } from '../../../service/emoji.service';
+import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { lastValueFrom, take } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-thread',
@@ -42,7 +42,7 @@ export class DesktopThreadComponent implements OnInit {
     public loginService: LoginService,
     public threadService: ThreadService,
   ) {
-    this.subscription = mainService.currentContentEmojiThread.subscribe(
+    this.subscription = mainService.currentContentThread.subscribe(
       content => {
         if (!this.chatService.editOpen) {
           this.threadService.textThread += content;

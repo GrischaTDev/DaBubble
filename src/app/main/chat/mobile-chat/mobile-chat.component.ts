@@ -6,27 +6,27 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MainServiceService} from '../../../service/main-service.service';
-import {ChatService} from '../../../service/chat.service';
-import {MobileHeaderComponent} from '../../header/mobile-header/mobile-header.component';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Firestore} from '@angular/fire/firestore';
-import {User} from '../../../../assets/models/user.class';
-import {PickerComponent} from '@ctrl/ngx-emoji-mart';
-import {EmojiService} from '../../../service/emoji.service';
-import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {LoginService} from '../../../service/login.service';
-import {ChannelService} from '../../../service/channel.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {ThreadService} from '../../../service/thread.service';
-import {SearchFieldService} from '../../../search-field.service';
-import {lastValueFrom} from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MainServiceService } from '../../../service/main-service.service';
+import { ChatService } from '../../../service/chat.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Firestore } from '@angular/fire/firestore';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiService } from '../../../service/emoji.service';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { LoginService } from '../../../service/login.service';
+import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -67,7 +67,7 @@ export class MobileChatComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.subscription = mainService.currentContentEmoji.subscribe(content => {
+    this.subscription = mainService.currentContent.subscribe(content => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
       } else {

@@ -68,7 +68,7 @@ export class DirectChatComponent implements OnInit {
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
       this.directMessageService.dataDirectMessage.messageChannel = [];
     }
-    this.subscription = mainService.currentContentEmoji.subscribe(content => {
+    this.subscription = mainService.currentContentDirectChat.subscribe(content => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
       } else {

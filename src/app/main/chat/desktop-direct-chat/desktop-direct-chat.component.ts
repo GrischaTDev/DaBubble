@@ -66,7 +66,7 @@ export class DesktopDirectChatComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
   ) {
-    this.subscription = mainService.currentContentEmoji.subscribe(content => {
+    this.subscription = mainService.currentContentDirectChat.subscribe(content => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
       } else {

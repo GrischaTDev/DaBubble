@@ -47,15 +47,33 @@ export class DialogMentionUsersComponent {
     this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
     if (lastChar !== '@') {
-      this.inputContent += '@' + user.name;
+      this.inputContent += '@' + user.name + ' ';
     } else {
       this.inputContent += user.name;
     }
-    if (this.mainService.contentToChannel || this.mainService.contentToDirectMessage) {
+    this.validationContent();
+  }
+
+  /**
+  * Validates and updates the input content based on the current service type.
+  * Updates content for channel, thread, or direct message, then resets the content.
+  */
+  validationContent() {
+    if (this.mainService.contentToChannel) {
       this.mainService.changeInputContent(this.inputContent);
     } else if (this.mainService.contentToThread) {
       this.mainService.changeInputContentThread(this.inputContent);
+    } else if (this.mainService.contentToDirectMessage) {
+      this.mainService.changeInputContentDirectChat(this.inputContent)
     }
+    this.resetContent();
+  }
+
+  /**
+  * Resets content flags for channel, direct message, and thread.
+  * Closes the chat dialog after resetting the flags.
+  */
+  resetContent() {
     this.mainService.contentToChannel = false;
     this.mainService.contentToDirectMessage = false;
     this.mainService.contentToThread = false;

@@ -166,6 +166,7 @@ export class ChatService {
    */
   closeDialog(): void {
     if (this.dialogInstance) {
+      this.mainService.clearObservable();
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;

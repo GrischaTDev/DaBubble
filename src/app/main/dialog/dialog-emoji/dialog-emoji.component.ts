@@ -57,10 +57,12 @@ export class DialogEmojiComponent {
   */
   setInputReaction(event: any) {
     this.inputContent = ' ' + event.emoji.native;
-    if (this.emojiService.emojiToChannel || this.emojiService.emojiToDirectMessage) {
+    if (this.emojiService.emojiToChannel) {
       this.mainService.changeInputContent(this.inputContent);
     } else if (this.emojiService.emojieToThread) {
       this.mainService.changeInputContentThread(this.inputContent);
+    } else if (this.emojiService.emojiToDirectMessage) {
+      this.mainService.changeInputContentDirectChat(this.inputContent)
     }
   }
 

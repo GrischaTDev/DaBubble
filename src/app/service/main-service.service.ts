@@ -37,8 +37,10 @@ export class MainServiceService {
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceThread = new BehaviorSubject<any>([]);
   private contentSourceEmoji = new BehaviorSubject<any>([]);
-  currentContentEmoji = this.contentSource.asObservable();
-  currentContentEmojiThread = this.contentSourceThread.asObservable();
+  private contentSourceDirectChat = new BehaviorSubject<any>([]);
+  currentContent = this.contentSource.asObservable();
+  currentContentThread = this.contentSourceThread.asObservable();
+  currentContentDirectChat = this.contentSourceDirectChat.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -65,11 +67,28 @@ export class MainServiceService {
   }
 
   /**
+ * Updates the content source with the new content.
+ * @param {any} content - The new content to set.
+ */
+  changeInputContentDirectChat(content: any) {
+    this.contentSourceDirectChat.next(content);
+  }
+
+  /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
    */
   changeInputContentThread(content: any) {
     this.contentSourceThread.next(content);
+  }
+
+  /**
+  * Clears the content sources for channel, direct chat, and thread by emitting empty values.
+  */
+  clearObservable() {
+    this.contentSource.next('');
+    this.contentSourceDirectChat.next('');
+    this.contentSourceThread.next('');
   }
 
   /**

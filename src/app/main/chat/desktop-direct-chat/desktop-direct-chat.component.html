@@ -267,9 +267,9 @@
                     <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
+                          emojiService.forWhichDocIsTheEmoji('direct-message');
                           chatService.openDialogEmoji();
                           directMessageService.fromWhichChannel();
-                          emojiService.forWhichDocIsTheEmoji('direct-message');
                           chatService.onButtonClick($event)
                         "
                         >sentiment_satisfied</mat-icon
