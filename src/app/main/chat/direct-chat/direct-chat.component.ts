@@ -56,7 +56,7 @@ export class DirectChatComponent implements OnInit {
     public directMessageService: DirectMessageService,
     private loginService: LoginService,
     public channelService: ChannelService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsIdContent = params['id'];
@@ -68,13 +68,15 @@ export class DirectChatComponent implements OnInit {
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
       this.directMessageService.dataDirectMessage.messageChannel = [];
     }
-    this.subscription = mainService.currentContentDirectChat.subscribe(content => {
-      if (!this.chatService.editOpen) {
-        this.chatService.text += content;
-      } else {
-        this.chatService.editText += content;
-      }
-    });
+    this.subscription = mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /**
@@ -85,16 +87,23 @@ export class DirectChatComponent implements OnInit {
   async ngOnInit() {
     if (this.parmsIdContent) {
       try {
-        const dataDirectChat = await lastValueFrom(this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message'));
+        const dataDirectChat = await lastValueFrom(
+          this.mainService.watchSingleChannelDoc(
+            this.parmsIdContent,
+            'direct-message',
+          ),
+        );
         this.chatService.dataChannel = dataDirectChat as Channel;
       } catch (error) {
         console.error('Fehler beim Laden der Daten:', error);
       }
     }
     if (this.parmsIdUser) {
-      this.mainService.watchSingleChannelDoc(this.parmsIdUser, 'users').subscribe(dataUser => {
-        this.chatService.clickedUser = dataUser as User;
-      });
+      this.mainService
+        .watchSingleChannelDoc(this.parmsIdUser, 'users')
+        .subscribe((dataUser) => {
+          this.chatService.clickedUser = dataUser as User;
+        });
     }
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -118,8 +127,14 @@ export class DirectChatComponent implements OnInit {
    */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', 'chat']);
-      this.chatService.mobileDirectChatIsOpen = false
+      this.router.navigate([
+        '/main',
+        'chat',
+        this.parmsIdOfChat,
+        'user',
+        'chat',
+      ]);
+      this.chatService.mobileDirectChatIsOpen = false;
       this.chatService.mobileThreadIsOpen = false;
     }
   }
@@ -136,9 +151,9 @@ export class DirectChatComponent implements OnInit {
   }
 
   /**
- * A lifecycle hook that is called when the component is destroyed.
- * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
- */
+   * A lifecycle hook that is called when the component is destroyed.
+   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+   */
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

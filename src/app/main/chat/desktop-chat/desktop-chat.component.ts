@@ -24,7 +24,7 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
-import { SearchFieldService } from '../../../search-field.service'
+import { SearchFieldService } from '../../../search-field.service';
 import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
 import { lastValueFrom, Subscription } from 'rxjs';
 
@@ -65,14 +65,13 @@ export class DesktopChatComponent implements OnInit {
     public channelService: ChannelService,
     public loginService: LoginService,
     public threadService: ThreadService,
-    public searchField: SearchFieldService
+    public searchField: SearchFieldService,
   ) {
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
   }
-
 
   /**
    * Initializes the component by fetching the current logged-in user and subscribing to changes in the user's status.
@@ -84,7 +83,7 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
   }
@@ -101,7 +100,8 @@ export class DesktopChatComponent implements OnInit {
   ngAfterViewChecked() {
     if (this.allChannel.length !== 0) {
       if (
-        this.scrollContainer.nativeElement.scrollHeight > this.lastScrollHeight &&
+        this.scrollContainer.nativeElement.scrollHeight >
+          this.lastScrollHeight &&
         this.chatService.sendetMessage
       ) {
         this.scrollToBottom();
@@ -113,9 +113,11 @@ export class DesktopChatComponent implements OnInit {
   @ViewChild('autofocus') meinInputField!: ElementRef;
   ngAfterViewInit() {
     this.focusInputField();
-    this.channelSubscription = this.chatService.channelChanged$.subscribe(() => {
-      this.focusInputField();
-    });
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(
+      () => {
+        this.focusInputField();
+      },
+    );
   }
 
   private focusInputField() {
@@ -138,7 +140,7 @@ export class DesktopChatComponent implements OnInit {
   toggleIconHoverContainerChat(
     singleMessageIndex: number,
     emojiUserIndex: number,
-    event: MouseEvent
+    event: MouseEvent,
   ) {
     event.stopPropagation();
     this.activeMessageIndexReacton = singleMessageIndex;
@@ -174,8 +176,8 @@ export class DesktopChatComponent implements OnInit {
       event.preventDefault();
       this.chatService.sendMessageFromChannel(
         this.chatService.dataChannel.id,
-        this.chatService.text
-      )
+        this.chatService.text,
+      );
     }
   }
 }

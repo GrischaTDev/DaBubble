@@ -56,7 +56,7 @@ export class DirectMessageService {
     public chatService: ChatService,
     public mainService: MainServiceService,
     public router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
@@ -86,7 +86,7 @@ export class DirectMessageService {
   async validationOfTheOtherUser() {
     const loggedInUserId = this.mainService.loggedInUser.id;
     const otherUsers = this.dataDirectMessage.channelUsers.filter(
-      user => user.id !== loggedInUserId,
+      (user) => user.id !== loggedInUserId,
     );
     if (otherUsers.length === 0) {
       this.directUser = new User(this.mainService.loggedInUser);
@@ -198,8 +198,11 @@ export class DirectMessageService {
     this.directMessageId = '';
     const clickedUserMessages = this.chatService.clickedUser.message;
     const loggedInUserMessages = this.mainService.loggedInUser.message;
-    if (Array.isArray(clickedUserMessages) && Array.isArray(loggedInUserMessages)) {
-      const commonMessages = clickedUserMessages.filter(msg =>
+    if (
+      Array.isArray(clickedUserMessages) &&
+      Array.isArray(loggedInUserMessages)
+    ) {
+      const commonMessages = clickedUserMessages.filter((msg) =>
         loggedInUserMessages.includes(msg),
       );
       if (commonMessages.length !== 0) {
@@ -220,7 +223,10 @@ export class DirectMessageService {
   async pushDirectMessageDocToFirebase() {
     if (!this.directMessageIdIsAvailable) {
       this.newDataDirectMessage.channelUsers = [];
-      await this.mainService.addNewDocOnFirebase('direct-message', new Channel(this.newDataDirectMessage),);
+      await this.mainService.addNewDocOnFirebase(
+        'direct-message',
+        new Channel(this.newDataDirectMessage),
+      );
       await this.pushDirectMessageIdToUser();
       await this.loadDirectChatContent(this.mainService.docId);
     }
@@ -249,9 +255,21 @@ export class DirectMessageService {
    * and adding a new channel document for the direct message.
    */
   async pushNewDirectmessageContenToFb() {
-    await this.mainService.addDoc('users', this.mainService.loggedInUser.id, new User(this.mainService.loggedInUser),);
-    await this.mainService.addDoc('users', this.chatService.clickedUser.id, new User(this.chatService.clickedUser),);
-    await this.mainService.addDoc('direct-message', this.directMessageDocId, new Channel(this.newDataDirectMessage),);
+    await this.mainService.addDoc(
+      'users',
+      this.mainService.loggedInUser.id,
+      new User(this.mainService.loggedInUser),
+    );
+    await this.mainService.addDoc(
+      'users',
+      this.chatService.clickedUser.id,
+      new User(this.chatService.clickedUser),
+    );
+    await this.mainService.addDoc(
+      'direct-message',
+      this.directMessageDocId,
+      new Channel(this.newDataDirectMessage),
+    );
   }
 
   /**
@@ -270,7 +288,7 @@ export class DirectMessageService {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = e => {
+      reader.onload = (e) => {
         if (e.target) {
           this.imageMessage = e.target.result;
         }
@@ -298,7 +316,11 @@ export class DirectMessageService {
     this.messageDirectChat.userAvatar = this.mainService.loggedInUser.avatar;
     this.messageDirectChat.imageToMessage = image as ArrayBuffer;
     this.chatService.dataChannel.messageChannel.push(this.messageDirectChat);
-    await this.mainService.addDoc('direct-message', this.chatService.dataChannel.id, new Channel(this.chatService.dataChannel),);
+    await this.mainService.addDoc(
+      'direct-message',
+      this.chatService.dataChannel.id,
+      new Channel(this.chatService.dataChannel),
+    );
     this.loadDirectMessageFromNewMessage();
   }
 
@@ -308,14 +330,31 @@ export class DirectMessageService {
    */
   loadDirectMessageFromNewMessage() {
     if (this.chatService.newMessageOpen) {
-      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,]);
+      this.router.navigate([
+        '/main',
+        'direct-message',
+        this.chatService.dataChannel.id,
+        this.userIdNewMessage,
+        this.mainService.allChannels[0].id,
+      ]);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
     } else if (this.sendNewMessageFromDesktop) {
-      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,]);
+      this.router.navigate([
+        '/main',
+        'direct-message',
+        this.chatService.dataChannel.id,
+        this.userIdNewMessage,
+        this.mainService.allChannels[0].id,
+      ]);
     } else {
-      this.router.navigate(['/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,]);
+      this.router.navigate([
+        '/direct-chat',
+        this.chatService.dataChannel.id,
+        this.userIdNewMessage,
+        this.mainService.allChannels[0].id,
+      ]);
       this.switchContent = true;
     }
     this.chatService.text = '';
@@ -331,20 +370,42 @@ export class DirectMessageService {
     this.directMessageDocId = chatId;
     if (this.chatService.mobileDirectChatIsOpen) {
       if (this.chatService.clickedUser.id) {
-        this.router.navigate(['/direct-chat', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id,]);
+        this.router.navigate([
+          '/direct-chat',
+          chatId,
+          this.chatService?.clickedUser?.id,
+          this.mainService.allChannels[0].id,
+        ]);
       } else {
-        this.router.navigate(['/direct-chat', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id,]);
+        this.router.navigate([
+          '/direct-chat',
+          chatId,
+          this.chatService.clickedUser.idUser,
+          this.mainService.allChannels[0].id,
+        ]);
       }
       this.switchContent = true;
     } else {
       this.mainService
         .watchSingleDirectMessageDoc(chatId, 'direct-message')
-        .subscribe(dataDirectMessage => {
+        .subscribe((dataDirectMessage) => {
           this.chatService.dataChannel = dataDirectMessage as Channel;
           if (this.chatService.clickedUser.id) {
-            this.router.navigate(['/main', 'direct-message', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id,]);
+            this.router.navigate([
+              '/main',
+              'direct-message',
+              chatId,
+              this.chatService?.clickedUser?.id,
+              this.mainService.allChannels[0].id,
+            ]);
           } else {
-            this.router.navigate(['/main', 'direct-message', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id,]);
+            this.router.navigate([
+              '/main',
+              'direct-message',
+              chatId,
+              this.chatService.clickedUser.idUser,
+              this.mainService.allChannels[0].id,
+            ]);
           }
           this.chatService.desktopChatOpen = false;
           this.chatService.directChatOpen = true;
@@ -362,17 +423,17 @@ export class DirectMessageService {
   async loadUserChatContent(chatId: string) {
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `users/${chatId}`);
-    this.itemsSubscription = docData(docRef).subscribe(user => {
+    this.itemsSubscription = docData(docRef).subscribe((user) => {
       this.chatService.clickedUser = user as User;
     });
   }
 
   /**
-  * Checks if a given user is not the logged-in user or if it's the second or later user in a direct message conversation.
-  * 
-  * Returns `true` if the provided user ID does not match the logged-in user's ID, or if the user is the second or later in the conversation.
-  * Increments the `indexUserDirectmessage` counter if the user ID matches the logged-in user.
-  */
+   * Checks if a given user is not the logged-in user or if it's the second or later user in a direct message conversation.
+   *
+   * Returns `true` if the provided user ID does not match the logged-in user's ID, or if the user is the second or later in the conversation.
+   * Increments the `indexUserDirectmessage` counter if the user ID matches the logged-in user.
+   */
   otherUser(singleUserId: string): boolean {
     if (singleUserId !== this.mainService.loggedInUser.id) {
       return true;
@@ -387,8 +448,8 @@ export class DirectMessageService {
   }
 
   /**
-  * Sets the chat service to indicate that the current chat is from a direct chat.
-  */
+   * Sets the chat service to indicate that the current chat is from a direct chat.
+   */
   fromWhichChannel() {
     this.chatService.fromDirectChat = true;
   }

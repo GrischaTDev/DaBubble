@@ -28,7 +28,7 @@ export class UserProfileComponent {
     public mainService: MainServiceService,
     public userProfileService: UserProfileService,
     private loginService: LoginService,
-    @Inject(MAT_DIALOG_DATA) public directUserProfile: User
+    @Inject(MAT_DIALOG_DATA) public directUserProfile: User,
   ) {}
 
   /**

@@ -4,8 +4,7 @@
     <img
       class="logo"
       src="./assets/img/devscpace-logo.svg"
-      alt="DaBubble logo"
-    />
+      alt="DaBubble logo" />
     <span class="space-name">Devspace</span>
   </div>
   <img
@@ -13,8 +12,7 @@
     referrerpolicy="no-referrer"
     class="user"
     src="{{ currentUser.avatar }}"
-    alt="User avatar"
-  />
+    alt="User avatar" />
 </header>
 
 <div *ngIf="userMenu" class="user-menu" (click)="openUserMenu()">
@@ -45,32 +43,28 @@
         placeholder="An: #channel, oder @jemand"
         (ngModelChange)="
           searchField.filterNewMessage(newMessageService.searchText)
-        "
-      />
+        " />
     </div>
 
     <div class="result-container">
       <div
         class="user-content-container content"
-        *ngIf="newMessageService.searchText.startsWith('@')"
-      >
+        *ngIf="newMessageService.searchText.startsWith('@')">
         <div
           (click)="newMessageService.chooseUser(user['name'], user)"
           class="user-content"
-          *ngFor="let user of this.mainService.allUsers"
-        >
-          <img src="{{ user['avatar'] }}" alt="" />{{ user['name'] }}
+          *ngFor="let user of this.mainService.allUsers">
+          <img src="{{ user['avatar'] }}" alt="" />
+          {{ user['name'] }}
         </div>
       </div>
       <div
         class="user-content-container content"
-        *ngIf="newMessageService.searchText.startsWith('#')"
-      >
+        *ngIf="newMessageService.searchText.startsWith('#')">
         <div
           (click)="newMessageService.chooseChannel(channel['name'], channel)"
           class="user-content"
-          *ngFor="let channel of allChannel"
-        >
+          *ngFor="let channel of allChannel">
           {{ channel['name'] }}
         </div>
         <div *ngIf="allChannel.length === 0">Keine Ergebnisse vorhanden.</div>
@@ -91,8 +85,7 @@
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
-        placeholder="Starte eine neue Nachricht"
-      ></textarea>
+        placeholder="Starte eine neue Nachricht"></textarea>
 
       <div class="mobile-chat-input-field-icon-container">
         <div class="mobile-chat-input-icon-container">
@@ -102,35 +95,34 @@
               <input
                 id="file-upload"
                 type="file"
-                (change)="newMessageService.onFileSelected($event)"
-              />
+                (change)="newMessageService.onFileSelected($event)" />
             </div>
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
                 chatService.onButtonClick($event); chatService.openDialogEmoji()
-              "
-              >sentiment_satisfied</mat-icon
-            >
+              ">
+              sentiment_satisfied
+            </mat-icon>
           </div>
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
                 chatService.onButtonClick($event);
                 chatService.openDialogMentionUser()
-              "
-              >alternate_email</mat-icon
-            >
+              ">
+              alternate_email
+            </mat-icon>
           </div>
         </div>
         <div>
           <div>
             <mat-icon
               (click)="newMessageService.sendMessage(newMessageService.text)"
-              class="mobile-chat-send-icon"
-              >send</mat-icon
-            >
+              class="mobile-chat-send-icon">
+              send
+            </mat-icon>
           </div>
         </div>
       </div>

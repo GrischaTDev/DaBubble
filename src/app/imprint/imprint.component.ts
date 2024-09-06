@@ -6,14 +6,8 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-imprint',
   standalone: true,
-  imports: [
-    MatIconModule,
-    RouterModule,
-    CommonModule,
-  ],
+  imports: [MatIconModule, RouterModule, CommonModule],
   templateUrl: './imprint.component.html',
-  styleUrl: './imprint.component.scss'
+  styleUrl: './imprint.component.scss',
 })
-export class ImprintComponent {
-
-}
+export class ImprintComponent {}

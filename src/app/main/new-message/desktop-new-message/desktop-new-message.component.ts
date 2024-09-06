@@ -71,13 +71,15 @@ export class DesktopNewMessageComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.subscription = mainService.currentContentNewMessage.subscribe(content => {
-      this.newMessageService.text += content;
-    });
+    this.subscription = mainService.currentContentNewMessage.subscribe(
+      (content) => {
+        this.newMessageService.text += content;
+      },
+    );
     this.loggedInUser = mainService.loggedInUser;
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
   }

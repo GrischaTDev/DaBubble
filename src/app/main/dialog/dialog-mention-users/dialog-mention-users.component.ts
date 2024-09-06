@@ -23,7 +23,7 @@ import { EmojiService } from '../../../service/emoji.service';
     MatDialogTitle,
     CommonModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './dialog-mention-users.component.html',
   styleUrl: './dialog-mention-users.component.scss',
@@ -34,15 +34,15 @@ export class DialogMentionUsersComponent {
   constructor(
     public chatService: ChatService,
     public mainService: MainServiceService,
-    public emojiService: EmojiService
+    public emojiService: EmojiService,
   ) {
     this.chatService = chatService;
   }
 
   /**
-  * Adds a user mention to the input content and updates the appropriate content area, then closes the dialog.
-  * @param {User} user - The user to be mentioned.
-  */
+   * Adds a user mention to the input content and updates the appropriate content area, then closes the dialog.
+   * @param {User} user - The user to be mentioned.
+   */
   addMentionUser(user: User) {
     this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
@@ -55,24 +55,24 @@ export class DialogMentionUsersComponent {
   }
 
   /**
-  * Validates and updates the input content based on the current service type.
-  * Updates content for channel, thread, or direct message, then resets the content.
-  */
+   * Validates and updates the input content based on the current service type.
+   * Updates content for channel, thread, or direct message, then resets the content.
+   */
   validationContent() {
     if (this.mainService.contentToChannel) {
       this.mainService.changeInputContent(this.inputContent);
     } else if (this.mainService.contentToThread) {
       this.mainService.changeInputContentThread(this.inputContent);
     } else if (this.mainService.contentToDirectMessage) {
-      this.mainService.changeInputContentDirectChat(this.inputContent)
+      this.mainService.changeInputContentDirectChat(this.inputContent);
     }
     this.resetContent();
   }
 
   /**
-  * Resets content flags for channel, direct message, and thread.
-  * Closes the chat dialog after resetting the flags.
-  */
+   * Resets content flags for channel, direct message, and thread.
+   * Closes the chat dialog after resetting the flags.
+   */
   resetContent() {
     this.mainService.contentToChannel = false;
     this.mainService.contentToDirectMessage = false;

@@ -6,14 +6,8 @@ import { RouterLink, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-policy',
   standalone: true,
-  imports: [
-    MatIconModule,
-    RouterModule,
-    CommonModule,
-  ],
+  imports: [MatIconModule, RouterModule, CommonModule],
   templateUrl: './policy.component.html',
-  styleUrl: './policy.component.scss'
+  styleUrl: './policy.component.scss',
 })
-export class PolicyComponent {
-
-}
+export class PolicyComponent {}

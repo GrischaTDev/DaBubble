@@ -1,4 +1,4 @@
-@import "./../../../../styles.scss";
+@import './../../../../styles.scss';
 
 .dialog-add-users-container {
   position: fixed;
@@ -186,7 +186,7 @@
   overflow-y: auto;
   resize: none;
   word-wrap: break-word;
-  font-family: Arial, "TwemojiMozilla";
+  font-family: Arial, 'TwemojiMozilla';
   height: 31px;
   overflow-y: hidden;
   margin-left: 12px;
@@ -244,7 +244,7 @@
   top: 310px;
   max-width: 320px;
   max-height: calc(100vh - 450px);
-  right: 30% !important;;
+  right: 30% !important;
   background-color: $background-white;
   border-top-right-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -329,7 +329,7 @@
     left: calc(100vw - 335px) !important;
     top: 304px !important;
   }
-  }
+}
 
 @media (max-width: 400px) {
   .dialog-add-users-container {

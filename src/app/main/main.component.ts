@@ -1,31 +1,37 @@
-import {Component, OnInit} from '@angular/core';
-import {MobileHeaderComponent} from './header/mobile-header/mobile-header.component';
-import {DesktopHeaderComponent} from './header/desktop-header/desktop-header.component';
-import {CommonModule} from '@angular/common';
-import {DesktopChatComponent} from './chat/desktop-chat/desktop-chat.component';
-import {MobileChatComponent} from './chat/mobile-chat/mobile-chat.component';
-import {DesktopThreadComponent} from './thread/desktop-thread/desktop-thread.component';
-import {MobileThreadComponent} from './thread/mobile-thread/mobile-thread.component';
-import {DesktopChannelsComponent} from './channels/desktop-channels/desktop-channels.component';
-import {MobileChannelsComponent} from './channels/mobile-channels/mobile-channels.component';
-import {MainServiceService} from '../service/main-service.service';
-import {AddChannelComponent} from './channels/add-channel/add-channel.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {UserProfileComponent} from './user-profile/user-profile.component';
-import {DirectChatComponent} from './chat/direct-chat/direct-chat.component';
-import {MobileChatHeaderComponent} from './header/mobile-chat-header/mobile-chat-header.component';
-import {MatIconModule} from '@angular/material/icon';
-import {DesktopDirectChatComponent} from './chat/desktop-direct-chat/desktop-direct-chat.component';
-import {DirectMessageService} from '../service/direct-message.service';
-import {ChatService} from '../service/chat.service';
-import {NewMessageComponent} from './new-message/mobile-new-message/new-message.component';
-import {DesktopNewMessageComponent} from './new-message/desktop-new-message/desktop-new-message.component';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Channel} from '../../assets/models/channel.class';
-import {User} from '../../assets/models/user.class';
-import {SearchFieldService} from '../search-field.service';
-import {take} from 'rxjs';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { Component, OnInit } from '@angular/core';
+import { MobileHeaderComponent } from './header/mobile-header/mobile-header.component';
+import { DesktopHeaderComponent } from './header/desktop-header/desktop-header.component';
+import { CommonModule } from '@angular/common';
+import { DesktopChatComponent } from './chat/desktop-chat/desktop-chat.component';
+import { MobileChatComponent } from './chat/mobile-chat/mobile-chat.component';
+import { DesktopThreadComponent } from './thread/desktop-thread/desktop-thread.component';
+import { MobileThreadComponent } from './thread/mobile-thread/mobile-thread.component';
+import { DesktopChannelsComponent } from './channels/desktop-channels/desktop-channels.component';
+import { MobileChannelsComponent } from './channels/mobile-channels/mobile-channels.component';
+import { MainServiceService } from '../service/main-service.service';
+import { AddChannelComponent } from './channels/add-channel/add-channel.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { DirectChatComponent } from './chat/direct-chat/direct-chat.component';
+import { MobileChatHeaderComponent } from './header/mobile-chat-header/mobile-chat-header.component';
+import { MatIconModule } from '@angular/material/icon';
+import { DesktopDirectChatComponent } from './chat/desktop-direct-chat/desktop-direct-chat.component';
+import { DirectMessageService } from '../service/direct-message.service';
+import { ChatService } from '../service/chat.service';
+import { NewMessageComponent } from './new-message/mobile-new-message/new-message.component';
+import { DesktopNewMessageComponent } from './new-message/desktop-new-message/desktop-new-message.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Channel } from '../../assets/models/channel.class';
+import { User } from '../../assets/models/user.class';
+import { SearchFieldService } from '../search-field.service';
+import { take } from 'rxjs';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-main',
@@ -117,7 +123,7 @@ export class MainComponent implements OnInit {
       this.chatService.desktopChatOpen = true;
       this.mainService
         .watchSingleChannelDoc(this.parmsIdContent, 'channels')
-        .subscribe(dataChannel => {
+        .subscribe((dataChannel) => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
     } else if (this.nameOfContent === 'direct-message') {
@@ -127,12 +133,12 @@ export class MainComponent implements OnInit {
       this.chatService.desktopChatOpen = false;
       this.mainService
         .watchSingleChannelDoc(this.parmsIdContent, 'direct-message')
-        .subscribe(dataChannel => {
+        .subscribe((dataChannel) => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
       this.mainService
         .watchUsersDoc(this.parmsIdUser, 'users')
-        .subscribe(dataUser => {
+        .subscribe((dataUser) => {
           this.chatService.clickedUser = dataUser as User;
         });
     }

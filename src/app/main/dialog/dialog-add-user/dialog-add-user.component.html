@@ -4,8 +4,7 @@
     !this.chatService.isThreadOpen ,
   'dialog-add-users-container-thread-open':
     this.chatService.isThreadOpen,
-}"
->
+}">
   <div *ngIf="!this.channelService.addUserClicked">
     <h2>Mitglieder</h2>
     <div class="close" (click)="channelService.closeDialogAddUser()">
@@ -13,19 +12,20 @@
     </div>
     <div
       class="dialog-add-users-content"
-      *ngFor="let userOwner of chatService.dataChannel.ownerUser; let i = index"
-    >
+      *ngFor="
+        let userOwner of chatService.dataChannel.ownerUser;
+        let i = index
+      ">
       <div>
-        <img [src]="userOwner.avatar" alt="User Avatar"/>
+        <img [src]="userOwner.avatar" alt="User Avatar" />
         <p>{{ userOwner.name }}</p>
       </div>
     </div>
     <div
       class="dialog-add-users-content"
-      *ngFor="let user of chatService.dataChannel.channelUsers; let i = index"
-    >
+      *ngFor="let user of chatService.dataChannel.channelUsers; let i = index">
       <div>
-        <img [src]="user.avatar" alt="User Avatar"/>
+        <img [src]="user.avatar" alt="User Avatar" />
         <p>{{ user.name }}</p>
       </div>
     </div>
@@ -45,8 +45,7 @@
       'dialog-add-users-container-thread-open':
         this.chatService.isThreadOpen,
     }"
-      (click)="channelService.clearInput()"
-    >
+      (click)="channelService.clearInput()">
       <h2>Leute hinzufügen</h2>
       <div class="close" (click)="channelService.closePeopleSearch()">
         <mat-icon>close</mat-icon>
@@ -55,8 +54,7 @@
         class="dialog-add-users-input-container"
         [style.min-height]="
           this.channelService.textareaHeight + 'px !important'
-        "
-      >
+        ">
         <div
           [ngClass]="{
             'push-addet-user-container':
@@ -67,15 +65,14 @@
           *ngFor="
             let userAddet of channelService.addetUser;
             let indexAddUser = index
-          "
-        >
-          <img [src]="userAddet.avatar" alt="User Avatar"/>
+          ">
+          <img [src]="userAddet.avatar" alt="User Avatar" />
           <p>{{ userAddet.name }}</p>
           <mat-icon
             class="dialog-add-users-close-icon"
-            (click)="removeAddUser(userAddet, indexAddUser)"
-            >close</mat-icon
-          >
+            (click)="removeAddUser(userAddet, indexAddUser)">
+            close
+          </mat-icon>
         </div>
         <textarea
           [(ngModel)]="channelService.content"
@@ -83,8 +80,7 @@
           [innerHTML]="channelService.content"
           name="textarea"
           (input)="updateContent()"
-          class="push-addet-user-textarea"
-        ></textarea>
+          class="push-addet-user-textarea"></textarea>
       </div>
       <div class="dialog-add-users-button-container">
         <span
@@ -95,9 +91,9 @@
             channelService.addetUser.length === 0,
               'dialog-add-users-button-available':
               channelService.addetUser.length > 0,
-          }"
-          >Hinzufügen</span
-        >
+          }">
+          Hinzufügen
+        </span>
       </div>
     </div>
   </div>
@@ -113,31 +109,26 @@
   }"
   [style.margin-top]="
     this.channelService.filterContentMarginTop + 'px !important'
-  "
->
+  ">
   <div
     class="dialog-add-users-not-found-container"
-    *ngIf="channelService.usersNotYetAdded.length === 0"
-  >
+    *ngIf="channelService.usersNotYetAdded.length === 0">
     <div>
       <p>kein Benutzer gefunden</p>
     </div>
   </div>
   <div
     class="dialog-add-users-scroll-container"
-    *ngIf="channelService.usersNotYetAdded.length !== 0"
-  >
+    *ngIf="channelService.usersNotYetAdded.length !== 0">
     <div
       class="dialog-add-users-content"
       *ngFor="
         let usersNotYetAdded of channelService.usersNotYetAdded;
         let indexusersNotYetAdded = index
-      "
-    >
+      ">
       <div
         (click)="pushAddetUser(usersNotYetAdded, indexusersNotYetAdded, $event)"
-        *ngIf="channelService.content"
-      >
+        *ngIf="channelService.content">
         <img [src]="usersNotYetAdded.avatar" />
         <p>{{ usersNotYetAdded.name }}</p>
       </div>

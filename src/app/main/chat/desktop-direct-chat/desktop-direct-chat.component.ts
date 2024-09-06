@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -66,13 +72,15 @@ export class DesktopDirectChatComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
   ) {
-    this.subscription = mainService.currentContentDirectChat.subscribe(content => {
-      if (!this.chatService.editOpen) {
-        this.chatService.text += content;
-      } else {
-        this.chatService.editText += content;
-      }
-    });
+    this.subscription = mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
@@ -90,7 +98,7 @@ export class DesktopDirectChatComponent implements OnInit {
    */
   ngOnInit() {
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
   }

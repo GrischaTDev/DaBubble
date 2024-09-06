@@ -44,7 +44,7 @@ export class DialogAddUserComponent {
     public chatService: ChatService,
     public mainService: MainServiceService,
     public channelService: ChannelService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.chatService = chatService;
     this.channelService.pushUserToEditList();

@@ -1,4 +1,4 @@
-@import "./../../../../styles.scss";
+@import './../../../../styles.scss';
 
 .dialog-mention-users-container {
   position: fixed;
@@ -54,8 +54,8 @@
 
 .dialog-mention-users-container-thread-open-from-thread {
   position: fixed;
-  right: 50px; 
-  bottom: 210px; 
+  right: 50px;
+  bottom: 210px;
   display: inline-block;
   background-color: $background-white;
   border: 1px solid $border-gray;

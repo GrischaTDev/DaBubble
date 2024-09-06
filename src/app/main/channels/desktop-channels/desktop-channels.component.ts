@@ -52,19 +52,19 @@ export class DesktopChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     public threadService: ThreadService,
     public searchField: SearchFieldService,
-    public newMessageService: NewMessageService
-  ) { }
+    public newMessageService: NewMessageService,
+  ) {}
 
   /**
    * Initializes the component and sets up necessary subscriptions.
    */
   ngOnInit() {
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
     });
 
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
   }
@@ -85,7 +85,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.mainService
       .watchSingleChannelDoc(channel.id, 'channels')
       .pipe(take(1))
-      .subscribe(dataChannel => {
+      .subscribe((dataChannel) => {
         this.chatService.dataChannel = dataChannel as Channel;
       });
     this.chatService.mobileChatIsOpen = true;
@@ -129,13 +129,13 @@ export class DesktopChannelsComponent implements OnInit {
   }
 
   /**
-  * Clear Data from Chat, Direct-Chat and Threads.
-  */
+   * Clear Data from Chat, Direct-Chat and Threads.
+   */
   clearData() {
     this.mainService.clearObservable();
-    this.chatService.dataChannel = new Channel;
-    this.chatService.dataThread = new Channel;
-    this.chatService.dataDirectChat = new Channel;
+    this.chatService.dataChannel = new Channel();
+    this.chatService.dataThread = new Channel();
+    this.chatService.dataDirectChat = new Channel();
     this.chatService.text = '';
   }
 

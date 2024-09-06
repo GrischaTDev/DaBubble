@@ -88,18 +88,18 @@ export class NewMessageComponent implements OnInit {
         this.chatService.dataChannel = channel;
       });
     }
-    this.subscription = mainService.currentContent.subscribe(content => {
+    this.subscription = mainService.currentContent.subscribe((content) => {
       this.newMessageService.text += content;
     });
     this.loggedInUser = mainService.loggedInUser;
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
 
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });

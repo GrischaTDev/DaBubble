@@ -67,7 +67,7 @@ export class MobileChatComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.subscription = mainService.currentContent.subscribe(content => {
+    this.subscription = mainService.currentContent.subscribe((content) => {
       if (!this.chatService.editOpen) {
         this.chatService.text += content;
       } else {
@@ -96,7 +96,7 @@ export class MobileChatComponent implements OnInit {
       }
     }
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);

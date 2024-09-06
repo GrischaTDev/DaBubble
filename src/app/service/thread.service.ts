@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {ChatService} from './chat.service';
-import {MainServiceService} from './main-service.service';
-import {Channel} from '../../assets/models/channel.class';
+import { Injectable } from '@angular/core';
+import { ChatService } from './chat.service';
+import { MainServiceService } from './main-service.service';
+import { Channel } from '../../assets/models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -292,7 +292,7 @@ export class ThreadService {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = e => {
+      reader.onload = (e) => {
         if (e.target) {
           this.imageMessage = e.target.result;
         }

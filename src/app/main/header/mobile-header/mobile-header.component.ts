@@ -15,16 +15,19 @@ import { ThreadService } from '../../../service/thread.service';
   standalone: true,
   imports: [CommonModule, MatIconModule, UserProfileComponent],
   templateUrl: './mobile-header.component.html',
-  styleUrls: ['./mobile-header.component.scss'] 
+  styleUrls: ['./mobile-header.component.scss'],
 })
-export class MobileHeaderComponent implements OnInit { 
+export class MobileHeaderComponent implements OnInit {
   currentUser: any;
   private dialog = inject(MatDialog);
   userMenu: boolean = false;
 
-
-  constructor(public mainService: MainServiceService, private loginService: LoginService, private router: Router, public threadService: ThreadService) {}
-
+  constructor(
+    public mainService: MainServiceService,
+    private loginService: LoginService,
+    private router: Router,
+    public threadService: ThreadService,
+  ) {}
 
   /**
    * Initializes the component.
@@ -32,23 +35,21 @@ export class MobileHeaderComponent implements OnInit {
    * Updates the component's currentUser property and the mainService's loggedInUser property.
    */
   ngOnInit() {
-    this.loginService.currentLoggedUser()
+    this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });
   }
 
-
   /**
    * Prevents the event from propagating further.
-   * 
+   *
    * @param event - The event object.
    */
   doNotClose(event: Event) {
     event.stopPropagation();
   }
-
 
   /**
    * Toggles the user menu.
@@ -57,14 +58,12 @@ export class MobileHeaderComponent implements OnInit {
     this.userMenu = !this.userMenu;
   }
 
-
   /**
    * Opens the user profile dialog.
    */
   openUserProfile() {
     this.dialog.open(UserProfileComponent);
   }
-
 
   /**
    * Logs out the user.
@@ -76,6 +75,6 @@ export class MobileHeaderComponent implements OnInit {
 
     signOut(auth).then(() => {
       this.router.navigate(['login']);
-    })
+    });
   }
 }

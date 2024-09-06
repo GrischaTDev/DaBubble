@@ -11,14 +11,12 @@
         referrerpolicy="no-referrer"
         *ngIf="!directUserProfile?.avatar"
         src="{{ loggedInUser.avatar }}"
-        alt=""
-      />
+        alt="" />
       <img
         referrerpolicy="no-referrer"
         *ngIf="directUserProfile?.avatar"
         src="{{ directUserProfile.avatar }}"
-        alt=""
-      />
+        alt="" />
     </div>
     <div class="name">
       <span *ngIf="!directUserProfile?.name">{{ loggedInUser.name }}</span>
@@ -26,43 +24,42 @@
       <mat-icon
         *ngIf="!directUserProfile?.name"
         (click)="editUserProfile()"
-        class="edit"
-        >edit</mat-icon
-      >
+        class="edit">
+        edit
+      </mat-icon>
       <span
         *ngIf="!directUserProfile?.name"
         (click)="editUserProfile()"
-        class="edit-desktop"
-        >Bearbeiten</span
-      >
+        class="edit-desktop">
+        Bearbeiten
+      </span>
     </div>
     <div class="status">
       <img
         *ngIf="!directUserProfile?.name"
         src="{{ loggedInUserStatus }}"
-        alt="User Status"
-      />
+        alt="User Status" />
       <img
         *ngIf="directUserProfile?.name"
         src="{{ directUserProfileStatus }}"
-        alt="User Status"
-      />
+        alt="User Status" />
     </div>
     <div class="email">
       <mat-icon>mail</mat-icon>
       <div class="email-adresse">
         <span class="titel">E-Mail-Adresse</span>
-        <span class="adresse" *ngIf="!directUserProfile?.email">{{
-          loggedInUser.email
-        }}</span>
-        <span class="adresse" *ngIf="directUserProfile?.email">{{
-          directUserProfile.email
-        }}</span>
+        <span class="adresse" *ngIf="!directUserProfile?.email">
+          {{ loggedInUser.email }}
+        </span>
+        <span class="adresse" *ngIf="directUserProfile?.email">
+          {{ directUserProfile.email }}
+        </span>
       </div>
     </div>
     <div class="message-btn" *ngIf="directUserProfile?.name">
       <button (click)="closeDialog()">
-        <mat-icon>mode_comment</mat-icon> Nachricht
+        <mat-icon>mode_comment</mat-icon>
+        Nachricht
       </button>
     </div>
   </div>
@@ -72,8 +69,7 @@
   <form
     #editForm="ngForm"
     class="edit-user-pofile-dialog"
-    (click)="doNotClose($event)"
-  >
+    (click)="doNotClose($event)">
     <div class="headline">
       <h2>Dein Profil bearbeiten</h2>
       <div class="close" (click)="closeDialog()">
@@ -84,8 +80,7 @@
       <img
         referrerpolicy="no-referrer"
         src="{{ this.loggedInUser.avatar }}"
-        alt=""
-      />
+        alt="" />
     </div>
 
     <div class="edit-name">
@@ -100,12 +95,11 @@
           name="userName"
           type="text"
           pattern="^[a-zA-ZÀ-ÿ]+( [a-zA-ZÀ-ÿ]+)+\s*$"
-          required
-        />
+          required />
         @if(nameInput.errors?.['pattern'] || !updateUserName) {
-        <span class="name-input-validation"
-          >Geben Sie ihren vollständige namen ein</span
-        >
+        <span class="name-input-validation">
+          Geben Sie ihren vollständige namen ein
+        </span>
         }
       </div>
     </div>
@@ -123,12 +117,11 @@
           type="email"
           value="{{ this.loggedInUser.email }}"
           pattern="^[^@]+@[^@]+\.(de|com)$"
-          required
-        />
+          required />
         @if(emailInput.errors?.['pattern'] || !updateUserEmail) {
-        <span class="email-input-validation"
-          >Geben Sie eine korrekte E-Mail-Adresse ein</span
-        >
+        <span class="email-input-validation">
+          Geben Sie eine korrekte E-Mail-Adresse ein
+        </span>
         }
       </div>
     </div>
@@ -150,8 +143,7 @@
           'disabled-btn': !editForm.dirty || !editForm.valid
         }"
         (click)="updateCurrentUser()"
-        [disabled]="!editForm.dirty || !editForm.valid"
-      >
+        [disabled]="!editForm.dirty || !editForm.valid">
         Speichern
       </button>
     </div>

@@ -15,7 +15,7 @@ export class AppComponent {
 
   constructor(
     private loginService: LoginService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   /**

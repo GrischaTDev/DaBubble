@@ -2,8 +2,7 @@
   <div class="desktop-chat-header-container">
     <div
       class="desktop-chat-header-headline"
-      (click)="channelService.openEditDialog()"
-    >
+      (click)="channelService.openEditDialog()">
       <p>#</p>
       <p>{{ chatService.dataChannel?.name }}</p>
       <mat-icon>keyboard_arrow_down</mat-icon>
@@ -13,29 +12,25 @@
         class="desktop-chat-header-members-container"
         (click)="
           this.chatService.doNotClose($event); chatService.openDialogAddUser()
-        "
-      >
+        ">
         <div *ngFor="let ownerUser of this.chatService.dataChannel?.ownerUser">
           <img
             class="desktop-chat-header-members-img"
             src="{{ ownerUser.avatar }}"
             alt="singleUserHeaderImg"
-            referrerpolicy="no-referrer"
-          />
+            referrerpolicy="no-referrer" />
         </div>
         <div
           *ngFor="
             let singleUserHeader of chatService.dataChannel?.channelUsers;
             let singleUserIndexHeader = index
-          "
-        >
+          ">
           <img
             class="desktop-chat-header-members-img"
             src="{{ singleUserHeader.avatar }}"
             alt="singleUserHeaderImg"
             referrerpolicy="no-referrer"
-            *ngIf="singleUserIndexHeader < 3"
-          />
+            *ngIf="singleUserIndexHeader < 3" />
         </div>
         <span class="desktop-chat-header-members-number">
           {{ (chatService.dataChannel?.channelUsers?.length || 0) + 1 }}
@@ -45,8 +40,7 @@
         class="desktop-chat-header-icon"
         (click)="
           this.chatService.doNotClose($event); chatService.openDialogAddUser()
-        "
-      >
+        ">
         <mat-icon>person_add</mat-icon>
       </div>
     </div>
@@ -54,8 +48,7 @@
   <div #scrollContainer class="desktop-chat-content">
     <div
       class="desktop-chat-owner-content-container"
-      *ngIf="chatService.dataChannel?.messageChannel?.length === 0"
-    >
+      *ngIf="chatService.dataChannel?.messageChannel?.length === 0">
       <div class="desktop-chat-owner-name-container">
         <p># {{ chatService.dataChannel?.name }}</p>
       </div>
@@ -75,20 +68,18 @@
         let singleMessage of chatService.dataChannel?.messageChannel;
         let singleMessageIndex = index
       "
-      (click)="chatService.onMouseLeave()"
-    >
+      (click)="chatService.onMouseLeave()">
       <div
         class="desktop-chat-message-date-container"
         [ngClass]="{
           'desktop-chat-message-date-container-hover':
             chatService.activeMessageIndex === singleMessageIndex
         }"
-        (mouseenter)="chatService.onMouseLeave()"
-      >
+        (mouseenter)="chatService.onMouseLeave()">
         <div class="desktop-chat-message-line"></div>
-        <span class="desktop-chat-message-date">{{
-          chatService.setDate(singleMessage.date)
-        }}</span>
+        <span class="desktop-chat-message-date">
+          {{ chatService.setDate(singleMessage.date) }}
+        </span>
         <div class="desktop-chat-message-line"></div>
       </div>
       <div
@@ -99,15 +90,13 @@
             chatService.ifMessageFromMe(singleMessage.userId),
           'desktop-chat-edit-message-container-left':
             !chatService.ifMessageFromMe(singleMessage.userId)
-        }"
-      >
+        }">
         <div
           class="desktop-chat-edit-icon-container"
           (click)="
             emojiService.forWhichDocIsTheEmoji('channels');
             emojiService.addReactionToMessageChannel('✅', singleMessageIndex)
-          "
-        >
+          ">
           <img src="./assets/icons/good-mark.svg" alt="good-mark" />
         </div>
         <div
@@ -115,8 +104,7 @@
           (click)="
             emojiService.forWhichDocIsTheEmoji('channels');
             emojiService.addReactionToMessageChannel('🙌', singleMessageIndex)
-          "
-        >
+          ">
           <img src="./assets/icons/hands_up.svg" alt="hands_up" />
         </div>
         <div
@@ -125,15 +113,13 @@
             emojiService.forWhichDocIsTheEmoji('channels');
             chatService.onButtonClick($event);
             chatService.openDialogEmojiReactionMessage(singleMessageIndex)
-          "
-        >
+          ">
           <mat-icon>add_reaction</mat-icon>
         </div>
         <div
           (mouseenter)="chatService.onMouseLeave()"
           class="desktop-chat-edit-icon-container"
-          (click)="chatService.openThread(singleMessage, singleMessageIndex)"
-        >
+          (click)="chatService.openThread(singleMessage, singleMessageIndex)">
           <mat-icon>comment</mat-icon>
         </div>
         <div
@@ -146,8 +132,7 @@
             'desktop-chat-edit-icon-left': !chatService.ifMessageFromMe(
               singleMessage.userId
             )
-          }"
-        >
+          }">
           <mat-icon>more_vert</mat-icon>
         </div>
       </div>
@@ -155,8 +140,7 @@
         (mouseenter)="chatService.onMouseEnter(singleMessageIndex)"
         (mouseleave)="chatService.onMouseLeave()"
         class="desktop-chat-edit-button-container"
-        *ngIf="chatService.hoveredMessageIndex === singleMessageIndex"
-      >
+        *ngIf="chatService.hoveredMessageIndex === singleMessageIndex">
         <span
           (click)="
             chatService.toggleEditMessageContainer(
@@ -165,9 +149,9 @@
               singleMessage.message
             )
           "
-          class="desktop-chat-edit-button"
-          >Nachricht bearbeiten</span
-        >
+          class="desktop-chat-edit-button">
+          Nachricht bearbeiten
+        </span>
       </div>
 
       <div
@@ -180,21 +164,18 @@
             !chatService.ifMessageFromMe(singleMessage.userId),
           'desktop-chat-message-container-clicked':
             chatService.activeMessageIndex === singleMessageIndex
-        }"
-      >
+        }">
         <div
           (click)="
             this.chatService.doNotClose($event);
             directMessageService.openProfil(singleMessage.userId)
           "
           (mouseenter)="chatService.onMouseLeave()"
-          class="desktop-chat-message-avatar-container"
-        >
+          class="desktop-chat-message-avatar-container">
           <img
             referrerpolicy="no-referrer"
             src="{{ singleMessage.userAvatar }}"
-            alt=""
-          />
+            alt="" />
         </div>
         <div class="desktop-chat-message-content">
           <div
@@ -203,12 +184,10 @@
                 chatService.ifMessageFromMe(singleMessage.userId),
               'desktop-chat-message-name-date-container-from-others':
                 !chatService.ifMessageFromMe(singleMessage.userId)
-            }"
-          >
+            }">
             <span
               (click)="directMessageService.openProfil(singleMessage.userId)"
-              class="desktop-chat-message-name"
-            >
+              class="desktop-chat-message-name">
               {{ singleMessage.userName }}
             </span>
             <div>
@@ -231,17 +210,14 @@
               ),
               'desktop-chat-message-clicked':
                 chatService.activeMessageIndex === singleMessageIndex
-            }"
-          >
+            }">
             <span
-              *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
-            >
+              *ngIf="chatService.editMessageInputIndex !== singleMessageIndex">
               {{ singleMessage.message }}
 
               <div
                 class="image-to-message-container"
-                *ngIf="singleMessage.imageToMessage"
-              >
+                *ngIf="singleMessage.imageToMessage">
                 <img
                   (click)="
                     chatService.openImageMessageDialog(
@@ -249,14 +225,12 @@
                     )
                   "
                   src="{{ singleMessage.imageToMessage }}"
-                  alt="message width"
-                />
+                  alt="message width" />
 
                 <a
                   class="download-icon"
                   href="{{ singleMessage.imageToMessage }}"
-                  download=""
-                >
+                  download="">
                   <mat-icon>download</mat-icon>
                 </a>
               </div>
@@ -269,8 +243,7 @@
                 (input)="chatService.adjustHeight($event.target)"
                 (contextmenu)="chatService.adjustHeight($event.target)"
                 style="min-height: 50px; width: 300px; padding: 8px"
-                class="desktop-chat-message-edit-textarea"
-              ></textarea>
+                class="desktop-chat-message-edit-textarea"></textarea>
               <div class="desktop-chat-input-field-icon-container">
                 <div class="desktop-chat-edit-message-icon-container">
                   <div class="desktop-chat-edit-message-icon">
@@ -280,18 +253,18 @@
                           chatService.openDialogEmoji();
                           emojiService.forWhichDocIsTheEmoji('channels');
                           chatService.onButtonClick($event)
-                        "
-                        >sentiment_satisfied</mat-icon
-                      >
+                        ">
+                        sentiment_satisfied
+                      </mat-icon>
                     </div>
                     <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
-                        "
-                        >alternate_email</mat-icon
-                      >
+                        ">
+                        alternate_email
+                      </mat-icon>
                     </div>
                   </div>
                   <div>
@@ -307,8 +280,7 @@
                               this.chatService.editText,
                               singleMessageIndex
                             )
-                          "
-                        >
+                          ">
                           Speichern
                         </p>
                       </div>
@@ -324,18 +296,15 @@
                 chatService.ifMessageFromMe(singleMessage.userId),
               'desktop-chat-message-reaction-left-container':
                 !chatService.ifMessageFromMe(singleMessage.userId)
-            }"
-          >
+            }">
             <div
               class="desktop-chat-message-thread-link-container"
-              *ngIf="singleMessage.numberOfMessage > 0"
-            >
+              *ngIf="singleMessage.numberOfMessage > 0">
               <div
                 class="desktop-chat-message-thread-link-number-content"
                 (click)="
                   chatService.openThread(singleMessage, singleMessageIndex)
-                "
-              >
+                ">
                 <p>{{ singleMessage.numberOfMessage }}</p>
                 <p *ngIf="singleMessage.numberOfMessage === 1">Antwort</p>
                 <p *ngIf="singleMessage.numberOfMessage > 1">Antworten</p>
@@ -366,8 +335,7 @@
                   $event
                 )
               "
-              (mouseleave)="this.toggleIconHoverContainerChatOut($event)"
-            >
+              (mouseleave)="this.toggleIconHoverContainerChatOut($event)">
               <div
                 [ngClass]="{
                   'desktop-chat-message-reaction-hover-content-right':
@@ -378,8 +346,7 @@
                 *ngIf="
                   emojiIndex === emojiReactionIndexHover &&
                   singleMessageIndex === activeMessageIndexReacton
-                "
-              >
+                ">
                 <p class="desktop-chat-message-reaction-hover-emoji">
                   {{ emojie.emoji }}
                 </p>
@@ -387,36 +354,41 @@
                   *ngFor="
                     let emojieUser of emojie.userName;
                     let emojiUserIndex = index
-                  "
-                >
+                  ">
                   <p
-                    *ngIf="emojie.userName.length === 1 && emojiUserIndex === 0"
-                  >
+                    *ngIf="
+                      emojie.userName.length === 1 && emojiUserIndex === 0
+                    ">
                     {{ emojieUser }}
                   </p>
                   <p
-                    *ngIf="emojie.userName.length === 2 && emojiUserIndex === 0"
-                  >
+                    *ngIf="
+                      emojie.userName.length === 2 && emojiUserIndex === 0
+                    ">
                     {{ emojieUser }} und
                   </p>
                   <p
-                    *ngIf="emojie.userName.length === 2 && emojiUserIndex === 1"
-                  >
+                    *ngIf="
+                      emojie.userName.length === 2 && emojiUserIndex === 1
+                    ">
                     {{ emojieUser }}
                   </p>
                   <p
-                    *ngIf="emojie.userName.length === 3 && emojiUserIndex === 0"
-                  >
+                    *ngIf="
+                      emojie.userName.length === 3 && emojiUserIndex === 0
+                    ">
                     {{ emojieUser }},
                   </p>
                   <p
-                    *ngIf="emojie.userName.length === 3 && emojiUserIndex === 1"
-                  >
+                    *ngIf="
+                      emojie.userName.length === 3 && emojiUserIndex === 1
+                    ">
                     {{ emojieUser }} und
                   </p>
                   <p
-                    *ngIf="emojie.userName.length === 3 && emojiUserIndex === 2"
-                  >
+                    *ngIf="
+                      emojie.userName.length === 3 && emojiUserIndex === 2
+                    ">
                     {{ emojieUser }}
                   </p>
                   <p *ngIf="emojie.userName.length > 3 && emojiUserIndex === 0">
@@ -437,8 +409,7 @@
                         emojiIndex,
                         emojie.emoji
                       )
-                    "
-                  >
+                    ">
                     {{ emojie.userName.length - 3 }} weitere Person
                   </p>
                   <p
@@ -450,8 +421,7 @@
                         emojiIndex,
                         emojie.emoji
                       )
-                    "
-                  >
+                    ">
                     {{ emojie.userName.length - 3 }} weitere Personen
                   </p>
                 </span>
@@ -470,8 +440,7 @@
                 class="desktop-chat-message-reaction-content"
                 [ngClass]="{
                   'd-none': emojie.user.length === 0
-                }"
-              >
+                }">
                 {{ emojie.emoji }} {{ emojie.user.length }}
               </div>
             </div>
@@ -482,9 +451,9 @@
                   emojiService.forWhichDocIsTheEmoji('channels');
                   chatService.onButtonClick($event);
                   chatService.openDialogEmojiReactionMessage(singleMessageIndex)
-                "
-                >add_reaction</mat-icon
-              >
+                ">
+                add_reaction
+              </mat-icon>
             </div>
           </div>
           <div>
@@ -515,8 +484,9 @@
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
         [placeholder]="'Antworten...'"
-        (ngModelChange)="searchField.filterDataChannelchat(chatService.text)"
-      ></textarea>
+        (ngModelChange)="
+          searchField.filterDataChannelchat(chatService.text)
+        "></textarea>
 
       <div class="desktop-chat-input-field-icon-container">
         <div class="desktop-chat-input-icon-container">
@@ -526,8 +496,7 @@
               <input
                 id="file-upload"
                 type="file"
-                (change)="chatService.onFileSelected($event)"
-              />
+                (change)="chatService.onFileSelected($event)" />
             </div>
           </div>
           <div class="desktop-chat-input-icon">
@@ -536,9 +505,9 @@
                 chatService.openDialogEmoji();
                 emojiService.forWhichDocIsTheEmoji('channels');
                 chatService.onButtonClick($event)
-              "
-              >sentiment_satisfied</mat-icon
-            >
+              ">
+              sentiment_satisfied
+            </mat-icon>
           </div>
           <div class="desktop-chat-input-icon">
             <mat-icon
@@ -546,9 +515,9 @@
                 mainService.contentOfWhichInput('channels');
                 chatService.onButtonClick($event);
                 chatService.openDialogMentionUser()
-              "
-              >alternate_email</mat-icon
-            >
+              ">
+              alternate_email
+            </mat-icon>
           </div>
         </div>
         <div>
@@ -560,9 +529,9 @@
                   this.chatService.text
                 )
               "
-              class="desktop-chat-send-icon"
-              >send</mat-icon
-            >
+              class="desktop-chat-send-icon">
+              send
+            </mat-icon>
           </div>
         </div>
       </div>

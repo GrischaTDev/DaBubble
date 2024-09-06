@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MainServiceService } from '../../../service/main-service.service';
 import { LoginService } from '../../../service/login.service';
@@ -43,7 +49,7 @@ export class DesktopThreadComponent implements OnInit {
     public threadService: ThreadService,
   ) {
     this.subscription = mainService.currentContentThread.subscribe(
-      content => {
+      (content) => {
         if (!this.chatService.editOpen) {
           this.threadService.textThread += content;
         } else {
@@ -78,7 +84,7 @@ export class DesktopThreadComponent implements OnInit {
       );
       this.chatService.dataThread = threadData as Channel;
       this.loginService.currentLoggedUser();
-      this.loginService.loggedInUser$.pipe(take(1)).subscribe(user => {
+      this.loginService.loggedInUser$.pipe(take(1)).subscribe((user) => {
         this.mainService.loggedInUser = new User(user);
       });
     }

@@ -6,21 +6,18 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-dialog-image-message',
   standalone: true,
-  imports: [
-    MatIcon
-  ],
+  imports: [MatIcon],
   templateUrl: './dialog-image-message.component.html',
-  styleUrl: './dialog-image-message.component.scss'
+  styleUrl: './dialog-image-message.component.scss',
 })
 export class DialogImageMessageComponent {
+  constructor(
+    public chatService: ChatService,
+    @Inject(MAT_DIALOG_DATA) public data: { image: string | ArrayBuffer },
+    public dialogRef: MatDialogRef<DialogImageMessageComponent>,
+  ) {}
 
-    constructor( 
-      public chatService: ChatService, 
-      @Inject(MAT_DIALOG_DATA) public data: { image: string | ArrayBuffer },
-      public dialogRef: MatDialogRef<DialogImageMessageComponent>,
-     ) {}
-
-     closeDialog() {
-        this.dialogRef.close();
-     }
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }

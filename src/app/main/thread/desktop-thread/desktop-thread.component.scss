@@ -1,10 +1,10 @@
-@import "./../../../../styles.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
+@import './../../../../styles.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-  font-family: "TwemojiMozilla";
-  src: local("TwemojiMozilla"),
-    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+  font-family: 'TwemojiMozilla';
+  src: local('TwemojiMozilla'),
+    url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
 .desktop-thread-container {
@@ -59,7 +59,8 @@
 .desktop-thread-header-headline-channel-text {
   font-size: 14px;
   font-weight: 400;
-  color: $background-purple;}
+  color: $background-purple;
+}
 
 .desktop-thread-header-icon {
   display: flex;
@@ -385,7 +386,7 @@
 .desktop-thread-separating-line-content {
   display: flex;
   gap: 8px;
-  >p {
+  > p {
     color: $border-ligth-purple;
     font-size: 18px;
     font-weight: 400;
@@ -436,7 +437,7 @@
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, 'TwemojiMozilla';
   }
 }
 
@@ -597,7 +598,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
+    flex-direction: column;
     padding: 0;
     margin: 0;
     > p {
@@ -639,7 +640,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
+    flex-direction: column;
     padding: 0;
     margin: 0;
     > p {
@@ -664,7 +665,7 @@
 .desktop-chat-message-reaction-hover-link {
   cursor: pointer !important;
   &:hover {
-   color: $border-ligth-purple !important;
+    color: $border-ligth-purple !important;
   }
 }
 
