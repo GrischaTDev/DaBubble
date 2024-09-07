@@ -53,7 +53,7 @@ export class DesktopChannelsComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
     public newMessageService: NewMessageService,
-  ) {}
+  ) { }
 
   /**
    * Initializes the component and sets up necessary subscriptions.
@@ -137,6 +137,9 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.dataThread = new Channel();
     this.chatService.dataDirectChat = new Channel();
     this.chatService.text = '';
+    this.newMessageService.textNewMessage = '';
+    this.chatService.editText = '';
+    this.threadService.textThread = '';
   }
 
   /**

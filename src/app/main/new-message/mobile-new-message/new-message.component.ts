@@ -77,7 +77,7 @@ export class NewMessageComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
   ) {
-    this.newMessageService.text = '';
+    this.newMessageService.textNewMessage = '';
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
@@ -89,7 +89,7 @@ export class NewMessageComponent implements OnInit {
       });
     }
     this.subscription = mainService.currentContent.subscribe((content) => {
-      this.newMessageService.text += content;
+      this.newMessageService.textNewMessage += content;
     });
     this.loggedInUser = mainService.loggedInUser;
   }

@@ -65,6 +65,8 @@ export class DialogMentionUsersComponent {
       this.mainService.changeInputContentThread(this.inputContent);
     } else if (this.mainService.contentToDirectMessage) {
       this.mainService.changeInputContentDirectChat(this.inputContent);
+    } else if (this.mainService.contentToNewMessage) {
+      this.mainService.changeInputContentNewMessage(this.inputContent);
     }
     this.resetContent();
   }

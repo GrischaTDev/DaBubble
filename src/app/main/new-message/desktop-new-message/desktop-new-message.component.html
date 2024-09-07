@@ -48,7 +48,7 @@
       </div>
       <textarea
         #autofocus
-        [(ngModel)]="newMessageService.text"
+        [(ngModel)]="newMessageService.textNewMessage"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -68,7 +68,7 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                emojiService.forWhichDocIsTheEmoji('channels');
+                emojiService.forWhichDocIsTheEmoji('newMessage');
                 chatService.onButtonClick($event);
                 chatService.openDialogEmoji()
               ">
@@ -78,7 +78,7 @@
           <div class="mobile-chat-input-icon">
             <mat-icon
               (click)="
-                mainService.contentOfWhichInput('channels');
+                mainService.contentOfWhichInput('newMessage');
                 chatService.onButtonClick($event);
                 chatService.openDialogMentionUser()
               ">

@@ -10,17 +10,14 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class EmojiService {
-  constructor(
-    public mainService: MainServiceService,
-    public chatService: ChatService,
-    public threadService: ThreadService,
-  ) {}
+  constructor(public mainService: MainServiceService, public chatService: ChatService, public threadService: ThreadService,) { }
   emojiIsAvailable = false;
   userIsAvailable = false;
   newEmoji: Emoji = new Emoji();
   additionalReaction = false;
   emojiIndex: number = 0;
   emojiToChannel: boolean = false;
+  emojieToNewMessage: boolean = false;
   emojiToDirectMessage: boolean = false;
   emojieToThread: boolean = false;
   emojiServiceThread: Channel = new Channel();
@@ -83,7 +80,7 @@ export class EmojiService {
         this.chatService.dataChannel &&
         this.chatService.dataChannel.messageChannel &&
         this.chatService.dataChannel.messageChannel[
-          this.chatService.indexOfChannelMessage
+        this.chatService.indexOfChannelMessage
         ]
       ) {
         const dataThreadChannel = await firstValueFrom(
@@ -234,7 +231,7 @@ export class EmojiService {
   async selectionTheAddedEmojiChannel(emoji: string, indexOfData: number) {
     let arrayEmoji =
       this.chatService.dataChannel.messageChannel[indexOfData].emojiReaction[
-        this.emojiIndex
+      this.emojiIndex
       ];
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
       this.pushEmojiToArray(emoji);
@@ -256,7 +253,7 @@ export class EmojiService {
   async selectionTheAddedEmojiThread(emoji: string, indexDocNumber: number) {
     let arrayEmoji =
       this.emojiServiceThread.messageChannel[indexDocNumber].emojiReaction[
-        this.emojiIndex
+      this.emojiIndex
       ];
     if (!this.userIsAvailable && !this.emojiIsAvailable) {
       this.pushEmojiToArrayThread(emoji);
@@ -492,6 +489,8 @@ export class EmojiService {
     } else if (docName === 'thread') {
       this.mainService.contentToThread = true;
       this.emojieToThread = true;
+    } else if ('newMessage') {
+      this.emojieToNewMessage = true;
     }
   }
 

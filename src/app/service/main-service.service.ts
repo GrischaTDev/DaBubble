@@ -39,6 +39,7 @@ export class MainServiceService {
   private contentSourceEmoji = new BehaviorSubject<any>([]);
   private contentSourceDirectChat = new BehaviorSubject<any>([]);
   private contentSourceNewMessage = new BehaviorSubject<any>([]);
+  private stopOldObservable$ = new Subject<void>();
   currentContent = this.contentSource.asObservable();
   currentContentThread = this.contentSourceThread.asObservable();
   currentContentDirectChat = this.contentSourceDirectChat.asObservable();
@@ -57,19 +58,18 @@ export class MainServiceService {
   private dataThreadSubject = new Subject<any>();
   private dataDirectMessageSubject = new Subject<any>();
   private dataUserSubject = new Subject<any>();
-  contentToChannel = false;
-  contentToDirectMessage = false;
-  contentToThread = false;
+  contentToChannel: boolean = false;
+  contentToDirectMessage: boolean = false;
+  contentToThread: boolean = false;
+  contentToNewMessage: boolean = false;
 
   /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
    */
   changeInputContent(content: any) {
+    this.stopOldObservable$.next(); // Stop the previous Observable
     this.contentSource.next(content);
-    if (this.newMessage) {
-      this.contentSourceNewMessage.next(content);
-    }
   }
 
   /**
@@ -77,6 +77,7 @@ export class MainServiceService {
    * @param {any} content - The new content to set.
    */
   changeInputContentDirectChat(content: any) {
+    this.stopOldObservable$.next(); // Stop the previous Observable
     this.contentSourceDirectChat.next(content);
   }
 
@@ -85,7 +86,17 @@ export class MainServiceService {
    * @param {any} content - The new content to set.
    */
   changeInputContentThread(content: any) {
+    this.stopOldObservable$.next(); // Stop the previous Observable
     this.contentSourceThread.next(content);
+  }
+
+  /**
+   * Updates the content source with the new content.
+   * @param {any} content - The new content to set.
+   */
+  changeInputContentNewMessage(content: any) {
+    this.stopOldObservable$.next(); // Stop the previous Observable
+    this.contentSourceNewMessage.next(content);
   }
 
   /**
@@ -228,8 +239,7 @@ export class MainServiceService {
    * @param {Channel|User} data - The data to be stored, which should be an instance of Channel or User.
    * @returns {Promise<void>} A promise that resolves when the update is complete and logs any errors encountered.
    */
-  async addDoc(
-    collectionName: string,
+  async addDoc(collectionName: string,
     docId: string,
     data: Channel | User | Emoji | EmojiCollection,
   ) {
@@ -378,6 +388,8 @@ export class MainServiceService {
       this.contentToDirectMessage = true;
     } else if (docName === 'thread') {
       this.contentToThread = true;
+    } else if (docName === 'newMessage') {
+      this.contentToNewMessage = true;
     }
   }
 

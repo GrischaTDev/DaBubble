@@ -15,7 +15,7 @@ import { NewMessageComponent } from '../main/new-message/mobile-new-message/new-
 })
 export class NewMessageService {
   searchText = '';
-  text = '';
+  textNewMessage = '';
   userData: User | undefined;
   channelData: Channel = new Channel();
   sendetMessage = false;
@@ -30,7 +30,7 @@ export class NewMessageService {
     private directMessageService: DirectMessageService,
     private mainService: MainServiceService,
     private router: Router,
-  ) {}
+  ) { }
 
   /**
    * Selects a user for direct messaging by setting the search text, user data,
@@ -95,7 +95,7 @@ export class NewMessageService {
         this.newMessageDialog.close();
       }
       this.searchText = '';
-      this.text = '';
+      this.textNewMessage = '';
       this.imageMessage = '';
     } else if (this.channelData) {
       this.sendMessageFromChannelNewChannelMessage(
@@ -293,7 +293,7 @@ export class NewMessageService {
    * After a 2-second delay, it sets the `sendetMessage` flag to false.
    */
   resetMessageContent() {
-    this.text = '';
+    this.textNewMessage = '';
     this.searchText = '';
     setTimeout(() => {
       this.sendetMessage = false;

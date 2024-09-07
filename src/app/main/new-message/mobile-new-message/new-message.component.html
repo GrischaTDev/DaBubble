@@ -81,7 +81,7 @@
         </div>
       </div>
       <textarea
-        [(ngModel)]="newMessageService.text"
+        [(ngModel)]="newMessageService.textNewMessage"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -119,7 +119,9 @@
         <div>
           <div>
             <mat-icon
-              (click)="newMessageService.sendMessage(newMessageService.text)"
+              (click)="
+                newMessageService.sendMessage(newMessageService.textNewMessage)
+              "
               class="mobile-chat-send-icon">
               send
             </mat-icon>

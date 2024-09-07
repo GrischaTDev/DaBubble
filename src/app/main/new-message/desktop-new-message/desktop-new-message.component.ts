@@ -47,7 +47,7 @@ export class DesktopNewMessageComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  private subscription: Subscription;
+  private subscriptionNewMessageContent: Subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   messageToChannel: Message = new Message();
@@ -55,8 +55,8 @@ export class DesktopNewMessageComponent implements OnInit {
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
   private channelSubscription!: Subscription;
-
   allChannel: Channel[] = [];
+  subscriptionChannels: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -71,15 +71,15 @@ export class DesktopNewMessageComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.subscription = mainService.currentContentNewMessage.subscribe(
+    this.subscriptionNewMessageContent = mainService.currentContentNewMessage.subscribe(
       (content) => {
-        this.newMessageService.text += content;
+        this.newMessageService.textNewMessage += content;
       },
     );
     this.loggedInUser = mainService.loggedInUser;
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
+    this.subscriptionChannels = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
   }
@@ -157,19 +157,24 @@ export class DesktopNewMessageComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-
+    this.subscriptionNewMessageContent.unsubscribe();
+    if (this.subscriptionChannels) {
+      this.subscriptionChannels.unsubscribe();
+    }
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }
   }
 
   sendMessage() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.subscriptionNewMessageContent) {
+      this.subscriptionNewMessageContent.unsubscribe();
+    }
+    if (this.subscriptionChannels) {
+      this.subscriptionChannels.unsubscribe();
     }
     this.mainService.newMessage = false;
     this.directMessageService.sendNewMessageFromDesktop = true;
-    this.newMessageService.sendMessage(this.newMessageService.text);
+    this.newMessageService.sendMessage(this.newMessageService.textNewMessage);
   }
 }
