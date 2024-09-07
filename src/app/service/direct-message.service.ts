@@ -56,7 +56,7 @@ export class DirectMessageService {
     public chatService: ChatService,
     public mainService: MainServiceService,
     public router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
@@ -371,14 +371,16 @@ export class DirectMessageService {
     if (this.chatService.mobileDirectChatIsOpen) {
       if (this.chatService.clickedUser.id) {
         this.router.navigate([
-          '/direct-chat',
+          '/main',
+          'direct-chat',
           chatId,
           this.chatService?.clickedUser?.id,
           this.mainService.allChannels[0].id,
         ]);
       } else {
         this.router.navigate([
-          '/direct-chat',
+          '/main',
+          'direct-chat',
           chatId,
           this.chatService.clickedUser.idUser,
           this.mainService.allChannels[0].id,

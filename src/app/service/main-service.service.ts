@@ -275,7 +275,7 @@ export class MainServiceService {
    * @param {Channel|User} data - The data object containing the ID to navigate to, which can be a Channel or User instance.
    */
   async goToCollectionPath(data: Channel | User, path: string) {
-    this.router.navigate([path, data.id, 'user', data.id]);
+    this.router.navigate(['/main', path, data.id, 'user', data.id]);
   }
 
   /**
