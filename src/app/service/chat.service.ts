@@ -71,7 +71,7 @@ export class ChatService {
   fromDirectChat = false;
   private channelChangedSource = new Subject<void>();
   channelChanged$ = this.channelChangedSource.asObservable();
-  constructor(public mainService: MainServiceService, private router: Router) {}
+  constructor(public mainService: MainServiceService, private router: Router) { }
 
   /**
    * Triggers a notification to indicate that the chat focus has changed.
@@ -157,7 +157,6 @@ export class ChatService {
    */
   closeDialog(): void {
     if (this.dialogInstance) {
-      this.mainService.clearObservable();
       this.dialogInstance.close();
       this.dialogEmojiOpen = false;
       this.dialogAddUserOpen = false;

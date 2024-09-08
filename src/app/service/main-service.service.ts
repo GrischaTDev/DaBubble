@@ -36,14 +36,21 @@ export class MainServiceService {
   }
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceThread = new BehaviorSubject<any>([]);
-  private contentSourceEmoji = new BehaviorSubject<any>([]);
   private contentSourceDirectChat = new BehaviorSubject<any>([]);
   private contentSourceNewMessage = new BehaviorSubject<any>([]);
+  private contentSourceEmojiNewMessage = new BehaviorSubject<any>([]);
+  private contentSourceEmojiChat = new BehaviorSubject<any>([]);
+  private contentSourceEmojiDirectChat = new BehaviorSubject<any>([]);
+  private contentSourceEmojiThread = new BehaviorSubject<any>([]);
   private stopOldObservable$ = new Subject<void>();
   currentContent = this.contentSource.asObservable();
   currentContentThread = this.contentSourceThread.asObservable();
   currentContentDirectChat = this.contentSourceDirectChat.asObservable();
   currentContentNewMessage = this.contentSourceNewMessage.asObservable();
+  emojiContentChat = this.contentSourceEmojiChat.asObservable();
+  emojiContentThreadDirectChat = this.contentSourceEmojiDirectChat.asObservable();
+  emojiContentThread = this.contentSourceEmojiThread.asObservable();
+  emojiContentNewMessage = this.contentSourceEmojiNewMessage.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -66,13 +73,15 @@ export class MainServiceService {
   subscriptionTextChat: Subscription | undefined;
   subscriptionDirectChat: Subscription | undefined;
   subscriptionThreadContent: Subscription | undefined;
+  subscriptionDirectChatEmoji: Subscription | undefined;
+  subscriptionThreadContentEmoji: Subscription | undefined;
 
   /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
    */
   changeInputContent(content: any) {
-    this.stopOldObservable$.next(); // Stop the previous Observable
+    this.stopOldObservable$.next();
     this.contentSource.next(content);
   }
 
@@ -81,7 +90,7 @@ export class MainServiceService {
    * @param {any} content - The new content to set.
    */
   changeInputContentDirectChat(content: any) {
-    this.stopOldObservable$.next(); // Stop the previous Observable
+    this.stopOldObservable$.next();
     this.contentSourceDirectChat.next(content);
   }
 
@@ -90,7 +99,7 @@ export class MainServiceService {
    * @param {any} content - The new content to set.
    */
   changeInputContentThread(content: any) {
-    this.stopOldObservable$.next(); // Stop the previous Observable
+    this.stopOldObservable$.next();
     this.contentSourceThread.next(content);
   }
 
@@ -99,33 +108,17 @@ export class MainServiceService {
    * @param {any} content - The new content to set.
    */
   changeInputContentNewMessage(content: any) {
-    this.stopOldObservable$.next(); // Stop the previous Observable
+    this.stopOldObservable$.next();
     this.contentSourceNewMessage.next(content);
   }
 
-  /**
-   * Clears the content sources for channel, direct chat, and thread by emitting empty values.
-   */
-  clearObservable() {
-    this.contentSource.next('');
-    this.contentSourceDirectChat.next('');
-    this.contentSourceThread.next('');
-    this.contentSourceEmoji.next('');
-    this.contentSourceNewMessage.next('');
-    if (this.subscriptionTextChat) {
-      this.subscriptionTextChat.unsubscribe();
-    }
-    if (this.subscriptionDirectChat) {
-      this.subscriptionDirectChat.unsubscribe();
-    }
-  }
 
   /**
    * Updates the emoji content source with the new content.
    * @param {any} content - The new emoji content to set.
    */
   changeReactionContent(content: any) {
-    this.contentSourceEmoji.next(content);
+    this.contentSourceEmojiChat.next(content);
   }
 
   /**

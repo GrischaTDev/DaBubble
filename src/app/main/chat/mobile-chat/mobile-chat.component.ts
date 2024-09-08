@@ -47,7 +47,6 @@ export class MobileChatComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
 
@@ -66,13 +65,6 @@ export class MobileChatComponent implements OnInit {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
-    });
-    this.subscription = mainService.currentContent.subscribe((content) => {
-      if (!this.chatService.editOpen) {
-        this.chatService.text += content;
-      } else {
-        this.chatService.editText += content;
-      }
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     this.chatService.mobileChatIsOpen = true;
@@ -95,6 +87,15 @@ export class MobileChatComponent implements OnInit {
         console.error('Fehler beim Laden der Daten:', err);
       }
     }
+    this.mainService.subscriptionTextChat = this.mainService.currentContent.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
@@ -183,6 +184,8 @@ export class MobileChatComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.mainService.subscriptionTextChat) {
+      this.mainService.subscriptionTextChat.unsubscribe();
+    }
   }
 }

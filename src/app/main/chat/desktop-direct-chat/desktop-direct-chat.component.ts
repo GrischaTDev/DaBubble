@@ -55,7 +55,7 @@ export class DesktopDirectChatComponent implements OnInit {
   dialogInstance?:
     | MatDialogRef<DialogEmojiComponent>
     | MatDialogRef<DialogShowsUserReactionComponent>;
-  subscription;
+
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   emojiReactionIndexHover: number | null = null;
@@ -72,15 +72,6 @@ export class DesktopDirectChatComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
   ) {
-    this.subscription = mainService.currentContentDirectChat.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
@@ -101,6 +92,15 @@ export class DesktopDirectChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
+    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /** Stores the last scroll height of the container to detect changes. */
@@ -193,8 +193,9 @@ export class DesktopDirectChatComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-
+    if (this.mainService.subscriptionDirectChat) {
+      this.mainService.subscriptionDirectChat.unsubscribe();
+    }
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }
