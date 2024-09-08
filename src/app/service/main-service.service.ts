@@ -10,7 +10,7 @@ import {
   query,
   orderBy,
 } from '@angular/fire/firestore';
-import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { User } from '../../assets/models/user.class';
 import { Channel } from '../../assets/models/channel.class';
 import { Router } from '@angular/router';
@@ -62,6 +62,10 @@ export class MainServiceService {
   contentToDirectMessage: boolean = false;
   contentToThread: boolean = false;
   contentToNewMessage: boolean = false;
+  subscriptionChannels: Subscription | undefined;
+  subscriptionTextChat: Subscription | undefined;
+  subscriptionDirectChat: Subscription | undefined;
+  subscriptionThreadContent: Subscription | undefined;
 
   /**
    * Updates the content source with the new content.
@@ -108,6 +112,12 @@ export class MainServiceService {
     this.contentSourceThread.next('');
     this.contentSourceEmoji.next('');
     this.contentSourceNewMessage.next('');
+    if (this.subscriptionTextChat) {
+      this.subscriptionTextChat.unsubscribe();
+    }
+    if (this.subscriptionDirectChat) {
+      this.subscriptionDirectChat.unsubscribe();
+    }
   }
 
   /**

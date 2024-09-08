@@ -45,7 +45,6 @@ export class DirectChatComponent implements OnInit {
   parmsIdContent: string = '';
   parmsIdUser: string = '';
   parmsIdOfChat: string = '';
-  subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,7 +67,7 @@ export class DirectChatComponent implements OnInit {
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
       this.directMessageService.dataDirectMessage.messageChannel = [];
     }
-    this.subscription = mainService.currentContentDirectChat.subscribe(
+    this.mainService.subscriptionDirectChat = mainService.currentContentDirectChat.subscribe(
       (content) => {
         if (!this.chatService.editOpen) {
           this.chatService.text += content;
@@ -155,6 +154,8 @@ export class DirectChatComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.mainService.subscriptionDirectChat) {
+      this.mainService.subscriptionDirectChat.unsubscribe();
+    }
   }
 }

@@ -34,7 +34,6 @@ export class DesktopThreadComponent implements OnInit {
   parmsId = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
 
@@ -48,7 +47,7 @@ export class DesktopThreadComponent implements OnInit {
     public loginService: LoginService,
     public threadService: ThreadService,
   ) {
-    this.subscription = mainService.currentContentThread.subscribe(
+    this.mainService.subscriptionThreadContent = mainService.currentContentThread.subscribe(
       (content) => {
         if (!this.chatService.editOpen) {
           this.threadService.textThread += content;
@@ -124,7 +123,9 @@ export class DesktopThreadComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.mainService.subscriptionThreadContent) {
+      this.mainService.subscriptionThreadContent.unsubscribe();
+    }
   }
 
   /**

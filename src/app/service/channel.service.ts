@@ -54,7 +54,7 @@ export class ChannelService {
     public chatService: ChatService,
     public mainService: MainServiceService,
     private router: Router,
-  ) {}
+  ) { }
 
   /**
    * Adds each user from the added users list to the current channel and updates the channel's document in the database.

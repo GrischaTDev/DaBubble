@@ -49,7 +49,7 @@ export class DesktopChatComponent implements OnInit {
   dialogInstance?:
     | MatDialogRef<DialogEmojiComponent>
     | MatDialogRef<DialogShowsUserReactionComponent>;
-  subscription: Subscription | undefined;
+
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   emojiReactionIndexHover: number | null = null;
@@ -83,9 +83,18 @@ export class DesktopChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
+    this.mainService.subscriptionChannels = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
+    this.mainService.subscriptionTextChat = this.mainService.currentContent.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -101,7 +110,7 @@ export class DesktopChatComponent implements OnInit {
     if (this.allChannel.length !== 0) {
       if (
         this.scrollContainer.nativeElement.scrollHeight >
-          this.lastScrollHeight &&
+        this.lastScrollHeight &&
         this.chatService.sendetMessage
       ) {
         this.scrollToBottom();
@@ -159,6 +168,9 @@ export class DesktopChatComponent implements OnInit {
   ngOnDestroy() {
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
+    }
+    if (this.mainService.subscriptionTextChat) {
+      this.mainService.subscriptionTextChat.unsubscribe();
     }
   }
 
