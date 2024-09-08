@@ -35,7 +35,7 @@ export class DialogEmojiComponent {
     public mainService: MainServiceService,
     public chatService: ChatService,
     public emojiService: EmojiService,
-  ) {}
+  ) { }
   inputContent: any;
 
   /**
@@ -56,13 +56,15 @@ export class DialogEmojiComponent {
    * @param {any} event - The event containing the emoji information.
    */
   setInputReaction(event: any) {
-    this.inputContent = ' ' + event.emoji.native;
+    this.inputContent = event.emoji.native + ' ';
     if (this.emojiService.emojiToChannel) {
       this.mainService.changeInputContent(this.inputContent);
     } else if (this.emojiService.emojieToThread) {
       this.mainService.changeInputContentThread(this.inputContent);
     } else if (this.emojiService.emojiToDirectMessage) {
       this.mainService.changeInputContentDirectChat(this.inputContent);
+    } else if (this.emojiService.emojieToNewMessage) {
+      this.mainService.changeInputContentNewMessage(this.inputContent);
     }
   }
 

@@ -38,19 +38,11 @@ export class MainServiceService {
   private contentSourceThread = new BehaviorSubject<any>([]);
   private contentSourceDirectChat = new BehaviorSubject<any>([]);
   private contentSourceNewMessage = new BehaviorSubject<any>([]);
-  private contentSourceEmojiNewMessage = new BehaviorSubject<any>([]);
-  private contentSourceEmojiChat = new BehaviorSubject<any>([]);
-  private contentSourceEmojiDirectChat = new BehaviorSubject<any>([]);
-  private contentSourceEmojiThread = new BehaviorSubject<any>([]);
   private stopOldObservable$ = new Subject<void>();
   currentContent = this.contentSource.asObservable();
   currentContentThread = this.contentSourceThread.asObservable();
   currentContentDirectChat = this.contentSourceDirectChat.asObservable();
   currentContentNewMessage = this.contentSourceNewMessage.asObservable();
-  emojiContentChat = this.contentSourceEmojiChat.asObservable();
-  emojiContentThreadDirectChat = this.contentSourceEmojiDirectChat.asObservable();
-  emojiContentThread = this.contentSourceEmojiThread.asObservable();
-  emojiContentNewMessage = this.contentSourceEmojiNewMessage.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -110,15 +102,6 @@ export class MainServiceService {
   changeInputContentNewMessage(content: any) {
     this.stopOldObservable$.next();
     this.contentSourceNewMessage.next(content);
-  }
-
-
-  /**
-   * Updates the emoji content source with the new content.
-   * @param {any} content - The new emoji content to set.
-   */
-  changeReactionContent(content: any) {
-    this.contentSourceEmojiChat.next(content);
   }
 
   /**
