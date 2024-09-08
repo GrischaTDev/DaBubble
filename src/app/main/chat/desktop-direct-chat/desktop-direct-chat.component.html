@@ -253,6 +253,7 @@
                     <div class="desktop-chat-input-icon">
                       <mat-icon
                         (click)="
+                          mainService.contentOfWhichInput('direct-message');
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
                         ">

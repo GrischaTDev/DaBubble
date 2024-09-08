@@ -3,7 +3,8 @@
 
 @font-face {
   font-family: 'TwemojiMozilla';
-  src: local('TwemojiMozilla'),
+  src:
+    local('TwemojiMozilla'),
     url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
@@ -195,7 +196,7 @@
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.08);
   font-size: 20px;
   font-weight: 500;
-  margin-left: 220px;
+  margin-left: 180px;
   width: 255px;
   margin-top: 40px;
   margin-bottom: -108px;
