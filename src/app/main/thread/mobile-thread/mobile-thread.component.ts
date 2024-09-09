@@ -69,11 +69,24 @@ export class MobileThreadComponent implements OnInit {
       this.parmsId1 = params['id1'];
       this.parmsId2 = params['id2'];
     });
+    this.mainService.subscriptionThreadContent = this.mainService.currentContentThread.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.threadService.textThread += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
+  /**
+   * Close mobile Thread
+   */
   closeThread() {
+    this.chatService.mobileThreadIsOpen = false;
+    this.router.navigate(['/main', 'chat', this.parmsId1, 'user', this.parmsId1]);
     this.chatService.dataThread = new Channel();
-    this.location.back();
   }
 
   /**
@@ -97,12 +110,12 @@ export class MobileThreadComponent implements OnInit {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
-
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });
+    this.chatService.mobileThreadIsOpen = true;
   }
 
   /**
@@ -120,12 +133,7 @@ export class MobileThreadComponent implements OnInit {
    */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate([
-        '/main',
-        'chat',
-        this.chatService.dataChannel.id,
-        'user',
-      ]);
+      this.router.navigate(['/main', 'chat', this.parmsId1, 'user', this.parmsId1]);
       this.chatService.mobileChatIsOpen = false;
       this.chatService.mobileDirectChatIsOpen = false;
       this.chatService.mobileThreadIsOpen = false;
@@ -159,21 +167,6 @@ export class MobileThreadComponent implements OnInit {
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
-  }
-
-  /**
-   * Navigates to a specified thread by ID.
-   * This method subscribes to a single thread document from a service, updates the chat service's data thread,
-   * and then navigates to the thread page using the router.
-   */
-  navigateToChat() {
-    this.router.navigate([
-      '/main',
-      'chat',
-      this.chatService.dataThread.idOfChannelOnThred,
-      'user',
-      'chat',
-    ]);
   }
 
   /**

@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login/login.component';
 import { authGuard } from './auth.guard';
 import { ImprintComponent } from './imprint/imprint.component';
 import { PolicyComponent } from './policy/policy.component';
+import { MobileThreadComponent } from './main/thread/mobile-thread/mobile-thread.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -58,13 +59,6 @@ export const routes: Routes = [
     resolve: { auth: authGuard },
     children: [
       {
-        path: 'thread/:id1/:id2',
-        loadComponent: () =>
-          import('./main/thread/mobile-thread/mobile-thread.component').then(
-            (m) => m.MobileThreadComponent,
-          ),
-      },
-      {
         path: 'user-profile',
         loadComponent: () =>
           import('./main/user-profile/user-profile.component').then(
@@ -90,6 +84,7 @@ export const routes: Routes = [
       },
     ],
   },
+  { path: 'thread-mobile/:id1/:id2', component: MobileThreadComponent },
   { path: 'imprint', component: ImprintComponent },
   { path: 'policy', component: PolicyComponent },
 ];

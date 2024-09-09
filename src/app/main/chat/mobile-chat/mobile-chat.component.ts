@@ -87,15 +87,6 @@ export class MobileChatComponent implements OnInit {
         console.error('Fehler beim Laden der Daten:', err);
       }
     }
-    this.mainService.subscriptionTextChat = this.mainService.currentContent.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
@@ -172,11 +163,7 @@ export class MobileChatComponent implements OnInit {
    */
   navigateToThread(threadId: string) {
     this.threadService.textThread = '';
-    this.router.navigate([
-      '/thread',
-      this.chatService.dataChannel.id,
-      threadId,
-    ]);
+    this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
   }
 
   /**

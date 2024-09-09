@@ -96,6 +96,15 @@ export class MainServiceService {
   }
 
   /**
+   * Clear Content Observable.
+   */
+  clearContentObservable() {
+    this.contentSource.next('');
+    this.contentSourceDirectChat.next('');
+    this.contentSourceThread.next('');
+  }
+
+  /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
    */
