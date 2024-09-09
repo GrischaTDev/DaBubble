@@ -11,7 +11,7 @@
 .mobile-chat-container {
   height: calc(100vh - 80px);
   width: 100%;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   display: flex;
   justify-content: center;
@@ -104,7 +104,7 @@
 
 .mobile-chat-container {
   height: calc(100vh - 80px);
-  position: absolute;
+  position: fixed;
   bottom: 0;
   display: flex;
   justify-content: center;
