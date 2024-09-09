@@ -356,16 +356,18 @@
 
 .desktop-chat-message-edit-textarea {
   all: unset;
-  background-color: $background-purple;
-  color: $background-white;
+  background-color: $background-white;
+  color: $color-black;
   border: none;
   padding: 0px 0px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
+  border-radius: 12px;
   font-size: 17px;
   width: 400px;
+  margin-bottom: 12px;
 }
 
 .desktop-chat-edit-message-icon-container {
