@@ -87,15 +87,6 @@ export class MobileChatComponent implements OnInit {
         console.error('Fehler beim Laden der Daten:', err);
       }
     }
-    this.mainService.subscriptionTextChat = this.mainService.currentContent.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
@@ -104,6 +95,15 @@ export class MobileChatComponent implements OnInit {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /**
@@ -122,13 +122,7 @@ export class MobileChatComponent implements OnInit {
   private checkScreenSize(width: number) {
     if (this.chatService.mobileChatIsOpen) {
       if (width > 960) {
-        this.router.navigate([
-          '/main',
-          'chat',
-          this.chatService.dataChannel.id,
-          'user',
-          'chat',
-        ]);
+        this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user', 'chat',]);
         this.chatService.mobileDirectChatIsOpen = false;
         this.chatService.mobileThreadIsOpen = false;
       }
@@ -171,21 +165,10 @@ export class MobileChatComponent implements OnInit {
    * @param {string} threadId - The unique identifier of the thread to navigate to.
    */
   navigateToThread(threadId: string) {
+    this.mainService.clearContentObservable()
     this.threadService.textThread = '';
-    this.router.navigate([
-      '/thread',
-      this.chatService.dataChannel.id,
-      threadId,
-    ]);
+    this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
   }
 
-  /**
-   * A lifecycle hook that is called when the component is destroyed.
-   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
-   */
-  ngOnDestroy() {
-    if (this.mainService.subscriptionTextChat) {
-      this.mainService.subscriptionTextChat.unsubscribe();
-    }
-  }
+
 }

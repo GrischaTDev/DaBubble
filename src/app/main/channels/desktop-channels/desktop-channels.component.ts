@@ -122,6 +122,7 @@ export class DesktopChannelsComponent implements OnInit {
    */
   openNewMessage() {
     this.clearData();
+    this.mainService.changeInputContentNewMessage('')
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.mainService.newMessage = true;
@@ -132,6 +133,7 @@ export class DesktopChannelsComponent implements OnInit {
    * Clear Data from Chat, Direct-Chat and Threads.
    */
   clearData() {
+    this.mainService.clearContentObservable()
     this.chatService.dataChannel = new Channel();
     this.chatService.dataThread = new Channel();
     this.chatService.dataDirectChat = new Channel();

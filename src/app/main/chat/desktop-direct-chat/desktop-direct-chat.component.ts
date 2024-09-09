@@ -80,6 +80,15 @@ export class DesktopDirectChatComponent implements OnInit {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /**
@@ -92,15 +101,6 @@ export class DesktopDirectChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
   }
 
   /** Stores the last scroll height of the container to detect changes. */

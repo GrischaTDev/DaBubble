@@ -148,14 +148,4 @@ export class DirectChatComponent implements OnInit {
     dialogConfig.data = directUser;
     this.dialog.open(UserProfileComponent, dialogConfig);
   }
-
-  /**
-   * A lifecycle hook that is called when the component is destroyed.
-   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
-   */
-  ngOnDestroy() {
-    if (this.mainService.subscriptionDirectChat) {
-      this.mainService.subscriptionDirectChat.unsubscribe();
-    }
-  }
 }

@@ -95,6 +95,7 @@ export class DesktopChatComponent implements OnInit {
         }
       },
     );
+
   }
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
