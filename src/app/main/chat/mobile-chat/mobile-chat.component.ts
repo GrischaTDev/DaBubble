@@ -69,15 +69,6 @@ export class MobileChatComponent implements OnInit {
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     this.chatService.mobileChatIsOpen = true;
     this.chatService.text = '';
-    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
   }
 
   /**
@@ -104,6 +95,15 @@ export class MobileChatComponent implements OnInit {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /**
@@ -122,13 +122,7 @@ export class MobileChatComponent implements OnInit {
   private checkScreenSize(width: number) {
     if (this.chatService.mobileChatIsOpen) {
       if (width > 960) {
-        this.router.navigate([
-          '/main',
-          'chat',
-          this.chatService.dataChannel.id,
-          'user',
-          'chat',
-        ]);
+        this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user', 'chat',]);
         this.chatService.mobileDirectChatIsOpen = false;
         this.chatService.mobileThreadIsOpen = false;
       }
@@ -175,4 +169,6 @@ export class MobileChatComponent implements OnInit {
     this.threadService.textThread = '';
     this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
   }
+
+
 }
