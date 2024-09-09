@@ -91,8 +91,10 @@ export class MainServiceService {
    * @param {any} content - The new content to set.
    */
   changeInputContentThread(content: any) {
-    this.stopOldObservable$.next();
-    this.contentSourceThread.next(content);
+    if (this.contentSourceThread.getValue() !== content) {
+      this.stopOldObservable$.next();
+      this.contentSourceThread.next(content);
+    }
   }
 
   /**

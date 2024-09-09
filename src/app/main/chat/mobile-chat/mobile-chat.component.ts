@@ -69,6 +69,15 @@ export class MobileChatComponent implements OnInit {
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     this.chatService.mobileChatIsOpen = true;
     this.chatService.text = '';
+    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /**
@@ -162,17 +171,8 @@ export class MobileChatComponent implements OnInit {
    * @param {string} threadId - The unique identifier of the thread to navigate to.
    */
   navigateToThread(threadId: string) {
+    this.mainService.clearContentObservable()
     this.threadService.textThread = '';
     this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
-  }
-
-  /**
-   * A lifecycle hook that is called when the component is destroyed.
-   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
-   */
-  ngOnDestroy() {
-    if (this.mainService.subscriptionTextChat) {
-      this.mainService.subscriptionTextChat.unsubscribe();
-    }
   }
 }

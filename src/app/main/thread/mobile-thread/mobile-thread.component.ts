@@ -69,6 +69,7 @@ export class MobileThreadComponent implements OnInit {
       this.parmsId1 = params['id1'];
       this.parmsId2 = params['id2'];
     });
+    this.threadService.textThread = '';
     this.mainService.subscriptionThreadContent = this.mainService.currentContentThread.subscribe(
       (content) => {
         if (!this.chatService.editOpen) {
@@ -115,7 +116,6 @@ export class MobileThreadComponent implements OnInit {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });
-    this.chatService.mobileThreadIsOpen = true;
   }
 
   /**
@@ -206,5 +206,15 @@ export class MobileThreadComponent implements OnInit {
     signOut(auth).then(() => {
       this.router.navigate(['login']);
     });
+  }
+
+  /**
+   * A lifecycle hook that is called when the component is destroyed.
+   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+   */
+  ngOnDestroy() {
+    if (this.mainService.subscriptionThreadContent) {
+      this.mainService.subscriptionThreadContent.unsubscribe();
+    }
   }
 }
