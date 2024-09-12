@@ -69,9 +69,13 @@ export class ChatService {
   emojiReactionIndexHoverThread: number | null = null;
   activeMessageIndexReactonThread: number | null = null;
   fromDirectChat = false;
+  body = document.body;
   private channelChangedSource = new Subject<void>();
   channelChanged$ = this.channelChangedSource.asObservable();
-  constructor(public mainService: MainServiceService, private router: Router) { }
+  constructor(
+    public mainService: MainServiceService,
+    private router: Router,
+  ) {}
 
   /**
    * Triggers a notification to indicate that the chat focus has changed.

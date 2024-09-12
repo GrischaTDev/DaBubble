@@ -100,6 +100,7 @@ export class MobileChatHeaderComponent implements OnInit {
    * Sets the mobileChatIsOpen and mobileDirectChatIsOpen properties of the chatService to false.
    */
   closeMobileChat() {
+    this.chatService.body.style.overflow = 'auto';
     if (this.parmsIdOfChat === 'chat') {
       this.mainService
         .watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels')

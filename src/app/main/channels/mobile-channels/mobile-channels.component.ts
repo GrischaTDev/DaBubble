@@ -48,7 +48,7 @@ export class MobileChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     private newMessageService: NewMessageService,
     public searchField: SearchFieldService,
-  ) { }
+  ) {}
 
   /**
    * Initializes the component.
@@ -114,6 +114,7 @@ export class MobileChannelsComponent implements OnInit {
     this.searchValue = '';
     this.directMessageService.openDirectMessage(user);
     this.chatService.text = '';
+    this.chatService.body.style.overflow = 'hidden';
   }
 
   /**
@@ -132,9 +133,9 @@ export class MobileChannelsComponent implements OnInit {
   }
 
   /**
-  * Navigates to a specific collection path and manages chat service states.
-  *
-  */
+   * Navigates to a specific collection path and manages chat service states.
+   *
+   */
   async goToCollectionPath(data: Channel | User, path: string) {
     this.router.navigate(['/main', path, data.id, 'user', data.id]);
     this.chatService.mobileChatIsOpen = true;
