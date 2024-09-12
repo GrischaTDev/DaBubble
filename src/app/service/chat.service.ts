@@ -75,7 +75,7 @@ export class ChatService {
   constructor(
     public mainService: MainServiceService,
     private router: Router,
-  ) {}
+  ) { }
 
   /**
    * Triggers a notification to indicate that the chat focus has changed.

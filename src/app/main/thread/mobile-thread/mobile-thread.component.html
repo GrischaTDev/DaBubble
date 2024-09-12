@@ -255,6 +255,7 @@
                         <div class="dektop-thread-input-icon">
                           <mat-icon
                             (click)="
+                              mainService.contentOfWhichInput('thread');
                               chatService.onButtonClick($event);
                               chatService.openDialogMentionUser()
                             ">

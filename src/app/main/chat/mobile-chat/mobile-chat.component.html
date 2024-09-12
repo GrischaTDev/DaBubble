@@ -231,6 +231,7 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
+                          mainService.contentOfWhichInput('channels');
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
                         ">
