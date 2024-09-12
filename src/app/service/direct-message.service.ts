@@ -350,6 +350,7 @@ export class DirectMessageService {
       ]);
     } else {
       this.router.navigate([
+        '/main',
         '/direct-chat',
         this.chatService.dataChannel.id,
         this.userIdNewMessage,
