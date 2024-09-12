@@ -40,7 +40,7 @@ export class DesktopChannelsComponent implements OnInit {
   arrowIconChannels: string = 'arrow_drop_down';
   arrowIconUser: string = 'arrow_drop_down';
   selectedChannel: any;
-  activeChannelId: string | null = null;
+  activeChannelId: string = '2jA0CJLj9sjowEvllKMg';
 
   allChannel: Channel[] = [];
 
@@ -53,7 +53,7 @@ export class DesktopChannelsComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
     public newMessageService: NewMessageService,
-  ) { }
+  ) {}
 
   /**
    * Initializes the component and sets up necessary subscriptions.
@@ -115,6 +115,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
     this.chatService.newMessageOpen = false;
+    this.activeChannelId = '';
   }
 
   /**
@@ -122,7 +123,7 @@ export class DesktopChannelsComponent implements OnInit {
    */
   openNewMessage() {
     this.clearData();
-    this.mainService.changeInputContentNewMessage('')
+    this.mainService.changeInputContentNewMessage('');
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = false;
     this.mainService.newMessage = true;
@@ -133,7 +134,7 @@ export class DesktopChannelsComponent implements OnInit {
    * Clear Data from Chat, Direct-Chat and Threads.
    */
   clearData() {
-    this.mainService.clearContentObservable()
+    this.mainService.clearContentObservable();
     this.chatService.dataChannel = new Channel();
     this.chatService.dataThread = new Channel();
     this.chatService.dataDirectChat = new Channel();

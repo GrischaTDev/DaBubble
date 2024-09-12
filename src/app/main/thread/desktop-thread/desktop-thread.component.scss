@@ -3,7 +3,8 @@
 
 @font-face {
   font-family: 'TwemojiMozilla';
-  src: local('TwemojiMozilla'),
+  src:
+    local('TwemojiMozilla'),
     url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
@@ -259,6 +260,7 @@
 .desktop-thread-message-content {
   margin-left: 18px;
   margin-right: 18px;
+  overflow-wrap: anywhere;
 }
 
 .desktop-thread-message-name-date-container-from-others {
