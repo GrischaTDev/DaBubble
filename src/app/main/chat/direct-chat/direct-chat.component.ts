@@ -105,6 +105,7 @@ export class DirectChatComponent implements OnInit {
         if (!this.chatService.editOpen) {
           this.chatService.text += content;
         } else {
+          console.log('dddddddddddddddddddu438987743889438934893789')
           this.chatService.editText += content;
         }
       },

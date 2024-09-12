@@ -20,7 +20,7 @@ export class ThreadService {
   constructor(
     public chatService: ChatService,
     public mainService: MainServiceService,
-  ) {}
+  ) { }
 
   /**
    * Closes the currently open thread by setting `isThreadOpen` to false.
@@ -61,6 +61,7 @@ export class ThreadService {
     event: MouseEvent,
     messageContent: string,
   ): void {
+    this.chatService.editOpen = true;
     event.stopPropagation();
     if (this.editMessageIndexThread === index) {
       this.editMessageIndexThread = null;

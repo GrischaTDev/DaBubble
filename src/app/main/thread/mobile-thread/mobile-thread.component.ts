@@ -75,7 +75,7 @@ export class MobileThreadComponent implements OnInit {
         if (!this.chatService.editOpen) {
           this.threadService.textThread += content;
         } else {
-          this.chatService.editText += content;
+          this.threadService.editTextThread += content;
         }
       },
     );
