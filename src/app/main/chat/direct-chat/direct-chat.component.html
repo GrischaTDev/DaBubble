@@ -257,7 +257,7 @@
                     <div class="mobile-chat-input-icon">
                       <mat-icon
                         (click)="
-                          emojiService.forWhichDocIsTheEmoji('direct-message');
+                          mainService.contentOfWhichInput('direct-message');
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
                         ">

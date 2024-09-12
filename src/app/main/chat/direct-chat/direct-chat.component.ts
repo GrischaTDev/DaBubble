@@ -100,16 +100,6 @@ export class DirectChatComponent implements OnInit {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);
-    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          console.log('dddddddddddddddddddu438987743889438934893789')
-          this.chatService.editText += content;
-        }
-      },
-    );
   }
 
   /**
