@@ -83,11 +83,8 @@ export class DirectChatComponent implements OnInit {
   async ngOnInit() {
     if (this.parmsIdContent) {
       try {
-        const dataDirectChat = await lastValueFrom(
-          this.mainService.watchSingleChannelDoc(
-            this.parmsIdContent,
-            'direct-message',
-          ),
+        const dataDirectChat = await lastValueFrom(this.mainService.watchSingleChannelDoc(this.parmsIdContent, 'direct-message',
+        ),
         );
         this.chatService.dataChannel = dataDirectChat as Channel;
       } catch (error) {
@@ -95,11 +92,7 @@ export class DirectChatComponent implements OnInit {
       }
     }
     if (this.parmsIdUser) {
-      this.mainService
-        .watchSingleChannelDoc(this.parmsIdUser, 'users')
-        .subscribe((dataUser) => {
-          this.chatService.clickedUser = dataUser as User;
-        });
+      this.mainService.watchSingleChannelDoc(this.parmsIdUser, 'users').subscribe((dataUser) => { this.chatService.clickedUser = dataUser as User; });
     }
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -118,9 +111,9 @@ export class DirectChatComponent implements OnInit {
   }
 
   /**
- * Scrolls the content of the scrollable container to the bottom.
- * This is typically used to ensure the user sees the most recent messages or content added to the container.
- */
+  * Scrolls the content of the scrollable container to the bottom.
+  * This is typically used to ensure the user sees the most recent messages or content added to the container.
+  */
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop =
       this.scrollContainer.nativeElement.scrollHeight;
@@ -132,18 +125,16 @@ export class DirectChatComponent implements OnInit {
    */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate([
-        '/main',
-        'chat',
-        this.parmsIdOfChat,
-        'user',
-        'chat',
-      ]);
+      this.router.navigate(['/main', 'chat', this.parmsIdOfChat, 'user', 'chat']);
       this.chatService.mobileDirectChatIsOpen = false;
       this.chatService.mobileThreadIsOpen = false;
     }
   }
 
+  /**
+  * Lifecycle hook that is called after the view is initialized.
+  * Subscribes to the channelChanged event to trigger scrolling to the bottom of the chat after a delay.
+  */
   @ViewChild('autofocus') meinInputField!: ElementRef;
   ngAfterViewInit() {
     this.channelSubscription = this.chatService.channelChanged$.subscribe(

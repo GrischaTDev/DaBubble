@@ -227,6 +227,10 @@ export class DesktopDirectChatComponent implements OnInit {
     this.dialog.open(UserProfileComponent, dialogConfig);
   }
 
+  /**
+  * Sends a direct message using the directMessageService.
+  * Marks the message as sent from the desktop and includes text and image data.
+  */
   sendDirectMessage() {
     this.directMessageService.sendNewMessageFromDesktop = true;
     this.directMessageService.sendMessageFromDirectMessage(

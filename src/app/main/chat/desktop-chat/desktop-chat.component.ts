@@ -114,6 +114,10 @@ export class DesktopChatComponent implements OnInit {
     }
   }
 
+  /**
+  * Accesses the input field element using ViewChild after the view is initialized.
+  * Subscribes to the channelChanged event and ensures the input field is focused and the chat is scrolled to the bottom.
+  */
   @ViewChild('autofocus') meinInputField!: ElementRef;
   ngAfterViewInit() {
     this.focusInputField();
@@ -127,6 +131,9 @@ export class DesktopChatComponent implements OnInit {
     );
   }
 
+  /**
+  * Focuses the input field element after a short delay.
+  */
   private focusInputField() {
     setTimeout(() => {
       this.meinInputField.nativeElement.focus();
@@ -142,16 +149,20 @@ export class DesktopChatComponent implements OnInit {
       this.scrollContainer.nativeElement.scrollHeight;
   }
 
-  toggleIconHoverContainerChat(
-    singleMessageIndex: number,
-    emojiUserIndex: number,
-    event: MouseEvent,
-  ) {
+  /**
+  * Toggles the hover state for the emoji reaction icon in the chat message.
+  * Sets the active message and emoji reaction indices on hover.
+  */
+  toggleIconHoverContainerChat(singleMessageIndex: number, emojiUserIndex: number, event: MouseEvent,) {
     event.stopPropagation();
     this.activeMessageIndexReacton = singleMessageIndex;
     this.emojiReactionIndexHover = emojiUserIndex;
   }
 
+  /**
+  * Clears the hover state for the emoji reaction icon in the chat message.
+  * Resets the active message and emoji reaction indices when the hover ends.
+  */
   toggleIconHoverContainerChatOut(event: MouseEvent) {
     this.activeMessageIndexReacton = null;
     this.emojiReactionIndexHover = null;
@@ -170,6 +181,10 @@ export class DesktopChatComponent implements OnInit {
     }
   }
 
+  /**
+  * Replaces the text after the last '@' in the chat input with the selected user's name.
+  * Clears the user search results after selection.
+  */
   chooseUser(name: string) {
     const atIndex = this.chatService.text.lastIndexOf('@');
     if (atIndex !== -1) {
@@ -179,6 +194,10 @@ export class DesktopChatComponent implements OnInit {
     }
   }
 
+  /**
+  * Checks if the 'Enter' key is pressed and sends the message if 'Shift' is not held.
+  * Prevents default behavior when sending the message.
+  */
   checkForEnter(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
