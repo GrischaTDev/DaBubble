@@ -124,6 +124,10 @@ export class MobileChatComponent implements OnInit {
     }
   }
 
+  /**
+  * Lifecycle hook that is called after the view is initialized.
+  * Subscribes to the channelChanged event to trigger scrolling to the bottom of the chat after a delay.
+  */
   @ViewChild('autofocus') meinInputField!: ElementRef;
   ngAfterViewInit() {
     this.channelSubscription = this.chatService.channelChanged$.subscribe(

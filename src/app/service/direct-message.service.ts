@@ -357,20 +357,10 @@ export class DirectMessageService {
     this.directMessageDocId = chatId;
     if (this.chatService.mobileDirectChatIsOpen) {
       if (this.chatService.clickedUser.id) {
-        this.router.navigate([
-          '/main',
-          'direct-chat',
-          chatId,
-          this.chatService?.clickedUser?.id,
-          this.mainService.allChannels[0].id,
+        this.router.navigate(['/main', 'direct-chat', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id,
         ]);
       } else {
-        this.router.navigate([
-          '/main',
-          'direct-chat',
-          chatId,
-          this.chatService.clickedUser.idUser,
-          this.mainService.allChannels[0].id,
+        this.router.navigate(['/main', 'direct-chat', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id,
         ]);
       }
       this.switchContent = true;
@@ -380,20 +370,10 @@ export class DirectMessageService {
         .subscribe((dataDirectMessage) => {
           this.chatService.dataChannel = dataDirectMessage as Channel;
           if (this.chatService.clickedUser.id) {
-            this.router.navigate([
-              '/main',
-              'direct-message',
-              chatId,
-              this.chatService?.clickedUser?.id,
-              this.mainService.allChannels[0].id,
+            this.router.navigate(['/main', 'direct-message', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id,
             ]);
           } else {
-            this.router.navigate([
-              '/main',
-              'direct-message',
-              chatId,
-              this.chatService.clickedUser.idUser,
-              this.mainService.allChannels[0].id,
+            this.router.navigate(['/main', 'direct-message', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id,
             ]);
           }
           this.chatService.desktopChatOpen = false;
