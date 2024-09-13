@@ -26,7 +26,7 @@ import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
 import { SearchFieldService } from '../../../search-field.service';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -49,6 +49,10 @@ export class MobileChatComponent implements OnInit {
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
+  private channelSubscription!: Subscription;
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -69,6 +73,9 @@ export class MobileChatComponent implements OnInit {
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     this.chatService.mobileChatIsOpen = true;
     this.chatService.text = '';
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
   }
 
   /**
@@ -92,9 +99,6 @@ export class MobileChatComponent implements OnInit {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
   }
 
   /**
@@ -120,8 +124,16 @@ export class MobileChatComponent implements OnInit {
     }
   }
 
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+  ngAfterViewInit() {
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(
+      () => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
+      },
+    );
+  }
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
@@ -160,6 +172,4 @@ export class MobileChatComponent implements OnInit {
     this.threadService.textThread = '';
     this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
   }
-
-
 }

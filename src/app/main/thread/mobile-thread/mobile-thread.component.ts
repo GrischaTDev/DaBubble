@@ -26,7 +26,7 @@ import { LoginService } from '../../../service/login.service';
 import { User } from '../../../../assets/models/user.class';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { getAuth, signOut } from '@angular/fire/auth';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-thread',
@@ -53,6 +53,7 @@ export class MobileThreadComponent implements OnInit {
   currentUser: any;
   loggedInUser: User = new User();
   public dialog = inject(MatDialog);
+  private channelSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -156,6 +157,13 @@ export class MobileThreadComponent implements OnInit {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
+    this.channelSubscription = this.chatService.threadChanged$.subscribe(
+      () => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
+      },
+    );
   }
 
   /**
