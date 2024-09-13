@@ -330,31 +330,16 @@ export class DirectMessageService {
    */
   loadDirectMessageFromNewMessage() {
     if (this.chatService.newMessageOpen) {
-      this.router.navigate([
-        '/main',
-        'direct-message',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
+      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,
       ]);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
     } else if (this.sendNewMessageFromDesktop) {
-      this.router.navigate([
-        '/main',
-        'direct-message',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
+      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,
       ]);
     } else {
-      this.router.navigate([
-        '/main',
-        '/direct-chat',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
+      this.router.navigate(['/main', '/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,
       ]);
       this.switchContent = true;
     }
@@ -362,6 +347,7 @@ export class DirectMessageService {
     this.chatService.imageMessage = '';
     this.imageMessage = '';
     this.sendNewMessageFromDesktop = false;
+    this.chatService.activateChatFocus()
   }
 
   /**

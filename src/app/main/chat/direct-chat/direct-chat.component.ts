@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
@@ -22,7 +22,7 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { SearchFieldService } from '../../../search-field.service';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-direct-chat',
@@ -45,6 +45,9 @@ export class DirectChatComponent implements OnInit {
   parmsIdContent: string = '';
   parmsIdUser: string = '';
   parmsIdOfChat: string = '';
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
+  private channelSubscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,6 +70,9 @@ export class DirectChatComponent implements OnInit {
     } else if (!this.directMessageService.dataDirectMessage.messageChannel) {
       this.directMessageService.dataDirectMessage.messageChannel = [];
     }
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 400);
   }
 
   /**
@@ -112,6 +118,15 @@ export class DirectChatComponent implements OnInit {
   }
 
   /**
+ * Scrolls the content of the scrollable container to the bottom.
+ * This is typically used to ensure the user sees the most recent messages or content added to the container.
+ */
+  scrollToBottom(): void {
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
+  }
+
+  /**
    * Redirects to the main page if the screen width exceeds 960 pixels.
    * @param {number} width - The current width of the screen.
    */
@@ -127,6 +142,17 @@ export class DirectChatComponent implements OnInit {
       this.chatService.mobileDirectChatIsOpen = false;
       this.chatService.mobileThreadIsOpen = false;
     }
+  }
+
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+  ngAfterViewInit() {
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(
+      () => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
+      },
+    );
   }
 
   /**
