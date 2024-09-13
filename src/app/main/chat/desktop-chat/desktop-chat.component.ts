@@ -68,7 +68,7 @@ export class DesktopChatComponent implements OnInit {
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     setTimeout(() => {
       this.scrollToBottom();
-    }, 500);
+    }, 400);
   }
 
   /**
@@ -138,10 +138,8 @@ export class DesktopChatComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    if (this.allChannel.length !== 0) {
-      this.scrollContainer.nativeElement.scrollTop =
-        this.scrollContainer.nativeElement.scrollHeight;
-    }
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
   }
 
   toggleIconHoverContainerChat(

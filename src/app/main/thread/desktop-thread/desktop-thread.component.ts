@@ -21,7 +21,7 @@ import { CommonModule } from '@angular/common';
 import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
 import { Channel } from '../../../../assets/models/channel.class';
-import { lastValueFrom, take } from 'rxjs';
+import { lastValueFrom, Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-thread',
@@ -36,6 +36,11 @@ export class DesktopThreadComponent implements OnInit {
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
+  private channelSubscription!: Subscription;
+
+  @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -61,9 +66,6 @@ export class DesktopThreadComponent implements OnInit {
       chatService.idOfChannel = params.id;
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
   }
 
   /**
@@ -89,9 +91,6 @@ export class DesktopThreadComponent implements OnInit {
     }
   }
 
-  /** @ViewChild decorator to access the scrollable container element within a thread. */
-  @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
@@ -107,6 +106,13 @@ export class DesktopThreadComponent implements OnInit {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
+    this.channelSubscription = this.chatService.threadChanged$.subscribe(
+      () => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
+      },
+    );
   }
 
   /**
@@ -114,8 +120,7 @@ export class DesktopThreadComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
+    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
   }
 
   /**

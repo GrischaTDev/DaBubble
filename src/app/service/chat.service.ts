@@ -18,14 +18,7 @@ import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  dialogInstance:
-    | MatDialogRef<DialogEmojiComponent, any>
-    | MatDialogRef<DialogMentionUsersComponent, any>
-    | MatDialogRef<DialogUserChatComponent, any>
-    | MatDialogRef<DialogAddUserComponent, any>
-    | MatDialogRef<DialogEditChannelComponent, any>
-    | MatDialogRef<DialogImageMessageComponent, any>
-    | undefined;
+  dialogInstance: | MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any> | MatDialogRef<DialogAddUserComponent, any> | MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any> | undefined;
   dialogEmojiOpen = false;
   dialogMentionUserOpen = false;
   dialogAddUserOpen = false;
@@ -71,17 +64,23 @@ export class ChatService {
   fromDirectChat = false;
   body = document.body;
   private channelChangedSource = new Subject<void>();
+  private threadChangedSource = new Subject<void>();
   channelChanged$ = this.channelChangedSource.asObservable();
-  constructor(
-    public mainService: MainServiceService,
-    private router: Router,
-  ) { }
+  threadChanged$ = this.threadChangedSource.asObservable();
+  constructor(public mainService: MainServiceService, private router: Router,) { }
 
   /**
    * Triggers a notification to indicate that the chat focus has changed.
    */
   activateChatFocus() {
     this.channelChangedSource.next();
+  }
+
+  /**
+ * Triggers a notification to indicate that the chat focus has changed.
+ */
+  activateThreadFocus() {
+    this.threadChangedSource.next();
   }
 
   /**
@@ -461,6 +460,7 @@ export class ChatService {
    * Opens a thread for a given message and initializes relevant properties.
    */
   async openThread(threadMessage: Message, indexSingleMessage: number) {
+    this.activateThreadFocus();
     this.mainService
       .watchSingleThreadDoc(threadMessage.thread, 'threads')
       .subscribe((dataThreadChannel) => {

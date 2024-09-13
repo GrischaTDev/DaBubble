@@ -135,6 +135,7 @@ export class ThreadService {
       this.chatService.indexOfThreadMessageForEditChatMessage
     ].numberOfMessage++;
     this.chatService.dataThread.messageChannel[0].numberOfMessage++;
+    this.chatService.activateThreadFocus();
     await this.sendMessageToThread();
     this.resetMessageContentThread();
   }
