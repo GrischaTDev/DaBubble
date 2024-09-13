@@ -45,17 +45,15 @@ import { lastValueFrom, Subscription } from 'rxjs';
 })
 export class DesktopChatComponent implements OnInit {
   parmsId: string = '';
-  public dialog = inject(MatDialog);
-  dialogInstance?:
-    | MatDialogRef<DialogEmojiComponent>
-    | MatDialogRef<DialogShowsUserReactionComponent>;
-
+  public dialog = inject(MatDialog); dialogInstance?: | MatDialogRef<DialogEmojiComponent> | MatDialogRef<DialogShowsUserReactionComponent>;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   emojiReactionIndexHover: number | null = null;
   activeMessageIndexReacton: number | null = null;
   private channelSubscription!: Subscription;
   allChannel: Channel[] = [];
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
 
   constructor(
     public chatService: ChatService,
@@ -95,11 +93,7 @@ export class DesktopChatComponent implements OnInit {
         }
       },
     );
-
   }
-
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
@@ -126,6 +120,9 @@ export class DesktopChatComponent implements OnInit {
     this.channelSubscription = this.chatService.channelChanged$.subscribe(
       () => {
         this.focusInputField();
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
       },
     );
   }

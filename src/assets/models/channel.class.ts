@@ -2,6 +2,9 @@ import { Message } from './message.class';
 import { User } from './user.class';
 
 export class Channel {
+  subscribe(arg0: (data: any) => void) {
+    throw new Error('Method not implemented.');
+  }
   id: string;
   openingDate: number;
   name: string;
