@@ -85,7 +85,10 @@
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
-        placeholder="Starte eine neue Nachricht"></textarea>
+        placeholder="Starte eine neue Nachricht"
+        (ngModelChange)="
+          searchField.filterDataChannelchat(newMessageService.textNewMessage)
+        "></textarea>
 
       <div class="mobile-chat-input-field-icon-container">
         <div class="mobile-chat-input-icon-container">
@@ -131,3 +134,4 @@
     </form>
   </div>
 </div>
+

@@ -148,6 +148,10 @@ export class AddChannelComponent implements OnInit {
     this.createdChannel = this.mainService.allChannels;
     this.openChannel(this.createdChannel[1]);
     this.closeDialog();
+    if (this.mainService.newMessage && this.chatService.newMessageOpen) {
+      this.mainService.newMessage = false;
+      this.chatService.newMessageOpen = false;
+    }
   }
 
   /**
@@ -286,3 +290,4 @@ export class AddChannelComponent implements OnInit {
     this.cdr.detectChanges();
   }
 }
+
