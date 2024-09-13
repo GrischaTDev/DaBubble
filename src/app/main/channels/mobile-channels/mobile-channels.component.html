@@ -23,10 +23,10 @@
         <p>Channel:</p>
         <div
           class="user-list-container"
-          *ngFor="let channel of allChannel"
+          *ngFor="let channel of searchField.filterChannel"
           (click)="openChannel(channel)">
           <span>#</span>
-          {{ channel.name }}
+          {{ channel['name'] }}
         </div>
       </div>
       <div *ngIf="searchField.filterMessage.length > 0">
@@ -142,3 +142,4 @@
     <mat-icon>edit_square</mat-icon>
   </div>
 </section>
+
