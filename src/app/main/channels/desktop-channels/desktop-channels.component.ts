@@ -128,6 +128,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.directChatOpen = false;
     this.mainService.newMessage = true;
     this.chatService.newMessageOpen = true;
+    this.activeChannelId = '';
   }
 
   /**
@@ -178,3 +179,4 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.mobileChatIsOpen = true;
   }
 }
+
