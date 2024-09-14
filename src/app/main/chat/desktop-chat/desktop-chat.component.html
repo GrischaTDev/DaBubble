@@ -447,7 +447,6 @@
             </div>
             <div class="desktop-chat-message-reaction-icon">
               <mat-icon
-                *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
                   emojiService.forWhichDocIsTheEmoji('channels');
                   chatService.onButtonClick($event);

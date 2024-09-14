@@ -18,10 +18,10 @@ export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
   dialogInstance: | MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any> | MatDialogRef<DialogAddUserComponent, any> | MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any> | undefined;
-  dialogEmojiOpen = false;
-  dialogMentionUserOpen = false;
-  dialogAddUserOpen = false;
-  dialogImageMessageOpen = false;
+  dialogEmojiOpen: boolean = false;
+  dialogMentionUserOpen: boolean = false;
+  dialogAddUserOpen: boolean = false;
+  dialogImageMessageOpen: boolean = false;
   mentionUser: MentionUser = new MentionUser();
   dataChannel: Channel = new Channel();
   dataDirectChat: Channel = new Channel();
@@ -31,41 +31,42 @@ export class ChatService {
   messageChannel: Message = new Message();
   messageThread: Message = new Message();
   allMessangeFromThread: Message[] = [];
-  idOfChannel = '';
+  idOfChannel: string = '';
   indexOfChannelMessage = 0;
   clickedUser: User = new User();
   activeMessageIndex: number | null = null;
   hoveredMessageIndex: number | null = null;
   editMessageIndex: number | null = null;
   editMessageInputIndex: number | null = null;
-  editOpen = false;
+  editOpen: boolean = false;
   text = '';
   editText = '';
   loggedInUser: User = new User();
-  mobileChatIsOpen = false;
-  mobileDirectChatIsOpen = false;
-  mobileThreadIsOpen = false;
-  mobileNewMessageOpen = false;
-  directChatOpen = false;
-  desktopChatOpen = true;
-  newMessageOpen = false;
-  isThreadOpen = false;
+  mobileChatIsOpen: boolean = false;
+  mobileDirectChatIsOpen: boolean = false;
+  mobileThreadIsOpen: boolean = false;
+  mobileNewMessageOpen: boolean = false;
+  directChatOpen: boolean = false;
+  desktopChatOpen: boolean = true;
+  newMessageOpen: boolean = false;
+  isThreadOpen: boolean = false;
   isWorkspaceOpen: boolean = true;
   closeMenu: string = 'arrow_drop_up';
   closeMenuText: string = 'Workspace-Menü schließen';
   imageMessage: string | ArrayBuffer | null = '';
   indexOfThreadMessageForEditChatMessage = 0;
   ownerThreadMessage = false;
-  sendetMessage = false;
+  sendetMessage: boolean = false;
   indexOfThreadMessage = 0;
   emojiReactionIndexHoverThread: number | null = null;
   activeMessageIndexReactonThread: number | null = null;
-  fromDirectChat = false;
+  fromDirectChat: boolean = false;
   body = document.body;
   private channelChangedSource = new Subject<void>();
   private threadChangedSource = new Subject<void>();
   channelChanged$ = this.channelChangedSource.asObservable();
   threadChanged$ = this.threadChangedSource.asObservable();
+  editMessageButtonVisible: boolean = false;
   constructor(public mainService: MainServiceService, private router: Router,) { }
 
   /**
@@ -316,7 +317,6 @@ export class ChatService {
 
   /**
    * Toggles the icon container based on the given index and event. Stops the event propagation if `editOpen` is false.
-   * If the active message index matches the provided index, it closes the icon container; otherwise, it sets the active message index to the provided index.
    */
   toggleIconContainer(index: number, event: MouseEvent): void {
     if (!this.editOpen) {
@@ -340,18 +340,19 @@ export class ChatService {
     if (this.editMessageIndex === index) {
       this.editMessageIndex = null;
       this.editMessageInputIndex = null;
+      this.editMessageButtonVisible = true;
     } else {
       this.activeMessageIndex = null;
       this.editOpen = true;
       this.editText = messageContent;
       this.editMessageIndex = index;
       this.editMessageInputIndex = index;
+      this.editMessageButtonVisible = false;
     }
   }
 
   /**
    * Closes the message editor without saving changes. It resets the editing state indices and closes the editor immediately.
-   * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
    */
   closeWithoutSaving() {
     this.editMessageIndex = null;

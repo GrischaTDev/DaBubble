@@ -126,9 +126,12 @@
 
       <div
         [ngClass]="{
-          'mobile-chat-message-container-from-me': chatService.ifMessageFromMe(
-            singleMessage.userId
-          ),
+          'mobile-chat-message-container-from-me':
+            chatService.ifMessageFromMe(singleMessage.userId) &&
+            chatService.hoveredMessageIndex !== singleMessageIndex,
+          'mobile-chat-message-container-from-me-edit-botton-vesible':
+            chatService.ifMessageFromMe(singleMessage.userId) &&
+            chatService.hoveredMessageIndex === singleMessageIndex,
           'mobile-chat-message-container-from-others':
             !chatService.ifMessageFromMe(singleMessage.userId)
         }">
@@ -314,7 +317,6 @@
             </div>
             <div class="mobile-chat-message-reaction-icon">
               <mat-icon
-                *ngIf="chatService.editMessageInputIndex !== singleMessageIndex"
                 (click)="
                   emojiService.forWhichDocIsTheEmoji('channels');
                   chatService.onButtonClick($event);

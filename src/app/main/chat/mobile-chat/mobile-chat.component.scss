@@ -233,6 +233,7 @@
   justify-content: flex-start;
   margin-left: 16px;
   z-index: 1;
+  gap: 8px;
 }
 
 .mobile-chat-message-container-from-me {
@@ -243,6 +244,19 @@
   margin-left: 16px;
   margin-right: 16px;
   z-index: 1;
+  gap: 8px;
+}
+
+.mobile-chat-message-container-from-me-edit-botton-vesible {
+  padding-top: 0px;
+  margin-top: -98px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+  margin-left: 16px;
+  margin-right: 16px;
+  z-index: 1;
+  gap: 8px;
 }
 
 .mobile-chat-message-avatar-container {

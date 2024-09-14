@@ -3,7 +3,8 @@
 
 @font-face {
   font-family: 'TwemojiMozilla';
-  src: local('TwemojiMozilla'),
+  src:
+    local('TwemojiMozilla'),
     url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
@@ -356,7 +357,7 @@
 
 .desktop-chat-message-edit-textarea {
   all: unset;
-  background-color: $background-white;
+  background-color: $background-purple !important;
   color: $color-black;
   border: none;
   padding: 0px 0px;

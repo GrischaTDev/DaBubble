@@ -305,7 +305,7 @@
 
 .desktop-chat-message-edit-textarea {
   all: unset;
-  background-color: $background-purple;
+  background-color: $background-purple !important;
   color: $background-white;
   border: none;
   padding: 0px 0px;
