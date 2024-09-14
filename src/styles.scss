@@ -1,6 +1,5 @@
-@import "./../src/fonts.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
-
+@import './../src/fonts.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 $background-white: #fff;
 $background-black: #fff;
@@ -18,8 +17,9 @@ $color-black: #000000;
 
 body {
   margin: 0;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   background-color: $background-white;
+  scroll-behavior: smooth;
 }
 
 .text-color-blue {
@@ -27,7 +27,7 @@ body {
 }
 
 input {
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 18px;
 }
 
@@ -47,7 +47,7 @@ button {
   border-radius: 25px;
   font-size: 18px;
   font-weight: 700;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   cursor: pointer;
 }
 
@@ -70,7 +70,7 @@ textarea {
   border-radius: 40px;
   border: 1px solid $border-ligth-purple;
   box-sizing: border-box;
-  font-family: "Nunito";
+  font-family: 'Nunito';
   font-size: 17px;
 }
 
@@ -118,7 +118,6 @@ textarea:focus {
 .br-20 {
   border-radius: 20px;
 }
-
 
 /* width */
 ::-webkit-scrollbar {
@@ -179,6 +178,4 @@ textarea:focus {
       color: #686868;
     }
   }
-
 }
-
