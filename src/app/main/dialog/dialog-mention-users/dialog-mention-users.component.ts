@@ -12,6 +12,7 @@ import { ChatService } from '../../../service/chat.service';
 import { User } from '../../../../assets/models/user.class';
 import { MainServiceService } from '../../../service/main-service.service';
 import { EmojiService } from '../../../service/emoji.service';
+import { NewMessageService } from '../../../service/new-message.service';
 
 @Component({
   selector: 'app-dialog-mention-users',
@@ -35,6 +36,7 @@ export class DialogMentionUsersComponent {
     public chatService: ChatService,
     public mainService: MainServiceService,
     public emojiService: EmojiService,
+    public newMessageService: NewMessageService,
   ) {
     this.chatService = chatService;
   }
@@ -46,11 +48,21 @@ export class DialogMentionUsersComponent {
   addMentionUser(user: User) {
     this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
+    const lastCharNewMessage = this.newMessageService.textNewMessage
+      .trim()
+      .slice(-1);
     if (lastChar !== '@') {
-      this.inputContent += '@' + user.name + ' ';
+      this.chatService.text += '@' + user.name + ' ';
     } else {
-      this.inputContent += user.name;
+      this.chatService.text += user.name;
     }
+
+    if (lastCharNewMessage !== '@') {
+      this.newMessageService.textNewMessage += '@' + user.name + ' ';
+    } else {
+      this.newMessageService.textNewMessage += user.name;
+    }
+
     this.validationContent();
   }
 
@@ -82,3 +94,4 @@ export class DialogMentionUsersComponent {
     this.chatService.closeDialog();
   }
 }
+
