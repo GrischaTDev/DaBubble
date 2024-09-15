@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message/dialog-image-message.component';
 import { Message } from '../../assets/models/message.class';
 import { DialogShowsUserReactionComponent } from '../main/dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import { DialogSearchChannelsComponent } from '../main/dialog/dialog-search-channels/dialog-search-channels.component';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,6 @@ export class ChannelService {
   @Input() content: string = '';
   @Input() textareaChannelName: string = '';
   @Input() textareaChannelDescription: string = '';
-
   @Input() placeholder: string = 'Name eingeben';
   addUserClicked = false;
   addetUser: User[] = [];
@@ -33,6 +33,7 @@ export class ChannelService {
   dialogInstance:
     | MatDialogRef<DialogEditChannelComponent, any>
     | MatDialogRef<DialogShowsUserReactionComponent, any>
+    | MatDialogRef<DialogSearchChannelsComponent, any>
     | undefined;
   editChannelNameIsOpen: boolean = false;
   editChannelDescriptionIsOpen: boolean = false;
@@ -342,6 +343,35 @@ export class ChannelService {
   closeDialogShowsUserReaction() {
     if (this.dialogInstance) {
       this.dialogInstance.close();
+    }
+  }
+
+
+  /**
+  * Manages the state of the chat dialog. If the chat dialog is not open or if the search channels dialog is open, it closes any currently open dialogs and then opens the chat dialog.
+  */
+  openDialogSearchChannels() {
+    if (!this.chatService.dialogMentionUserOpen || this.chatService.dialogEmojiOpen) {
+      this.closeDialog();
+      this.dialogInstance = this.dialog.open(DialogSearchChannelsComponent);
+      this.chatService.dialogMentionUserOpen = true;
+    } else {
+      this.closeDialog();
+    }
+    setTimeout(() => {
+      this.chatService.activateChatFocus();
+    }, 400);
+  }
+
+  /**
+  * Closes the dialog if it is currently open. Logs the attempt and the result of the dialog closure.
+  */
+  closeDialog(): void {
+    if (this.dialogInstance) {
+      this.dialogInstance.close();
+      this.chatService.dialogEmojiOpen = false;
+      this.chatService.dialogAddUserOpen = false;
+      this.chatService.dialogMentionUserOpen = false;
     }
   }
 }
