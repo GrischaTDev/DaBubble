@@ -30,11 +30,10 @@
           <div class="icon-and-name">
             <div
               class="sub-channel active-channel"
-              [ngClass]="{'active-channel': channel.id === activeChannelId}"
-              (click)="openChannel(channel); setVariableOpenChat()"
-            >
+              [ngClass]="{ 'active-channel': channel.id === activeChannelId }"
+              (click)="openChannel(channel); setVariableOpenChat()">
               <mat-icon>tag</mat-icon>
-              <a>{{ channel.name }} </a>
+              <a>{{ channel.name }}</a>
             </div>
           </div>
         </div>
@@ -64,15 +63,13 @@
       <div
         class="logged-in-user"
         class="user"
-        (click)="openDirectChat(currentUser)"
-      >
+        (click)="openDirectChat(currentUser)">
         <div *ngIf="currentUser" class="user-img">
           <img
             referrerpolicy="no-referrer"
             class="user-avatar"
             src="{{ currentUser.avatar }}"
-            alt="User Avatar"
-          />
+            alt="User Avatar" />
           <img
             class="user-status"
             [src]="
@@ -80,8 +77,7 @@
                 ? './assets/img/online-icon.svg'
                 : './assets/img/offline-icon.svg'
             "
-            alt="Online Status"
-          />
+            alt="Online Status" />
         </div>
         <span *ngIf="currentUser">{{ currentUser.name }} (Du)</span>
       </div>
@@ -89,15 +85,13 @@
         <div
           *ngIf="currentUser && user.name !== currentUser.name"
           class="user"
-          (click)="openDirectChat(user)"
-        >
+          (click)="openDirectChat(user)">
           <div class="user-img">
             <img
               referrerpolicy="no-referrer"
               class="user-avatar"
               src="{{ user.avatar }}"
-              alt="User Avatar"
-            />
+              alt="User Avatar" />
             <img
               class="user-status"
               [src]="
@@ -105,8 +99,7 @@
                   ? './assets/img/online-icon.svg'
                   : './assets/img/offline-icon.svg'
               "
-              alt="Online Status"
-            />
+              alt="Online Status" />
           </div>
           <span>{{ user.name }}</span>
         </div>

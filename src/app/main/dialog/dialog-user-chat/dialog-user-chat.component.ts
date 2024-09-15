@@ -28,7 +28,7 @@ export class DialogUserChatComponent {
     public mainService: MainServiceService,
     public chatService: ChatService,
     public userProfileService: UserProfileService,
-    public directMessageService: DirectMessageService
+    public directMessageService: DirectMessageService,
   ) {}
 
   /**

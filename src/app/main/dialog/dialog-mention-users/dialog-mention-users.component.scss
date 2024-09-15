@@ -1,4 +1,4 @@
-@import "./../../../../styles.scss";
+@import './../../../../styles.scss';
 
 .dialog-mention-users-container {
   position: fixed;
@@ -20,6 +20,7 @@
   padding: 16px;
   max-height: calc(100vh - 250px);
   gap: 8px;
+  z-index: 1200;
   h2 {
     font-size: 24px;
     font-size: 700;
@@ -54,8 +55,8 @@
 
 .dialog-mention-users-container-thread-open-from-thread {
   position: fixed;
-  right: 50px; 
-  bottom: 210px; 
+  right: 50px;
+  bottom: 210px;
   display: inline-block;
   background-color: $background-white;
   border: 1px solid $border-gray;

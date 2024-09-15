@@ -5,8 +5,7 @@
         [(ngModel)]="searchValue"
         (ngModelChange)="searchField.filterData(searchValue)"
         type="search"
-        placeholder="Code learning durchsuchen"
-      />
+        placeholder="Code learning durchsuchen" />
       <mat-icon *ngIf="!searchValue">search</mat-icon>
     </div>
     <div *ngIf="searchValue" class="result-container">
@@ -15,8 +14,7 @@
         <div
           class="user-list-container"
           *ngFor="let user of searchField.filterUser"
-          (click)="openDirectChat(user)"
-        >
+          (click)="openDirectChat(user)">
           <img referrerpolicy="no-referrer" src="{{ user['avatar'] }}" alt="" />
           {{ user['name'] }}
         </div>
@@ -25,11 +23,10 @@
         <p>Channel:</p>
         <div
           class="user-list-container"
-          *ngFor="let channel of allChannel"
-          (click)="openChannel(channel)"
-        >
+          *ngFor="let channel of searchField.filterChannel"
+          (click)="openChannel(channel)">
           <span>#</span>
-          {{ channel.name }}
+          {{ channel['name'] }}
         </div>
       </div>
       <div *ngIf="searchField.filterMessage.length > 0">
@@ -37,8 +34,7 @@
         <div
           class="user-list-container"
           *ngFor="let message of searchField.filterMessage"
-          (click)="openChannel(message['channelData'])"
-        >
+          (click)="openChannel(message['channelData'])">
           [{{ message['channelName'] }}]
           {{ message['message'] }}
         </div>
@@ -49,8 +45,7 @@
           searchField.filterChannel.length === 0 &&
           searchField.filterUser.length === 0 &&
           searchField.filterMessage.length === 0
-        "
-      >
+        ">
         <p>Keine Ergebnisse gefunden.</p>
       </div>
     </div>
@@ -77,8 +72,8 @@
           <div class="icon-and-name">
             <div class="sub-channel">
               <mat-icon>tag</mat-icon>
-              <a (click)="mainService.goToCollectionPath(channel, '/chat/')"
-                >{{ channel.name }}
+              <a (click)="goToCollectionPath(channel, 'chat')">
+                {{ channel.name }}
               </a>
             </div>
           </div>
@@ -109,8 +104,7 @@
       <div
         class="logged-in-user"
         class="user"
-        (click)="openDirectChat(currentUser)"
-      >
+        (click)="openDirectChat(currentUser)">
         <div *ngIf="currentUser" class="user-img">
           <img class="user-avatar" src="{{ currentUser.avatar }}" />
           <img
@@ -119,8 +113,7 @@
               currentUser.online
                 ? './assets/img/online-icon.svg'
                 : './assets/img/offline-icon.svg'
-            "
-          />
+            " />
         </div>
         <span *ngIf="currentUser">{{ currentUser.name }} (Du)</span>
       </div>
@@ -128,8 +121,7 @@
         <div
           *ngIf="currentUser && user.name !== currentUser.name"
           class="user"
-          (click)="openDirectChat(user)"
-        >
+          (click)="openDirectChat(user)">
           <div class="user-img">
             <img class="user-avatar" src="{{ user.avatar }}" />
             <img
@@ -138,8 +130,7 @@
                 user.online
                   ? './assets/img/online-icon.svg'
                   : './assets/img/offline-icon.svg'
-              "
-            />
+              " />
           </div>
           <span>{{ user.name }}</span>
         </div>
@@ -151,3 +142,4 @@
     <mat-icon>edit_square</mat-icon>
   </div>
 </section>
+

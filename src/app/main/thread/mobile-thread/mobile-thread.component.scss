@@ -262,6 +262,7 @@
 .dektop-thread-message-content {
   margin-left: 18px;
   margin-right: 18px;
+  overflow-wrap: anywhere;
 }
 
 .dektop-thread-message-name-date-container-from-others {
@@ -350,6 +351,7 @@
     border-bottom-right-radius: 25px;
     border-bottom-left-radius: 25px;
     color: $icon-gray;
+    font-size: 13px;
     &:hover {
       color: $icon-purple-hover;
       background-color: $background-lightblue;
@@ -364,7 +366,6 @@
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  margin-right: 90px;
 }
 
 .dektop-thread-message-from-me {
@@ -375,7 +376,6 @@
   border-top-left-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  margin-left: 90px;
 }
 
 .dektop-thread-separating-line-container {

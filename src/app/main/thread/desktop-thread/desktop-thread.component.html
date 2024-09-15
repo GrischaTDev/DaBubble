@@ -13,8 +13,7 @@
         (click)="
           this.threadService.doNotCloseThread($event);
           threadService.closeThread()
-        "
-      >
+        ">
         <mat-icon>close</mat-icon>
       </div>
     </div>
@@ -37,8 +36,7 @@
       [ngClass]="{
         'desktop-thread-message-single-message-hover':
           threadService.activeThreadMessageIndex === singleThreadMessageIndex
-      }"
-    >
+      }">
       <div
         class="desktop-thread-edit-message-container"
         *ngIf="
@@ -49,8 +47,7 @@
             chatService.ifMessageFromMe(singleThreadMessage.userId),
           'desktop-thread-edit-message-container-left':
             !chatService.ifMessageFromMe(singleThreadMessage.userId)
-        }"
-      >
+        }">
         <div
           class="desktop-thread-edit-icon-container"
           (click)="
@@ -60,8 +57,7 @@
             emojiService.forWhichDocIsTheEmoji('thread');
             chatService.onButtonClick($event);
             chatService.openDialogEmojiReactionMessage(singleThreadMessageIndex)
-          "
-        >
+          ">
           <mat-icon>add_reaction</mat-icon>
         </div>
         <div
@@ -74,8 +70,7 @@
             'desktop-thread-edit-icon-left': !chatService.ifMessageFromMe(
               singleThreadMessage.userId
             )
-          }"
-        >
+          }">
           <mat-icon>more_vert</mat-icon>
         </div>
       </div>
@@ -87,8 +82,7 @@
         class="desktop-thread-edit-button-container"
         *ngIf="
           threadService.hoveredMessageIndexThread === singleThreadMessageIndex
-        "
-      >
+        ">
         <span
           (click)="
             threadService.toggleEditMessageContainerThread(
@@ -97,9 +91,9 @@
               singleThreadMessage.message
             )
           "
-          class="desktop-thread-edit-button"
-          >Nachricht bearbeiten</span
-        >
+          class="desktop-thread-edit-button">
+          Nachricht bearbeiten
+        </span>
       </div>
 
       <div
@@ -111,21 +105,18 @@
             !chatService.ifMessageFromMe(singleThreadMessage.userId),
           'desktop-thread-message-container-clicked':
             threadService.activeThreadMessageIndex === singleThreadMessageIndex
-        }"
-      >
+        }">
         <div
           (click)="
             this.threadService.doNotCloseThread($event);
             directMessageService.openProfil(singleThreadMessage.userId)
           "
           (mouseenter)="threadService.onMouseLeaveThread()"
-          class="desktop-thread-message-avatar-container"
-        >
+          class="desktop-thread-message-avatar-container">
           <img
             src="{{ singleThreadMessage.userAvatar }}"
             alt=""
-            referrerpolicy="no-referrer"
-          />
+            referrerpolicy="no-referrer" />
         </div>
         <div class="desktop-thread-message-content">
           <div
@@ -134,14 +125,12 @@
                 chatService.ifMessageFromMe(singleThreadMessage.userId),
               'desktop-thread-message-name-date-container-from-others':
                 !chatService.ifMessageFromMe(singleThreadMessage.userId)
-            }"
-          >
+            }">
             <span
               (click)="
                 directMessageService.openProfil(singleThreadMessage.userId)
               "
-              class="desktop-thread-message-name"
-            >
+              class="desktop-thread-message-name">
               {{ singleThreadMessage.userName }}
             </span>
             <div>
@@ -167,20 +156,17 @@
               'desktop-thread-message-clicked':
                 threadService.activeThreadMessageIndex ===
                 singleThreadMessageIndex
-            }"
-          >
+            }">
             <span
               *ngIf="
                 threadService.editMessageInputIndexThread !==
                 singleThreadMessageIndex
-              "
-            >
+              ">
               {{ singleThreadMessage.message }}
 
               <div
                 class="image-to-message-container"
-                *ngIf="singleThreadMessage.imageToMessage"
-              >
+                *ngIf="singleThreadMessage.imageToMessage">
                 <img
                   (click)="
                     chatService.openImageMessageDialog(
@@ -188,13 +174,11 @@
                     )
                   "
                   src="{{ singleThreadMessage.imageToMessage }}"
-                  alt="message width"
-                />
+                  alt="message width" />
                 <a
                   class="download-icon"
                   href="{{ singleThreadMessage.imageToMessage }}"
-                  download=""
-                >
+                  download="">
                   <mat-icon>download</mat-icon>
                 </a>
               </div>
@@ -203,16 +187,14 @@
               *ngIf="
                 threadService.editMessageIndexThread ===
                 singleThreadMessageIndex
-              "
-            >
+              ">
               <textarea
                 [(ngModel)]="threadService.editTextThread"
                 name="newTextarea"
                 (input)="chatService.adjustHeight($event.target)"
                 (focus)="chatService.adjustHeight($event.target)"
                 style="min-height: 100px; width: 100%"
-                class="desktop-thread-message-edit-textarea"
-              ></textarea>
+                class="desktop-thread-message-edit-textarea"></textarea>
               <div class="desktop-thread-input-field-icon-container">
                 <div class="desktop-thread-edit-message-icon-container">
                   <div class="desktop-thread-edit-message-icon">
@@ -223,20 +205,21 @@
                             singleThreadMessageIndex
                           );
                           emojiService.forWhichDocIsTheEmoji('thread');
-                          chatService.onButtonClick($event);
-                          chatService.openDialogEmoji()
-                        "
-                        >sentiment_satisfied</mat-icon
-                      >
+                          chatService.openDialogEmoji();
+                          chatService.onButtonClick($event)
+                        ">
+                        sentiment_satisfied
+                      </mat-icon>
                     </div>
                     <div class="desktop-thread-input-icon">
                       <mat-icon
                         (click)="
+                          mainService.contentOfWhichInput('thread');
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
-                        "
-                        >alternate_email</mat-icon
-                      >
+                        ">
+                        alternate_email
+                      </mat-icon>
                     </div>
                   </div>
                   <div>
@@ -252,8 +235,7 @@
                               this.threadService.editTextThread,
                               singleThreadMessageIndex
                             )
-                          "
-                        >
+                          ">
                           Speichern
                         </p>
                       </div>
@@ -270,8 +252,7 @@
                 chatService.ifMessageFromMe(singleThreadMessage.userId),
               'desktop-thread-message-reaction-left-container':
                 !chatService.ifMessageFromMe(singleThreadMessage.userId)
-            }"
-          >
+            }">
             <div
               class="desktop-chat-message-reaction-hover-content-container"
               *ngFor="
@@ -287,8 +268,7 @@
                   $event
                 )
               "
-              (mouseleave)="this.toggleIconHoverContainerThreadOut($event)"
-            >
+              (mouseleave)="this.toggleIconHoverContainerThreadOut($event)">
               <div
                 [ngClass]="{
                   'desktop-chat-message-reaction-hover-content-right':
@@ -301,8 +281,7 @@
                     chatService.emojiReactionIndexHoverThread &&
                   singleThreadMessageIndex ===
                     chatService.activeMessageIndexReactonThread
-                "
-              >
+                ">
                 <p class="desktop-chat-message-reaction-hover-emoji">
                   {{ emojieThread.emoji }}
                 </p>
@@ -310,78 +289,68 @@
                   *ngFor="
                     let emojieUserThread of emojieThread.userName;
                     let emojiUserIndexThread = index
-                  "
-                >
+                  ">
                   <p
                     *ngIf="
                       emojieThread.userName.length === 1 &&
                       emojiUserIndexThread === 0
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }}
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length === 2 &&
                       emojiUserIndexThread === 0
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }} und
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length === 2 &&
                       emojiUserIndexThread === 1
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }}
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length === 3 &&
                       emojiUserIndexThread === 0
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }},
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length === 3 &&
                       emojiUserIndexThread === 1
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }} und
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length === 3 &&
                       emojiUserIndexThread === 2
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }}
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length > 3 &&
                       emojiUserIndexThread === 0
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }},
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length > 3 &&
                       emojiUserIndexThread === 1
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }},
                   </p>
                   <p
                     *ngIf="
                       emojieThread.userName.length > 3 &&
                       emojiUserIndexThread === 2
-                    "
-                  >
+                    ">
                     {{ emojieUserThread }} und
                   </p>
                   <p
@@ -389,8 +358,7 @@
                       emojieThread.userName.length === 4 &&
                       emojiUserIndexThread === 3
                     "
-                    class="desktop-chat-message-reaction-hover-link"
-                  >
+                    class="desktop-chat-message-reaction-hover-link">
                     {{ emojieThread.userName.length - 3 }} weitere Person
                   </p>
                   <p
@@ -398,8 +366,7 @@
                       emojieThread.userName.length > 4 &&
                       emojiUserIndexThread === 4
                     "
-                    class="desktop-chat-message-reaction-hover-link"
-                  >
+                    class="desktop-chat-message-reaction-hover-link">
                     {{ emojieThread.userName.length - 3 }} weitere Personen
                   </p>
                 </span>
@@ -418,8 +385,7 @@
                 class="desktop-thread-message-reaction-content"
                 [ngClass]="{
                   'd-none': emojieThread.user.length === 0
-                }"
-              >
+                }">
                 {{ emojieThread.emoji }} {{ emojieThread.user.length }}
               </div>
             </div>
@@ -438,25 +404,23 @@
                   chatService.openDialogEmojiReactionMessage(
                     singleThreadMessageIndex
                   )
-                "
-                >add_reaction</mat-icon
-              >
+                ">
+                add_reaction
+              </mat-icon>
             </div>
           </div>
         </div>
       </div>
       <div
         class="desktop-thread-separating-line-container"
-        *ngIf="singleThreadMessageIndex === 0"
-      >
+        *ngIf="singleThreadMessageIndex === 0">
         <div class="desktop-thread-separating-line-content">
           <p
             *ngIf="
               this.chatService?.dataChannel?.messageChannel?.[
                 this.chatService.indexOfThreadMessageForEditChatMessage
               ]?.numberOfMessage === 0
-            "
-          >
+            ">
             keine
           </p>
           <p
@@ -464,8 +428,7 @@
               this.chatService.dataChannel.messageChannel[
                 this.chatService.indexOfThreadMessageForEditChatMessage
               ].numberOfMessage > 0
-            "
-          >
+            ">
             {{
               this.chatService.dataChannel.messageChannel[
                 this.chatService.indexOfThreadMessageForEditChatMessage
@@ -477,8 +440,7 @@
               this.chatService.dataChannel.messageChannel[
                 this.chatService.indexOfThreadMessageForEditChatMessage
               ].numberOfMessage === 1
-            "
-          >
+            ">
             Antwort
           </p>
           <p
@@ -486,8 +448,7 @@
               this.chatService.dataChannel.messageChannel[
                 this.chatService.indexOfThreadMessageForEditChatMessage
               ].numberOfMessage !== 1
-            "
-          >
+            ">
             Antworten
           </p>
         </div>
@@ -507,12 +468,11 @@
       </div>
       <textarea
         (keydown)="checkForEnter($event)"
-        [(ngModel)]="threadService.textThread"
+        [(ngModel)]="this.threadService.textThread"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
-        [placeholder]="'Antworten...'"
-      ></textarea>
+        [placeholder]="'Antworten...'"></textarea>
 
       <div class="desktop-thread-input-field-icon-container">
         <div class="desktop-thread-input-icon-container">
@@ -522,19 +482,18 @@
               <input
                 id="file-upload"
                 type="file"
-                (change)="threadService.onFileSelected($event)"
-              />
+                (change)="threadService.onFileSelected($event)" />
             </div>
           </div>
           <div class="desktop-thread-input-icon">
             <mat-icon
               (click)="
                 emojiService.forWhichDocIsTheEmoji('thread');
-                chatService.onButtonClick($event);
-                chatService.openDialogEmoji()
-              "
-              >sentiment_satisfied</mat-icon
-            >
+                chatService.openDialogEmoji();
+                chatService.onButtonClick($event)
+              ">
+              sentiment_satisfied
+            </mat-icon>
           </div>
           <div class="desktop-thread-input-icon">
             <mat-icon
@@ -542,9 +501,9 @@
                 mainService.contentOfWhichInput('thread');
                 chatService.onButtonClick($event);
                 chatService.openDialogMentionUser()
-              "
-              >alternate_email</mat-icon
-            >
+              ">
+              alternate_email
+            </mat-icon>
           </div>
         </div>
         <div>
@@ -557,9 +516,9 @@
                   this.threadService.imageMessage
                 )
               "
-              class="desktop-thread-send-icon"
-              >send</mat-icon
-            >
+              class="desktop-thread-send-icon">
+              send
+            </mat-icon>
           </div>
         </div>
       </div>

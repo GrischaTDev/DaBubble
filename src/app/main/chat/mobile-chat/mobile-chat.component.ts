@@ -6,27 +6,27 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MainServiceService} from '../../../service/main-service.service';
-import {ChatService} from '../../../service/chat.service';
-import {MobileHeaderComponent} from '../../header/mobile-header/mobile-header.component';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Firestore} from '@angular/fire/firestore';
-import {User} from '../../../../assets/models/user.class';
-import {PickerComponent} from '@ctrl/ngx-emoji-mart';
-import {EmojiService} from '../../../service/emoji.service';
-import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {LoginService} from '../../../service/login.service';
-import {ChannelService} from '../../../service/channel.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {ThreadService} from '../../../service/thread.service';
-import {SearchFieldService} from '../../../search-field.service';
-import {lastValueFrom} from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MainServiceService } from '../../../service/main-service.service';
+import { ChatService } from '../../../service/chat.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Firestore } from '@angular/fire/firestore';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiService } from '../../../service/emoji.service';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { LoginService } from '../../../service/login.service';
+import { ChannelService } from '../../../service/channel.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { ThreadService } from '../../../service/thread.service';
+import { SearchFieldService } from '../../../search-field.service';
+import { lastValueFrom, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-chat',
@@ -47,9 +47,13 @@ export class MobileChatComponent implements OnInit {
   parmsId: string = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
+  private channelSubscription!: Subscription;
+  textMobileChat: string = '';
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,16 +71,24 @@ export class MobileChatComponent implements OnInit {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
-    this.subscription = mainService.currentContentEmoji.subscribe(content => {
-      if (!this.chatService.editOpen) {
-        this.chatService.text += content;
-      } else {
-        this.chatService.editText += content;
-      }
-    });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     this.chatService.mobileChatIsOpen = true;
-    this.chatService.text = '';
+    this.textMobileChat = '';
+    this.chatService.editTextMobile = '';
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 500);
+    this.mainService.subscriptionTextChatMobile = this.mainService.currentContent.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.textMobileChat += content;
+        } else {
+
+          this.chatService.editTextMobile += content;
+          console.log('fffff', this.chatService.editTextMobile)
+        }
+      },
+    );
   }
 
   /**
@@ -96,13 +108,10 @@ export class MobileChatComponent implements OnInit {
       }
     }
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
     this.checkScreenSize(window.innerWidth);
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
   }
 
   /**
@@ -121,21 +130,27 @@ export class MobileChatComponent implements OnInit {
   private checkScreenSize(width: number) {
     if (this.chatService.mobileChatIsOpen) {
       if (width > 960) {
-        this.router.navigate([
-          '/main',
-          'chat',
-          this.chatService.dataChannel.id,
-          'user',
-          'chat',
-        ]);
+        this.router.navigate(['/main', 'chat', this.chatService.dataChannel.id, 'user', 'chat',]);
         this.chatService.mobileDirectChatIsOpen = false;
         this.chatService.mobileThreadIsOpen = false;
       }
     }
   }
 
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
+  /**
+  * Lifecycle hook that is called after the view is initialized.
+  * Subscribes to the channelChanged event to trigger scrolling to the bottom of the chat after a delay.
+  */
+  @ViewChild('autofocus') meinInputField!: ElementRef;
+  ngAfterViewInit() {
+    this.channelSubscription = this.chatService.channelChanged$.subscribe(
+      () => {
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
+      },
+    );
+  }
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
@@ -170,18 +185,19 @@ export class MobileChatComponent implements OnInit {
    * @param {string} threadId - The unique identifier of the thread to navigate to.
    */
   navigateToThread(threadId: string) {
-    this.router.navigate([
-      '/thread',
-      this.chatService.dataChannel.id,
-      threadId,
-    ]);
+    this.chatService.editOpen = false;
+    this.mainService.clearContentObservable()
+    this.threadService.textThread = '';
+    this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
   }
 
   /**
-   * A lifecycle hook that is called when the component is destroyed.
-   * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
-   */
+ * A lifecycle hook that is called when the component is destroyed.
+ * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+ */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.mainService.subscriptionTextChatMobile) {
+      this.mainService.subscriptionTextChatMobile.unsubscribe();
+    }
   }
 }

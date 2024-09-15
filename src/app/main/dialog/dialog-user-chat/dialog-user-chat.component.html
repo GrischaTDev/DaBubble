@@ -17,9 +17,9 @@
         [ngClass]="{
           'd-none':
             this.chatService.clickedUser.id !== this.mainService.loggedInUser.id
-        }"
-        >edit</mat-icon
-      >
+        }">
+        edit
+      </mat-icon>
     </div>
     <div class="status">
       <img src="{{ userStatus }}" />
@@ -36,9 +36,13 @@
       [ngClass]="{
         'd-none':
           this.chatService.clickedUser.id === this.mainService.loggedInUser.id
-      }"
-    >
-      <div class="send-direct-message-button" (click)="directMessageService.openDirectMessage(this.chatService.clickedUser); closeDialog()">
+      }">
+      <div
+        class="send-direct-message-button"
+        (click)="
+          directMessageService.openDirectMessage(this.chatService.clickedUser);
+          closeDialog()
+        ">
         <mat-icon>mode_comment</mat-icon>
         <span>Nachricht</span>
       </div>
@@ -49,8 +53,7 @@
 <div *ngIf="editProfileOpen" class="profile-container" (click)="closeDialog()">
   <div
     class="edit-user-pofile-dialog"
-    (click)="this.chatService.doNotClose($event)"
-  >
+    (click)="this.chatService.doNotClose($event)">
     <div class="headline">
       <h2>Dein Profil bearbeiten</h2>
       <div class="close" (click)="closeDialog()">
@@ -68,8 +71,7 @@
       <input
         [(ngModel)]="updateUserName"
         type="text"
-        placeholder="{{ this.chatService.clickedUser.name }}"
-      />
+        placeholder="{{ this.chatService.clickedUser.name }}" />
     </div>
     <div class="edit-email">
       <div>
@@ -79,8 +81,7 @@
       <input
         [(ngModel)]="updateUserEmail"
         type="text"
-        placeholder="{{ this.chatService.clickedUser.email }}"
-      />
+        placeholder="{{ this.chatService.clickedUser.email }}" />
     </div>
     <div class="edit-btn">
       <div class="secondary-btn" (click)="closeDialog()">Abbrechen</div>

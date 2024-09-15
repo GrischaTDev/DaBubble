@@ -1,17 +1,17 @@
-import {CommonModule} from '@angular/common';
-import {Component, inject, OnInit} from '@angular/core';
-import {MatIconModule} from '@angular/material/icon';
-import {UserProfileComponent} from '../../user-profile/user-profile.component';
-import {MatDialog} from '@angular/material/dialog';
-import {MainServiceService} from '../../../service/main-service.service';
-import {getAuth, signOut} from '@angular/fire/auth';
-import {LoginService} from '../../../service/login.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {User} from '../../../../assets/models/user.class';
-import {ChatService} from '../../../service/chat.service';
-import {ThreadService} from '../../../service/thread.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {take} from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MainServiceService } from '../../../service/main-service.service';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { LoginService } from '../../../service/login.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
+import { ChatService } from '../../../service/chat.service';
+import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-mobile-chat-header',
@@ -46,7 +46,7 @@ export class MobileChatHeaderComponent implements OnInit {
    */
   ngOnInit() {
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });
@@ -100,10 +100,12 @@ export class MobileChatHeaderComponent implements OnInit {
    * Sets the mobileChatIsOpen and mobileDirectChatIsOpen properties of the chatService to false.
    */
   closeMobileChat() {
+    this.chatService.body.style.overflow = 'auto';
     if (this.parmsIdOfChat === 'chat') {
       this.mainService
         .watchSingleChannelDoc(this.chatService.dataChannel.id, 'channels')
-        .subscribe(dataChannel => {
+        .pipe(take(1))
+        .subscribe((dataChannel) => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
       this.router.navigate([
@@ -116,7 +118,8 @@ export class MobileChatHeaderComponent implements OnInit {
     } else {
       this.mainService
         .watchSingleChannelDoc(this.parmsIdOfChat, 'channels')
-        .subscribe(dataChannel => {
+        .pipe(take(1))
+        .subscribe((dataChannel) => {
           this.chatService.dataChannel = dataChannel as Channel;
         });
       this.router.navigate([

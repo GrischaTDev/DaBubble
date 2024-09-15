@@ -17,7 +17,6 @@ import { LoginService } from './service/login.service';
   providedIn: 'root',
 })
 export class SearchFieldService implements OnInit {
-
   allUser: User[] = [];
   filterUser: DocumentData[] = [];
   filterChannel: DocumentData[] = [];
@@ -33,7 +32,7 @@ export class SearchFieldService implements OnInit {
     private firestore: Firestore,
     private chatService: ChatService,
     private mainService: MainServiceService,
-    private loginService: LoginService
+    private loginService: LoginService,
   ) {
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -59,10 +58,15 @@ export class SearchFieldService implements OnInit {
   }
 
   filterDataChannelchat(searchValue: string) {
-    const lastChar = searchValue.trim().slice(-1); 
-    
+    const lastChar = searchValue.trim().slice(-1);
+
     if (lastChar === '@') {
-      this.mainService.contentOfWhichInput('channels');
+      if (this.mainService.newMessage && this.chatService.newMessageOpen) {
+        this.mainService.contentOfWhichInput('newMessage');
+      } else {
+        this.mainService.contentOfWhichInput('channels');
+      }
+
       this.chatService.openDialogMentionUser();
     }
   }
@@ -97,16 +101,16 @@ export class SearchFieldService implements OnInit {
     });
   }
 
-    setAllUser() {
-      const docRef = collection(this.firestore, 'users');
-      return onSnapshot(docRef, (channelList) => {
-        this.allUser = [];
-        channelList.forEach(channel => {
-          const userData = new User(channel.data());
-          this.allUser.push(userData);
-        });
-      })
-    }
+  setAllUser() {
+    const docRef = collection(this.firestore, 'users');
+    return onSnapshot(docRef, (channelList) => {
+      this.allUser = [];
+      channelList.forEach((channel) => {
+        const userData = new User(channel.data());
+        this.allUser.push(userData);
+      });
+    });
+  }
 
   setAllChannel() {
     const docRef = collection(this.firestore, 'channels');
@@ -118,11 +122,11 @@ export class SearchFieldService implements OnInit {
         if (
           channelData.channelUsers.some(
             (channeluser: User) =>
-              channeluser.id === this.mainService.loggedInUser.id
+              channeluser.id === this.mainService.loggedInUser.id,
           ) ||
           channelData.ownerUser.some(
             (channeluser: User) =>
-              channeluser.id === this.mainService.loggedInUser.id
+              channeluser.id === this.mainService.loggedInUser.id,
           )
         ) {
           channels.push(channelData);
@@ -153,7 +157,7 @@ export class SearchFieldService implements OnInit {
             if (
               channelData['channelUsers'].some(
                 (channeluser: User) =>
-                  channeluser['id'] === this.mainService.loggedInUser.id
+                  channeluser['id'] === this.mainService.loggedInUser.id,
               )
             ) {
               this.filterChannel.push(channelData);
@@ -170,11 +174,11 @@ export class SearchFieldService implements OnInit {
                 if (
                   channelData['channelUsers'].some(
                     (channeluser: User) =>
-                      channeluser['id'] === this.mainService.loggedInUser.id
+                      channeluser['id'] === this.mainService.loggedInUser.id,
                   ) ||
                   channelData['ownerUser'].some(
                     (channeluser: User) =>
-                      channeluser['id'] === this.mainService.loggedInUser.id
+                      channeluser['id'] === this.mainService.loggedInUser.id,
                   )
                 ) {
                   this.filterMessage.push({
@@ -184,7 +188,7 @@ export class SearchFieldService implements OnInit {
                   });
                 }
               }
-            }
+            },
           );
         }
       });
@@ -200,3 +204,4 @@ export class SearchFieldService implements OnInit {
     }
   }
 }
+

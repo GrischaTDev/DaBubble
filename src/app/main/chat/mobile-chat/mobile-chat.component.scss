@@ -1,10 +1,11 @@
-@import "./../../../../styles.scss";
-@import "@ctrl/ngx-emoji-mart/picker";
+@import './../../../../styles.scss';
+@import '@ctrl/ngx-emoji-mart/picker';
 
 @font-face {
-  font-family: "TwemojiMozilla";
-  src: local("TwemojiMozilla"),
-    url("../../../../assets/fonts/Twemoji.Mozilla.ttf") format("truetype");
+  font-family: 'TwemojiMozilla';
+  src:
+    local('TwemojiMozilla'),
+    url('../../../../assets/fonts/Twemoji.Mozilla.ttf') format('truetype');
 }
 
 .mobile-chat-container {
@@ -187,7 +188,7 @@
   margin-left: calc(100vw - 300px);
   width: 255px;
   margin-top: 40px;
-  margin-bottom: -108px;
+  margin-bottom: -80px;
   z-index: 999 !important;
 }
 
@@ -232,6 +233,7 @@
   justify-content: flex-start;
   margin-left: 16px;
   z-index: 1;
+  gap: 8px;
 }
 
 .mobile-chat-message-container-from-me {
@@ -242,6 +244,19 @@
   margin-left: 16px;
   margin-right: 16px;
   z-index: 1;
+  gap: 8px;
+}
+
+.mobile-chat-message-container-from-me-edit-botton-vesible {
+  padding-top: 0px;
+  margin-top: -98px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row-reverse;
+  margin-left: 16px;
+  margin-right: 16px;
+  z-index: 1;
+  gap: 8px;
 }
 
 .mobile-chat-message-avatar-container {
@@ -254,11 +269,6 @@
     height: 50px;
     border-radius: 100%;
   }
-}
-
-.mobile-chat-message-content {
-  margin-left: 18px;
-  margin-right: 18px;
 }
 
 .image-to-message-container {
@@ -346,6 +356,7 @@
     border-bottom-right-radius: 25px;
     border-bottom-left-radius: 25px;
     color: $icon-gray;
+    font-size: 13px;
     &:hover {
       color: $icon-purple-hover;
       background-color: $background-lightblue;
@@ -360,7 +371,7 @@
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  margin-right: 90px;
+  overflow-wrap: anywhere;
 }
 
 .mobile-chat-message-from-me {
@@ -371,7 +382,7 @@
   border-top-left-radius: 20px;
   border-bottom-right-radius: 20px;
   border-bottom-left-radius: 20px;
-  margin-left: 90px;
+  overflow-wrap: anywhere;
 }
 
 .mobile-chat-message-clicked {
@@ -407,7 +418,7 @@
     resize: none;
     background-position: right 24px top 16px;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, 'TwemojiMozilla';
   }
 }
 

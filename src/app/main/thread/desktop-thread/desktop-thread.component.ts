@@ -1,21 +1,27 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {Firestore} from '@angular/fire/firestore';
-import {MainServiceService} from '../../../service/main-service.service';
-import {LoginService} from '../../../service/login.service';
-import {ChatService} from '../../../service/chat.service';
-import {FormsModule} from '@angular/forms';
-import {MatIcon} from '@angular/material/icon';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
-import {User} from '../../../../assets/models/user.class';
-import {ActivatedRoute} from '@angular/router';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {ChannelService} from '../../../service/channel.service';
-import {CommonModule} from '@angular/common';
-import {EmojiService} from '../../../service/emoji.service';
-import {ThreadService} from '../../../service/thread.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {lastValueFrom} from 'rxjs';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { MainServiceService } from '../../../service/main-service.service';
+import { LoginService } from '../../../service/login.service';
+import { ChatService } from '../../../service/chat.service';
+import { FormsModule } from '@angular/forms';
+import { MatIcon } from '@angular/material/icon';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import { User } from '../../../../assets/models/user.class';
+import { ActivatedRoute } from '@angular/router';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { ChannelService } from '../../../service/channel.service';
+import { CommonModule } from '@angular/common';
+import { EmojiService } from '../../../service/emoji.service';
+import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { lastValueFrom, Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-desktop-thread',
@@ -28,9 +34,14 @@ export class DesktopThreadComponent implements OnInit {
   parmsId = '';
   public dialog = inject(MatDialog);
   dialogInstance?: MatDialogRef<DialogEmojiComponent>;
-  subscription;
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
+  private channelSubscription!: Subscription;
+  scrollStarted: boolean = false;
+
+  @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
+  private lastScrollHeight = 0;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -42,23 +53,11 @@ export class DesktopThreadComponent implements OnInit {
     public loginService: LoginService,
     public threadService: ThreadService,
   ) {
-    this.subscription = mainService.currentContentEmojiThread.subscribe(
-      content => {
-        if (!this.chatService.editOpen) {
-          this.threadService.textThread += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 500);
   }
 
   /**
@@ -78,15 +77,21 @@ export class DesktopThreadComponent implements OnInit {
       );
       this.chatService.dataThread = threadData as Channel;
       this.loginService.currentLoggedUser();
-      this.loginService.loggedInUser$.subscribe(user => {
+      this.loginService.loggedInUser$.pipe(take(1)).subscribe((user) => {
         this.mainService.loggedInUser = new User(user);
       });
     }
+    this.mainService.subscriptionThreadContent = this.mainService.currentContentThread.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.threadService.textThread += content;
+        } else {
+          this.threadService.editTextThread += content;
+        }
+      },
+    );
   }
 
-  /** @ViewChild decorator to access the scrollable container element within a thread. */
-  @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
-  private lastScrollHeight = 0;
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
@@ -102,6 +107,16 @@ export class DesktopThreadComponent implements OnInit {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
+    this.channelSubscription = this.chatService.threadChanged$.subscribe(
+      () => {
+        if (!this.scrollStarted) {
+          this.scrollStarted = true;
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 400);
+        }
+      },
+    );
   }
 
   /**
@@ -109,8 +124,8 @@ export class DesktopThreadComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop =
-      this.scrollContainer.nativeElement.scrollHeight;
+    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    this.scrollStarted = false;
   }
 
   /**
@@ -118,7 +133,9 @@ export class DesktopThreadComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.mainService.subscriptionThreadContent) {
+      this.mainService.subscriptionThreadContent.unsubscribe();
+    }
   }
 
   /**

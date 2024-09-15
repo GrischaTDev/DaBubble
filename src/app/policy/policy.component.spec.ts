@@ -8,10 +8,9 @@ describe('PolicyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PolicyComponent]
-    })
-    .compileComponents();
-    
+      imports: [PolicyComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(PolicyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

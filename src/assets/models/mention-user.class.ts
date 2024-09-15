@@ -3,7 +3,7 @@ export class MentionUser {
   mentionUser: User[] = [];
 
   constructor(obj?: any) {
-    this.mentionUser= obj?.mentionUser || [];
+    this.mentionUser = obj?.mentionUser || [];
   }
 
   public toJSON() {

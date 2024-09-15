@@ -1,4 +1,4 @@
-@import "./../../../../styles.scss";
+@import './../../../../styles.scss';
 
 .edit-channel-container-background {
   position: fixed;
@@ -147,7 +147,7 @@
     overflow-y: auto;
     resize: none;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, 'TwemojiMozilla';
   }
 }
 
@@ -175,7 +175,7 @@
     overflow-y: auto;
     resize: none;
     word-wrap: break-word;
-    font-family: Arial, "TwemojiMozilla";
+    font-family: Arial, 'TwemojiMozilla';
   }
 }
 
@@ -398,7 +398,7 @@
   overflow-y: auto;
   resize: none;
   word-wrap: break-word;
-  font-family: Arial, "TwemojiMozilla";
+  font-family: Arial, 'TwemojiMozilla';
   height: 31px;
   overflow-y: hidden;
   margin-left: 12px;
@@ -568,15 +568,14 @@
   }
 }
 
-
 @media only screen and (min-width: 960px) {
   .edit-channel-container {
     left: calc((100vw - 800px) / 2);
     top: calc((100vh - 650px) / 2);
     width: 800px;
-    height:630px;
+    height: 630px;
     background-color: $background-white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-top-right-radius: 25px;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
@@ -590,12 +589,12 @@
     margin-right: 24px;
   }
 
-  .edit-channel-members-container{
+  .edit-channel-members-container {
     display: none;
   }
 
   .edit-channel-channel-leave-button {
-      margin-top: -38px;
+    margin-top: -38px;
   }
 
   .d-none-icon {
@@ -623,4 +622,3 @@
     left: calc((100vw - 600px) / 2);
   }
 }
-

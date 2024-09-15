@@ -27,7 +27,7 @@ export class DialogEditChannelComponent {
     public channelService: ChannelService,
     public mainService: MainServiceService,
     public directMessageService: DirectMessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.channelService.pushUserToEditList();
   }

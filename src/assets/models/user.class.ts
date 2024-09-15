@@ -6,7 +6,7 @@ export class User {
   avatar: string;
   message: String[] = [];
   online: boolean;
-  idUser: string | undefined
+  idUser: string | undefined;
 
   constructor(obj?: any) {
     this.id = obj ? obj.id : '';
@@ -24,7 +24,7 @@ export class User {
       email: this.email,
       avatar: this.avatar,
       message: this.message,
-      online: this.online
+      online: this.online,
     };
   }
 }

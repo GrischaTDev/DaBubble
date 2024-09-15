@@ -8,10 +8,9 @@ describe('MobileChannelsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MobileChannelsComponent]
-    })
-    .compileComponents();
-    
+      imports: [MobileChannelsComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(MobileChannelsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

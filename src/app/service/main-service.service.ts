@@ -1,4 +1,4 @@
-import {Injectable, inject} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   addDoc,
@@ -10,15 +10,15 @@ import {
   query,
   orderBy,
 } from '@angular/fire/firestore';
-import {BehaviorSubject, Subject, Observable} from 'rxjs';
-import {User} from '../../assets/models/user.class';
-import {Channel} from '../../assets/models/channel.class';
-import {Router} from '@angular/router';
-import {getAuth, onAuthStateChanged} from '@angular/fire/auth';
-import {Emoji} from '../../assets/models/emoji.class';
-import {Message} from '../../assets/models/message.class';
-import {MentionUser} from '../../assets/models/mention-user.class';
-import {EmojiCollection} from '../../assets/models/emojiCollection.class';
+import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
+import { User } from '../../assets/models/user.class';
+import { Channel } from '../../assets/models/channel.class';
+import { Router } from '@angular/router';
+import { getAuth, onAuthStateChanged } from '@angular/fire/auth';
+import { Emoji } from '../../assets/models/emoji.class';
+import { Message } from '../../assets/models/message.class';
+import { MentionUser } from '../../assets/models/mention-user.class';
+import { EmojiCollection } from '../../assets/models/emojiCollection.class';
 
 @Injectable({
   providedIn: 'root',
@@ -36,11 +36,13 @@ export class MainServiceService {
   }
   private contentSource = new BehaviorSubject<any>([]);
   private contentSourceThread = new BehaviorSubject<any>([]);
-  private contentSourceEmoji = new BehaviorSubject<any>([]);
-  currentContentEmoji = this.contentSource.asObservable();
-  currentContentEmojiThread = this.contentSourceThread.asObservable();
-  mentionUser = this.contentSource.asObservable();
-  mentionUserThread = this.contentSourceThread.asObservable();
+  private contentSourceDirectChat = new BehaviorSubject<any>([]);
+  private contentSourceNewMessage = new BehaviorSubject<any>([]);
+  private stopOldObservable$ = new Subject<void>();
+  currentContent = this.contentSource.asObservable();
+  currentContentThread = this.contentSourceThread.asObservable();
+  currentContentDirectChat = this.contentSourceDirectChat.asObservable();
+  currentContentNewMessage = this.contentSourceNewMessage.asObservable();
   channel: Channel = new Channel();
   firestore: Firestore = inject(Firestore);
   allUsers: User[] = [];
@@ -49,20 +51,30 @@ export class MainServiceService {
   loggedInUser: User = new User();
   testUser: User = new User();
   emojiReactionMessage = false;
+  newMessage: boolean = false;
   docId: string = '';
   private dataChannelSubject = new Subject<any>();
   private dataThreadSubject = new Subject<any>();
   private dataDirectMessageSubject = new Subject<any>();
   private dataUserSubject = new Subject<any>();
-  contentToChannel = false;
-  contentToDirectMessage = false;
-  contentToThread = false;
+  contentToChannel: boolean = false;
+  contentToDirectMessage: boolean = false;
+  contentToThread: boolean = false;
+  contentToNewMessage: boolean = false;
+  subscriptionChannels: Subscription | undefined;
+  subscriptionTextChat: Subscription | undefined;
+  subscriptionTextChatMobile: Subscription | undefined;
+  subscriptionDirectChat: Subscription | undefined;
+  subscriptionThreadContent: Subscription | undefined;
+  subscriptionDirectChatEmoji: Subscription | undefined;
+  subscriptionThreadContentEmoji: Subscription | undefined;
 
   /**
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
    */
   changeInputContent(content: any) {
+    this.stopOldObservable$.next();
     this.contentSource.next(content);
   }
 
@@ -70,16 +82,36 @@ export class MainServiceService {
    * Updates the content source with the new content.
    * @param {any} content - The new content to set.
    */
+  changeInputContentDirectChat(content: any) {
+    this.stopOldObservable$.next();
+    this.contentSourceDirectChat.next(content);
+  }
+
+  /**
+   * Updates the content source with the new content.
+   * @param {any} content - The new content to set.
+   */
   changeInputContentThread(content: any) {
+    this.stopOldObservable$.next();
     this.contentSourceThread.next(content);
   }
 
   /**
-   * Updates the emoji content source with the new content.
-   * @param {any} content - The new emoji content to set.
+   * Clear Content Observable.
    */
-  changeReactionContent(content: any) {
-    this.contentSourceEmoji.next(content);
+  clearContentObservable() {
+    this.contentSource.next('');
+    this.contentSourceDirectChat.next('');
+    this.contentSourceThread.next('');
+  }
+
+  /**
+   * Updates the content source with the new content.
+   * @param {any} content - The new content to set.
+   */
+  changeInputContentNewMessage(content: any) {
+    this.stopOldObservable$.next();
+    this.contentSourceNewMessage.next(content);
   }
 
   /**
@@ -110,13 +142,22 @@ export class MainServiceService {
     }
   }
 
+  /**
+   * Sets the channel ID in Firebase for a specified document.
+   *
+   * Updates the Firebase document with the given reference and document name, setting the document's ID.
+   * Uses the merge option to avoid overwriting existing data.
+   *
+   * @param {string} docRef - The reference ID of the document to update.
+   * @param {string} docName - The name of the document collection in Firebase.
+   */
   setChannelIdOnFirebase(docRef: string, docName: string) {
     setDoc(
       doc(this.firestore, docName, docRef),
       {
         id: docRef,
       },
-      {merge: true},
+      { merge: true },
     );
   }
 
@@ -126,18 +167,21 @@ export class MainServiceService {
    */
   currentLoggedUser() {
     const auth = getAuth();
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, (user) => {
       const userId = user?.uid;
       if (user) {
-        onSnapshot(doc(this.firestore, 'users', userId ?? 'default'), item => {
-          if (item.exists()) {
-            let userData = {
-              ...item.data(),
-              id: item.id,
-            };
-            this.loggedInUser = new User(userData);
-          }
-        });
+        onSnapshot(
+          doc(this.firestore, 'users', userId ?? 'default'),
+          (item) => {
+            if (item.exists()) {
+              let userData = {
+                ...item.data(),
+                id: item.id,
+              };
+              this.loggedInUser = new User(userData);
+            }
+          },
+        );
       }
     });
   }
@@ -148,9 +192,9 @@ export class MainServiceService {
    * Each `User` instance is created from the document's data, including a unique ID.
    */
   subUserList() {
-    return onSnapshot(collection(this.firestore, 'users'), list => {
+    return onSnapshot(collection(this.firestore, 'users'), (list) => {
       this.allUsers = [];
-      list.forEach(element => {
+      list.forEach((element) => {
         let userData = {
           ...element.data(),
           id: element.id,
@@ -171,9 +215,9 @@ export class MainServiceService {
         collection(this.firestore, 'channels'),
         orderBy('openingDate', 'asc'), // Sortieren nach 'openingDate' absteigend
       ),
-      list => {
+      (list) => {
         this.allChannels = [];
-        list.forEach(element => {
+        list.forEach((element) => {
           let channelData = {
             ...element.data(),
             id: element.id,
@@ -191,8 +235,7 @@ export class MainServiceService {
    * @param {Channel|User} data - The data to be stored, which should be an instance of Channel or User.
    * @returns {Promise<void>} A promise that resolves when the update is complete and logs any errors encountered.
    */
-  async addDoc(
-    collectionName: string,
+  async addDoc(collectionName: string,
     docId: string,
     data: Channel | User | Emoji | EmojiCollection,
   ) {
@@ -200,7 +243,7 @@ export class MainServiceService {
       doc(collection(this.firestore, collectionName), docId),
       data.toJSON(),
     )
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       })
       .then(() => {
@@ -228,7 +271,7 @@ export class MainServiceService {
    * @param {Channel|User} data - The data object containing the ID to navigate to, which can be a Channel or User instance.
    */
   async goToCollectionPath(data: Channel | User, path: string) {
-    this.router.navigate([path, data.id, 'user', data.id]);
+    this.router.navigate(['/main', path, data.id, 'user', data.id]);
   }
 
   /**
@@ -251,7 +294,7 @@ export class MainServiceService {
     docId: string,
     collectionName: string,
   ): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), element => {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
       let docData = {
         ...element.data(),
       };
@@ -267,7 +310,7 @@ export class MainServiceService {
    * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
    */
   watchSingleThreadDoc(docId: string, collectionName: string): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), element => {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
       let docData = {
         ...element.data(),
       };
@@ -283,7 +326,7 @@ export class MainServiceService {
    * @returns {Observable<any>} An Observable that emits the document's data whenever it updates.
    */
   watchUsersDoc(docId: string, collectionName: string): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), element => {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
       let docData = {
         ...element.data(),
       };
@@ -302,7 +345,7 @@ export class MainServiceService {
     docId: string,
     collectionName: string,
   ): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), element => {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
       let docData = {
         ...element.data(),
       };
@@ -321,7 +364,7 @@ export class MainServiceService {
     docId: string,
     collectionName: string,
   ): Observable<any> {
-    onSnapshot(doc(this.firestore, collectionName, docId), element => {
+    onSnapshot(doc(this.firestore, collectionName, docId), (element) => {
       let docData = {
         ...element.data(),
       };
@@ -341,6 +384,8 @@ export class MainServiceService {
       this.contentToDirectMessage = true;
     } else if (docName === 'thread') {
       this.contentToThread = true;
+    } else if (docName === 'newMessage') {
+      this.contentToNewMessage = true;
     }
   }
 

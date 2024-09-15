@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {ChatService} from './chat.service';
-import {MainServiceService} from './main-service.service';
-import {Channel} from '../../assets/models/channel.class';
+import { Injectable } from '@angular/core';
+import { ChatService } from './chat.service';
+import { MainServiceService } from './main-service.service';
+import { Channel } from '../../assets/models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -20,15 +20,18 @@ export class ThreadService {
   constructor(
     public chatService: ChatService,
     public mainService: MainServiceService,
-  ) {}
+  ) { }
 
   /**
    * Closes the currently open thread by setting `isThreadOpen` to false.
    * @function closeThread
    */
   closeThread() {
+    this.chatService.editOpen = false;
+    this.chatService.dataThread = new Channel();
     this.chatService.isThreadOpen = false;
     this.chatService.isWorkspaceOpen = true;
+    this.textThread = '';
   }
 
   /**
@@ -59,6 +62,7 @@ export class ThreadService {
     event: MouseEvent,
     messageContent: string,
   ): void {
+    this.chatService.editOpen = true;
     event.stopPropagation();
     if (this.editMessageIndexThread === index) {
       this.editMessageIndexThread = null;
@@ -77,6 +81,7 @@ export class ThreadService {
    * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
    */
   closeWithoutSavingThread() {
+    this.chatService.editOpen = false;
     this.editMessageIndexThread = null;
     this.editMessageInputIndexThread = null;
     this.editOpenThread = false;
@@ -132,6 +137,7 @@ export class ThreadService {
       this.chatService.indexOfThreadMessageForEditChatMessage
     ].numberOfMessage++;
     this.chatService.dataThread.messageChannel[0].numberOfMessage++;
+    this.chatService.activateThreadFocus();
     await this.sendMessageToThread();
     this.resetMessageContentThread();
   }
@@ -290,7 +296,7 @@ export class ThreadService {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = e => {
+      reader.onload = (e) => {
         if (e.target) {
           this.imageMessage = e.target.result;
         }

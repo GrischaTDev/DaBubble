@@ -2,8 +2,7 @@ export class Emoji {
   emoji: string;
   user: string[] = [];
   userName: string[] = [];
-  userAvatar: string[]
-
+  userAvatar: string[];
 
   constructor(obj?: any) {
     this.emoji = obj ? obj.emoji : '';

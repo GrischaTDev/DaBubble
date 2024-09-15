@@ -7,8 +7,7 @@
         [(ngModel)]="searchValue"
         (ngModelChange)="searchField.filterData(searchValue)"
         type="search"
-        placeholder="Code learning durchsuchen"
-      />
+        placeholder="Code learning durchsuchen" />
       <mat-icon *ngIf="!searchValue">search</mat-icon>
     </div>
 
@@ -18,13 +17,9 @@
         <div
           class="user-list-container"
           *ngFor="let user of searchField.filterUser"
-          (click)="openDirectChat(user)"
-        >
-          <img
-            referrerpolicy="no-referrer"
-            src="{{ user['avatar'] }}"
-            alt=""
-          />{{ user["name"] }}
+          (click)="openDirectChat(user)">
+          <img referrerpolicy="no-referrer" src="{{ user['avatar'] }}" alt="" />
+          {{ user['name'] }}
         </div>
       </div>
 
@@ -32,10 +27,10 @@
         <p>Channel:</p>
         <div
           class="user-list-container"
-          *ngFor="let channel of allChannel"
-          (click)="openChannel(channel)"
-        >
-          <span>#</span>{{ channel.name }}
+          *ngFor="let channel of searchField.filterChannel"
+          (click)="openChannel(channel)">
+          <span>#</span>
+          {{ channel['name'] }}
         </div>
       </div>
 
@@ -44,10 +39,9 @@
         <div
           class="user-list-container"
           *ngFor="let message of searchField.filterMessage"
-          (click)="openChannel(message['channelData'])"
-        >
-          [{{ message["channelName"] }}]
-          {{ message["message"] }}
+          (click)="openChannel(message['channelData'])">
+          [{{ message['channelName'] }}]
+          {{ message['message'] }}
         </div>
       </div>
 
@@ -56,8 +50,7 @@
           searchField.filterChannel.length === 0 &&
           searchField.filterUser.length === 0 &&
           searchField.filterMessage.length === 0
-        "
-      >
+        ">
         <p>Keine Ergebnisse gefunden.</p>
       </div>
     </div>
@@ -69,13 +62,11 @@
       <img
         class="user-avatar"
         src="{{ currentUser.avatar }}"
-        alt="User Avatar"
-      />
+        alt="User Avatar" />
       <img
         class="user-status"
         src="./assets/img/online-icon-desktop.svg"
-        alt="Online Status"
-      />
+        alt="Online Status" />
     </div>
     <mat-icon>keyboard_arrow_down</mat-icon>
   </div>
@@ -87,3 +78,4 @@
     <span (click)="logout()">Logout</span>
   </div>
 </div>
+

@@ -12,12 +12,16 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, MatIconModule, FormsModule],
   templateUrl: './dialog-shows-user-reaction.component.html',
-  styleUrl: './dialog-shows-user-reaction.component.scss'
+  styleUrl: './dialog-shows-user-reaction.component.scss',
 })
-export class DialogShowsUserReactionComponent  {
-  constructor(public emojiService: EmojiService, public channelService: ChannelService, public directMessageService: DirectMessageService ) { }
+export class DialogShowsUserReactionComponent {
+  constructor(
+    public emojiService: EmojiService,
+    public channelService: ChannelService,
+    public directMessageService: DirectMessageService,
+  ) {}
 
   openUser(id: string) {
-    this.directMessageService.openProfil(id)
+    this.directMessageService.openProfil(id);
   }
 }

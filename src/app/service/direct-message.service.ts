@@ -6,8 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {Channel} from '../../assets/models/channel.class';
-import {ChatService} from './chat.service';
+import { Channel } from '../../assets/models/channel.class';
+import { ChatService } from './chat.service';
 import {
   doc,
   docData,
@@ -15,13 +15,13 @@ import {
   getDoc,
   onSnapshot,
 } from '@angular/fire/firestore';
-import {User} from '../../assets/models/user.class';
-import {MainServiceService} from './main-service.service';
-import {Router} from '@angular/router';
-import {Message} from '../../assets/models/message.class';
-import {DialogUserChatComponent} from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
-import {MatDialog} from '@angular/material/dialog';
-import {Observable, Subscription} from 'rxjs';
+import { User } from '../../assets/models/user.class';
+import { MainServiceService } from './main-service.service';
+import { Router } from '@angular/router';
+import { Message } from '../../assets/models/message.class';
+import { DialogUserChatComponent } from '../main/dialog/dialog-user-chat/dialog-user-chat.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -56,7 +56,7 @@ export class DirectMessageService {
     public chatService: ChatService,
     public mainService: MainServiceService,
     public router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.windowWidth = window.innerWidth;
@@ -65,7 +65,6 @@ export class DirectMessageService {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.windowWidth = window.innerWidth;
-    console.log(this.windowWidth);
   }
 
   /**
@@ -87,7 +86,7 @@ export class DirectMessageService {
   async validationOfTheOtherUser() {
     const loggedInUserId = this.mainService.loggedInUser.id;
     const otherUsers = this.dataDirectMessage.channelUsers.filter(
-      user => user.id !== loggedInUserId,
+      (user) => user.id !== loggedInUserId,
     );
     if (otherUsers.length === 0) {
       this.directUser = new User(this.mainService.loggedInUser);
@@ -124,9 +123,6 @@ export class DirectMessageService {
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
-   * Checks if the scrollHeight of the container has increased since the last check,
-   * indicating that new content might have been added. If so, it scrolls to the bottom of the container
-   * and updates the last known scrollHeight.
    */
   ngAfterViewChecked() {
     if (
@@ -140,8 +136,6 @@ export class DirectMessageService {
   /**
    * Toggles the visibility of an icon container for messages. It stops the propagation of the click event to prevent triggering parent handlers.
    * It sets or unsets the active message index based on whether the current index is already active.
-   * @param {number} index - The index of the message whose icon container is to be toggled.
-   * @param {MouseEvent} event - The mouse event associated with the action.
    */
   toggleIconContainer(index: number, event: MouseEvent): void {
     event.stopPropagation();
@@ -155,7 +149,6 @@ export class DirectMessageService {
   /**
    * Handles click events on the document level to reset the active message index.
    * This method ensures that the message icons are collapsed when clicking anywhere outside the message components.
-   * @HostListener Decorator to listen for click events on the document.
    */
   @HostListener('document:click', ['$event'])
   onDocumentClick(): void {
@@ -165,7 +158,6 @@ export class DirectMessageService {
   /**
    * Sets the hovered message index when the mouse enters a message component.
    * This helps in identifying which message item is currently under the mouse cursor.
-   * @param {number} index - The index of the message being hovered.
    */
   onMouseEnter(index: number): void {
     this.hoveredMessageIndex = index;
@@ -191,8 +183,6 @@ export class DirectMessageService {
   /**
    * Opens a direct message with a specific user by loading user data, checking message availability,
    * pushing the direct message document to Firebase, and navigating to the message.
-   * @async
-   * @param {string} userId - The ID of the user with whom to open a direct message.
    */
   async openDirectMessage(user: User) {
     this.chatService.mobileChatIsOpen = false;
@@ -202,8 +192,6 @@ export class DirectMessageService {
 
   /**
    * Checks if a direct message is available between the clicked user and the logged-in user.
-   * Updates the `directMessageIdIsAvailable` to true if there is a common message, and assigns
-   * the first common message ID to `directMessageId`. Otherwise, resets the `directMessageId`.
    */
   async directMessageIsAvailable() {
     this.directMessageIdIsAvailable = false;
@@ -214,7 +202,7 @@ export class DirectMessageService {
       Array.isArray(clickedUserMessages) &&
       Array.isArray(loggedInUserMessages)
     ) {
-      const commonMessages = clickedUserMessages.filter(msg =>
+      const commonMessages = clickedUserMessages.filter((msg) =>
         loggedInUserMessages.includes(msg),
       );
       if (commonMessages.length !== 0) {
@@ -265,7 +253,6 @@ export class DirectMessageService {
   /**
    * Pushes new direct message content to Firebase by updating user documents for both the logged-in user and the clicked user,
    * and adding a new channel document for the direct message.
-   * @async
    */
   async pushNewDirectmessageContenToFb() {
     await this.mainService.addDoc(
@@ -287,8 +274,6 @@ export class DirectMessageService {
 
   /**
    * Clears the content of the image message.
-   *
-   * @function deleteMessage
    */
   deleteMessage() {
     this.imageMessage = '';
@@ -303,7 +288,7 @@ export class DirectMessageService {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       const reader = new FileReader();
-      reader.onload = e => {
+      reader.onload = (e) => {
         if (e.target) {
           this.imageMessage = e.target.result;
         }
@@ -345,30 +330,16 @@ export class DirectMessageService {
    */
   loadDirectMessageFromNewMessage() {
     if (this.chatService.newMessageOpen) {
-      this.router.navigate([
-        '/main',
-        'direct-message',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
+      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,
       ]);
       this.chatService.desktopChatOpen = false;
       this.chatService.directChatOpen = true;
       this.chatService.newMessageOpen = false;
     } else if (this.sendNewMessageFromDesktop) {
-      this.router.navigate([
-        '/main',
-        'direct-message',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
+      this.router.navigate(['/main', 'direct-message', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,
       ]);
     } else {
-      this.router.navigate([
-        '/direct-chat',
-        this.chatService.dataChannel.id,
-        this.userIdNewMessage,
-        this.mainService.allChannels[0].id,
+      this.router.navigate(['/main', '/direct-chat', this.chatService.dataChannel.id, this.userIdNewMessage, this.mainService.allChannels[0].id,
       ]);
       this.switchContent = true;
     }
@@ -376,52 +347,33 @@ export class DirectMessageService {
     this.chatService.imageMessage = '';
     this.imageMessage = '';
     this.sendNewMessageFromDesktop = false;
+    this.chatService.activateChatFocus()
   }
 
   /**
    * Loads the content of a direct chat for a given user ID from Firestore. If the document exists, it initializes the data for direct messaging.
-   * @async
-   * @param {string} userId - The ID of the user whose direct message content is to be loaded.
    */
   async loadDirectChatContent(chatId: string) {
     this.directMessageDocId = chatId;
     if (this.chatService.mobileDirectChatIsOpen) {
       if (this.chatService.clickedUser.id) {
-        this.router.navigate([
-          '/direct-chat',
-          chatId,
-          this.chatService?.clickedUser?.id,
-          this.mainService.allChannels[0].id,
+        this.router.navigate(['/main', 'direct-chat', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id,
         ]);
       } else {
-        this.router.navigate([
-          '/direct-chat',
-          chatId,
-          this.chatService.clickedUser.idUser,
-          this.mainService.allChannels[0].id,
+        this.router.navigate(['/main', 'direct-chat', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id,
         ]);
       }
       this.switchContent = true;
     } else {
       this.mainService
         .watchSingleDirectMessageDoc(chatId, 'direct-message')
-        .subscribe(dataDirectMessage => {
+        .subscribe((dataDirectMessage) => {
           this.chatService.dataChannel = dataDirectMessage as Channel;
           if (this.chatService.clickedUser.id) {
-            this.router.navigate([
-              '/main',
-              'direct-message',
-              chatId,
-              this.chatService?.clickedUser?.id,
-              this.mainService.allChannels[0].id,
+            this.router.navigate(['/main', 'direct-message', chatId, this.chatService?.clickedUser?.id, this.mainService.allChannels[0].id,
             ]);
           } else {
-            this.router.navigate([
-              '/main',
-              'direct-message',
-              chatId,
-              this.chatService.clickedUser.idUser,
-              this.mainService.allChannels[0].id,
+            this.router.navigate(['/main', 'direct-message', chatId, this.chatService.clickedUser.idUser, this.mainService.allChannels[0].id,
             ]);
           }
           this.chatService.desktopChatOpen = false;
@@ -440,11 +392,17 @@ export class DirectMessageService {
   async loadUserChatContent(chatId: string) {
     this.itemsSubscription?.unsubscribe();
     const docRef = doc(this.firestore, `users/${chatId}`);
-    this.itemsSubscription = docData(docRef).subscribe(user => {
+    this.itemsSubscription = docData(docRef).subscribe((user) => {
       this.chatService.clickedUser = user as User;
     });
   }
 
+  /**
+   * Checks if a given user is not the logged-in user or if it's the second or later user in a direct message conversation.
+   *
+   * Returns `true` if the provided user ID does not match the logged-in user's ID, or if the user is the second or later in the conversation.
+   * Increments the `indexUserDirectmessage` counter if the user ID matches the logged-in user.
+   */
   otherUser(singleUserId: string): boolean {
     if (singleUserId !== this.mainService.loggedInUser.id) {
       return true;
@@ -458,6 +416,9 @@ export class DirectMessageService {
     }
   }
 
+  /**
+   * Sets the chat service to indicate that the current chat is from a direct chat.
+   */
   fromWhichChannel() {
     this.chatService.fromDirectChat = true;
   }

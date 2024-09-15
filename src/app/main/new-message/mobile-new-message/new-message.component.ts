@@ -6,29 +6,29 @@ import {
   HostListener,
   OnInit,
 } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MainServiceService} from '../../../service/main-service.service';
-import {ChatService} from '../../../service/chat.service';
-import {MobileHeaderComponent} from '../../header/mobile-header/mobile-header.component';
-import {CommonModule} from '@angular/common';
-import {Firestore, docData} from '@angular/fire/firestore';
-import {Message} from '../../../../assets/models/message.class';
-import {User} from '../../../../assets/models/user.class';
-import {PickerComponent} from '@ctrl/ngx-emoji-mart';
-import {EmojiService} from '../../../service/emoji.service';
-import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
-import {SearchFieldService} from '../../../search-field.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {NewMessageService} from '../../../service/new-message.service';
-import {UserProfileComponent} from '../../user-profile/user-profile.component';
-import {ThreadService} from '../../../service/thread.service';
-import {getAuth, signOut} from '@angular/fire/auth';
-import {LoginService} from '../../../service/login.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {take} from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MainServiceService } from '../../../service/main-service.service';
+import { ChatService } from '../../../service/chat.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
+import { CommonModule } from '@angular/common';
+import { Firestore, docData } from '@angular/fire/firestore';
+import { Message } from '../../../../assets/models/message.class';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiService } from '../../../service/emoji.service';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { SearchFieldService } from '../../../search-field.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { NewMessageService } from '../../../service/new-message.service';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { ThreadService } from '../../../service/thread.service';
+import { getAuth, signOut } from '@angular/fire/auth';
+import { LoginService } from '../../../service/login.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-new-message',
@@ -77,29 +77,29 @@ export class NewMessageComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
   ) {
-    this.newMessageService.text = '';
+    this.newMessageService.textNewMessage = '';
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
     });
     if (this.parmsId) {
       this.items$ = docData(mainService.getDataRef(this.parmsId, 'channels'));
-      this.items = this.items$.subscribe((channel: any) => {
+      this.items = this.items$.pipe(take(1)).subscribe((channel: any) => {
         this.chatService.dataChannel = channel;
       });
     }
-    this.subscription = mainService.currentContentEmoji.subscribe(content => {
-      this.newMessageService.text += content;
+    this.subscription = mainService.currentContent.subscribe((content) => {
+      this.newMessageService.textNewMessage += content;
     });
     this.loggedInUser = mainService.loggedInUser;
   }
   ngOnInit(): void {
-    this.subscription = this.searchField.allChannel$.subscribe(channels => {
+    this.subscription = this.searchField.allChannel$.subscribe((channels) => {
       this.allChannel = channels;
     });
 
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.currentUser = user;
       this.mainService.loggedInUser = new User(user);
     });

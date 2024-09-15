@@ -1,31 +1,37 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {DialogEmojiComponent} from '../../dialog/dialog-emoji/dialog-emoji.component';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogEmojiComponent } from '../../dialog/dialog-emoji/dialog-emoji.component';
 import {
   MatDialog,
   MatDialogConfig,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {MainServiceService} from '../../../service/main-service.service';
-import {ChatService} from '../../../service/chat.service';
-import {MobileHeaderComponent} from '../../header/mobile-header/mobile-header.component';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
-import {User} from '../../../../assets/models/user.class';
-import {PickerComponent} from '@ctrl/ngx-emoji-mart';
-import {MobileChatHeaderComponent} from '../../header/mobile-chat-header/mobile-chat-header.component';
-import {EmojiService} from '../../../service/emoji.service';
-import {DirectMessageService} from '../../../service/direct-message.service';
-import {UserProfileComponent} from '../../user-profile/user-profile.component';
-import {Subscription} from 'rxjs';
-import {DialogShowsUserReactionComponent} from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
-import {Firestore} from '@angular/fire/firestore';
-import {ChannelService} from '../../../service/channel.service';
-import {LoginService} from '../../../service/login.service';
-import {ThreadService} from '../../../service/thread.service';
-import {Channel} from '../../../../assets/models/channel.class';
-import {SearchFieldService} from '../../../search-field.service';
+import { MainServiceService } from '../../../service/main-service.service';
+import { ChatService } from '../../../service/chat.service';
+import { MobileHeaderComponent } from '../../header/mobile-header/mobile-header.component';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../../../assets/models/user.class';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
+import { EmojiService } from '../../../service/emoji.service';
+import { DirectMessageService } from '../../../service/direct-message.service';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { Subscription } from 'rxjs';
+import { DialogShowsUserReactionComponent } from '../../dialog/dialog-shows-user-reaction/dialog-shows-user-reaction.component';
+import { Firestore } from '@angular/fire/firestore';
+import { ChannelService } from '../../../service/channel.service';
+import { LoginService } from '../../../service/login.service';
+import { ThreadService } from '../../../service/thread.service';
+import { Channel } from '../../../../assets/models/channel.class';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-direct-chat',
@@ -49,7 +55,7 @@ export class DesktopDirectChatComponent implements OnInit {
   dialogInstance?:
     | MatDialogRef<DialogEmojiComponent>
     | MatDialogRef<DialogShowsUserReactionComponent>;
-  subscription;
+
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   emojiReactionIndexHover: number | null = null;
@@ -66,13 +72,6 @@ export class DesktopDirectChatComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
   ) {
-    this.subscription = mainService.currentContentEmoji.subscribe(content => {
-      if (!this.chatService.editOpen) {
-        this.chatService.text += content;
-      } else {
-        this.chatService.editText += content;
-      }
-    });
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
@@ -81,6 +80,15 @@ export class DesktopDirectChatComponent implements OnInit {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
   }
 
   /**
@@ -90,7 +98,7 @@ export class DesktopDirectChatComponent implements OnInit {
    */
   ngOnInit() {
     this.loginService.currentLoggedUser();
-    this.loginService.loggedInUser$.subscribe(user => {
+    this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
   }
@@ -185,8 +193,9 @@ export class DesktopDirectChatComponent implements OnInit {
    * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
    */
   ngOnDestroy() {
-    this.subscription.unsubscribe();
-
+    if (this.mainService.subscriptionDirectChat) {
+      this.mainService.subscriptionDirectChat.unsubscribe();
+    }
     if (this.channelSubscription) {
       this.channelSubscription.unsubscribe();
     }
@@ -218,6 +227,10 @@ export class DesktopDirectChatComponent implements OnInit {
     this.dialog.open(UserProfileComponent, dialogConfig);
   }
 
+  /**
+  * Sends a direct message using the directMessageService.
+  * Marks the message as sent from the desktop and includes text and image data.
+  */
   sendDirectMessage() {
     this.directMessageService.sendNewMessageFromDesktop = true;
     this.directMessageService.sendMessageFromDirectMessage(

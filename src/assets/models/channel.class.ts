@@ -2,6 +2,9 @@ import { Message } from './message.class';
 import { User } from './user.class';
 
 export class Channel {
+  subscribe(arg0: (data: any) => void) {
+    throw new Error('Method not implemented.');
+  }
   id: string;
   openingDate: number;
   name: string;
@@ -20,7 +23,7 @@ export class Channel {
 
   constructor(obj?: any) {
     this.id = obj?.id || '';
-    this.openingDate= obj?.openingDate || '';
+    this.openingDate = obj?.openingDate || '';
     this.name = obj?.name || '';
     this.description = obj?.description || '';
     this.channelUsers = obj?.channelUsers || [];
@@ -30,8 +33,8 @@ export class Channel {
     this.userEmail = obj?.userEmail || '';
     this.userAvatar = obj?.userAvatar || '';
     this.avatarChannel = obj?.avatar || '';
-    this.mentionUser= obj?.mentionUser || [];
-    this.thread= obj?.thread || '';
+    this.mentionUser = obj?.mentionUser || [];
+    this.thread = obj?.thread || '';
     this.ownerUser = obj?.ownerUser || [];
     this.idOfChannelOnThred = obj?.idOfChannelOnThred || '';
   }
@@ -61,7 +64,7 @@ export class Channel {
         thread: message.thread,
         numberOfMessage: message.numberOfMessage,
         dateOfLastThreadMessage: message.dateOfLastThreadMessage,
-       })),
+      })),
       avatarChannel: this.avatarChannel,
       ownerUser: this.ownerUser.map((user) => ({
         id: user.id,
@@ -69,7 +72,7 @@ export class Channel {
         email: user.email,
         avatar: user.avatar,
       })),
-      idOfChannelOnThred: this.idOfChannelOnThred
+      idOfChannelOnThred: this.idOfChannelOnThred,
     };
   }
 }
