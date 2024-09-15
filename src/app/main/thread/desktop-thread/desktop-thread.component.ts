@@ -37,6 +37,7 @@ export class DesktopThreadComponent implements OnInit {
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   private channelSubscription!: Subscription;
+  scrollStarted: boolean = false;
 
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
@@ -52,15 +53,6 @@ export class DesktopThreadComponent implements OnInit {
     public loginService: LoginService,
     public threadService: ThreadService,
   ) {
-    this.mainService.subscriptionThreadContent = mainService.currentContentThread.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.threadService.textThread += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
       chatService.idOfChannel = params.id;
@@ -89,6 +81,15 @@ export class DesktopThreadComponent implements OnInit {
         this.mainService.loggedInUser = new User(user);
       });
     }
+    this.mainService.subscriptionThreadContent = this.mainService.currentContentThread.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.threadService.textThread += content;
+        } else {
+          this.threadService.editTextThread += content;
+        }
+      },
+    );
   }
 
 
@@ -108,9 +109,12 @@ export class DesktopThreadComponent implements OnInit {
     }
     this.channelSubscription = this.chatService.threadChanged$.subscribe(
       () => {
-        setTimeout(() => {
-          this.scrollToBottom();
-        }, 400);
+        if (!this.scrollStarted) {
+          this.scrollStarted = true;
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 400);
+        }
       },
     );
   }
@@ -121,6 +125,7 @@ export class DesktopThreadComponent implements OnInit {
    */
   scrollToBottom(): void {
     this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    this.scrollStarted = false;
   }
 
   /**

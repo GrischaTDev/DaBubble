@@ -204,8 +204,8 @@
                           threadService.ifMessageOwnerMessageFromThread(
                             singleThreadMessageIndex
                           );
-                          chatService.openDialogEmoji();
                           emojiService.forWhichDocIsTheEmoji('thread');
+                          chatService.openDialogEmoji();
                           chatService.onButtonClick($event)
                         ">
                         sentiment_satisfied
@@ -214,6 +214,7 @@
                     <div class="desktop-thread-input-icon">
                       <mat-icon
                         (click)="
+                          mainService.contentOfWhichInput('thread');
                           chatService.onButtonClick($event);
                           chatService.openDialogMentionUser()
                         ">
@@ -467,7 +468,7 @@
       </div>
       <textarea
         (keydown)="checkForEnter($event)"
-        [(ngModel)]="threadService.textThread"
+        [(ngModel)]="this.threadService.textThread"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -487,8 +488,8 @@
           <div class="desktop-thread-input-icon">
             <mat-icon
               (click)="
-                chatService.openDialogEmoji();
                 emojiService.forWhichDocIsTheEmoji('thread');
+                chatService.openDialogEmoji();
                 chatService.onButtonClick($event)
               ">
               sentiment_satisfied

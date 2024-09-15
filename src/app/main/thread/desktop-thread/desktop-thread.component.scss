@@ -348,6 +348,7 @@
     border-bottom-right-radius: 25px;
     border-bottom-left-radius: 25px;
     color: $icon-gray;
+    font-size: 13px;
     &:hover {
       color: $icon-purple-hover;
       background-color: $background-lightblue;
@@ -479,10 +480,8 @@
   &:hover {
     background-color: $background-lightblue;
   }
-
   &:first-child {
     position: relative;
-    z-index: 1;
   }
 
   mat-icon {

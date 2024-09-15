@@ -53,7 +53,7 @@ export class DesktopChannelsComponent implements OnInit {
     public threadService: ThreadService,
     public searchField: SearchFieldService,
     public newMessageService: NewMessageService,
-  ) {}
+  ) { }
 
   /**
    * Initializes the component and sets up necessary subscriptions.
@@ -135,6 +135,7 @@ export class DesktopChannelsComponent implements OnInit {
    * Clear Data from Chat, Direct-Chat and Threads.
    */
   clearData() {
+    this.chatService.editOpen = false;
     this.mainService.clearContentObservable();
     this.chatService.dataChannel = new Channel();
     this.chatService.dataThread = new Channel();

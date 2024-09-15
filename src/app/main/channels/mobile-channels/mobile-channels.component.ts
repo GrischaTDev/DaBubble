@@ -48,7 +48,7 @@ export class MobileChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     private newMessageService: NewMessageService,
     public searchField: SearchFieldService,
-  ) {}
+  ) { }
 
   /**
    * Initializes the component.
@@ -85,6 +85,7 @@ export class MobileChannelsComponent implements OnInit {
    * Toggles the visibility of the channel list and updates the arrow icon accordingly.
    */
   openChannels() {
+    this.chatService.editOpen = false;
     this.channelListOpen = !this.channelListOpen;
     this.arrowIconChannels =
       this.arrowIconChannels === 'arrow_right'
@@ -96,6 +97,7 @@ export class MobileChannelsComponent implements OnInit {
    * Toggles the user list visibility and updates the arrow icon accordingly.
    */
   openUserList() {
+    this.chatService.editOpen = false;
     this.userListOpen = !this.userListOpen;
     this.arrowIconUser =
       this.arrowIconUser === 'arrow_right' ? 'arrow_drop_down' : 'arrow_right';
@@ -107,6 +109,7 @@ export class MobileChannelsComponent implements OnInit {
    * @param user - The user to open the direct chat with.
    */
   openDirectChat(user: any) {
+    this.chatService.editOpen = false;
     this.chatService.mobileDirectChatIsOpen = true;
     this.chatService.desktopChatOpen = false;
     this.chatService.directChatOpen = true;
@@ -123,6 +126,7 @@ export class MobileChannelsComponent implements OnInit {
    * @param channel - Channel that is clicked on
    */
   openChannel(channel: any) {
+    this.chatService.editOpen = false;
     this.chatService.desktopChatOpen = true;
     this.chatService.directChatOpen = false;
     this.chatService.dataChannel = channel;
@@ -137,6 +141,7 @@ export class MobileChannelsComponent implements OnInit {
    *
    */
   async goToCollectionPath(data: Channel | User, path: string) {
+    this.chatService.editOpen = false;
     this.router.navigate(['/main', path, data.id, 'user', data.id]);
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;

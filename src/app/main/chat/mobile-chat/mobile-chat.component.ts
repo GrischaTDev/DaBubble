@@ -98,6 +98,15 @@ export class MobileChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
+    this.mainService.subscriptionTextChat = this.mainService.currentContent.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.chatService.text += content;
+        } else {
+          this.chatService.editText += content;
+        }
+      },
+    );
     this.checkScreenSize(window.innerWidth);
   }
 
@@ -172,6 +181,7 @@ export class MobileChatComponent implements OnInit {
    * @param {string} threadId - The unique identifier of the thread to navigate to.
    */
   navigateToThread(threadId: string) {
+    this.chatService.editOpen = false;
     this.mainService.clearContentObservable()
     this.threadService.textThread = '';
     this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);

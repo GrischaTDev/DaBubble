@@ -48,21 +48,17 @@ export class DialogMentionUsersComponent {
   addMentionUser(user: User) {
     this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
-    const lastCharNewMessage = this.newMessageService.textNewMessage
-      .trim()
-      .slice(-1);
+    const lastCharNewMessage = this.newMessageService.textNewMessage.trim().slice(-1);
     if (lastChar !== '@') {
-      this.chatService.text += '@' + user.name + ' ';
+      this.inputContent += '@' + user.name + ' ';
     } else {
-      this.chatService.text += user.name;
+      this.inputContent += user.name;
     }
-
     if (lastCharNewMessage !== '@') {
       this.newMessageService.textNewMessage += '@' + user.name + ' ';
     } else {
       this.newMessageService.textNewMessage += user.name;
     }
-
     this.validationContent();
   }
 

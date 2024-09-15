@@ -272,6 +272,7 @@
                         </p>
                         <p
                           (click)="
+                            mainService.contentOfWhichInput('direct-message');
                             chatService.editMessageFromChannel(
                               this.parmsIdContent,
                               this.chatService.editText,

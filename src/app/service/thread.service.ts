@@ -27,6 +27,7 @@ export class ThreadService {
    * @function closeThread
    */
   closeThread() {
+    this.chatService.editOpen = false;
     this.chatService.dataThread = new Channel();
     this.chatService.isThreadOpen = false;
     this.chatService.isWorkspaceOpen = true;
