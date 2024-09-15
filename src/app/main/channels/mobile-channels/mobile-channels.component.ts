@@ -48,7 +48,7 @@ export class MobileChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     private newMessageService: NewMessageService,
     public searchField: SearchFieldService,
-  ) { }
+  ) {}
 
   /**
    * Initializes the component.
@@ -131,6 +131,7 @@ export class MobileChannelsComponent implements OnInit {
     this.chatService.directChatOpen = false;
     this.chatService.dataChannel = channel;
     this.searchValue = '';
+    this.goToCollectionPath(channel, 'chat');
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.text = '';
@@ -148,3 +149,4 @@ export class MobileChannelsComponent implements OnInit {
     this.chatService.text = '';
   }
 }
+
