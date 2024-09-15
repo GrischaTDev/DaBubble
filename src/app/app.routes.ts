@@ -4,6 +4,11 @@ import { authGuard } from './auth.guard';
 import { ImprintComponent } from './imprint/imprint.component';
 import { PolicyComponent } from './policy/policy.component';
 import { MobileThreadComponent } from './main/thread/mobile-thread/mobile-thread.component';
+import { RegisterComponent } from './login/register/register.component';
+import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
+import { NewPaswordComponent } from './login/new-pasword/new-pasword.component';
+import { VerifyEmailComponent } from './login/verify-email/verify-email.component';
+import { AvatarComponent } from './login/avatar/avatar.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -12,45 +17,12 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    children: [
-      {
-        path: 'register',
-        loadComponent: () =>
-          import('./login/register/register.component').then(
-            (m) => m.RegisterComponent,
-          ),
-      },
-      {
-        path: 'reset-password',
-        loadComponent: () =>
-          import('./login/reset-password/reset-password.component').then(
-            (m) => m.ResetPasswordComponent,
-          ),
-      },
-      {
-        path: 'new-password',
-        loadComponent: () =>
-          import('./login/new-pasword/new-pasword.component').then(
-            (m) => m.NewPaswordComponent,
-          ),
-      },
-      {
-        path: 'verify-email',
-        loadComponent: () =>
-          import('./login/verify-email/verify-email.component').then(
-            (m) => m.VerifyEmailComponent,
-          ),
-      },
-      {
-        path: 'create-avatar',
-        loadComponent: () =>
-          import('./login/avatar/avatar.component').then(
-            (m) => m.AvatarComponent,
-          ),
-      },
-    ],
   },
-
+  { path: 'register', component: RegisterComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'new-password', component: NewPaswordComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
+  { path: 'create-avatar', component: AvatarComponent },
   // <<<<< MAIN ROUTES >>>>>
   {
     path: 'main/:nameOfContent/:id/:idUser/:idOfChat',
@@ -88,3 +60,4 @@ export const routes: Routes = [
   { path: 'imprint', component: ImprintComponent },
   { path: 'policy', component: PolicyComponent },
 ];
+
