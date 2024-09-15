@@ -63,6 +63,7 @@ export class MainServiceService {
   contentToNewMessage: boolean = false;
   subscriptionChannels: Subscription | undefined;
   subscriptionTextChat: Subscription | undefined;
+  subscriptionTextChatMobile: Subscription | undefined;
   subscriptionDirectChat: Subscription | undefined;
   subscriptionThreadContent: Subscription | undefined;
   subscriptionDirectChatEmoji: Subscription | undefined;

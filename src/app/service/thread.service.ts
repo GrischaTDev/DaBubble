@@ -81,6 +81,7 @@ export class ThreadService {
    * After a brief delay, it also resets the active message index to ensure the interface reflects the closure of any active interactions.
    */
   closeWithoutSavingThread() {
+    this.chatService.editOpen = false;
     this.editMessageIndexThread = null;
     this.editMessageInputIndexThread = null;
     this.editOpenThread = false;

@@ -41,6 +41,7 @@ export class ChatService {
   editOpen: boolean = false;
   text = '';
   editText = '';
+  editTextMobile = '';
   loggedInUser: User = new User();
   mobileChatIsOpen: boolean = false;
   mobileDirectChatIsOpen: boolean = false;
@@ -345,6 +346,7 @@ export class ChatService {
       this.activeMessageIndex = null;
       this.editOpen = true;
       this.editText = messageContent;
+      this.editTextMobile = messageContent;
       this.editMessageIndex = index;
       this.editMessageInputIndex = index;
       this.editMessageButtonVisible = false;

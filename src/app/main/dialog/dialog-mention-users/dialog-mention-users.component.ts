@@ -54,11 +54,6 @@ export class DialogMentionUsersComponent {
     } else {
       this.inputContent += user.name;
     }
-    if (lastCharNewMessage !== '@') {
-      this.newMessageService.textNewMessage += '@' + user.name + ' ';
-    } else {
-      this.newMessageService.textNewMessage += user.name;
-    }
     this.validationContent();
   }
 

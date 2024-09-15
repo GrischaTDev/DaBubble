@@ -214,7 +214,7 @@
             </span>
             <div *ngIf="chatService.editMessageIndex === singleMessageIndex">
               <textarea
-                [(ngModel)]="chatService.editText"
+                [(ngModel)]="this.chatService.editTextMobile"
                 name="newTextarea"
                 (input)="chatService.adjustHeight($event.target)"
                 style="min-height: 50px; width: 100%"
@@ -253,7 +253,7 @@
                           (click)="
                             chatService.editMessageFromChannel(
                               this.parmsId,
-                              this.chatService.editText,
+                              this.chatService.editTextMobile,
                               singleMessageIndex
                             )
                           ">
@@ -340,7 +340,7 @@
   <div
     id="user-result-container"
     class="user-result-container"
-    *ngIf="chatService.text && searchField.filterUser.length > 0">
+    *ngIf="this.textMobileChat && searchField.filterUser.length > 0">
     <div
       class="user-content-container"
       *ngIf="searchField.filterUser.length > 0">
@@ -366,8 +366,8 @@
         </div>
       </div>
       <textarea
-        [(ngModel)]="chatService.text"
-        (ngModelChange)="searchField.filterDataChannelchat(chatService.text)"
+        [(ngModel)]="this.textMobileChat"
+        (ngModelChange)="searchField.filterDataChannelchat(this.textMobileChat)"
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -411,7 +411,7 @@
               (click)="
                 chatService.sendMessageFromChannel(
                   this.chatService.dataChannel.id,
-                  this.chatService.text
+                  this.textMobileChat
                 )
               "
               class="mobile-chat-send-icon">

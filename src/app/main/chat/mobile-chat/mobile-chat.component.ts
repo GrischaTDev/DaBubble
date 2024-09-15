@@ -50,6 +50,7 @@ export class MobileChatComponent implements OnInit {
   dialogOpen = false;
   firestore: Firestore = inject(Firestore);
   private channelSubscription!: Subscription;
+  textMobileChat: string = '';
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
@@ -72,10 +73,22 @@ export class MobileChatComponent implements OnInit {
     });
     this.chatService.loggedInUser = this.mainService.loggedInUser;
     this.chatService.mobileChatIsOpen = true;
-    this.chatService.text = '';
+    this.textMobileChat = '';
+    this.chatService.editTextMobile = '';
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
+    this.mainService.subscriptionTextChatMobile = this.mainService.currentContent.subscribe(
+      (content) => {
+        if (!this.chatService.editOpen) {
+          this.textMobileChat += content;
+        } else {
+
+          this.chatService.editTextMobile += content;
+          console.log('fffff', this.chatService.editTextMobile)
+        }
+      },
+    );
   }
 
   /**
@@ -98,15 +111,6 @@ export class MobileChatComponent implements OnInit {
     this.loginService.loggedInUser$.subscribe((user) => {
       this.mainService.loggedInUser = new User(user);
     });
-    this.mainService.subscriptionTextChat = this.mainService.currentContent.subscribe(
-      (content) => {
-        if (!this.chatService.editOpen) {
-          this.chatService.text += content;
-        } else {
-          this.chatService.editText += content;
-        }
-      },
-    );
     this.checkScreenSize(window.innerWidth);
   }
 
@@ -185,5 +189,15 @@ export class MobileChatComponent implements OnInit {
     this.mainService.clearContentObservable()
     this.threadService.textThread = '';
     this.router.navigate(['/thread-mobile', this.chatService.dataChannel.id, threadId,]);
+  }
+
+  /**
+ * A lifecycle hook that is called when the component is destroyed.
+ * Used for any custom cleanup that needs to occur when the component is taken out of the DOM.
+ */
+  ngOnDestroy() {
+    if (this.mainService.subscriptionTextChatMobile) {
+      this.mainService.subscriptionTextChatMobile.unsubscribe();
+    }
   }
 }
