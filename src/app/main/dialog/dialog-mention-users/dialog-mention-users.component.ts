@@ -13,6 +13,7 @@ import { User } from '../../../../assets/models/user.class';
 import { MainServiceService } from '../../../service/main-service.service';
 import { EmojiService } from '../../../service/emoji.service';
 import { NewMessageService } from '../../../service/new-message.service';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-dialog-mention-users',
@@ -37,6 +38,7 @@ export class DialogMentionUsersComponent {
     public mainService: MainServiceService,
     public emojiService: EmojiService,
     public newMessageService: NewMessageService,
+    public threadService: ThreadService,
   ) {
     this.chatService = chatService;
   }
@@ -48,8 +50,15 @@ export class DialogMentionUsersComponent {
   addMentionUser(user: User) {
     this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
-    const lastCharNewMessage = this.newMessageService.textNewMessage.trim().slice(-1);
-    if (lastChar !== '@') {
+    const lastCharNewMessage = this.newMessageService.textNewMessage
+      .trim()
+      .slice(-1);
+    const lastCharThread = this.threadService.textThread.trim().slice(-1);
+    if (
+      lastChar !== '@' &&
+      lastCharNewMessage !== '@' &&
+      lastCharThread !== '@'
+    ) {
       this.inputContent += '@' + user.name + ' ';
     } else {
       this.inputContent += user.name;

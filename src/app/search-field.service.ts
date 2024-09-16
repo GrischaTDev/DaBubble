@@ -83,6 +83,26 @@ export class SearchFieldService implements OnInit {
     }
   }
 
+  filterDataThreadchat(searchValue: string) {
+    const lastChar = searchValue.trim().slice(-1);
+
+    if (lastChar === '@') {
+      if (this.chatService.isThreadOpen) {
+        this.mainService.contentOfWhichInput('thread');
+      }
+
+      this.chatService.openDialogMentionUser();
+    }
+
+    if (lastChar === '#') {
+      if (this.chatService.isThreadOpen) {
+        this.mainService.contentOfWhichInput('thread');
+      }
+
+      this.channelService.openDialogSearchChannels();
+    }
+  }
+
   filterNewMessage(searchValue: string) {
     if (searchValue.startsWith('@')) {
       this.setAllUser();

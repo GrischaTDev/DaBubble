@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ChannelService } from '../../../service/channel.service';
+import { ThreadService } from '../../../service/thread.service';
 
 @Component({
   selector: 'app-dialog-search-channels',
@@ -37,6 +38,7 @@ export class DialogSearchChannelsComponent {
     public emojiService: EmojiService,
     public newMessageService: NewMessageService,
     public channelService: ChannelService,
+    public threadService: ThreadService,
   ) {}
 
   inputContent = '';
@@ -47,7 +49,12 @@ export class DialogSearchChannelsComponent {
     const lastCharNewMessage = this.newMessageService.textNewMessage
       .trim()
       .slice(-1);
-    if (lastChar !== '#') {
+    const lastCharThread = this.threadService.textThread.trim().slice(-1);
+    if (
+      lastChar !== '#' &&
+      lastCharNewMessage !== '#' &&
+      lastCharThread !== '#'
+    ) {
       this.inputContent += '#' + channel.name + ' ';
     } else {
       this.inputContent += channel.name;

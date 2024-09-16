@@ -22,6 +22,7 @@ import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { lastValueFrom, Subscription, take } from 'rxjs';
+import { SearchFieldService } from '../../../search-field.service';
 
 @Component({
   selector: 'app-desktop-thread',
@@ -42,7 +43,6 @@ export class DesktopThreadComponent implements OnInit {
   @ViewChild('scrollContainerThread') private scrollContainer!: ElementRef;
   private lastScrollHeight = 0;
 
-
   constructor(
     private route: ActivatedRoute,
     public chatService: ChatService,
@@ -52,6 +52,7 @@ export class DesktopThreadComponent implements OnInit {
     public channelService: ChannelService,
     public loginService: LoginService,
     public threadService: ThreadService,
+    public searchField: SearchFieldService,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId = params.id;
@@ -81,17 +82,15 @@ export class DesktopThreadComponent implements OnInit {
         this.mainService.loggedInUser = new User(user);
       });
     }
-    this.mainService.subscriptionThreadContent = this.mainService.currentContentThread.subscribe(
-      (content) => {
+    this.mainService.subscriptionThreadContent =
+      this.mainService.currentContentThread.subscribe((content) => {
         if (!this.chatService.editOpen) {
           this.threadService.textThread += content;
         } else {
           this.threadService.editTextThread += content;
         }
-      },
-    );
+      });
   }
-
 
   /**
    * Lifecycle hook that is called after every check of the component's view.
@@ -107,16 +106,14 @@ export class DesktopThreadComponent implements OnInit {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
-    this.channelSubscription = this.chatService.threadChanged$.subscribe(
-      () => {
-        if (!this.scrollStarted) {
-          this.scrollStarted = true;
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 400);
-        }
-      },
-    );
+    this.channelSubscription = this.chatService.threadChanged$.subscribe(() => {
+      if (!this.scrollStarted) {
+        this.scrollStarted = true;
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 400);
+      }
+    });
   }
 
   /**
@@ -124,7 +121,8 @@ export class DesktopThreadComponent implements OnInit {
    * This is typically used to ensure the user sees the most recent messages or content added to the container.
    */
   scrollToBottom(): void {
-    this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+    this.scrollContainer.nativeElement.scrollTop =
+      this.scrollContainer.nativeElement.scrollHeight;
     this.scrollStarted = false;
   }
 
@@ -178,3 +176,4 @@ export class DesktopThreadComponent implements OnInit {
     }
   }
 }
+
