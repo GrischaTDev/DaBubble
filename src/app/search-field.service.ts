@@ -12,6 +12,7 @@ import { User } from '../assets/models/user.class';
 import { Channel } from '../assets/models/channel.class';
 import { BehaviorSubject } from 'rxjs';
 import { LoginService } from './service/login.service';
+import { ChannelService } from './service/channel.service';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,7 @@ export class SearchFieldService implements OnInit {
     private chatService: ChatService,
     private mainService: MainServiceService,
     private loginService: LoginService,
+    private channelService: ChannelService,
   ) {
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -68,6 +70,16 @@ export class SearchFieldService implements OnInit {
       }
 
       this.chatService.openDialogMentionUser();
+    }
+
+    if (lastChar === '#') {
+      if (this.mainService.newMessage && this.chatService.newMessageOpen) {
+        this.mainService.contentOfWhichInput('newMessage');
+      } else {
+        this.mainService.contentOfWhichInput('channels');
+      }
+
+      this.channelService.openDialogSearchChannels();
     }
   }
 

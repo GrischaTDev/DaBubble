@@ -10,8 +10,9 @@
   <div
     class="dialog-search-channels-content"
     *ngFor="let channel of mainService.allChannels; let i = index">
-    <div>
+    <div (click)="addSearchChannel(channel)">
       <p>{{ channel.name }}</p>
     </div>
   </div>
 </div>
+
