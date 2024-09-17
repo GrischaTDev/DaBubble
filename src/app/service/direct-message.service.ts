@@ -344,6 +344,7 @@ export class DirectMessageService {
       this.switchContent = true;
     }
     this.chatService.text = '';
+    this.chatService.directText = '';
     this.chatService.imageMessage = '';
     this.imageMessage = '';
     this.sendNewMessageFromDesktop = false;

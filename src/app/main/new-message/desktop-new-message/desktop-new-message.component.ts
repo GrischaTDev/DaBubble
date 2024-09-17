@@ -21,12 +21,12 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
-import { SearchFieldService } from '../../../search-field.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { Subscription, take } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
 import { DialogImageMessageComponent } from '../../dialog/dialog-image-message/dialog-image-message.component';
+import { SearchFieldService } from '../../../service/search-field.service';
 
 @Component({
   selector: 'app-desktop-new-message',

@@ -22,7 +22,8 @@ import { EmojiService } from '../../../service/emoji.service';
 import { ThreadService } from '../../../service/thread.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { lastValueFrom, Subscription, take } from 'rxjs';
-import { SearchFieldService } from '../../../search-field.service';
+import { SearchFieldService } from '../../../service/search-field.service';
+
 
 @Component({
   selector: 'app-desktop-thread',

@@ -6,13 +6,15 @@ import {
   onSnapshot,
   QuerySnapshot,
 } from '@angular/fire/firestore';
-import { ChatService } from './service/chat.service';
-import { MainServiceService } from './service/main-service.service';
-import { User } from '../assets/models/user.class';
-import { Channel } from '../assets/models/channel.class';
+
 import { BehaviorSubject } from 'rxjs';
-import { LoginService } from './service/login.service';
-import { ChannelService } from './service/channel.service';
+import { ChatService } from './chat.service';
+import { MainServiceService } from './main-service.service';
+import { LoginService } from './login.service';
+import { ChannelService } from './channel.service';
+import { Channel } from '../../assets/models/channel.class';
+import { User } from '../../assets/models/user.class';
+
 
 @Injectable({
   providedIn: 'root',

@@ -9,12 +9,12 @@ import { ChatService } from '../../../service/chat.service';
 import { NewMessageComponent } from '../../new-message/mobile-new-message/new-message.component';
 import { LoginService } from '../../../service/login.service';
 import { DirectMessageService } from '../../../service/direct-message.service';
-import { SearchFieldService } from '../../../search-field.service';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
 import { User } from '../../../../assets/models/user.class';
+import { SearchFieldService } from '../../../service/search-field.service';
 
 @Component({
   selector: 'app-mobile-channels',
@@ -48,7 +48,7 @@ export class MobileChannelsComponent implements OnInit {
     public directMessageService: DirectMessageService,
     private newMessageService: NewMessageService,
     public searchField: SearchFieldService,
-  ) {}
+  ) { }
 
   /**
    * Initializes the component.
@@ -117,6 +117,7 @@ export class MobileChannelsComponent implements OnInit {
     this.searchValue = '';
     this.directMessageService.openDirectMessage(user);
     this.chatService.text = '';
+    this.chatService.directText = '';
     this.chatService.body.style.overflow = 'hidden';
   }
 
@@ -135,6 +136,7 @@ export class MobileChannelsComponent implements OnInit {
     this.chatService.mobileChatIsOpen = true;
     this.chatService.mobileDirectChatIsOpen = false;
     this.chatService.text = '';
+    this.chatService.directText = '';
   }
 
   /**

@@ -11,10 +11,10 @@ import { User } from '../../../../assets/models/user.class';
 import { FormsModule } from '@angular/forms';
 import { DirectMessageService } from '../../../service/direct-message.service';
 import { ChatService } from '../../../service/chat.service';
-import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
 import { Subscription, take } from 'rxjs';
+import { SearchFieldService } from '../../../service/search-field.service';
 
 @Component({
   selector: 'app-desktop-header',
@@ -39,7 +39,7 @@ export class DesktopHeaderComponent implements OnInit {
     private chatService: ChatService,
     public searchField: SearchFieldService,
     public threadService: ThreadService,
-  ) {}
+  ) { }
 
   /**
    * Initializes the component.

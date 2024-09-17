@@ -39,7 +39,7 @@ export class DialogSearchChannelsComponent {
     public newMessageService: NewMessageService,
     public channelService: ChannelService,
     public threadService: ThreadService,
-  ) {}
+  ) { }
 
   inputContent = '';
   inputContentNewMessage = '';
@@ -85,7 +85,7 @@ export class DialogSearchChannelsComponent {
     } else if (this.mainService.contentToThread) {
       this.mainService.changeInputContentThread(this.inputContentThread);
     } else if (this.mainService.contentToDirectMessage) {
-      this.mainService.changeInputContentDirectChat(this.inputContent);
+      this.mainService.changeInputContentDirectChat(this.inputContentDirect);
     } else if (this.mainService.contentToNewMessage) {
       this.mainService.changeInputContentNewMessage(
         this.inputContentNewMessage,

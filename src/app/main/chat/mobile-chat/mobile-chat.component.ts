@@ -25,8 +25,8 @@ import { LoginService } from '../../../service/login.service';
 import { ChannelService } from '../../../service/channel.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { ThreadService } from '../../../service/thread.service';
-import { SearchFieldService } from '../../../search-field.service';
 import { lastValueFrom, Subscription } from 'rxjs';
+import { SearchFieldService } from '../../../service/search-field.service';
 
 @Component({
   selector: 'app-mobile-chat',

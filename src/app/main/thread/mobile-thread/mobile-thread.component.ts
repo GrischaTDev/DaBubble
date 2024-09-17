@@ -27,7 +27,8 @@ import { User } from '../../../../assets/models/user.class';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { Subscription, take } from 'rxjs';
-import { SearchFieldService } from '../../../search-field.service';
+import { SearchFieldService } from '../../../service/search-field.service';
+
 
 @Component({
   selector: 'app-mobile-thread',
