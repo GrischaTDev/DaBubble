@@ -77,6 +77,24 @@ export class SearchFieldService implements OnInit {
     }
   }
 
+  filterDataDirectchat(searchValue: string) {
+    const lastChar = searchValue.trim().slice(-1);
+
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('direct-message');
+      this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
+    }
+
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('direct-message');
+      this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
+    }
+  }
+
   filterDataNewMessagechat(searchValue: string) {
     const lastChar = searchValue.trim().slice(-1);
 

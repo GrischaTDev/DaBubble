@@ -34,6 +34,7 @@ export class DialogMentionUsersComponent {
   inputContent = '';
   inputContentNewMessage = '';
   inputContentThread = '';
+  inputContentDirect = '';
 
   constructor(
     public chatService: ChatService,
@@ -55,6 +56,13 @@ export class DialogMentionUsersComponent {
       this.inputContent += '@' + user.name + ' ';
     } else {
       this.inputContent += user.name;
+    }
+
+    const lastCharDirect = this.chatService.directText.trim().slice(-1);
+    if (lastCharDirect !== '@') {
+      this.inputContentDirect += '@' + user.name + ' ';
+    } else {
+      this.inputContentDirect += user.name;
     }
 
     const lastCharNewMessage = this.newMessageService.textNewMessage
@@ -85,7 +93,7 @@ export class DialogMentionUsersComponent {
     } else if (this.mainService.contentToThread) {
       this.mainService.changeInputContentThread(this.inputContentThread);
     } else if (this.mainService.contentToDirectMessage) {
-      this.mainService.changeInputContentDirectChat(this.inputContent);
+      this.mainService.changeInputContentDirectChat(this.inputContentDirect);
     } else if (this.mainService.contentToNewMessage) {
       this.mainService.changeInputContentNewMessage(
         this.inputContentNewMessage,

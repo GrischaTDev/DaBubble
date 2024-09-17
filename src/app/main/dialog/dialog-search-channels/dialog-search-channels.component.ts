@@ -39,11 +39,12 @@ export class DialogSearchChannelsComponent {
     public newMessageService: NewMessageService,
     public channelService: ChannelService,
     public threadService: ThreadService,
-  ) { }
+  ) {}
 
   inputContent = '';
   inputContentNewMessage = '';
   inputContentThread = '';
+  inputContentDirect = '';
 
   addSearchChannel(channel: Channel) {
     const lastChar = this.chatService.text.trim().slice(-1);
@@ -51,6 +52,13 @@ export class DialogSearchChannelsComponent {
       this.inputContent += '#' + channel.name + ' ';
     } else {
       this.inputContent += channel.name;
+    }
+
+    const lastCharDirect = this.chatService.directText.trim().slice(-1);
+    if (lastCharDirect !== '#') {
+      this.inputContentDirect += '#' + channel.name + ' ';
+    } else {
+      this.inputContentDirect += channel.name;
     }
 
     const lastCharNewMessage = this.newMessageService.textNewMessage
@@ -79,7 +87,9 @@ export class DialogSearchChannelsComponent {
     } else if (this.mainService.contentToDirectMessage) {
       this.mainService.changeInputContentDirectChat(this.inputContent);
     } else if (this.mainService.contentToNewMessage) {
-      this.mainService.changeInputContentNewMessage(this.inputContentNewMessage,);
+      this.mainService.changeInputContentNewMessage(
+        this.inputContentNewMessage,
+      );
     }
     this.resetContent();
   }
@@ -88,7 +98,7 @@ export class DialogSearchChannelsComponent {
     this.mainService.contentToChannel = false;
     this.mainService.contentToDirectMessage = false;
     this.mainService.contentToThread = false;
-    this.mainService.contentToNewMessage = false
+    this.mainService.contentToNewMessage = false;
     this.channelService.closeDialog();
   }
 }
