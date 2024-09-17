@@ -32,6 +32,8 @@ import { ThreadService } from '../../../service/thread.service';
 })
 export class DialogMentionUsersComponent {
   inputContent = '';
+  inputContentNewMessage = '';
+  inputContentThread = '';
 
   constructor(
     public chatService: ChatService,
@@ -48,20 +50,27 @@ export class DialogMentionUsersComponent {
    * @param {User} user - The user to be mentioned.
    */
   addMentionUser(user: User) {
-    this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
-    const lastCharNewMessage = this.newMessageService.textNewMessage
-      .trim()
-      .slice(-1);
-    const lastCharThread = this.threadService.textThread.trim().slice(-1);
-    if (
-      lastChar !== '@' &&
-      lastCharNewMessage !== '@' &&
-      lastCharThread !== '@'
-    ) {
+    if (lastChar !== '@') {
       this.inputContent += '@' + user.name + ' ';
     } else {
       this.inputContent += user.name;
+    }
+
+    const lastCharNewMessage = this.newMessageService.textNewMessage
+      .trim()
+      .slice(-1);
+    if (lastCharNewMessage !== '@') {
+      this.inputContentNewMessage += '@' + user.name + ' ';
+    } else {
+      this.inputContentNewMessage += user.name;
+    }
+
+    const lastCharThread = this.threadService.textThread.trim().slice(-1);
+    if (lastCharThread !== '@') {
+      this.inputContentThread += '@' + user.name + ' ';
+    } else {
+      this.inputContentThread += user.name;
     }
     this.validationContent();
   }
@@ -74,11 +83,13 @@ export class DialogMentionUsersComponent {
     if (this.mainService.contentToChannel) {
       this.mainService.changeInputContent(this.inputContent);
     } else if (this.mainService.contentToThread) {
-      this.mainService.changeInputContentThread(this.inputContent);
+      this.mainService.changeInputContentThread(this.inputContentThread);
     } else if (this.mainService.contentToDirectMessage) {
       this.mainService.changeInputContentDirectChat(this.inputContent);
     } else if (this.mainService.contentToNewMessage) {
-      this.mainService.changeInputContentNewMessage(this.inputContent);
+      this.mainService.changeInputContentNewMessage(
+        this.inputContentNewMessage,
+      );
     }
     this.resetContent();
   }

@@ -42,22 +42,31 @@ export class DialogSearchChannelsComponent {
   ) {}
 
   inputContent = '';
+  inputContentNewMessage = '';
+  inputContentThread = '';
 
   addSearchChannel(channel: Channel) {
-    this.inputContent = '';
     const lastChar = this.chatService.text.trim().slice(-1);
-    const lastCharNewMessage = this.newMessageService.textNewMessage
-      .trim()
-      .slice(-1);
-    const lastCharThread = this.threadService.textThread.trim().slice(-1);
-    if (
-      lastChar !== '#' &&
-      lastCharNewMessage !== '#' &&
-      lastCharThread !== '#'
-    ) {
+    if (lastChar !== '#') {
       this.inputContent += '#' + channel.name + ' ';
     } else {
       this.inputContent += channel.name;
+    }
+
+    const lastCharNewMessage = this.newMessageService.textNewMessage
+      .trim()
+      .slice(-1);
+    if (lastCharNewMessage !== '#') {
+      this.inputContentNewMessage += '#' + channel.name + ' ';
+    } else {
+      this.inputContentNewMessage += channel.name;
+    }
+
+    const lastCharThread = this.threadService.textThread.trim().slice(-1);
+    if (lastCharThread !== '#') {
+      this.inputContentThread += '#' + channel.name + ' ';
+    } else {
+      this.inputContentThread += channel.name;
     }
     this.validationContent();
   }
@@ -66,11 +75,13 @@ export class DialogSearchChannelsComponent {
     if (this.mainService.contentToChannel) {
       this.mainService.changeInputContent(this.inputContent);
     } else if (this.mainService.contentToThread) {
-      this.mainService.changeInputContentThread(this.inputContent);
+      this.mainService.changeInputContentThread(this.inputContentThread);
     } else if (this.mainService.contentToDirectMessage) {
       this.mainService.changeInputContentDirectChat(this.inputContent);
     } else if (this.mainService.contentToNewMessage) {
-      this.mainService.changeInputContentNewMessage(this.inputContent);
+      this.mainService.changeInputContentNewMessage(
+        this.inputContentNewMessage,
+      );
     }
 
     this.resetContent();

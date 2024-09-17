@@ -366,8 +366,10 @@
         </div>
       </div>
       <textarea
-        [(ngModel)]="this.textMobileChat"
-        (ngModelChange)="searchField.filterDataChannelchat(this.textMobileChat)"
+        [(ngModel)]="this.chatService.text"
+        (ngModelChange)="
+          searchField.filterDataChannelchat(this.chatService.text)
+        "
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -423,3 +425,4 @@
     </form>
   </div>
 </div>
+

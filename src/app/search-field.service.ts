@@ -62,44 +62,54 @@ export class SearchFieldService implements OnInit {
   filterDataChannelchat(searchValue: string) {
     const lastChar = searchValue.trim().slice(-1);
 
-    if (lastChar === '@') {
-      if (this.mainService.newMessage && this.chatService.newMessageOpen) {
-        this.mainService.contentOfWhichInput('newMessage');
-      } else {
-        this.mainService.contentOfWhichInput('channels');
-      }
-
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('channels');
       this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
     }
 
-    if (lastChar === '#') {
-      if (this.mainService.newMessage && this.chatService.newMessageOpen) {
-        this.mainService.contentOfWhichInput('newMessage');
-      } else {
-        this.mainService.contentOfWhichInput('channels');
-      }
-
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('channels');
       this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
+    }
+  }
+
+  filterDataNewMessagechat(searchValue: string) {
+    const lastChar = searchValue.trim().slice(-1);
+
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('newMessage');
+      this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
+    }
+
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('newMessage');
+      this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
     }
   }
 
   filterDataThreadchat(searchValue: string) {
     const lastChar = searchValue.trim().slice(-1);
 
-    if (lastChar === '@') {
-      if (this.chatService.isThreadOpen) {
-        this.mainService.contentOfWhichInput('thread');
-      }
-
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('thread');
       this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
     }
 
-    if (lastChar === '#') {
-      if (this.chatService.isThreadOpen) {
-        this.mainService.contentOfWhichInput('thread');
-      }
-
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('thread');
       this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
     }
   }
 
