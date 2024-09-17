@@ -83,9 +83,7 @@ export class MobileChatComponent implements OnInit {
         if (!this.chatService.editOpen) {
           this.textMobileChat += content;
         } else {
-
           this.chatService.editTextMobile += content;
-          console.log('fffff', this.chatService.editTextMobile)
         }
       },
     );
