@@ -102,6 +102,7 @@ export class DialogMentionUsersComponent {
     this.mainService.contentToChannel = false;
     this.mainService.contentToDirectMessage = false;
     this.mainService.contentToThread = false;
+    this.mainService.contentToNewMessage = false;
     this.chatService.closeDialog();
   }
 }

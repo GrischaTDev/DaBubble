@@ -39,7 +39,7 @@ export class DialogSearchChannelsComponent {
     public newMessageService: NewMessageService,
     public channelService: ChannelService,
     public threadService: ThreadService,
-  ) {}
+  ) { }
 
   inputContent = '';
   inputContentNewMessage = '';
@@ -79,11 +79,8 @@ export class DialogSearchChannelsComponent {
     } else if (this.mainService.contentToDirectMessage) {
       this.mainService.changeInputContentDirectChat(this.inputContent);
     } else if (this.mainService.contentToNewMessage) {
-      this.mainService.changeInputContentNewMessage(
-        this.inputContentNewMessage,
-      );
+      this.mainService.changeInputContentNewMessage(this.inputContentNewMessage,);
     }
-
     this.resetContent();
   }
 
@@ -91,6 +88,7 @@ export class DialogSearchChannelsComponent {
     this.mainService.contentToChannel = false;
     this.mainService.contentToDirectMessage = false;
     this.mainService.contentToThread = false;
+    this.mainService.contentToNewMessage = false
     this.channelService.closeDialog();
   }
 }
