@@ -7,6 +7,8 @@ import { UserProfileService } from '../../service/user-profile.service';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../../assets/models/user.class';
 import { LoginService } from '../../service/login.service';
+import { doc, Firestore, setDoc } from '@angular/fire/firestore';
+import { Channel } from '../../../assets/models/channel.class';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,6 +24,7 @@ export class UserProfileComponent {
   updateUserEmail: string = '';
   loggedInUserStatus: string = './assets/img/offline.svg';
   directUserProfileStatus: string = './assets/img/offline.svg';
+  selectedAvatarImage: string | ArrayBuffer | null = '';
 
   constructor(
     public dialogRef: MatDialogRef<UserProfileComponent>,
@@ -29,6 +32,7 @@ export class UserProfileComponent {
     public userProfileService: UserProfileService,
     private loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public directUserProfile: User,
+    private firestore: Firestore,
   ) {}
 
   /**
@@ -105,4 +109,30 @@ export class UserProfileComponent {
       this.userProfileService.isEmailSend = false;
     }, 3000);
   }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) {
+          this.selectedAvatarImage = e.target.result;
+          this.setAvatarImageToFirebase(this.loggedInUser);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async setAvatarImageToFirebase(user: User) {
+    await setDoc(
+      doc(this.firestore, 'users', user.id),
+      {
+        avatar: this.selectedAvatarImage,
+      },
+      { merge: true },
+    );
+  }
 }
+

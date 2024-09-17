@@ -23,7 +23,7 @@ import { DesktopNewMessageComponent } from './new-message/desktop-new-message/de
 import { ActivatedRoute, Router } from '@angular/router';
 import { Channel } from '../../assets/models/channel.class';
 import { User } from '../../assets/models/user.class';
-import { SearchFieldService } from '../search-field.service';
+
 import { take } from 'rxjs';
 import {
   animate,
@@ -32,6 +32,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { SearchFieldService } from '../service/search-field.service';
 
 @Component({
   selector: 'app-main',
@@ -110,7 +111,7 @@ export class MainComponent implements OnInit {
     public chatService: ChatService,
     public searchField: SearchFieldService,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params: any) => {

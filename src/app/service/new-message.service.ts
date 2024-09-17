@@ -354,6 +354,7 @@ export class NewMessageService {
     this.chatService.directChatOpen = false;
     this.chatService.newMessageOpen = false;
     this.chatService.text = '';
+    this.chatService.directText = '';
     this.imageMessage = '';
   }
 

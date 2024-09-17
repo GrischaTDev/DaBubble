@@ -20,7 +20,6 @@ import { User } from '../../../../assets/models/user.class';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiService } from '../../../service/emoji.service';
 import { MobileChatHeaderComponent } from '../../header/mobile-chat-header/mobile-chat-header.component';
-import { SearchFieldService } from '../../../search-field.service';
 import { Channel } from '../../../../assets/models/channel.class';
 import { NewMessageService } from '../../../service/new-message.service';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
@@ -29,6 +28,7 @@ import { getAuth, signOut } from '@angular/fire/auth';
 import { LoginService } from '../../../service/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
+import { SearchFieldService } from '../../../service/search-field.service';
 
 @Component({
   selector: 'app-new-message',

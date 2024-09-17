@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { ChatService } from '../../../service/chat.service';
+import { MainServiceService } from '../../../service/main-service.service';
+import { EmojiService } from '../../../service/emoji.service';
+import { NewMessageService } from '../../../service/new-message.service';
 import {
   MatDialogActions,
   MatDialogClose,
@@ -6,17 +10,14 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { ChatService } from '../../../service/chat.service';
-import { User } from '../../../../assets/models/user.class';
-import { MainServiceService } from '../../../service/main-service.service';
-import { EmojiService } from '../../../service/emoji.service';
-import { NewMessageService } from '../../../service/new-message.service';
+import { FormsModule } from '@angular/forms';
+import { Channel } from '../../../../assets/models/channel.class';
+import { ChannelService } from '../../../service/channel.service';
 import { ThreadService } from '../../../service/thread.service';
 
 @Component({
-  selector: 'app-dialog-mention-users',
+  selector: 'app-dialog-search-channels',
   standalone: true,
   imports: [
     MatDialogActions,
@@ -27,66 +28,57 @@ import { ThreadService } from '../../../service/thread.service';
     MatIconModule,
     FormsModule,
   ],
-  templateUrl: './dialog-mention-users.component.html',
-  styleUrl: './dialog-mention-users.component.scss',
+  templateUrl: './dialog-search-channels.component.html',
+  styleUrl: './dialog-search-channels.component.scss',
 })
-export class DialogMentionUsersComponent {
-  inputContent = '';
-  inputContentNewMessage = '';
-  inputContentThread = '';
-  inputContentDirect = '';
-
+export class DialogSearchChannelsComponent {
   constructor(
     public chatService: ChatService,
     public mainService: MainServiceService,
     public emojiService: EmojiService,
     public newMessageService: NewMessageService,
+    public channelService: ChannelService,
     public threadService: ThreadService,
-  ) {
-    this.chatService = chatService;
-  }
+  ) { }
 
-  /**
-   * Adds a user mention to the input content and updates the appropriate content area, then closes the dialog.
-   * @param {User} user - The user to be mentioned.
-   */
-  addMentionUser(user: User) {
+  inputContent = '';
+  inputContentNewMessage = '';
+  inputContentThread = '';
+  inputContentDirect = '';
+
+  addSearchChannel(channel: Channel) {
     const lastChar = this.chatService.text.trim().slice(-1);
-    if (lastChar !== '@') {
-      this.inputContent += '@' + user.name + ' ';
+    if (lastChar !== '#') {
+      this.inputContent += '#' + channel.name + ' ';
     } else {
-      this.inputContent += user.name;
+      this.inputContent += channel.name;
     }
 
     const lastCharDirect = this.chatService.directText.trim().slice(-1);
-    if (lastCharDirect !== '@') {
-      this.inputContentDirect += '@' + user.name + ' ';
+    if (lastCharDirect !== '#') {
+      this.inputContentDirect += '#' + channel.name + ' ';
     } else {
-      this.inputContentDirect += user.name;
+      this.inputContentDirect += channel.name;
     }
 
     const lastCharNewMessage = this.newMessageService.textNewMessage
       .trim()
       .slice(-1);
-    if (lastCharNewMessage !== '@') {
-      this.inputContentNewMessage += '@' + user.name + ' ';
+    if (lastCharNewMessage !== '#') {
+      this.inputContentNewMessage += '#' + channel.name + ' ';
     } else {
-      this.inputContentNewMessage += user.name;
+      this.inputContentNewMessage += channel.name;
     }
 
     const lastCharThread = this.threadService.textThread.trim().slice(-1);
-    if (lastCharThread !== '@') {
-      this.inputContentThread += '@' + user.name + ' ';
+    if (lastCharThread !== '#') {
+      this.inputContentThread += '#' + channel.name + ' ';
     } else {
-      this.inputContentThread += user.name;
+      this.inputContentThread += channel.name;
     }
     this.validationContent();
   }
 
-  /**
-   * Validates and updates the input content based on the current service type.
-   * Updates content for channel, thread, or direct message, then resets the content.
-   */
   validationContent() {
     if (this.mainService.contentToChannel) {
       this.mainService.changeInputContent(this.inputContent);
@@ -102,16 +94,12 @@ export class DialogMentionUsersComponent {
     this.resetContent();
   }
 
-  /**
-   * Resets content flags for channel, direct message, and thread.
-   * Closes the chat dialog after resetting the flags.
-   */
   resetContent() {
     this.mainService.contentToChannel = false;
     this.mainService.contentToDirectMessage = false;
     this.mainService.contentToThread = false;
     this.mainService.contentToNewMessage = false;
-    this.chatService.closeDialog();
+    this.channelService.closeDialog();
   }
 }
 

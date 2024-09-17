@@ -14,8 +14,8 @@ import { Subscription, take } from 'rxjs';
 import { Channel } from '../../../../assets/models/channel.class';
 import { User } from '../../../../assets/models/user.class';
 import { ThreadService } from '../../../service/thread.service';
-import { SearchFieldService } from '../../../search-field.service';
 import { NewMessageService } from '../../../service/new-message.service';
+import { SearchFieldService } from '../../../service/search-field.service';
 
 @Component({
   selector: 'app-desktop-channels',
@@ -95,6 +95,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.newMessageOpen = false;
     this.activeChannelId = channel.id;
     this.chatService.text = '';
+    this.chatService.directText = '';
     this.chatService.activateChatFocus();
   }
 
@@ -141,6 +142,7 @@ export class DesktopChannelsComponent implements OnInit {
     this.chatService.dataThread = new Channel();
     this.chatService.dataDirectChat = new Channel();
     this.chatService.text = '';
+    this.chatService.directText = '';
     this.newMessageService.textNewMessage = '';
     this.chatService.editText = '';
     this.threadService.textThread = '';

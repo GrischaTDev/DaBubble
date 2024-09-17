@@ -116,9 +116,10 @@ header {
       display: flex;
       position: relative;
 
-      .user-avatar {
+      .user-avatar { 
         height: 70px;
-        border-radius: 50px;
+        width: 70px;
+        border-radius: 50%;
       }
 
       .user-status {

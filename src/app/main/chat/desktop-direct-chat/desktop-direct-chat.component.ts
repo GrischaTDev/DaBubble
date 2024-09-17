@@ -31,7 +31,8 @@ import { ChannelService } from '../../../service/channel.service';
 import { LoginService } from '../../../service/login.service';
 import { ThreadService } from '../../../service/thread.service';
 import { Channel } from '../../../../assets/models/channel.class';
-import { SearchFieldService } from '../../../search-field.service';
+import { SearchFieldService } from '../../../service/search-field.service';
+
 
 @Component({
   selector: 'app-desktop-direct-chat',
@@ -80,15 +81,14 @@ export class DesktopDirectChatComponent implements OnInit {
     setTimeout(() => {
       this.scrollToBottom();
     }, 500);
-    this.mainService.subscriptionDirectChat = this.mainService.currentContentDirectChat.subscribe(
-      (content) => {
+    this.mainService.subscriptionDirectChat =
+      this.mainService.currentContentDirectChat.subscribe((content) => {
         if (!this.chatService.editOpen) {
-          this.chatService.text += content;
+          this.chatService.directText += content;
         } else {
           this.chatService.editText += content;
         }
-      },
-    );
+      });
   }
 
   /**
@@ -210,7 +210,7 @@ export class DesktopDirectChatComponent implements OnInit {
       event.preventDefault();
       this.directMessageService.sendMessageFromDirectMessage(
         this.chatService.dataChannel.id,
-        this.chatService.text,
+        this.chatService.directText,
         this.chatService.imageMessage,
       );
     }
@@ -228,15 +228,16 @@ export class DesktopDirectChatComponent implements OnInit {
   }
 
   /**
-  * Sends a direct message using the directMessageService.
-  * Marks the message as sent from the desktop and includes text and image data.
-  */
+   * Sends a direct message using the directMessageService.
+   * Marks the message as sent from the desktop and includes text and image data.
+   */
   sendDirectMessage() {
     this.directMessageService.sendNewMessageFromDesktop = true;
     this.directMessageService.sendMessageFromDirectMessage(
       this.chatService.dataChannel.id,
-      this.chatService.text,
+      this.chatService.directText,
       this.chatService.imageMessage,
     );
   }
 }
+

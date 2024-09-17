@@ -17,7 +17,14 @@ import { DialogImageMessageComponent } from '../main/dialog/dialog-image-message
 export class ChatService {
   contentEmojie: any;
   public dialog = inject(MatDialog);
-  dialogInstance: | MatDialogRef<DialogEmojiComponent, any> | MatDialogRef<DialogMentionUsersComponent, any> | MatDialogRef<DialogUserChatComponent, any> | MatDialogRef<DialogAddUserComponent, any> | MatDialogRef<DialogEditChannelComponent, any> | MatDialogRef<DialogImageMessageComponent, any> | undefined;
+  dialogInstance:
+    | MatDialogRef<DialogEmojiComponent, any>
+    | MatDialogRef<DialogMentionUsersComponent, any>
+    | MatDialogRef<DialogUserChatComponent, any>
+    | MatDialogRef<DialogAddUserComponent, any>
+    | MatDialogRef<DialogEditChannelComponent, any>
+    | MatDialogRef<DialogImageMessageComponent, any>
+    | undefined;
   dialogEmojiOpen: boolean = false;
   dialogMentionUserOpen: boolean = false;
   dialogAddUserOpen: boolean = false;
@@ -40,6 +47,7 @@ export class ChatService {
   editMessageInputIndex: number | null = null;
   editOpen: boolean = false;
   text = '';
+  directText: string = '';
   editText = '';
   editTextMobile = '';
   loggedInUser: User = new User();
@@ -68,7 +76,10 @@ export class ChatService {
   channelChanged$ = this.channelChangedSource.asObservable();
   threadChanged$ = this.threadChangedSource.asObservable();
   editMessageButtonVisible: boolean = false;
-  constructor(public mainService: MainServiceService, private router: Router,) { }
+  constructor(
+    public mainService: MainServiceService,
+    private router: Router,
+  ) {}
 
   /**
    * Triggers a notification to indicate that the chat focus has changed.
@@ -78,8 +89,8 @@ export class ChatService {
   }
 
   /**
- * Triggers a notification to indicate that the chat focus has changed.
- */
+   * Triggers a notification to indicate that the chat focus has changed.
+   */
   activateThreadFocus() {
     this.threadChangedSource.next();
   }
@@ -228,8 +239,16 @@ export class ChatService {
     this.newThreadOnFb.messageChannel.push(this.messageChannel);
     this.newThreadOnFb.idOfChannelOnThred = this.dataChannel.id;
     this.newThreadOnFb.name = this.dataChannel.name;
-    await this.mainService.addDoc('threads', this.newThreadOnFb.id, new Channel(this.newThreadOnFb),);
-    await this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel),);
+    await this.mainService.addDoc(
+      'threads',
+      this.newThreadOnFb.id,
+      new Channel(this.newThreadOnFb),
+    );
+    await this.mainService.addDoc(
+      'channels',
+      this.dataChannel.id,
+      new Channel(this.dataChannel),
+    );
   }
 
   /**
@@ -336,7 +355,11 @@ export class ChatService {
   /**
    * Toggles the editing state of a message container based on the provided index and event. Stops event propagation always.
    */
-  toggleEditMessageContainer(index: number, event: MouseEvent, messageContent: string,): void {
+  toggleEditMessageContainer(
+    index: number,
+    event: MouseEvent,
+    messageContent: string,
+  ): void {
     event.stopPropagation();
     if (this.editMessageIndex === index) {
       this.editMessageIndex = null;
@@ -368,17 +391,30 @@ export class ChatService {
   /**
    * Asynchronously edits a message within a channel by updating its text and then sends an update notification. It finalizes by closing the editor without saving further changes.
    */
-  async editMessageFromChannel(parmsId: string, newText: string, singleMessageIndex: number,) {
+  async editMessageFromChannel(
+    parmsId: string,
+    newText: string,
+    singleMessageIndex: number,
+  ) {
     this.loadContenThreadForEditMessage(singleMessageIndex).then(() => {
       this.dataChannel.messageChannel[singleMessageIndex].message = newText;
       if (!this.fromDirectChat) {
         this.dataThread.messageChannel[0].message = newText;
-        this.mainService.addDoc('channels', this.dataChannel.id, new Channel(this.dataChannel),
+        this.mainService.addDoc(
+          'channels',
+          this.dataChannel.id,
+          new Channel(this.dataChannel),
         );
-        this.mainService.addDoc('threads', this.dataThread.id, new Channel(this.dataThread),
+        this.mainService.addDoc(
+          'threads',
+          this.dataThread.id,
+          new Channel(this.dataThread),
         );
       } else {
-        this.mainService.addDoc('direct-message', this.dataChannel.id, new Channel(this.dataChannel),
+        this.mainService.addDoc(
+          'direct-message',
+          this.dataChannel.id,
+          new Channel(this.dataChannel),
         );
       }
       this.closeWithoutSaving();
@@ -389,15 +425,23 @@ export class ChatService {
   /**
    * Asynchronously loads a content thread for editing a message based on its index.
    */
-  async loadContenThreadForEditMessage(singleMessageIndex: number): Promise<void> {
+  async loadContenThreadForEditMessage(
+    singleMessageIndex: number,
+  ): Promise<void> {
     if (!this.fromDirectChat) {
       const dataThreadChannel = await firstValueFrom(
-        this.mainService.watchSingleThreadDoc(this.dataChannel.messageChannel[singleMessageIndex].thread, 'threads',),
+        this.mainService.watchSingleThreadDoc(
+          this.dataChannel.messageChannel[singleMessageIndex].thread,
+          'threads',
+        ),
       );
       this.dataThread = dataThreadChannel as Channel;
     } else {
       const dataThreadChannel = await firstValueFrom(
-        this.mainService.watchSingleThreadDoc(this.dataChannel.id, 'direct-message',),
+        this.mainService.watchSingleThreadDoc(
+          this.dataChannel.id,
+          'direct-message',
+        ),
       );
       this.dataThread = dataThreadChannel as Channel;
     }
@@ -430,14 +474,19 @@ export class ChatService {
    */
   async openThread(threadMessage: Message, indexSingleMessage: number) {
     this.activateThreadFocus();
-    this.mainService.watchSingleThreadDoc(threadMessage.thread, 'threads').subscribe((dataThreadChannel) => {
-      this.dataThread = dataThreadChannel as Channel;
-    });
+    this.mainService
+      .watchSingleThreadDoc(threadMessage.thread, 'threads')
+      .subscribe((dataThreadChannel) => {
+        this.dataThread = dataThreadChannel as Channel;
+      });
     this.contentMessageOfThread = threadMessage;
     this.indexOfThreadMessageForEditChatMessage = indexSingleMessage;
     this.isThreadOpen = true;
     this.isWorkspaceOpen = false;
     this.closeMenu = this.isWorkspaceOpen ? 'arrow_drop_up' : 'arrow_drop_down';
-    this.closeMenuText = this.isWorkspaceOpen ? 'Workspace-Menü schließen' : 'Workspace-Menü öffnen';
+    this.closeMenuText = this.isWorkspaceOpen
+      ? 'Workspace-Menü schließen'
+      : 'Workspace-Menü öffnen';
   }
 }
+

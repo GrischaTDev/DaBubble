@@ -6,12 +6,15 @@ import {
   onSnapshot,
   QuerySnapshot,
 } from '@angular/fire/firestore';
-import { ChatService } from './service/chat.service';
-import { MainServiceService } from './service/main-service.service';
-import { User } from '../assets/models/user.class';
-import { Channel } from '../assets/models/channel.class';
+
 import { BehaviorSubject } from 'rxjs';
-import { LoginService } from './service/login.service';
+import { ChatService } from './chat.service';
+import { MainServiceService } from './main-service.service';
+import { LoginService } from './login.service';
+import { ChannelService } from './channel.service';
+import { Channel } from '../../assets/models/channel.class';
+import { User } from '../../assets/models/user.class';
+
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +36,7 @@ export class SearchFieldService implements OnInit {
     private chatService: ChatService,
     private mainService: MainServiceService,
     private loginService: LoginService,
+    private channelService: ChannelService,
   ) {
     this.loginService.currentLoggedUser();
     this.loginService.loggedInUser$.subscribe((user) => {
@@ -60,14 +64,72 @@ export class SearchFieldService implements OnInit {
   filterDataChannelchat(searchValue: string) {
     const lastChar = searchValue.trim().slice(-1);
 
-    if (lastChar === '@') {
-      if (this.mainService.newMessage && this.chatService.newMessageOpen) {
-        this.mainService.contentOfWhichInput('newMessage');
-      } else {
-        this.mainService.contentOfWhichInput('channels');
-      }
-
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('channels');
       this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
+    }
+
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('channels');
+      this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
+    }
+  }
+
+  filterDataDirectchat(searchValue: string) {
+    const lastChar = searchValue.trim().slice(-1);
+
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('direct-message');
+      this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
+    }
+
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('direct-message');
+      this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
+    }
+  }
+
+  filterDataNewMessagechat(searchValue: string) {
+    const lastChar = searchValue.trim().slice(-1);
+
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('newMessage');
+      this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
+    }
+
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('newMessage');
+      this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
+    }
+  }
+
+  filterDataThreadchat(searchValue: string) {
+    const lastChar = searchValue.trim().slice(-1);
+
+    if (lastChar == '@') {
+      this.mainService.contentOfWhichInput('thread');
+      this.chatService.openDialogMentionUser();
+    } else {
+      this.chatService.closeDialog();
+    }
+
+    if (lastChar == '#') {
+      this.mainService.contentOfWhichInput('thread');
+      this.channelService.openDialogSearchChannels();
+    } else {
+      this.channelService.closeDialog();
     }
   }
 

@@ -27,6 +27,8 @@ import { User } from '../../../../assets/models/user.class';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { getAuth, signOut } from '@angular/fire/auth';
 import { Subscription, take } from 'rxjs';
+import { SearchFieldService } from '../../../service/search-field.service';
+
 
 @Component({
   selector: 'app-mobile-thread',
@@ -65,21 +67,21 @@ export class MobileThreadComponent implements OnInit {
     public directMessageService: DirectMessageService,
     private loginService: LoginService,
     private location: Location,
+    public searchField: SearchFieldService,
   ) {
     this.route.params.subscribe((params: any) => {
       this.parmsId1 = params['id1'];
       this.parmsId2 = params['id2'];
     });
     this.threadService.textThread = '';
-    this.mainService.subscriptionThreadContent = this.mainService.currentContentThread.subscribe(
-      (content) => {
+    this.mainService.subscriptionThreadContent =
+      this.mainService.currentContentThread.subscribe((content) => {
         if (!this.chatService.editOpen) {
           this.threadService.textThread += content;
         } else {
           this.threadService.editTextThread += content;
         }
-      },
-    );
+      });
   }
 
   /**
@@ -87,7 +89,13 @@ export class MobileThreadComponent implements OnInit {
    */
   closeThread() {
     this.chatService.mobileThreadIsOpen = false;
-    this.router.navigate(['/main', 'chat', this.parmsId1, 'user', this.parmsId1]);
+    this.router.navigate([
+      '/main',
+      'chat',
+      this.parmsId1,
+      'user',
+      this.parmsId1,
+    ]);
     this.chatService.dataThread = new Channel();
   }
 
@@ -132,7 +140,13 @@ export class MobileThreadComponent implements OnInit {
    */
   private checkScreenSize(width: number) {
     if (width > 960) {
-      this.router.navigate(['/main', 'chat', this.parmsId1, 'user', this.parmsId1]);
+      this.router.navigate([
+        '/main',
+        'chat',
+        this.parmsId1,
+        'user',
+        this.parmsId1,
+      ]);
       this.chatService.mobileChatIsOpen = false;
       this.chatService.mobileDirectChatIsOpen = false;
       this.chatService.mobileThreadIsOpen = false;
@@ -157,13 +171,11 @@ export class MobileThreadComponent implements OnInit {
       this.scrollToBottom();
       this.lastScrollHeight = this.scrollContainer.nativeElement.scrollHeight;
     }
-    this.channelSubscription = this.chatService.threadChanged$.subscribe(
-      () => {
-        setTimeout(() => {
-          this.scrollToBottom();
-        }, 400);
-      },
-    );
+    this.channelSubscription = this.chatService.threadChanged$.subscribe(() => {
+      setTimeout(() => {
+        this.scrollToBottom();
+      }, 400);
+    });
   }
 
   /**
@@ -224,3 +236,4 @@ export class MobileThreadComponent implements OnInit {
     }
   }
 }
+

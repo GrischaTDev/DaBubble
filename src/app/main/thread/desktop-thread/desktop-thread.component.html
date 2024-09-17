@@ -472,7 +472,10 @@
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
-        [placeholder]="'Antworten...'"></textarea>
+        [placeholder]="'Antworten...'"
+        (ngModelChange)="
+          searchField.filterDataThreadchat(this.threadService.textThread)
+        "></textarea>
 
       <div class="desktop-thread-input-field-icon-container">
         <div class="desktop-thread-input-icon-container">
@@ -525,3 +528,4 @@
     </form>
   </div>
 </div>
+

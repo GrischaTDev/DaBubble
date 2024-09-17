@@ -81,6 +81,11 @@
         referrerpolicy="no-referrer"
         src="{{ this.loggedInUser.avatar }}"
         alt="" />
+
+      <mat-icon class="edit-icon">
+        edit
+        <input id="file-upload" type="file" (change)="onFileSelected($event)" />
+      </mat-icon>
     </div>
 
     <div class="edit-name">
@@ -96,10 +101,10 @@
           type="text"
           pattern="^[a-zA-ZÀ-ÿ]+( [a-zA-ZÀ-ÿ]+)+\s*$"
           required />
-        @if(nameInput.errors?.['pattern'] || !updateUserName) {
-        <span class="name-input-validation">
-          Geben Sie ihren vollständige namen ein
-        </span>
+        @if (nameInput.errors?.['pattern'] || !updateUserName) {
+          <span class="name-input-validation">
+            Geben Sie ihren vollständige namen ein
+          </span>
         }
       </div>
     </div>
@@ -118,10 +123,10 @@
           value="{{ this.loggedInUser.email }}"
           pattern="^[^@]+@[^@]+\.(de|com)$"
           required />
-        @if(emailInput.errors?.['pattern'] || !updateUserEmail) {
-        <span class="email-input-validation">
-          Geben Sie eine korrekte E-Mail-Adresse ein
-        </span>
+        @if (emailInput.errors?.['pattern'] || !updateUserEmail) {
+          <span class="email-input-validation">
+            Geben Sie eine korrekte E-Mail-Adresse ein
+          </span>
         }
       </div>
     </div>
@@ -149,3 +154,4 @@
     </div>
   </form>
 </div>
+

@@ -352,8 +352,10 @@
       </div>
       <textarea
         #autofocus
-        [(ngModel)]="chatService.text"
-        (ngModelChange)="searchField.filterDataChannelchat(chatService.text)"
+        [(ngModel)]="chatService.directText"
+        (ngModelChange)="
+          searchField.filterDataDirectchat(chatService.directText)
+        "
         name="textarea"
         (input)="chatService.adjustHeight($event.target)"
         style="min-height: 50px; width: 100%"
@@ -397,7 +399,7 @@
               (click)="
                 directMessageService.sendMessageFromDirectMessage(
                   this.directMessageService.dataDirectMessage.id,
-                  this.chatService.text,
+                  this.chatService.directText,
                   this.directMessageService.imageMessage
                 )
               "
@@ -410,3 +412,4 @@
     </form>
   </div>
 </div>
+
