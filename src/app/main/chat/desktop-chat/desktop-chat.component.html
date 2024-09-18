@@ -13,27 +13,23 @@
         (click)="
           this.chatService.doNotClose($event); chatService.openDialogAddUser()
         ">
-        <div *ngFor="let ownerUser of this.chatService.dataChannel?.ownerUser">
-          <img
-            class="desktop-chat-header-members-img"
-            src="{{ ownerUser.avatar }}"
-            alt="singleUserHeaderImg"
-            referrerpolicy="no-referrer" />
-        </div>
         <div
           *ngFor="
             let singleUserHeader of chatService.dataChannel?.channelUsers;
             let singleUserIndexHeader = index
           ">
-          <img
-            class="desktop-chat-header-members-img"
-            src="{{ singleUserHeader.avatar }}"
-            alt="singleUserHeaderImg"
-            referrerpolicy="no-referrer"
-            *ngIf="singleUserIndexHeader < 3" />
+          <div *ngIf="mainService.loggedInUser.id !== singleUserHeader.id">
+            <img
+              class="desktop-chat-header-members-img"
+              src="{{ singleUserHeader.avatar }}"
+              alt="singleUserHeaderImg"
+              referrerpolicy="no-referrer"
+              *ngIf="singleUserIndexHeader < 3" />
+          </div>
         </div>
+
         <span class="desktop-chat-header-members-number">
-          {{ (chatService.dataChannel?.channelUsers?.length || 0) + 1 }}
+          {{ chatService.dataChannel?.channelUsers?.length || 0 }}
         </span>
       </div>
       <div

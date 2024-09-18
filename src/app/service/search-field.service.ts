@@ -180,21 +180,16 @@ export class SearchFieldService implements OnInit {
       const channels: Channel[] = [];
       channelList.forEach((channel) => {
         const channelData = new Channel(channel.data());
-
         if (
           channelData.channelUsers.some(
             (channeluser: User) =>
               channeluser.id === this.mainService.loggedInUser.id,
-          ) ||
-          channelData.ownerUser.some(
-            (channeluser: User) =>
-              channeluser.id === this.mainService.loggedInUser.id,
-          )
-        ) {
+          )) {
           channels.push(channelData);
         }
       });
       this.allChannelSubject.next(channels);
+      console.log()
     });
   }
 

@@ -10,20 +10,6 @@
     </div>
     <div
       class="dialog-add-users-content"
-      *ngFor="
-        let userOwner of chatService.dataChannel.ownerUser;
-        let i = index
-      ">
-      <div>
-        <img
-          referrerpolicy="no-referrer"
-          [src]="userOwner.avatar"
-          alt="User Avatar" />
-        <p>{{ userOwner.name }}</p>
-      </div>
-    </div>
-    <div
-      class="dialog-add-users-content"
       *ngFor="let user of chatService.dataChannel.channelUsers; let i = index">
       <div>
         <img [src]="user.avatar" alt="User Avatar" />
@@ -132,4 +118,3 @@
     </div>
   </div>
 </div>
-

@@ -134,16 +134,21 @@
           </div>
         </div>
         <div
-          class="edit-channel-members-users-content"
           *ngFor="
             let user of chatService.dataChannel.channelUsers;
             let i = index
           ">
           <div
-            *ngIf="this.mainService.loggedInUser.id !== user.id"
+            *ngIf="
+              this.mainService.loggedInUser.id !== user.id ||
+              mainService.loggedInUser.id !== user.id
+            "
+            class="edit-channel-members-users-content"
             (click)="directMessageService.openProfil(user.id)">
-            <img [src]="user.avatar" />
-            <p>{{ user.name }}</p>
+            <div>
+              <img [src]="user.avatar" />
+              <p>{{ user.name }}</p>
+            </div>
           </div>
         </div>
         <div class="edit-channel-add-users-edit-channel">
@@ -218,11 +223,11 @@
               (click)="channelService.pushNewUserToChannel()"
               class="edit-channel-users-button"
               [ngClass]="{
-            'edit-channel-add-users-button-not-available':
-              this.channelService.addetUser.length === 0,
-              'edit-channel-add-users-button-available':
-              this.channelService.addetUser.length > 0,
-          }">
+                'edit-channel-add-users-button-not-available':
+                  this.channelService.addetUser.length === 0,
+                'edit-channel-add-users-button-available':
+                  this.channelService.addetUser.length > 0
+              }">
               Hinzufügen
             </span>
           </div>
