@@ -143,6 +143,8 @@ export class ChannelService {
         !addedUserId.includes(user.id)
       ) {
         this.usersNotYetAdded.push(new User(user));
+      } else if (ownerId.includes(user.id) && !channelUserIds.includes(user.id)) {
+        this.usersNotYetAdded.push(new User(user));
       }
     });
   }
