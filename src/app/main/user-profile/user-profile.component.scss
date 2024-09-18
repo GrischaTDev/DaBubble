@@ -129,11 +129,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 
     > img {
       height: 100px;
       width: 100px;
       border-radius: 50%;
+    }
+
+    > mat-icon {
+      position: absolute;
+      width: 35%;
+      height: 60%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
@@ -306,7 +316,6 @@
 }
 
 .edit-icon {
-
   #file-upload {
     position: absolute;
     left: 0;
@@ -318,4 +327,3 @@
     cursor: pointer;
   }
 }
-
