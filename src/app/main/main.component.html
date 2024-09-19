@@ -24,7 +24,9 @@
 <div class="mobile">
   <app-mobile-header></app-mobile-header>
   <app-mobile-channels
-    *ngIf="!chatService.mobileChatIsOpen"></app-mobile-channels>
+    *ngIf="
+      !chatService.mobileChatIsOpen && !chatService.mobileDirectChatIsOpen
+    "></app-mobile-channels>
   <app-mobile-chat *ngIf="chatService.mobileChatIsOpen"></app-mobile-chat>
   <app-direct-chat *ngIf="chatService.mobileDirectChatIsOpen"></app-direct-chat>
   <app-mobile-thread *ngIf="chatService.mobileThreadIsOpen"></app-mobile-thread>
